@@ -986,8 +986,8 @@ export default function ApertureHero() {
               ref={leftDisciplineRailRef}
               style={{
                 position: "absolute",
-                top: "135px",
-                bottom: "78px",
+                top: "clamp(80px, 12vh, 120px)",
+                bottom: "clamp(45px, 7vh, 70px)",
                 left: "clamp(24px, 2.8vw, 48px)",
                 width: "196px",
                 zIndex: 15,
@@ -1180,8 +1180,8 @@ export default function ApertureHero() {
               ref={rightFilmReelRailRef}
               style={{
                 position: "absolute",
-                top: "135px",
-                bottom: "74px",
+                top: "clamp(80px, 12vh, 120px)",
+                bottom: "clamp(45px, 7vh, 70px)",
                 right: "clamp(38px, 3.6vw, 66px)",
                 width: "clamp(172px, 15vw, 218px)",
                 zIndex: 15,
@@ -1364,8 +1364,8 @@ export default function ApertureHero() {
               <div
                 style={{
                   position: "relative",
-                  width: isMobile ? "min(92vw, 680px)" : "min(72vw, 820px)",
-                  height: isMobile ? "min(68vw, 500px)" : "min(56vw, 600px)",
+                  width: isMobile ? "min(92vw, 560px)" : "min(58vw, 56vh, 660px)",
+                  height: isMobile ? "min(68vw, 420px)" : "min(44vw, 44vh, 480px)",
                 }}
               >
                 <Image
@@ -1373,7 +1373,7 @@ export default function ApertureHero() {
                   alt="ShutterScape Camera"
                   fill
                   priority
-                  sizes="820px"
+                  sizes="660px"
                   style={{ objectFit: "contain" }}
                 />
               </div>
@@ -1381,7 +1381,7 @@ export default function ApertureHero() {
               <svg
                 viewBox="0 0 1100 760"
                 style={{
-                  width: isMobile ? "min(92vw, 680px)" : "min(72vw, 820px)",
+                  width: isMobile ? "min(92vw, 560px)" : "min(58vw, 56vh, 660px)",
                   height: "auto",
                   overflow: "visible",
                   filter: "drop-shadow(0 40px 90px rgba(0,0,0,0.96))",
@@ -2140,7 +2140,7 @@ export default function ApertureHero() {
             <svg
               viewBox="0 0 1100 760"
               style={{
-                width: isMobile ? "min(92vw, 680px)" : "min(72vw, 820px)",
+                width: isMobile ? "min(92vw, 560px)" : "min(58vw, 56vh, 660px)",
                 height: "auto",
                 overflow: "visible",
               }}

@@ -24,6 +24,14 @@ html {
   background-color: #030303 !important;
   color-scheme: dark;
   color: var(--color-light);
+  font-size: 15px;
+}
+
+/* Gracefully scale the entire website on compact laptop displays so nothing feels enlarged */
+@media (max-height: 820px) and (min-width: 1024px) {
+  html {
+    font-size: 13.5px;
+  }
 }
 
 body {
