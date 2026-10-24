@@ -1,0 +1,102 @@
+/* src/app/globals.css */
+@import "tailwindcss";
+
+:root {
+  --color-void: #050505;
+  --color-darkroom: #0a0a0a;
+  --color-surface: #141414;
+  --color-film: #1c1c1c;
+  --color-silver: #8a8a8a;
+  --color-light: #e8e8e8;
+  --color-white: #fafafa;
+  --color-shutter: #d4a843;
+  --color-shutter-glow: rgba(212, 168, 67, 0.22);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: auto;
+  background-color: #030303 !important;
+  color-scheme: dark;
+  color: var(--color-light);
+}
+
+body {
+  background-color: #030303 !important;
+  color-scheme: dark;
+  color: var(--color-light);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ====== FONT UTILITIES (Guaranteed fallback if Tailwind isn't active) ====== */
+.font-display {
+  font-family: var(--font-cormorant), Georgia, serif;
+}
+.font-heading {
+  font-family: var(--font-sora), system-ui, sans-serif;
+}
+.font-body {
+  font-family: var(--font-inter), system-ui, sans-serif;
+}
+.font-mono {
+  font-family: var(--font-space-mono), monospace;
+}
+
+/* ====== SELECTION & SCROLLBAR ====== */
+::selection {
+  background-color: var(--color-shutter);
+  color: var(--color-void);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-void);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-film);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-shutter);
+}
+
+/* ====== PLACEHOLDER SECTIONS STYLING ====== */
+main > section {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* ====== KEYFRAMES ====== */
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 0.45;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.04);
+  }
+}
+
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
