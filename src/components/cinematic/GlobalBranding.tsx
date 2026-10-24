@@ -380,7 +380,7 @@ export default function GlobalBranding() {
       className={`fixed ${
         pathname === "/activities"
           ? "top-2 sm:top-3 md:top-5"
-          : "top-2 sm:top-3 md:top-6 lg:top-7"
+          : "top-2 sm:top-4 md:top-20"
       } w-full z-[9980] pointer-events-none select-none flex justify-center`}
       role="banner"
       aria-label="Global Viewfinder Navigation"
