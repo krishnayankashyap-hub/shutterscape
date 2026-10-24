@@ -2309,7 +2309,9 @@ export default function ApertureHero() {
             ref={scene1HudRef}
             style={{
               position: "absolute",
-              inset: isMobile ? "68px 14px 64px 14px" : "clamp(14px, 2.5vw, 32px)",
+              inset: isMobile
+                ? "68px 14px 64px 14px"
+                : "clamp(56px, 7.5vh, 68px) clamp(16px, 2.5vw, 32px) clamp(24px, 3vh, 32px) clamp(16px, 2.5vw, 32px)",
               zIndex: 25,
               display: "flex",
               flexDirection: "column",

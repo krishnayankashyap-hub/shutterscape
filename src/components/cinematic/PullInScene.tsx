@@ -119,7 +119,7 @@ const EXHIBITION_PAIRINGS = [
 
 function getCardLaneStyle(lane: string, isMobile: boolean): React.CSSProperties {
   if (isMobile) {
-    if (lane === "center-stage") return { left: "50%", top: "31%", transform: "translate(-50%, -50%)" };
+    if (lane === "center-stage") return { left: "50%", top: "34%", transform: "translate(-50%, -50%)" };
     return { left: "50%", top: "34%", transform: "translate(-50%, -50%)" };
   }
   switch (lane) {
@@ -132,7 +132,7 @@ function getCardLaneStyle(lane: string, isMobile: boolean): React.CSSProperties 
     case "center-stage": default: 
       return { 
         left: "50%", 
-        top: "clamp(170px, 30vh, 250px)", 
+        top: "39%", 
         transform: "translate(-50%, -50%)" 
       };
   }
@@ -142,7 +142,7 @@ function getTextPositionStyle(pos: string, isMobile: boolean): React.CSSProperti
   if (isMobile) {
     return { 
       left: "50%", 
-      top: "calc(31% + 140px)", 
+      top: "calc(34% + 130px)", 
       transform: "translateX(-50%)", 
       textAlign: "center", 
       width: "90vw" 
@@ -158,7 +158,7 @@ function getTextPositionStyle(pos: string, isMobile: boolean): React.CSSProperti
     case "center-bottom": default: 
       return { 
         left: "50%", 
-        top: "calc(clamp(170px, 30vh, 250px) + clamp(145px, 15vh, 170px))", 
+        top: "calc(39% + 155px)", 
         transform: "translateX(-50%)", 
         textAlign: "center" 
       };
@@ -447,14 +447,8 @@ export default function PullInScene() {
         <div ref={eveningOverlayRef} style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 50% 50%, rgba(18,28,48,0.55) 0%, rgba(5,5,8,0.95) 80%)", opacity: 0, pointerEvents: "none" }} />
       </div>
 
-      {/* CLEAN TUNNEL ENVIRONMENT (SQUARE RINGS REMOVED) */}
-      <div ref={tunnelEnvironmentRef} style={{ position: "absolute", inset: 0, zIndex: 10, display: "flex", alignItems: "center", justifyContent: "center", transformStyle: "preserve-3d", pointerEvents: "none" }}>
-        {/* Center Focal Plane Reticle kept for camera HUD theme */}
-        <div style={{ position: "relative", width: "56px", height: "56px", borderRadius: "50%", border: "1px dashed rgba(212, 168, 67, 0.45)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <span style={{ width: "14px", height: "1px", backgroundColor: "rgba(212, 168, 67, 0.7)", position: "absolute" }} />
-          <span style={{ width: "1px", height: "14px", backgroundColor: "rgba(212, 168, 67, 0.7)", position: "absolute" }} />
-        </div>
-      </div>
+      {/* CLEAN TUNNEL ENVIRONMENT */}
+      <div ref={tunnelEnvironmentRef} style={{ position: "absolute", inset: 0, zIndex: 10, pointerEvents: "none" }} />
 
       {/* 3D CARDS & TYPOGRAPHY STAGE */}
       <div ref={stageRef} style={{ position: "absolute", inset: 0, zIndex: 20, transformStyle: "preserve-3d", pointerEvents: "none", willChange: "transform" }}>
@@ -488,7 +482,7 @@ export default function PullInScene() {
               <div style={{ 
                   position: "relative", 
                   width: "100%", 
-                  height: isMobile ? "150px" : item.lane === "center-stage" ? "210px" : "190px", 
+                  height: isMobile ? "140px" : item.lane === "center-stage" ? "185px" : "180px", 
                   borderRadius: "10px", 
                   overflow: "hidden", 
                   border: "1px solid rgba(255, 255, 255, 0.1)" 
@@ -545,7 +539,7 @@ export default function PullInScene() {
       </div>
 
       {/* HUD BAR */}
-      <div ref={hudBarRef} style={{ position: "absolute", inset: isMobile ? "68px 14px 64px 14px" : "clamp(16px, 2.5vw, 32px)", zIndex: 35, display: "flex", flexDirection: "column", justifyContent: "space-between", pointerEvents: "none" }}>
+      <div ref={hudBarRef} style={{ position: "absolute", inset: isMobile ? "68px 14px 64px 14px" : "clamp(56px, 7.5vh, 68px) clamp(16px, 2.5vw, 32px) clamp(24px, 3vh, 32px) clamp(16px, 2.5vw, 32px)", zIndex: 35, display: "flex", flexDirection: "column", justifyContent: "space-between", pointerEvents: "none" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
           <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
