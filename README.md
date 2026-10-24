@@ -4,6 +4,8 @@
 ### The Official Digital Platform & Darkroom Content Management System
 **Girijananda Chowdhury University (GCU) Photography Club**
 
+*Designed & crafted with love by **Krishnayan** ❤️*
+
 [![Next.js](https://img.shields.io/badge/Next.js-16.4.2-black?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.3.0-blue?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -237,6 +239,7 @@ shutterscape/
 <div align="center">
 
 **Developed with precision for Girijananda Chowdhury University (GCU) Photography Club.**  
+*Designed and made with love by **Krishnayan** ❤️*  
 *Observe. Capture. Tell Stories.*
 
 </div>
