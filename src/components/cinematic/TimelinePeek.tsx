@@ -38,7 +38,7 @@ const ACTIVITY_CHAPTERS: ActivityChapter[] = [
     description:
       "Golden-hour riverfront documentation exploring ferry silhouettes, twilight reflections, and colonial architecture.",
     exif: "35MM · F/2.0 · 1/1000S · ISO 200",
-    src: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1400&q=85",
+    src: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=720&auto=format&fit=crop&q=78",
   },
   {
     id: "02",
@@ -53,7 +53,7 @@ const ACTIVITY_CHAPTERS: ActivityChapter[] = [
     description:
       "Hands-on technical clinic covering aperture control, high-speed sync flash, and Chiaroscuro portrait lighting.",
     exif: "85MM · F/1.4 · 1/250S · ISO 100",
-    src: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=1400&q=85",
+    src: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=720&auto=format&fit=crop&q=78",
   },
   {
     id: "03",
@@ -68,7 +68,7 @@ const ACTIVITY_CHAPTERS: ActivityChapter[] = [
     description:
       "Curated physical print showcase featuring 60+ archival photographs by GCU students and faculty mentors.",
     exif: "50MM · F/2.8 · 1/500S · ISO 400",
-    src: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1400&q=85",
+    src: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=720&auto=format&fit=crop&q=78",
   },
   {
     id: "04",
@@ -83,7 +83,7 @@ const ACTIVITY_CHAPTERS: ActivityChapter[] = [
     description:
       "48-hour visual storytelling challenge celebrating high-contrast urban geometry and human emotion.",
     exif: "24MM · F/4.0 · 1/1250S · ISO 400",
-    src: "https://images.unsplash.com/photo-1449844908441-8829872d2607?w=1400&q=85",
+    src: "https://images.unsplash.com/photo-1449844908441-8829872d2607?w=720&auto=format&fit=crop&q=78",
   },
   {
     id: "05",
@@ -98,7 +98,7 @@ const ACTIVITY_CHAPTERS: ActivityChapter[] = [
     description:
       "Dawn expedition focusing on long-focal tracking, atmospheric compression, and conservation storytelling.",
     exif: "200MM · F/2.8 · 1/2000S · ISO 320",
-    src: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1400&q=85",
+    src: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=720&auto=format&fit=crop&q=78",
   },
 ];
 
@@ -434,6 +434,8 @@ export default function TimelinePeek() {
                         src={chapter.src}
                         alt={chapter.title}
                         fill
+                        priority={idx < 3}
+                        loading={idx < 3 ? "eager" : "lazy"}
                         sizes="(max-width: 1024px) 90vw, 700px"
                         className="object-cover"
                       />

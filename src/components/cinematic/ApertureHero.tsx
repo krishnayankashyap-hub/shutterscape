@@ -17,37 +17,37 @@ const FILM_REEL_FRAMES = [
   {
     id: "01A",
     title: "SILENT PEAKS",
-    src: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800&q=85",
+    src: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400&auto=format&fit=crop&q=75",
     exif: "85MM · F/1.4 · ISO 200",
   },
   {
     id: "02B",
     title: "GOLDEN HORIZON",
-    src: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800&q=85",
+    src: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=400&auto=format&fit=crop&q=75",
     exif: "35MM · F/2.0 · 1/1000S",
   },
   {
     id: "03C",
     title: "CANYON DRIFT",
-    src: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800&q=85",
+    src: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=400&auto=format&fit=crop&q=75",
     exif: "50MM · F/1.8 · RAW",
   },
   {
     id: "04D",
     title: "MIST & LIGHT",
-    src: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&q=85",
+    src: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=400&auto=format&fit=crop&q=75",
     exif: "24MM · F/2.8 · GOLDEN HR",
   },
   {
     id: "05E",
     title: "URBAN SOLITUDE",
-    src: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=800&q=85",
+    src: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=400&auto=format&fit=crop&q=75",
     exif: "35MM · F/1.4 · NIGHT",
   },
   {
     id: "06F",
     title: "ALPINE CREST",
-    src: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=85",
+    src: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400&auto=format&fit=crop&q=75",
     exif: "70MM · F/4.0 · DAWN",
   },
 ];

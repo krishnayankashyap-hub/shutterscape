@@ -16,7 +16,7 @@ const EXHIBITION_PAIRINGS = [
     code: "EXHIBIT // 01A",
     title: "STREET & SHADOWS",
     subTitle: "Guwahati Dusk",
-    src: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800&q=85",
+    src: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=640&auto=format&fit=crop&q=78",
     exif: "f/2.8 · 1/500s · 35mm · ISO 400",
     lane: "left-top",
     textPosition: "right-center",
@@ -29,7 +29,7 @@ const EXHIBITION_PAIRINGS = [
     code: "EXHIBIT // 02B",
     title: "BEHIND THE LENS",
     subTitle: "Human Portrait",
-    src: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800&q=85",
+    src: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=640&auto=format&fit=crop&q=78",
     exif: "f/1.4 · 1/1000s · 85mm · ISO 160",
     lane: "right-center",
     textPosition: "left-center",
@@ -42,7 +42,7 @@ const EXHIBITION_PAIRINGS = [
     code: "EXHIBIT // 03C",
     title: "BRAHMAPUTRA MIST",
     subTitle: "Exhibition Landscape",
-    src: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800&q=85",
+    src: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=640&auto=format&fit=crop&q=78",
     exif: "f/4.0 · 1/250s · 24mm · ISO 100",
     lane: "left-bottom",
     textPosition: "right-top",
@@ -55,7 +55,7 @@ const EXHIBITION_PAIRINGS = [
     code: "EXHIBIT // 04D",
     title: "SILENT PEAKS",
     subTitle: "High Altitude",
-    src: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&q=85",
+    src: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=640&auto=format&fit=crop&q=78",
     exif: "f/2.0 · 1/2000s · 50mm · ISO 200",
     lane: "right-top",
     textPosition: "left-bottom",
@@ -68,7 +68,7 @@ const EXHIBITION_PAIRINGS = [
     code: "EXHIBIT // 05E",
     title: "NEON DRIFT",
     subTitle: "Night Photography",
-    src: "https://images.unsplash.com/photo-1554223090-7e482851df45?w=800&q=85",
+    src: "https://images.unsplash.com/photo-1554223090-7e482851df45?w=640&auto=format&fit=crop&q=78",
     exif: "f/1.8 · 1/60s · 50mm · ISO 800",
     lane: "left-center",
     textPosition: "right-bottom",
@@ -81,7 +81,7 @@ const EXHIBITION_PAIRINGS = [
     code: "EXHIBIT // 06F",
     title: "STUDIO SILHOUETTE",
     subTitle: "Chiaroscuro Study",
-    src: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&q=85",
+    src: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=640&auto=format&fit=crop&q=78",
     exif: "f/5.6 · 1/200s · 105mm · ISO 100",
     lane: "right-bottom",
     textPosition: "left-top",
@@ -94,7 +94,7 @@ const EXHIBITION_PAIRINGS = [
     code: "EXHIBIT // 07G",
     title: "ABSTRACT MOTION",
     subTitle: "Long Exposure",
-    src: "https://images.unsplash.com/photo-1449844908441-8829872d2607?w=800&q=85",
+    src: "https://images.unsplash.com/photo-1449844908441-8829872d2607?w=640&auto=format&fit=crop&q=78",
     exif: "f/8.0 · 4s · 14mm · ISO 100",
     lane: "left-top",
     textPosition: "right-center",
@@ -107,7 +107,7 @@ const EXHIBITION_PAIRINGS = [
     code: "EXHIBIT // 08H",
     title: "THE FINAL APERTURE",
     subTitle: "Master Gallery Showcase",
-    src: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=85",
+    src: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=640&auto=format&fit=crop&q=78",
     exif: "f/1.4 · 1/4000s · 85mm · ISO 100",
     lane: "center-stage",
     textPosition: "center-bottom",
@@ -487,7 +487,7 @@ export default function PullInScene() {
                   overflow: "hidden", 
                   border: "1px solid rgba(255, 255, 255, 0.1)" 
               }}>
-                <Image src={item.src} alt={item.title} fill sizes="(max-width: 1024px) 100vw, 600px" style={{ objectFit: "cover", filter: "contrast(1.06) brightness(0.95)" }} />
+                <Image src={item.src} alt={item.title} fill priority={idx < 4} sizes="(max-width: 1024px) 100vw, 600px" style={{ objectFit: "cover", filter: "contrast(1.06) brightness(0.95)" }} />
                 <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(5,5,5,0.82) 0%, transparent 55%)" }} />
                 <div className="font-display" style={{ position: "absolute", bottom: "10px", left: "12px", fontSize: "17px", letterSpacing: "0.14em", color: "#FAFAFA" }}>
                   {item.title}
