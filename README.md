@@ -1,10 +1,8 @@
 <div align="center">
 
-# 📷 ShutterScape
-### The Official Digital Platform & Darkroom Content Management System
-**Girijananda Chowdhury University (GCU) Photography Club**
+<img src="./public/images/shutterscape-animated-banner.svg" alt="ShutterScape — Designed with love by Krishnayan" width="100%" />
 
-*Designed & crafted with love by **Krishnayan** ❤️*
+<br /><br />
 
 [![Next.js](https://img.shields.io/badge/Next.js-16.4.2-black?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.3.0-blue?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev/)
