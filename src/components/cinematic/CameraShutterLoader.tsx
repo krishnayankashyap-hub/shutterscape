@@ -17,6 +17,17 @@ export default function CameraShutterLoader() {
 
   useEffect(() => {
     if (pathname?.startsWith("/admin")) return;
+
+    // Check if user already saw the shutter intro in this session to make repeat visits instant
+    if (typeof window !== "undefined") {
+      try {
+        if (sessionStorage.getItem("shutter_intro_done")) {
+          setDismissed(true);
+          return;
+        }
+      } catch {}
+    }
+
     // 1. Prevent browser from restoring raw scroll offsets before GSAP pins hydrate
     if (typeof window !== "undefined") {
       window.history.scrollRestoration = "manual";
@@ -79,10 +90,13 @@ export default function CameraShutterLoader() {
       }
     };
 
-    // 3. Camera aperture focus & shutter flash animation timeline
+    // 3. Camera aperture focus & shutter flash animation timeline (Snappy & Instant)
     const tl = gsap.timeline({
       onComplete: () => {
         setDismissed(true);
+        try {
+          sessionStorage.setItem("shutter_intro_done", "true");
+        } catch {}
         // Refresh ScrollTrigger pins cleanly once screen is revealed
         if (typeof window !== "undefined") {
           ScrollTrigger.refresh();
@@ -91,35 +105,32 @@ export default function CameraShutterLoader() {
     });
 
     // Initial state
-    gsap.set(cameraRef.current, { scale: 0.88, opacity: 0 });
+    gsap.set(cameraRef.current, { scale: 0.92, opacity: 0 });
     gsap.set(flashRef.current, { opacity: 0 });
 
-    // Step 1: Camera enters and lens locks focus smoothly
+    // Step 1: Camera enters quickly
     tl.to(cameraRef.current, {
       scale: 1,
       opacity: 1,
-      duration: 0.5,
+      duration: 0.22,
       ease: "power2.out",
     });
 
-    // Step 2: Lens aperture rotates & contracts (autofocus calibration)
+    // Step 2: Lens aperture calibrates fast
     if (apertureRingRef.current) {
       tl.to(
         apertureRingRef.current,
         {
-          rotate: 90,
-          scale: 0.92,
-          duration: 0.55,
+          rotate: 60,
+          scale: 0.94,
+          duration: 0.2,
           ease: "power1.inOut",
         },
-        "-=0.2"
+        "-=0.08"
       );
     }
 
-    // Step 3: Brief focus lock pause before shutter release
-    tl.to({}, { duration: 0.25 });
-
-    // Step 4: CAMERA SHUTTER CLICK + FLASH BURST!
+    // Step 3: Shutter release sound and flash burst
     tl.call(() => {
       setFlashActive(true);
       playCameraShutterSound();
@@ -129,16 +140,16 @@ export default function CameraShutterLoader() {
       flashRef.current,
       {
         opacity: 0.98,
-        duration: 0.08,
+        duration: 0.05,
         ease: "power4.in",
       },
       "+=0.02"
     );
 
-    // Step 5: Flash dissipates with optical bloom, revealing clean website
+    // Step 4: Flash bloom reveals website instantly
     tl.to(flashRef.current, {
       opacity: 0,
-      duration: 0.5,
+      duration: 0.28,
       ease: "power2.out",
     });
 
@@ -146,10 +157,10 @@ export default function CameraShutterLoader() {
       loaderRef.current,
       {
         opacity: 0,
-        duration: 0.6,
-        ease: "power3.inOut",
+        duration: 0.25,
+        ease: "power2.out",
       },
-      "-=0.35"
+      "-=0.18"
     );
 
     return () => {

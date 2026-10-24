@@ -166,7 +166,7 @@ export default function GlobalMusicPlayer() {
         ref={audioRef}
         src="/audio/background-music.mp3"
         loop
-        preload="auto"
+        preload="none"
       />
 
       <button
