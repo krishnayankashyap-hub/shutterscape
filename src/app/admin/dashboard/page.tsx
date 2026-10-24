@@ -2112,12 +2112,55 @@ export default function AdminDashboardPage() {
                   </div>
 
                   <div>
-                    <label
-                      style={{ marginBottom: "6px" }}
-                      className="block text-xs font-bold text-[#2A3547]"
-                    >
-                      Event Description
-                    </label>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <label className="block text-xs font-bold text-[#2A3547]">
+                        Event Description
+                      </label>
+                      <div className="flex items-center gap-1">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const cur = editingItem.description || "";
+                            setEditingItem({
+                              ...editingItem,
+                              description: cur + " **bold text** ",
+                            });
+                          }}
+                          className="px-2 py-0.5 rounded text-[11px] font-bold bg-[#F4F7FE] hover:bg-[#5D87FF] hover:text-white border border-[#DFE5EF] text-[#2A3547] transition-all cursor-pointer"
+                          title="Add bold formatting"
+                        >
+                          B
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const cur = editingItem.description || "";
+                            setEditingItem({
+                              ...editingItem,
+                              description: cur + " *italic text* ",
+                            });
+                          }}
+                          className="px-2 py-0.5 rounded text-[11px] italic font-serif bg-[#F4F7FE] hover:bg-[#5D87FF] hover:text-white border border-[#DFE5EF] text-[#2A3547] transition-all cursor-pointer"
+                          title="Add italic formatting"
+                        >
+                          I
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const cur = editingItem.description || "";
+                            setEditingItem({
+                              ...editingItem,
+                              description: cur + " [Link Title](https://example.com) ",
+                            });
+                          }}
+                          className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#F4F7FE] hover:bg-[#5D87FF] hover:text-white border border-[#DFE5EF] text-[#2A3547] transition-all cursor-pointer"
+                          title="Add web link"
+                        >
+                          Link
+                        </button>
+                      </div>
+                    </div>
                     <textarea
                       rows={3}
                       value={editingItem.description || ""}
@@ -2127,7 +2170,7 @@ export default function AdminDashboardPage() {
                           description: e.target.value,
                         })
                       }
-                      placeholder="Details, gear requirements, and itinerary..."
+                      placeholder="Details, gear requirements, and itinerary... (supports **bold**, *italics*, and [link](url))"
                       className="cms-form-input"
                     />
                   </div>

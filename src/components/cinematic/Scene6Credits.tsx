@@ -225,7 +225,9 @@ export default function Scene6Credits() {
             {/* WHATSAPP BUTTON WITH SVG LOGO */}
             <Link
               ref={waBtnRef}
-              href="#"
+              href="https://chat.whatsapp.com/Hs71BicR1Xj3PmOyPJ5wdc?s=sw&p=a&mlu=4&ilr=4"
+              target="_blank"
+              rel="noopener noreferrer"
               className="font-mono relative inline-flex items-center justify-center gap-3 rounded-full uppercase transition-all duration-300 group min-h-[44px] min-w-[44px] w-full sm:w-auto touch-manipulation cursor-pointer"
               style={{
                 padding: "16px 36px",
@@ -258,8 +260,9 @@ export default function Scene6Credits() {
             {/* INSTAGRAM BUTTON WITH SVG LOGO */}
             <Link
               ref={igBtnRef}
-              href="https://instagram.com/shutterscape_gcu"
+              href="https://www.instagram.com/shutterscape_gcu"
               target="_blank"
+              rel="noopener noreferrer"
               className="font-mono relative inline-flex items-center justify-center gap-3 rounded-full uppercase transition-all duration-300 group min-h-[44px] min-w-[44px] w-full sm:w-auto touch-manipulation cursor-pointer"
               style={{
                 padding: "16px 36px",
@@ -331,7 +334,7 @@ export default function Scene6Credits() {
               </p>
 
               {/* FIXED GOOGLE MAP EMBED */}
-              <div className="w-full max-w-[420px] h-[180px] rounded-xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.08)] border border-black/10 mb-8 filter grayscale-[80%] hover:grayscale-0 hover:shadow-[0_15px_40px_rgba(212,168,67,0.15)] transition-all duration-500">
+              <div className="w-full max-w-[420px] h-[180px] rounded-xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.08)] border border-black/10 mb-3 filter grayscale-[80%] hover:grayscale-0 hover:shadow-[0_15px_40px_rgba(212,168,67,0.15)] transition-all duration-500">
                 <iframe 
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3582.493527263544!2d91.60334817610196!3d26.11520639391097!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x375a4ffab238a8e1%3A0xda591cc5a3592bc1!2sGirijananda%20Chowdhury%20University%2C%20Assam!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin" 
                   width="100%" 
@@ -342,6 +345,15 @@ export default function Scene6Credits() {
                   referrerPolicy="no-referrer-when-downgrade"
                 />
               </div>
+              <a
+                href="https://maps.app.goo.gl/NhdHs1u76Bjxo2J87"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-mono text-[10px] tracking-wider text-[#D4A843] hover:text-[#050505] transition-colors mb-6 inline-flex items-center gap-1.5"
+              >
+                <span>Open University Location on Google Maps</span>
+                <span>↗</span>
+              </a>
               
               <div className="font-mono text-[10px] md:text-[11px] tracking-[0.18em] text-[#050505]/40 uppercase mb-2">Contact</div>
               <a href="mailto:shutterscape@gcuniversity.ac.in" className="font-mono text-xs md:text-sm tracking-widest text-[#D4A843] hover:text-[#050505] transition-colors">

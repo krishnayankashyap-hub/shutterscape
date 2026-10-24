@@ -7,6 +7,7 @@ import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SmoothScroller from "@/components/cinematic/SmoothScroller";
+import ClubFooter from "@/components/cinematic/ClubFooter";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -818,30 +819,9 @@ export default function CinematicGalleryPage() {
         )}
 
         {/* =========================================================
-            FOOTER: Seamlessly connects beneath the gallery
+            FOOTER: Unified Club Footer
             ========================================================= */}
-        <footer className="relative z-10 py-16 sm:py-20 bg-[#0A0A0D] text-center border-t border-black/10 text-white">
-          <div className="flex flex-col items-center justify-center gap-5">
-            <div className="w-11 h-11 rounded-full border border-[#D4A843]/50 flex items-center justify-center shadow-[0_0_15px_rgba(212,168,67,0.2)]">
-              <span className="font-serif italic text-[#D4A843] text-lg">
-                S
-              </span>
-            </div>
-
-            <p className="font-mono text-[10px] tracking-[0.3em] text-white/50 uppercase">
-              © 2026 ShutterScape GCU. All Rights Reserved.
-            </p>
-
-            <a
-              href="https://codingclub.gcuniversity.ac.in"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-mono text-[9px] tracking-[0.35em] text-[#FAFAFA]/75 uppercase border border-white/20 px-6 py-2.5 rounded-full hover:bg-white hover:text-black hover:border-white transition-all duration-300 cursor-pointer"
-            >
-              Designed & Developed by Codénix
-            </a>
-          </div>
-        </footer>
+        <ClubFooter variant="dark" />
       </main>
     </SmoothScroller>
   );

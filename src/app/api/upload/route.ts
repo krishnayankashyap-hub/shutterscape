@@ -3,13 +3,6 @@ import { NextResponse } from "next/server";
 import { writeFile } from "fs/promises";
 import path from "path";
 
-// Allow payloads up to 100MB for 4K vertical video reels and raw photos
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
 export async function POST(request: Request) {
   try {
     const formData = await request.formData();

@@ -1,10 +1,10 @@
 // src/app/admin/login/page.tsx
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function AdminLoginPage() {
+function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/admin/dashboard";
@@ -148,5 +148,19 @@ export default function AdminLoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function AdminLoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen w-full flex items-center justify-center bg-[#F4F7FE] text-[#7C8FAC] font-mono text-xs">
+          Loading gateway...
+        </div>
+      }
+    >
+      <LoginForm />
+    </Suspense>
   );
 }

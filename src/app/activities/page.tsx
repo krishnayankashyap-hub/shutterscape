@@ -7,6 +7,7 @@ import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SmoothScroller from "@/components/cinematic/SmoothScroller";
+import ClubFooter from "@/components/cinematic/ClubFooter";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -407,6 +408,44 @@ const FILTERS: { label: string; value: FilterKey }[] = [
 const HEX_ANGLES_DEG = [-90, -30, 30, 90, 150, -150];
 // Card Z-rotations so inner edges form a seamless 6-sided aperture without upside-down cards
 const HEX_ROTATIONS_DEG = [0, 60, -60, 0, 60, -60];
+
+function renderFormattedDescription(text: string) {
+  if (!text) return null;
+  const regex = /(\*\*.*?\*\*|\*.*?\*|\[.*?\]\(.*?\))/g;
+  const parts = text.split(regex);
+
+  return parts.map((part, index) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return (
+        <strong key={index} className="font-bold text-[#141413]">
+          {part.slice(2, -2)}
+        </strong>
+      );
+    }
+    if (part.startsWith("*") && part.endsWith("*")) {
+      return (
+        <em key={index} className="italic text-[#141413]">
+          {part.slice(1, -1)}
+        </em>
+      );
+    }
+    const linkMatch = part.match(/^\[(.*?)\]\((.*?)\)$/);
+    if (linkMatch) {
+      return (
+        <a
+          key={index}
+          href={linkMatch[2]}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[#D4A843] underline font-semibold hover:text-[#141413] transition-colors"
+        >
+          {linkMatch[1]}
+        </a>
+      );
+    }
+    return part;
+  });
+}
 
 export default function ActivitiesPage() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -1092,7 +1131,7 @@ export default function ActivitiesPage() {
                   </h2>
 
                   <p className="font-body text-sm text-[#141413]/75 leading-relaxed mb-6">
-                    {activeModalEvent.description}
+                    {renderFormattedDescription(activeModalEvent.description)}
                   </p>
 
                   <div className="grid grid-cols-2 gap-3 py-4 border-y border-[#141413]/10 font-mono text-xs">
@@ -1149,6 +1188,11 @@ export default function ActivitiesPage() {
             </div>
           </div>
         )}
+
+        {/* =========================================================
+            FOOTER: Unified Club Footer
+            ========================================================= */}
+        <ClubFooter variant="dark" />
       </main>
     </SmoothScroller>
   );
