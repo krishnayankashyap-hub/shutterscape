@@ -119,7 +119,7 @@ const EXHIBITION_PAIRINGS = [
 
 function getCardLaneStyle(lane: string, isMobile: boolean): React.CSSProperties {
   if (isMobile) {
-    if (lane === "center-stage") return { left: "50%", top: "33%", transform: "translate(-50%, -50%)" };
+    if (lane === "center-stage") return { left: "50%", top: "31%", transform: "translate(-50%, -50%)" };
     return { left: "50%", top: "34%", transform: "translate(-50%, -50%)" };
   }
   switch (lane) {
@@ -129,13 +129,24 @@ function getCardLaneStyle(lane: string, isMobile: boolean): React.CSSProperties 
     case "right-top": return { left: "76%", top: "42%", transform: "translate(-50%, -50%)" };
     case "right-center": return { left: "77%", top: "50%", transform: "translate(-50%, -50%)" };
     case "right-bottom": return { left: "75%", top: "58%", transform: "translate(-50%, -50%)" };
-    case "center-stage": default: return { left: "50%", top: isMobile ? "38%" : "34%", transform: "translate(-50%, -50%)" };
+    case "center-stage": default: 
+      return { 
+        left: "50%", 
+        top: "clamp(170px, 30vh, 250px)", 
+        transform: "translate(-50%, -50%)" 
+      };
   }
 }
 
 function getTextPositionStyle(pos: string, isMobile: boolean): React.CSSProperties {
   if (isMobile) {
-    return { left: "50%", bottom: "8%", transform: "translateX(-50%)", textAlign: "center", width: "90vw" };
+    return { 
+      left: "50%", 
+      top: "calc(31% + 140px)", 
+      transform: "translateX(-50%)", 
+      textAlign: "center", 
+      width: "90vw" 
+    };
   }
   switch (pos) {
     case "right-center": return { right: "7%", top: "50%", transform: "translateY(-50%)", textAlign: "right" };
@@ -145,7 +156,12 @@ function getTextPositionStyle(pos: string, isMobile: boolean): React.CSSProperti
     case "left-top": return { left: "7%", top: "38%", transform: "translateY(-50%)", textAlign: "left" };
     case "left-bottom": return { left: "7%", top: "60%", transform: "translateY(-50%)", textAlign: "left" };
     case "center-bottom": default: 
-      return { left: "50%", bottom: "6%", transform: "translateX(-50%)", textAlign: "center" };
+      return { 
+        left: "50%", 
+        top: "calc(clamp(170px, 30vh, 250px) + clamp(145px, 15vh, 170px))", 
+        transform: "translateX(-50%)", 
+        textAlign: "center" 
+      };
   }
 }
 
@@ -449,7 +465,7 @@ export default function PullInScene() {
                 position: "absolute", 
                 ...laneStyle, 
                 // BALANCED CARD SIZES (Prevents overlap with stage text)
-                width: isMobile ? "min(88vw, 320px)" : item.lane === "center-stage" ? "clamp(340px, 32vw, 440px)" : "clamp(300px, 26vw, 400px)", 
+                width: isMobile ? "min(88vw, 320px)" : item.lane === "center-stage" ? "clamp(320px, 30vw, 420px)" : "clamp(290px, 25vw, 380px)", 
                 backgroundColor: "rgba(12, 12, 14, 0.92)", 
                 border: "1px solid rgba(212, 168, 67, 0.38)", 
                 borderRadius: "14px", 
@@ -472,7 +488,7 @@ export default function PullInScene() {
               <div style={{ 
                   position: "relative", 
                   width: "100%", 
-                  height: isMobile ? "160px" : item.lane === "center-stage" ? "240px" : "220px", 
+                  height: isMobile ? "150px" : item.lane === "center-stage" ? "210px" : "190px", 
                   borderRadius: "10px", 
                   overflow: "hidden", 
                   border: "1px solid rgba(255, 255, 255, 0.1)" 
@@ -496,18 +512,18 @@ export default function PullInScene() {
           const isLast = idx === exhibits.length - 1;
 
           return (
-            <div key={`text-${item.id}`} ref={(el) => { textRefs.current[idx] = el; }} style={{ position: "absolute", ...textStyle, maxWidth: isMobile ? "90vw" : "420px", zIndex: 30, pointerEvents: isLast ? "auto" : "none", willChange: "transform, opacity, clip-path" }}>
-              <div className="font-mono" style={{ display: "inline-block", fontSize: "10px", letterSpacing: "0.28em", color: "#D4A843", backgroundColor: "rgba(212, 168, 67, 0.1)", border: "1px solid rgba(212, 168, 67, 0.32)", padding: "4px 12px", borderRadius: "999px", marginBottom: "14px" }}>
+            <div key={`text-${item.id}`} ref={(el) => { textRefs.current[idx] = el; }} style={{ position: "absolute", ...textStyle, maxWidth: isMobile ? "90vw" : item.lane === "center-stage" ? "min(90vw, 520px)" : "420px", zIndex: 30, pointerEvents: isLast ? "auto" : "none", willChange: "transform, opacity, clip-path" }}>
+              <div className="font-mono" style={{ display: "inline-block", fontSize: "10px", letterSpacing: "0.28em", color: "#D4A843", backgroundColor: "rgba(212, 168, 67, 0.1)", border: "1px solid rgba(212, 168, 67, 0.32)", padding: "3px 10px", borderRadius: "999px", marginBottom: "8px" }}>
                 {item.code} · {item.focusDistance}
               </div>
-              <h2 className="font-display" style={{ fontSize: isMobile ? "clamp(1.2rem, 4vw, 1.6rem)" : "clamp(1.6rem, 2.4vw, 2.4rem)", fontWeight: 300, color: "#FAFAFA", lineHeight: 1.15, letterSpacing: "0.04em", textShadow: "0 12px 35px rgba(0, 0, 0, 0.85)" }}>
+              <h2 className="font-display" style={{ fontSize: isMobile ? "clamp(1.2rem, 3.8vw, 1.5rem)" : "clamp(1.5rem, 2.2vw, 2.2rem)", fontWeight: 300, color: "#FAFAFA", lineHeight: 1.15, letterSpacing: "0.04em", textShadow: "0 12px 35px rgba(0, 0, 0, 0.85)" }}>
                 {item.headline}
               </h2>
-              <p className="font-body" style={{ marginTop: "12px", fontSize: isMobile ? "12px" : "15px", fontWeight: 300, color: "#E8E8E8", lineHeight: 1.6, opacity: 0.85 }}>
+              <p className="font-body" style={{ marginTop: "8px", fontSize: isMobile ? "12px" : "14px", fontWeight: 300, color: "#E8E8E8", lineHeight: 1.5, opacity: 0.85 }}>
                 {item.subhead}
               </p>
               {isLast && (
-                <div ref={finalCtaRef} style={{ marginTop: "22px", display: "inline-block" }}>
+                <div ref={finalCtaRef} style={{ marginTop: "16px", display: "inline-block" }}>
                   <Link
                     href="/gallery"
                     className="group font-mono relative inline-flex items-center gap-3 min-h-[44px] py-2 px-1 text-[#D4A843] hover:text-white text-[11px] sm:text-[12.5px] tracking-[0.3em] uppercase font-bold transition-colors duration-300 cursor-pointer touch-manipulation bg-transparent border-0 shadow-none rounded-none focus-visible:outline-2 focus-visible:outline-[#D4A843] focus-visible:outline-offset-4"

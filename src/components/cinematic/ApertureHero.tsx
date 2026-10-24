@@ -1,7 +1,7 @@
 // src/components/cinematic/ApertureHero.tsx
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
@@ -130,15 +130,39 @@ export default function ApertureHero() {
       .catch(() => {});
   }, []);
 
-  // Detect mobile/tablet viewport so layout and lens portal scale cleanly on all devices
-  useEffect(() => {
-    const checkViewport = () => {
-      setIsMobile(window.innerWidth < 1024);
-    };
-    checkViewport();
-    window.addEventListener("resize", checkViewport);
-    return () => window.removeEventListener("resize", checkViewport);
+  // Compute exact responsive lens portal radius so the circular photo inside the lens
+  // matches the SVG inner lens rim on mobile, laptop, and desktop displays
+  const getLensPortalRadius = useCallback(() => {
+    const svgEl = cameraBodyLayerRef.current?.querySelector("svg");
+    if (svgEl) {
+      const rect = svgEl.getBoundingClientRect();
+      if (rect.width > 0) {
+        return Math.round(rect.width * 0.128);
+      }
+    }
+    const vw = typeof window !== "undefined" ? window.innerWidth : 1200;
+    const vh = typeof window !== "undefined" ? window.innerHeight : 800;
+    const svgWidth =
+      vw < 1024
+        ? Math.min(vw * 0.9, vh * 0.68, 520)
+        : Math.min(vw * 0.64, vh * 0.7, 740);
+    return Math.round(svgWidth * 0.128);
   }, []);
+
+  // Detect mobile/tablet viewport and dynamically update lens portal on resize
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 1024);
+      if (clipMaskRef.current && window.scrollY < 60) {
+        gsap.set(clipMaskRef.current, {
+          clipPath: `circle(${getLensPortalRadius()}px at 50% 50%)`,
+        });
+      }
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [getLensPortalRadius]);
 
   // Subtle, disciplined optical glass reflection & single-line backdrop parallax on mouse move
   useEffect(() => {
@@ -184,15 +208,6 @@ export default function ApertureHero() {
 
       const validBlades = bladePolygonRefs.current.filter(Boolean);
       const validTitleChars = titleCharsRef.current.filter(Boolean);
-
-      // Compute exact responsive lens portal radius so the circular photo inside the lens
-      // matches the SVG inner lens rim on both 360px mobile phones and 1920px desktops
-      const getLensPortalRadius = () => {
-        const vw = window.innerWidth;
-        const svgWidth =
-          vw < 1024 ? Math.min(vw * 0.92, 680) : Math.min(vw * 0.72, 820);
-        return Math.round(svgWidth * 0.128);
-      };
 
       const initialRadius = getLensPortalRadius();
 
@@ -1364,8 +1379,8 @@ export default function ApertureHero() {
               <div
                 style={{
                   position: "relative",
-                  width: isMobile ? "min(92vw, 680px)" : "min(72vw, 820px)",
-                  height: isMobile ? "min(68vw, 500px)" : "min(56vw, 600px)",
+                  width: isMobile ? "min(90vw, 68vh, 520px)" : "min(64vw, 70vh, 740px)",
+                  height: isMobile ? "min(62vw, 47vh, 360px)" : "min(44vw, 48vh, 510px)",
                 }}
               >
                 <Image
@@ -1373,7 +1388,7 @@ export default function ApertureHero() {
                   alt="ShutterScape Camera"
                   fill
                   priority
-                  sizes="820px"
+                  sizes="740px"
                   style={{ objectFit: "contain" }}
                 />
               </div>
@@ -1381,7 +1396,7 @@ export default function ApertureHero() {
               <svg
                 viewBox="0 0 1100 760"
                 style={{
-                  width: isMobile ? "min(92vw, 680px)" : "min(72vw, 820px)",
+                  width: isMobile ? "min(90vw, 68vh, 520px)" : "min(64vw, 70vh, 740px)",
                   height: "auto",
                   overflow: "visible",
                   filter: "drop-shadow(0 40px 90px rgba(0,0,0,0.96))",
@@ -2140,7 +2155,7 @@ export default function ApertureHero() {
             <svg
               viewBox="0 0 1100 760"
               style={{
-                width: isMobile ? "min(92vw, 680px)" : "min(72vw, 820px)",
+                width: isMobile ? "min(90vw, 68vh, 520px)" : "min(64vw, 70vh, 740px)",
                 height: "auto",
                 overflow: "visible",
               }}

@@ -379,15 +379,15 @@ export default function GlobalBranding() {
     <header
       className={`fixed ${
         pathname === "/activities"
-          ? "top-2 sm:top-3 md:top-5"
-          : "top-2 sm:top-4 md:top-9 lg:top-10"
+          ? "top-2 sm:top-3 md:top-4"
+          : "top-2 sm:top-3 md:top-4 lg:top-5"
       } w-full z-[9980] pointer-events-none select-none flex justify-center`}
       role="banner"
       aria-label="Global Viewfinder Navigation"
     >
       {/* The shadow dynamically applies in dark environments and lifts cleanly in white environments */}
       <div
-        className="relative flex flex-wrap md:flex-nowrap items-center justify-between w-full max-w-7xl gap-y-1 gap-x-2 sm:gap-4 md:gap-6 lg:gap-8 xl:gap-12 px-4 sm:px-6 pointer-events-auto transition-all duration-500"
+        className="relative flex flex-wrap md:flex-nowrap items-center justify-between w-full max-w-7xl gap-y-1 gap-x-2 sm:gap-4 md:gap-6 px-4 sm:px-6 pointer-events-auto transition-all duration-500"
         style={{
           filter: isLightBackground
             ? "none"
@@ -446,7 +446,7 @@ export default function GlobalBranding() {
             CENTER: NAVIGATION ITEMS (HOME // GALLERY // ABOUT // ACTIVITY // MOMENTS) - DEAD CENTER
             ============================================================ */}
         <nav
-          className="order-3 md:order-2 md:absolute md:left-1/2 md:-translate-x-1/2 w-full md:w-auto flex items-center justify-center gap-1 sm:gap-2 md:gap-3 lg:gap-5 xl:gap-7 shrink-0 mt-0.5 sm:mt-1 md:mt-0 z-20"
+          className="order-3 md:order-2 md:absolute md:left-1/2 md:-translate-x-1/2 w-full md:w-auto flex items-center justify-center gap-1 sm:gap-2 md:gap-3 lg:gap-4 shrink-0 mt-0.5 sm:mt-1 md:mt-0 z-20"
           aria-label="Primary Navigation"
         >
           {NAV_ITEMS.map((item, index) => {
@@ -458,7 +458,7 @@ export default function GlobalBranding() {
                   type="button"
                   onClick={(e) => handleNavClick(item, e)}
                   aria-current={isActive ? "page" : undefined}
-                  className="group relative flex flex-col items-center justify-center font-mono text-[9.5px] sm:text-[11px] md:text-[12.5px] lg:text-[13.5px] xl:text-[14px] uppercase tracking-[0.1em] sm:tracking-[0.15em] md:tracking-[0.2em] lg:tracking-[0.24em] font-extrabold transition-colors duration-300 cursor-pointer min-h-[38px] sm:min-h-[44px] min-w-[32px] sm:min-w-[38px] px-1 sm:px-1.5 md:px-2 py-1.5 touch-manipulation focus-visible:outline-2 focus-visible:outline-[#D4A843]"
+                  className="group relative flex flex-col items-center justify-center font-mono text-[9px] sm:text-[10px] md:text-[11px] lg:text-[11.5px] uppercase tracking-[0.14em] sm:tracking-[0.18em] font-bold transition-colors duration-300 cursor-pointer min-h-[34px] sm:min-h-[38px] px-1 sm:px-1.5 md:px-2 py-1 touch-manipulation focus-visible:outline-2 focus-visible:outline-[#D4A843]"
                   style={{
                     color: isActive ? activeGoldColor : textColor,
                     opacity: isActive ? 1 : 0.75,
@@ -468,7 +468,7 @@ export default function GlobalBranding() {
 
                   {/* Sharp Gold Underline for Active/Hover State */}
                   <span
-                    className={`absolute bottom-1 w-full h-[2px] transition-transform duration-500 ease-out origin-center ${
+                    className={`absolute bottom-0.5 w-full h-[1.5px] transition-transform duration-500 ease-out origin-center ${
                       isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
                     }`}
                     style={{ backgroundColor: activeGoldColor }}
@@ -478,7 +478,7 @@ export default function GlobalBranding() {
                 {/* Technical Slash Separators */}
                 {index < NAV_ITEMS.length - 1 && (
                   <span
-                    className="font-mono text-[8.5px] sm:text-[10px] md:text-[12px] pointer-events-none select-none transition-colors duration-500 opacity-60"
+                    className="font-mono text-[8px] sm:text-[9px] md:text-[10px] pointer-events-none select-none transition-colors duration-500 opacity-45"
                     style={{ color: mutedTextColor }}
                   >
                     //
@@ -490,24 +490,9 @@ export default function GlobalBranding() {
         </nav>
 
         {/* ============================================================
-            RIGHT SIDE: GCU LOGO + METADATA
+            RIGHT SIDE: GCU LOGO
             ============================================================ */}
         <div className="order-2 md:order-3 md:flex-1 flex items-center justify-end gap-2 sm:gap-4 md:gap-6 shrink-0 z-10">
-          {/* Telemetry metadata */}
-          <div
-            className="hidden xl:flex items-center gap-4 font-mono text-[9px] tracking-[0.25em] uppercase opacity-80 transition-colors duration-500"
-            style={{ color: textColor }}
-          >
-            <span
-              className="h-6 w-[1px] transition-colors duration-500"
-              style={{ backgroundColor: dividerColor }}
-            />
-            <div className="flex flex-col gap-0.5 text-left">
-              <span className="text-[7.5px] tracking-[0.4em] opacity-60 font-bold"></span>
-              <span> // </span>
-            </div>
-          </div>
-
           <a
             href="https://gcu.ac.in"
             target="_blank"
@@ -517,7 +502,7 @@ export default function GlobalBranding() {
             aria-label="Girijananda Chowdhury University"
           >
             <div
-              className="relative h-6 w-[82px] sm:h-8 sm:w-[115px] md:h-[42px] md:w-[190px] transition-all duration-500"
+              className="relative h-6 w-[82px] sm:h-8 sm:w-[115px] md:h-[40px] md:w-[175px] transition-all duration-500"
             >
               <Image
                 src={
@@ -527,7 +512,7 @@ export default function GlobalBranding() {
                 }
                 alt="GCU Logo"
                 fill
-                sizes="(max-width: 640px) 130px, (max-width: 768px) 150px, 190px"
+                sizes="(max-width: 640px) 130px, (max-width: 768px) 150px, 175px"
                 priority
                 unoptimized
                 className="object-contain"
