@@ -73,17 +73,6 @@
       fill: #E2E8F0;
     }
 
-    .heart {
-      fill: #EF4444;
-      animation: heartbeat 1.5s ease-in-out infinite;
-      transform-origin: 645px 233px;
-    }
-
-    .recording-dot {
-      fill: #EF4444;
-      animation: blinkDot 1.4s ease-in-out infinite;
-    }
-
     @keyframes rotateRing {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
@@ -92,16 +81,6 @@
     @keyframes pulseGlow {
       0% { opacity: 0.5; filter: drop-shadow(0 0 6px rgba(212, 168, 67, 0.4)); }
       100% { opacity: 1; filter: drop-shadow(0 0 20px rgba(129, 140, 248, 0.8)); }
-    }
-
-    @keyframes heartbeat {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.35); }
-    }
-
-    @keyframes blinkDot {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.15; }
     }
   </style>
 
@@ -118,10 +97,6 @@
   <line x1="50" y1="140" x2="65" y2="140" stroke="#334155" stroke-width="1.5" />
   <line x1="935" y1="140" x2="950" y2="140" stroke="#334155" stroke-width="1.5" />
 
-  <!-- Live Shutter Indicator -->
-  <circle cx="440" cy="45" r="4" class="recording-dot" />
-  <text x="452" y="49" font-family="'Space Mono', monospace" font-size="10" font-weight="700" fill="#EF4444" letter-spacing="0.2em">DARKROOM REC // 35MM</text>
-
   <!-- Rotating Aperture Blades / Iris Reticle -->
   <g class="aperture-ring">
     <circle cx="500" cy="75" r="26" stroke="#D4A843" stroke-width="1.5" fill="none" stroke-dasharray="8 6" opacity="0.8" />
@@ -137,12 +112,11 @@
   <!-- Subtitle Bar -->
   <text x="500" y="194" class="subtitle">Girijananda Chowdhury University · Photography Club</text>
 
-  <!-- Creator Badge Bar -->
+  <!-- Clean Centered Creator Badge Bar -->
   <g>
-    <rect x="300" y="215" width="400" height="34" rx="17" fill="#0b0f19" stroke="#334155" stroke-width="1" />
-    <text x="490" y="237" class="creator-tag">
+    <rect x="315" y="215" width="370" height="34" rx="17" fill="#0b0f19" stroke="#334155" stroke-width="1" />
+    <text x="500" y="237" class="creator-tag">
       Designed &amp; made with love by <tspan font-weight="bold" fill="#D4A843">Krishnayan</tspan>
     </text>
-    <path class="heart" d="M 645 234 C 645 231, 642 228, 639 228 C 636 228, 634 230, 633 232 C 632 230, 630 228, 627 228 C 624 228, 621 231, 621 234 C 621 238, 633 243, 633 243 C 633 243, 645 238, 645 234 Z" transform="translate(48, -4)" />
   </g>
 </svg>

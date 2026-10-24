@@ -145,7 +145,7 @@ graph TD
 
 ### 1. Clone & Install
 ```bash
-git clone https://github.com/krishnayankashyap/shutterscape.git
+git clone https://github.com/krishnayankashyap-hub/shutterscape.git
 cd shutterscape
 npm install
 ```
@@ -237,7 +237,7 @@ shutterscape/
 <div align="center">
 
 **Developed with precision for Girijananda Chowdhury University (GCU) Photography Club.**  
-*Designed and made with love by **Krishnayan** ❤️*  
+*Designed and made with love by **Krishnayan***  
 *Observe. Capture. Tell Stories.*
 
 </div>
