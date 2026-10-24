@@ -129,13 +129,13 @@ function getCardLaneStyle(lane: string, isMobile: boolean): React.CSSProperties 
     case "right-top": return { left: "76%", top: "42%", transform: "translate(-50%, -50%)" };
     case "right-center": return { left: "77%", top: "50%", transform: "translate(-50%, -50%)" };
     case "right-bottom": return { left: "75%", top: "58%", transform: "translate(-50%, -50%)" };
-    case "center-stage": default: return { left: "50%", top: "41%", transform: "translate(-50%, -50%)" };
+    case "center-stage": default: return { left: "50%", top: isMobile ? "38%" : "34%", transform: "translate(-50%, -50%)" };
   }
 }
 
 function getTextPositionStyle(pos: string, isMobile: boolean): React.CSSProperties {
   if (isMobile) {
-    return { left: "50%", bottom: "11%", transform: "translateX(-50%)", textAlign: "center", width: "90vw" };
+    return { left: "50%", bottom: "8%", transform: "translateX(-50%)", textAlign: "center", width: "90vw" };
   }
   switch (pos) {
     case "right-center": return { right: "7%", top: "50%", transform: "translateY(-50%)", textAlign: "right" };
@@ -145,8 +145,7 @@ function getTextPositionStyle(pos: string, isMobile: boolean): React.CSSProperti
     case "left-top": return { left: "7%", top: "38%", transform: "translateY(-50%)", textAlign: "left" };
     case "left-bottom": return { left: "7%", top: "60%", transform: "translateY(-50%)", textAlign: "left" };
     case "center-bottom": default: 
-      // Brought the final text block up by 10%
-      return { left: "50%", bottom: "18%", transform: "translateX(-50%)", textAlign: "center" };
+      return { left: "50%", bottom: "6%", transform: "translateX(-50%)", textAlign: "center" };
   }
 }
 
@@ -449,8 +448,8 @@ export default function PullInScene() {
             <div key={item.id} ref={(el) => { cardRefs.current[idx] = el; }} style={{ 
                 position: "absolute", 
                 ...laneStyle, 
-                // SIGNIFICANTLY INCREASED CARD SIZES
-                width: isMobile ? "min(88vw, 340px)" : item.lane === "center-stage" ? "clamp(400px, 38vw, 560px)" : "clamp(340px, 30vw, 460px)", 
+                // BALANCED CARD SIZES (Prevents overlap with stage text)
+                width: isMobile ? "min(88vw, 320px)" : item.lane === "center-stage" ? "clamp(340px, 32vw, 440px)" : "clamp(300px, 26vw, 400px)", 
                 backgroundColor: "rgba(12, 12, 14, 0.92)", 
                 border: "1px solid rgba(212, 168, 67, 0.38)", 
                 borderRadius: "14px", 
@@ -473,8 +472,7 @@ export default function PullInScene() {
               <div style={{ 
                   position: "relative", 
                   width: "100%", 
-                  // SCALED UP IMAGE HEIGHTS TO MATCH NEW WIDTHS
-                  height: isMobile ? "180px" : item.lane === "center-stage" ? "320px" : "280px", 
+                  height: isMobile ? "160px" : item.lane === "center-stage" ? "240px" : "220px", 
                   borderRadius: "10px", 
                   overflow: "hidden", 
                   border: "1px solid rgba(255, 255, 255, 0.1)" 
@@ -502,7 +500,7 @@ export default function PullInScene() {
               <div className="font-mono" style={{ display: "inline-block", fontSize: "10px", letterSpacing: "0.28em", color: "#D4A843", backgroundColor: "rgba(212, 168, 67, 0.1)", border: "1px solid rgba(212, 168, 67, 0.32)", padding: "4px 12px", borderRadius: "999px", marginBottom: "14px" }}>
                 {item.code} · {item.focusDistance}
               </div>
-              <h2 className="font-display" style={{ fontSize: isMobile ? "clamp(1.4rem, 5.2vw, 2rem)" : "clamp(2.4rem, 3.8vw, 3.8rem)", fontWeight: 300, color: "#FAFAFA", lineHeight: 1.12, letterSpacing: "0.04em", textShadow: "0 12px 35px rgba(0, 0, 0, 0.85)" }}>
+              <h2 className="font-display" style={{ fontSize: isMobile ? "clamp(1.2rem, 4vw, 1.6rem)" : "clamp(1.6rem, 2.4vw, 2.4rem)", fontWeight: 300, color: "#FAFAFA", lineHeight: 1.15, letterSpacing: "0.04em", textShadow: "0 12px 35px rgba(0, 0, 0, 0.85)" }}>
                 {item.headline}
               </h2>
               <p className="font-body" style={{ marginTop: "12px", fontSize: isMobile ? "12px" : "15px", fontWeight: 300, color: "#E8E8E8", lineHeight: 1.6, opacity: 0.85 }}>
@@ -533,13 +531,15 @@ export default function PullInScene() {
       {/* HUD BAR */}
       <div ref={hudBarRef} style={{ position: "absolute", inset: isMobile ? "68px 14px 64px 14px" : "clamp(16px, 2.5vw, 32px)", zIndex: 35, display: "flex", flexDirection: "column", justifyContent: "space-between", pointerEvents: "none" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-            <div style={{ width: "20px", height: "20px", borderTop: "1.5px solid rgba(212, 168, 67, 0.75)", borderLeft: "1.5px solid rgba(212, 168, 67, 0.75)" }} />
-            <span className="font-mono" style={{ fontSize: isMobile ? "9px" : "10.5px", letterSpacing: "0.26em", color: "#D4A843" }}>[ SCENE 02 // THE PULL-IN ]</span>
-          </div>
-          <div className="font-mono" style={{ display: "flex", alignItems: "center", gap: "16px", fontSize: isMobile ? "9px" : "10.5px", letterSpacing: "0.22em", color: "#E8E8E8" }}>
-            <span>FOCUS: <strong style={{ color: "#D4A843" }}>{focusDistanceText}</strong></span>
-            {!isMobile && <span>Z-AXIS: <strong ref={zAxisReadoutRef} style={{ color: "#FAFAFA" }}>{zAxisMM}</strong></span>}
+          <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+              <div style={{ width: "20px", height: "20px", borderTop: "1.5px solid rgba(212, 168, 67, 0.75)", borderLeft: "1.5px solid rgba(212, 168, 67, 0.75)" }} />
+              <span className="font-mono" style={{ fontSize: isMobile ? "9px" : "10.5px", letterSpacing: "0.26em", color: "#D4A843" }}>[ SCENE 02 // THE PULL-IN ]</span>
+            </div>
+            <div className="font-mono hidden sm:flex" style={{ alignItems: "center", gap: "14px", paddingLeft: "32px", fontSize: "9.5px", letterSpacing: "0.22em", color: "#E8E8E8" }}>
+              <span>FOCUS: <strong style={{ color: "#D4A843" }}>{focusDistanceText}</strong></span>
+              {!isMobile && <span>Z-AXIS: <strong ref={zAxisReadoutRef} style={{ color: "#FAFAFA" }}>{zAxisMM}</strong></span>}
+            </div>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
             <span className="font-mono" style={{ fontSize: isMobile ? "9px" : "11px", letterSpacing: "0.22em", color: "#FAFAFA" }}>

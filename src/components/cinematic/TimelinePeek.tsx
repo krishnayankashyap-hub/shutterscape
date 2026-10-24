@@ -392,38 +392,38 @@ export default function TimelinePeek() {
             {chapters.map((chapter, idx) => (
               <article
                 key={chapter.id}
-                className="w-[88vw] md:w-[700px] lg:w-[840px] shrink-0 flex flex-col"
+                className="w-[88vw] md:w-[560px] lg:w-[640px] shrink-0 flex flex-col"
               >
                 {/* HEADER ABOVE FRAME */}
-                <div className="flex items-end justify-between px-1 relative z-0 mb-3 md:mb-5">
-                  <div className="flex items-baseline gap-3 md:gap-6">
-                    <span className="font-serif text-4xl sm:text-[64px] md:text-[88px] text-[#050505] leading-none tracking-tighter">
+                <div className="flex items-end justify-between px-1 relative z-0 mb-2 md:mb-3">
+                  <div className="flex items-baseline gap-3 md:gap-4">
+                    <span className="font-serif text-3xl sm:text-5xl md:text-5xl text-[#050505] leading-none tracking-tighter">
                       {chapter.id}
                     </span>
-                    <span className="font-mono text-[9px] sm:text-[10px] md:text-[11px] tracking-[0.25em] text-[#D4A843] uppercase pb-1 md:pb-2">
+                    <span className="font-mono text-[9px] sm:text-[10px] md:text-[11px] tracking-[0.25em] text-[#D4A843] uppercase pb-0.5 md:pb-1">
                       {chapter.category}{" "}
                       <span className="text-[#050505]/30 mx-1 md:mx-2">·</span>{" "}
                       {chapter.date}
                     </span>
                   </div>
 
-                  <span className="font-mono text-[8.5px] sm:text-[9px] md:text-[11px] tracking-[0.22em] text-[#050505]/35 pb-1 md:pb-2 uppercase">
+                  <span className="font-mono text-[8.5px] sm:text-[9px] md:text-[10px] tracking-[0.22em] text-[#050505]/35 pb-0.5 md:pb-1 uppercase">
                     [{chapter.frameCode}]
                   </span>
                 </div>
 
-                {/* MASSIVE 35MM FILM STRIP */}
-                <div className="relative z-10 bg-[#0A0A0C] p-3 sm:p-4 md:p-5 rounded-2xl shadow-[0_30px_90px_rgba(0,0,0,0.2)] border border-[#050505]/20">
-                  <div className="flex justify-between mb-3 sm:mb-4 px-2 md:px-3">
+                {/* NORMAL PROPORTIONED 35MM FILM STRIP */}
+                <div className="relative z-10 bg-[#0A0A0C] p-3 sm:p-4 rounded-xl shadow-[0_25px_70px_rgba(0,0,0,0.18)] border border-[#050505]/20">
+                  <div className="flex justify-between mb-2.5 sm:mb-3 px-2 md:px-3">
                     {Array.from({ length: 18 }).map((_, i) => (
                       <span
                         key={i}
-                        className="w-2 sm:w-3 md:w-4 h-1.5 sm:h-2 md:h-2.5 rounded-[1.5px] bg-[#F4F4F5] opacity-90 shadow-[inset_0_1px_3px_rgba(0,0,0,0.5)]"
+                        className="w-2 sm:w-2.5 md:w-3 h-1.5 sm:h-2 md:h-2 rounded-[1.5px] bg-[#F4F4F5] opacity-90 shadow-[inset_0_1px_3px_rgba(0,0,0,0.5)]"
                       />
                     ))}
                   </div>
 
-                  <div className="relative w-full h-[180px] sm:h-[320px] md:h-[420px] lg:h-[480px] rounded-[3px] overflow-hidden border border-white/10">
+                  <div className="relative w-full h-[180px] sm:h-[250px] md:h-[290px] lg:h-[320px] rounded-[3px] overflow-hidden border border-white/10">
                     <div
                       ref={(el) => {
                         innerImagesRef.current[idx] = el;
@@ -434,7 +434,7 @@ export default function TimelinePeek() {
                         src={chapter.src}
                         alt={chapter.title}
                         fill
-                        sizes="(max-width: 1024px) 90vw, 900px"
+                        sizes="(max-width: 1024px) 90vw, 700px"
                         className="object-cover"
                       />
                     </div>
@@ -446,11 +446,11 @@ export default function TimelinePeek() {
                     </div>
                   </div>
 
-                  <div className="flex justify-between mt-3 sm:mt-4 px-2 md:px-3">
+                  <div className="flex justify-between mt-2.5 sm:mt-3 px-2 md:px-3">
                     {Array.from({ length: 18 }).map((_, i) => (
                       <span
                         key={i}
-                        className="w-2 sm:w-3 md:w-4 h-1.5 sm:h-2 md:h-2.5 rounded-[1.5px] bg-[#F4F4F5] opacity-90 shadow-[inset_0_1px_3px_rgba(0,0,0,0.5)]"
+                        className="w-2 sm:w-2.5 md:w-3 h-1.5 sm:h-2 md:h-2 rounded-[1.5px] bg-[#F4F4F5] opacity-90 shadow-[inset_0_1px_3px_rgba(0,0,0,0.5)]"
                       />
                     ))}
                   </div>
@@ -461,15 +461,15 @@ export default function TimelinePeek() {
                   </div>
                 </div>
 
-                <div className="h-2 sm:h-6 md:h-12 w-full shrink-0"></div>
+                <div className="h-2 sm:h-3 md:h-4 w-full shrink-0"></div>
 
                 {/* EDITORIAL CONTENT BELOW STRIP */}
-                <div className="relative z-10 px-1 md:px-2 flex flex-col md:flex-row justify-between items-start gap-4 md:gap-12">
-                  <div className="max-w-2xl">
-                    <h3 className="font-serif text-lg sm:text-2xl md:text-[40px] text-[#050505] leading-[1.15] font-light tracking-tight">
+                <div className="relative z-10 px-1 md:px-2 flex flex-col md:flex-row justify-between items-start gap-3 md:gap-8">
+                  <div className="max-w-xl">
+                    <h3 className="font-serif text-lg sm:text-xl md:text-2xl text-[#050505] leading-[1.2] font-normal tracking-tight">
                       {chapter.title}
                     </h3>
-                    <p className="font-body text-xs sm:text-[13px] md:text-[16px] text-[#050505]/65 mt-1.5 sm:mt-3 md:mt-4 leading-[1.5]">
+                    <p className="font-body text-xs sm:text-[13px] md:text-[14px] text-[#050505]/65 mt-1 sm:mt-2 leading-[1.5]">
                       {chapter.description}
                     </p>
                   </div>

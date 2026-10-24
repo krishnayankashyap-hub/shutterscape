@@ -180,8 +180,8 @@ export default function Scene6Credits() {
 
       <div style={{ position: "relative", zIndex: 10, maxWidth: "1360px", margin: "0 auto", padding: isMobile ? "0 16px" : "0 28px" }}>
         
-        <div style={{ borderTop: "1px solid rgba(5,5,5,0.12)", paddingTop: "48px", paddingBottom: "64px" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "64px" }}>
+        <div style={{ borderTop: "1px solid rgba(5,5,5,0.12)", paddingTop: "32px", paddingBottom: "36px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "32px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
               <span style={{ width: "8px", height: "8px", borderRadius: "50%", backgroundColor: "#D4A843", boxShadow: "0 0 10px rgba(212,168,67,0.5)" }} />
               <span className="font-mono text-[10px] md:text-xs tracking-[0.32em] text-[#D4A843] uppercase">
@@ -193,17 +193,17 @@ export default function Scene6Credits() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-8 text-center">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6 text-center">
             {STATS.map((stat, idx) => (
               <div key={idx} className="flex flex-col items-center">
                 <span
                   ref={(el) => { countersRef.current[idx] = el; }}
-                  className="font-serif text-6xl sm:text-7xl md:text-8xl lg:text-[110px] text-[#050505] font-light tracking-tighter leading-none"
+                  className="font-serif text-4xl sm:text-5xl md:text-6xl text-[#050505] font-light tracking-tighter leading-none"
                   style={{ fontVariantNumeric: "tabular-nums" }}
                 >
                   0{stat.suffix}
                 </span>
-                <span className="mt-4 sm:mt-6 font-mono text-[10px] md:text-[11px] tracking-[0.25em] text-[#D4A843] uppercase">
+                <span className="mt-2.5 sm:mt-3 font-mono text-[9.5px] md:text-[10.5px] tracking-[0.25em] text-[#D4A843] uppercase">
                   {stat.label}
                 </span>
               </div>
@@ -211,16 +211,16 @@ export default function Scene6Credits() {
           </div>
         </div>
 
-        <div style={{ borderTop: "1px solid rgba(5,5,5,0.12)", paddingTop: "72px", paddingBottom: "80px", textAlign: "center" }}>
+        <div style={{ borderTop: "1px solid rgba(5,5,5,0.12)", paddingTop: "36px", paddingBottom: "42px", textAlign: "center" }}>
           <h2
             ref={giantCtaRef}
-            className="font-serif text-3xl sm:text-5xl md:text-[80px] font-light text-[#050505] tracking-tight leading-tight"
+            className="font-serif text-2xl sm:text-4xl md:text-5xl font-light text-[#050505] tracking-tight leading-tight"
           >
             Shape the{" "}
             <span className="italic text-[#D4A843] font-normal">Visual Archive.</span>
           </h2>
           
-          <div className="mt-10 sm:mt-14 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 w-full max-w-md sm:max-w-none mx-auto">
+          <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-5 w-full max-w-md sm:max-w-none mx-auto">
             
             {/* WHATSAPP BUTTON WITH SVG LOGO */}
             <Link
@@ -228,16 +228,16 @@ export default function Scene6Credits() {
               href="https://chat.whatsapp.com/Hs71BicR1Xj3PmOyPJ5wdc?s=sw&p=a&mlu=4&ilr=4"
               target="_blank"
               rel="noopener noreferrer"
-              className="font-mono relative inline-flex items-center justify-center gap-3 rounded-full uppercase transition-all duration-300 group min-h-[44px] min-w-[44px] w-full sm:w-auto touch-manipulation cursor-pointer"
+              className="font-mono relative inline-flex items-center justify-center gap-2.5 rounded-full uppercase transition-all duration-300 group min-h-[44px] min-w-[44px] w-full sm:w-auto touch-manipulation cursor-pointer"
               style={{
-                padding: "16px 36px",
+                padding: "12px 28px",
                 backgroundColor: "#050505",
                 border: "1px solid #050505",
                 color: "#FAFAFA",
-                fontSize: "11px",
+                fontSize: "10.5px",
                 fontWeight: 600,
                 letterSpacing: "0.22em",
-                boxShadow: "0 15px 45px rgba(0,0,0,0.15)",
+                boxShadow: "0 10px 30px rgba(0,0,0,0.12)",
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = "#D4A843";
@@ -263,13 +263,13 @@ export default function Scene6Credits() {
               href="https://www.instagram.com/shutterscape_gcu"
               target="_blank"
               rel="noopener noreferrer"
-              className="font-mono relative inline-flex items-center justify-center gap-3 rounded-full uppercase transition-all duration-300 group min-h-[44px] min-w-[44px] w-full sm:w-auto touch-manipulation cursor-pointer"
+              className="font-mono relative inline-flex items-center justify-center gap-2.5 rounded-full uppercase transition-all duration-300 group min-h-[44px] min-w-[44px] w-full sm:w-auto touch-manipulation cursor-pointer"
               style={{
-                padding: "16px 36px",
+                padding: "12px 28px",
                 backgroundColor: "transparent",
                 border: "1px solid rgba(5,5,5,0.2)",
                 color: "#050505",
-                fontSize: "11px",
+                fontSize: "10.5px",
                 fontWeight: 600,
                 letterSpacing: "0.22em",
               }}
@@ -294,18 +294,18 @@ export default function Scene6Credits() {
         {/* ============================================================
             SECTION 3: THE COLOPHON (FOOTER WITH PROMINENT MAP)
             ============================================================ */}
-        <footer style={{ borderTop: "1px solid rgba(5,5,5,0.12)", paddingTop: "64px", paddingBottom: "32px" }}>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-12 mb-16">
+        <footer style={{ borderTop: "1px solid rgba(5,5,5,0.12)", paddingTop: "36px", paddingBottom: "24px" }}>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 mb-8">
             
             {/* Left Column: Branding & Logos */}
             <div>
-              <h4 className="font-serif text-3xl md:text-4xl text-[#050505] tracking-wide mb-4">ShutterScape Studio</h4>
-              <p className="font-mono text-[10px] md:text-[11px] tracking-[0.18em] text-[#050505]/60 uppercase max-w-md leading-relaxed mb-10">
+              <h4 className="font-serif text-2xl md:text-3xl text-[#050505] tracking-wide mb-3">ShutterScape Studio</h4>
+              <p className="font-mono text-[9.5px] md:text-[10.5px] tracking-[0.18em] text-[#050505]/60 uppercase max-w-md leading-relaxed mb-6">
                 The official photography & visual storytelling club of Girijananda Chowdhury University.
               </p>
               
-              <div className="flex items-center gap-6 opacity-80 mix-blend-multiply">
-                <div className="relative w-16 h-16">
+              <div className="flex items-center gap-5 opacity-80 mix-blend-multiply">
+                <div className="relative w-12 h-12">
                   <Image 
                     src="/images/gcu-logo.png" 
                     alt="GCU Logo" 
@@ -313,7 +313,7 @@ export default function Scene6Credits() {
                     className="object-contain drop-shadow-sm" 
                   />
                 </div>
-                <div className="relative w-16 h-16">
+                <div className="relative w-12 h-12">
                   <Image 
                     src="/images/shutterscape-logo.png" 
                     alt="ShutterScape Logo" 
@@ -326,15 +326,15 @@ export default function Scene6Credits() {
 
             {/* Right Column: Address, Map, and Contact */}
             <div className="flex flex-col lg:items-end text-left lg:text-right">
-              <div className="font-mono text-[10px] md:text-[11px] tracking-[0.18em] text-[#050505]/40 uppercase mb-3">Location</div>
-              <p className="font-body text-[14px] md:text-[15px] leading-relaxed text-[#050505]/80 mb-6">
+              <div className="font-mono text-[9.5px] md:text-[10px] tracking-[0.18em] text-[#050505]/40 uppercase mb-2">Location</div>
+              <p className="font-body text-[13px] md:text-[14px] leading-relaxed text-[#050505]/80 mb-4">
                 Girijananda Chowdhury University<br/>
                 Hathkhowapara, Azara, Guwahati<br/>
                 Assam 781017, India
               </p>
 
               {/* FIXED GOOGLE MAP EMBED */}
-              <div className="w-full max-w-[420px] h-[180px] rounded-xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.08)] border border-black/10 mb-3 filter grayscale-[80%] hover:grayscale-0 hover:shadow-[0_15px_40px_rgba(212,168,67,0.15)] transition-all duration-500">
+              <div className="w-full max-w-[360px] h-[130px] rounded-xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.08)] border border-black/10 mb-2.5 filter grayscale-[80%] hover:grayscale-0 hover:shadow-[0_15px_40px_rgba(212,168,67,0.15)] transition-all duration-500">
                 <iframe 
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3582.493527263544!2d91.60334817610196!3d26.11520639391097!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x375a4ffab238a8e1%3A0xda591cc5a3592bc1!2sGirijananda%20Chowdhury%20University%2C%20Assam!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin" 
                   width="100%" 
@@ -349,13 +349,13 @@ export default function Scene6Credits() {
                 href="https://maps.app.goo.gl/NhdHs1u76Bjxo2J87"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-mono text-[10px] tracking-wider text-[#D4A843] hover:text-[#050505] transition-colors mb-6 inline-flex items-center gap-1.5"
+                className="font-mono text-[9.5px] tracking-wider text-[#D4A843] hover:text-[#050505] transition-colors mb-4 inline-flex items-center gap-1.5"
               >
                 <span>Open University Location on Google Maps</span>
                 <span>↗</span>
               </a>
               
-              <div className="font-mono text-[10px] md:text-[11px] tracking-[0.18em] text-[#050505]/40 uppercase mb-2">Contact</div>
+              <div className="font-mono text-[9.5px] md:text-[10px] tracking-[0.18em] text-[#050505]/40 uppercase mb-1.5">Contact</div>
               <a href="mailto:shutterscape@gcuniversity.ac.in" className="font-mono text-xs md:text-sm tracking-widest text-[#D4A843] hover:text-[#050505] transition-colors">
                 shutterscape@gcuniversity.ac.in
               </a>
