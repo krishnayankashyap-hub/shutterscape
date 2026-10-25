@@ -53,6 +53,53 @@ export default function FileUploadZone({
     return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + " " + sizes[i];
   };
 
+  const compressImageIfNeeded = async (file: File): Promise<File> => {
+    // Only compress images exceeding 3.5MB to fit within Vercel's 4.5MB serverless payload limit
+    if (!file.type.startsWith("image/") || file.size <= 3.5 * 1024 * 1024) {
+      return file;
+    }
+
+    return new Promise((resolve) => {
+      const img = new window.Image();
+      const url = URL.createObjectURL(file);
+      img.onload = () => {
+        URL.revokeObjectURL(url);
+        const canvas = document.createElement("canvas");
+        let { width, height } = img;
+        const maxDim = 2560; // 2.5K crisp resolution preserved for photography exhibition
+        if (width > maxDim || height > maxDim) {
+          if (width > height) {
+            height = Math.round((height * maxDim) / width);
+            width = maxDim;
+          } else {
+            width = Math.round((width * maxDim) / height);
+            height = maxDim;
+          }
+        }
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return resolve(file);
+        ctx.drawImage(img, 0, 0, width, height);
+        canvas.toBlob(
+          (blob) => {
+            if (!blob) return resolve(file);
+            const compressed = new File(
+              [blob],
+              file.name.replace(/\.[^.]+$/, ".webp"),
+              { type: "image/webp" }
+            );
+            resolve(compressed);
+          },
+          "image/webp",
+          0.88
+        );
+      };
+      img.onerror = () => resolve(file);
+      img.src = url;
+    });
+  };
+
   const handleUploadFile = async (file: File) => {
     setUploadError(null);
     setIsUploading(true);
@@ -64,8 +111,11 @@ export default function FileUploadZone({
     onChange(localPreviewUrl);
 
     try {
+      const optimizedFile = await compressImageIfNeeded(file);
+      setFileSize(formatBytes(optimizedFile.size));
+
       const formData = new FormData();
-      formData.append("file", file);
+      formData.append("file", optimizedFile);
 
       const res = await fetch("/api/upload", {
         method: "POST",
