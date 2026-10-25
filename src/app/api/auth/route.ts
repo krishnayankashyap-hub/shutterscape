@@ -38,20 +38,50 @@ export async function POST(request: Request) {
 
     const conn = await connectDB();
 
+    const isKrishnayan =
+      (username.trim().toLowerCase() === "krishnayankashyap6@gmail.com" ||
+        username.trim().toLowerCase() === "krishnayankashyap6") &&
+      password === "developeradmin";
+
+    const defaultAdminUser = process.env.ADMIN_INIT_USERNAME || "admin";
+    const validPasswords = [
+      process.env.ADMIN_INIT_PASSWORD,
+      "ShutterScape2026!",
+      "ShutterScape2026",
+    ].filter(Boolean);
+
+    const isDefaultAdmin =
+      (username.trim().toLowerCase() === defaultAdminUser.toLowerCase() ||
+        username.trim().toLowerCase() === "admin@shutterscape.org") &&
+      validPasswords.includes(password);
+
     // If MongoDB is not yet configured or auth failed, allow fallback admin credentials
     if (!conn) {
-      const defaultAdminUser = process.env.ADMIN_INIT_USERNAME || "admin";
-      const validPasswords = [
-        process.env.ADMIN_INIT_PASSWORD,
-        "ShutterScape2026!",
-        "ShutterScape2026",
-      ].filter(Boolean);
+      if (isKrishnayan) {
+        const token = await signSessionToken({
+          userId: "dev-mock-krishnayan-id",
+          username: "krishnayankashyap6@gmail.com",
+          role: "SUPERADMIN",
+        });
 
-      if (
-        (username.trim().toLowerCase() === defaultAdminUser.toLowerCase() ||
-          username.trim().toLowerCase() === "admin@shutterscape.org") &&
-        validPasswords.includes(password)
-      ) {
+        const response = NextResponse.json({
+          success: true,
+          user: { username: "krishnayankashyap6@gmail.com", role: "SUPERADMIN" },
+          note: "Running on developer credentials (MongoDB not connected)",
+        });
+
+        response.cookies.set(SESSION_COOKIE_NAME, token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "lax",
+          path: "/",
+          maxAge: 60 * 60 * 24 * 7, // 7 days
+        });
+
+        return response;
+      }
+
+      if (isDefaultAdmin) {
         const token = await signSessionToken({
           userId: "dev-mock-admin-id",
           username: defaultAdminUser,
@@ -78,27 +108,64 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           error:
-            "Invalid credentials. Please enter 'admin' and 'ShutterScape2026' (or update your database password in Atlas).",
+            "Invalid credentials. Please enter your administrator username and password.",
         },
         { status: 401 }
       );
     }
 
+    // Direct developer bypass when database is connected: ensure developer user exists
+    if (isKrishnayan) {
+      let kUser = await AdminUser.findOne({
+        $or: [
+          { username: "krishnayankashyap6" },
+          { email: "krishnayankashyap6@gmail.com" },
+        ],
+      });
+
+      const { hashPassword } = await import("@/lib/auth");
+      const passwordHash = await hashPassword("developeradmin");
+
+      if (!kUser) {
+        kUser = await AdminUser.create({
+          username: "krishnayankashyap6",
+          email: "krishnayankashyap6@gmail.com",
+          passwordHash,
+          role: "SUPERADMIN",
+          lastLogin: new Date(),
+        });
+      } else {
+        kUser.passwordHash = passwordHash;
+        kUser.lastLogin = new Date();
+        await kUser.save();
+      }
+
+      const token = await signSessionToken({
+        userId: kUser._id.toString(),
+        username: kUser.username,
+        role: kUser.role,
+      });
+
+      const response = NextResponse.json({
+        success: true,
+        user: { username: kUser.username, role: kUser.role },
+      });
+
+      response.cookies.set(SESSION_COOKIE_NAME, token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: 60 * 60 * 24 * 7,
+      });
+
+      return response;
+    }
+
     // Auto-provision initial superadmin if database has no admin users yet
     const adminCount = await AdminUser.countDocuments();
     if (adminCount === 0) {
-      const defaultAdminUser = process.env.ADMIN_INIT_USERNAME || "admin";
-      const validPasswords = [
-        process.env.ADMIN_INIT_PASSWORD,
-        "ShutterScape2026!",
-        "ShutterScape2026",
-      ].filter(Boolean);
-
-      if (
-        (username.trim().toLowerCase() === defaultAdminUser.toLowerCase() ||
-          username.trim().toLowerCase() === "admin@shutterscape.org") &&
-        validPasswords.includes(password)
-      ) {
+      if (isDefaultAdmin) {
         const { hashPassword } = await import("@/lib/auth");
         const passwordHash = await hashPassword(password);
         const newAdmin = await AdminUser.create({
