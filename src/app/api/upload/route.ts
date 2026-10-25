@@ -1,7 +1,7 @@
 // src/app/api/upload/route.ts
 import { NextResponse } from "next/server";
-import { writeFile } from "fs/promises";
-import path from "path";
+import { connectDB } from "@/lib/db";
+import { UploadMedia } from "@/models/UploadMedia";
 
 export async function POST(request: Request) {
   try {
@@ -17,32 +17,39 @@ export async function POST(request: Request) {
 
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
+    const mimeType = file.type || "image/jpeg";
+    const originalName = file.name || "upload.jpg";
+    const base64Data = buffer.toString("base64");
 
-    // Sanitize filename to prevent directory traversal or malformed paths
-    const originalName = file.name || "upload";
-    const extension = path.extname(originalName) || "";
-    const baseName = path
-      .basename(originalName, extension)
-      .replace(/[^a-zA-Z0-9_-]/g, "_")
-      .slice(0, 40);
-    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e4)}`;
-    const finalFilename = `${baseName}-${uniqueSuffix}${extension}`;
+    const conn = await connectDB();
+    if (conn) {
+      // Store in MongoDB Atlas as a persistent cloud media asset
+      const media = await UploadMedia.create({
+        filename: originalName,
+        mimeType,
+        size: file.size,
+        data: base64Data,
+      });
 
-    // Target storage directory: <project_root>/public/uploads
-    const uploadDir = path.join(process.cwd(), "public", "uploads");
-    const filePath = path.join(uploadDir, finalFilename);
+      const publicUrl = `/api/media/${media._id.toString()}`;
 
-    await writeFile(filePath, buffer);
+      return NextResponse.json({
+        success: true,
+        url: publicUrl,
+        filename: originalName,
+        size: file.size,
+        mimeType,
+      });
+    }
 
-    // Public URL accessible by Next.js static asset server
-    const publicUrl = `/uploads/${finalFilename}`;
-
+    // High-availability fallback: Data URI
+    const dataUri = `data:${mimeType};base64,${base64Data}`;
     return NextResponse.json({
       success: true,
-      url: publicUrl,
-      filename: finalFilename,
+      url: dataUri,
+      filename: originalName,
       size: file.size,
-      mimeType: file.type,
+      mimeType,
     });
   } catch (error) {
     console.error("Upload API Error:", error);
