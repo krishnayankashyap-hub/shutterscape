@@ -491,16 +491,16 @@ export default function AboutPage() {
         }
         className="popout-member-card group relative flex flex-col items-center cursor-pointer pointer-events-auto select-none w-full"
       >
-        {/* Stage Area: Top 28% is open air so the portrait pops out above the colored block */}
+        {/* Stage Area: Top 25% is open air so the cutout portrait pops out above the colored block */}
         <div
           className={`relative w-full ${
             size === "compact"
-              ? "aspect-[4/4.6] max-h-[125px] sm:max-h-[195px] md:max-h-[230px]"
-              : "aspect-[3/3.8] max-h-[175px] sm:max-h-[255px] md:max-h-[320px]"
+              ? "aspect-[4/4.6] max-h-[135px] sm:max-h-[205px] md:max-h-[240px]"
+              : "aspect-[3/3.8] max-h-[190px] sm:max-h-[270px] md:max-h-[335px]"
           } flex items-end justify-center overflow-visible`}
         >
-          {/* LOWER COLORED GEOMETRIC BACKDROP BLOCK (72% height, expands & shifts color on hover) */}
-          <div className="popout-backdrop absolute inset-x-0 bottom-0 h-[70%] group-hover:h-[76%] rounded-xl overflow-hidden transition-all duration-500 ease-out shadow-[0_20px_50px_rgba(0,0,0,0.65)]">
+          {/* LOWER COLORED GEOMETRIC BACKDROP BLOCK (74% height, expands & shifts color on hover) */}
+          <div className="popout-backdrop absolute inset-x-0 bottom-0 h-[74%] group-hover:h-[80%] rounded-xl overflow-hidden transition-all duration-500 ease-out shadow-[0_16px_40px_rgba(0,0,0,0.55)]">
             {/* Diagonal Geometric Stripe Accent (Top-Left & Bottom-Right corners like Atlassian) */}
             <div
               className="popout-stripes absolute -top-6 -left-6 w-24 h-24 sm:w-32 sm:h-32 opacity-75 group-hover:opacity-100 group-hover:rotate-12 group-hover:scale-110 transition-all duration-500 pointer-events-none"
@@ -521,16 +521,15 @@ export default function AboutPage() {
             <div className="absolute inset-0 bg-gradient-to-tr from-black/25 via-transparent to-white/15 pointer-events-none" />
           </div>
 
-          {/* POP-OUT PORTRAIT (Rises 28% above the colored backdrop card!) */}
-          <div className="relative z-10 w-[82%] h-[98%] rounded-t-[42%] rounded-b-lg overflow-hidden shadow-[0_14px_34px_rgba(0,0,0,0.55)] border-b-0 transition-transform duration-500 ease-out group-hover:-translate-y-2.5 group-hover:scale-[1.04]">
+          {/* POP-OUT CUTOUT PORTRAIT (Pure cutout popping above the colored backdrop - no arch frame or inner card) */}
+          <div className="relative z-10 w-full h-[106%] flex items-end justify-center overflow-visible transition-transform duration-500 ease-out group-hover:-translate-y-2 group-hover:scale-[1.03] pointer-events-none">
             <Image
               src={member.img}
               alt={member.name}
               fill
               sizes="360px"
-              className="object-cover object-top grayscale contrast-115 group-hover:grayscale-0 group-hover:contrast-105 transition-all duration-500"
+              className="object-contain object-bottom select-none transition-all duration-500"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent opacity-60 group-hover:opacity-20 transition-opacity duration-500 pointer-events-none" />
           </div>
         </div>
 
@@ -569,6 +568,17 @@ export default function AboutPage() {
               {member.dept}
             </p>
           )}
+
+          {/* Explicit "Click to know about this member" action */}
+          <div
+            style={{ marginTop: "8px" }}
+            className="inline-flex items-center gap-1.5 text-[10.5px] sm:text-[11.5px] font-semibold text-[#D4A843] group-hover:text-white transition-colors duration-200 cursor-pointer"
+          >
+            <span>Click to know about this member</span>
+            <span className="transition-transform duration-200 group-hover:translate-x-1">
+              →
+            </span>
+          </div>
         </div>
       </div>
     );
@@ -965,13 +975,13 @@ export default function AboutPage() {
                     />
                   </div>
 
-                  <div className="relative z-10 w-[82%] h-[98%] rounded-t-[42%] rounded-b-lg overflow-hidden shadow-xl">
+                  <div className="relative z-10 w-full h-[104%] flex items-end justify-center overflow-visible pointer-events-none">
                     <Image
                       src={selectedMember.member.img}
                       alt={selectedMember.member.name}
                       fill
                       sizes="300px"
-                      className="object-cover object-top"
+                      className="object-contain object-bottom select-none"
                     />
                   </div>
                 </div>
