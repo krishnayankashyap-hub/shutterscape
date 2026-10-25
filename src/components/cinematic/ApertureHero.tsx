@@ -164,17 +164,18 @@ export default function ApertureHero() {
     return () => window.removeEventListener("resize", handleResize);
   }, [getLensPortalRadius]);
 
-  // Subtle, disciplined optical glass reflection & single-line backdrop parallax on mouse move
+  // Subtle, disciplined optical glass reflection & single-line backdrop parallax on mouse move (RAF-throttled)
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (window.innerWidth < 1024) return;
-      const nx = (e.clientX / window.innerWidth - 0.5) * 2;
-      const ny = (e.clientY / window.innerHeight - 0.5) * 2;
+    let rafId: number | null = null;
+    let targetX = 0;
+    let targetY = 0;
 
+    const updateParallax = () => {
+      rafId = null;
       if (glassGlareRef.current) {
         gsap.to(glassGlareRef.current, {
-          x: nx * 12,
-          y: ny * 12,
+          x: targetX * 12,
+          y: targetY * 12,
           duration: 0.6,
           ease: "power2.out",
           overwrite: "auto",
@@ -183,8 +184,8 @@ export default function ApertureHero() {
 
       if (cameraBackTextLayerRef.current) {
         gsap.to(cameraBackTextLayerRef.current, {
-          x: nx * -8,
-          y: ny * -5,
+          x: targetX * -8,
+          y: targetY * -5,
           duration: 0.9,
           ease: "power2.out",
           overwrite: "auto",
@@ -192,8 +193,20 @@ export default function ApertureHero() {
       }
     };
 
+    const handleMouseMove = (e: MouseEvent) => {
+      if (window.innerWidth < 1024) return;
+      targetX = (e.clientX / window.innerWidth - 0.5) * 2;
+      targetY = (e.clientY / window.innerHeight - 0.5) * 2;
+      if (!rafId) {
+        rafId = requestAnimationFrame(updateParallax);
+      }
+    };
+
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
   }, []);
 
   useEffect(() => {

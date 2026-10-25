@@ -18,11 +18,14 @@ export default function GlobalMusicPlayer() {
 
     let disposed = false;
     let attemptInProgress = false;
+    let lastPlayAttempt = 0;
     let touchStartY: number | null = null;
 
     const startMusic = () => {
-      if (disposed || !audio.paused || attemptInProgress) return;
+      const now = Date.now();
+      if (disposed || !audio.paused || attemptInProgress || now - lastPlayAttempt < 1200) return;
 
+      lastPlayAttempt = now;
       attemptInProgress = true;
       audio.muted = false;
 
@@ -35,7 +38,7 @@ export default function GlobalMusicPlayer() {
           removeScrollListeners();
         })
         .catch(() => {
-          // Keep listening and retry on the next real scroll gesture.
+          // Keep listening and retry on the next real scroll gesture after cooldown.
           attemptInProgress = false;
           setIsPlaying(false);
         });

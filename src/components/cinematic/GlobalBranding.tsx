@@ -124,8 +124,12 @@ export default function GlobalBranding() {
       "shutterscape-universal-footer",
     ];
 
+    let lastCheckedY = -999;
     const performScrollCheck = () => {
       rafId = null;
+      const curY = window.scrollY || document.documentElement.scrollTop;
+      if (Math.abs(curY - lastCheckedY) < 12) return;
+      lastCheckedY = curY;
 
       if (document.getElementById("not-found-container")) {
         if (!isLightRef.current) {

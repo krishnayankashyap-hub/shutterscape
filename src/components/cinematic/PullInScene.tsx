@@ -223,19 +223,47 @@ export default function PullInScene() {
   }, []);
 
   useEffect(() => {
+    let rafId: number | null = null;
+    let targetX = 0;
+    let targetY = 0;
+
+    const updateTilt = () => {
+      rafId = null;
+      if (stageRef.current) {
+        gsap.to(stageRef.current, {
+          rotationY: targetX * 4.2,
+          rotationX: -targetY * 4.2,
+          duration: 0.85,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
+      }
+      if (tunnelEnvironmentRef.current) {
+        gsap.to(tunnelEnvironmentRef.current, {
+          rotationY: targetX * 2.5,
+          rotationX: -targetY * 2.5,
+          x: -targetX * 14,
+          y: -targetY * 10,
+          duration: 1.0,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
+      }
+    };
+
     const handleMouseMove = (e: MouseEvent) => {
       if (window.innerWidth < 1024 || !stageRef.current) return;
-      const nx = (e.clientX / window.innerWidth - 0.5) * 2;
-      const ny = (e.clientY / window.innerHeight - 0.5) * 2;
-      
-      gsap.to(stageRef.current, { rotationY: nx * 4.2, rotationX: -ny * 4.2, duration: 0.85, ease: "power2.out", overwrite: "auto" });
-      
-      if (tunnelEnvironmentRef.current) {
-        gsap.to(tunnelEnvironmentRef.current, { rotationY: nx * 2.5, rotationX: -ny * 2.5, x: -nx * 14, y: -ny * 10, duration: 1.0, ease: "power2.out", overwrite: "auto" });
+      targetX = (e.clientX / window.innerWidth - 0.5) * 2;
+      targetY = (e.clientY / window.innerHeight - 0.5) * 2;
+      if (!rafId) {
+        rafId = requestAnimationFrame(updateTilt);
       }
     };
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
   }, []);
 
   useEffect(() => {

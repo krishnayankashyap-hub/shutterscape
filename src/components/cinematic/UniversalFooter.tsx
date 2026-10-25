@@ -45,6 +45,8 @@ export default function UniversalFooter() {
             "url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1600&q=80')",
           backgroundSize: "cover",
           backgroundPosition: "center 65%",
+          transform: "translate3d(0, 0, 0)",
+          willChange: "transform",
         }}
       />
 

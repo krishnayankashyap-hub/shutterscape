@@ -65,8 +65,7 @@ export default function Home() {
       }
 
       if (progressNodeRef.current) {
-        const yVh = 8 + p * 84;
-        progressNodeRef.current.style.top = `${yVh}vh`;
+        progressNodeRef.current.style.transform = `translate3d(-50%, calc(-50% + ${(p * 84).toFixed(2)}vh), 0)`;
       }
     };
 
@@ -135,7 +134,8 @@ export default function Home() {
             position: "absolute",
             top: "8vh",
             left: "50%",
-            transform: "translate(-50%, -50%)",
+            transform: "translate3d(-50%, -50%, 0)",
+            willChange: "transform",
             width: "7px",
             height: "7px",
             borderRadius: "50%",
