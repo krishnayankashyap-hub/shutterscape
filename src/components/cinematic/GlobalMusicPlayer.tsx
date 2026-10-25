@@ -15,59 +15,51 @@ export default function GlobalMusicPlayer() {
     if (!audio) return;
 
     audio.volume = 0.35;
+    audio.load();
 
     let disposed = false;
     let attemptInProgress = false;
-    let lastPlayAttempt = 0;
-    let touchStartY: number | null = null;
 
     const startMusic = () => {
-      const now = Date.now();
-      if (disposed || !audio.paused || attemptInProgress || now - lastPlayAttempt < 1200) return;
+      if (disposed || !audio.paused || attemptInProgress) return;
 
-      lastPlayAttempt = now;
       attemptInProgress = true;
       audio.muted = false;
 
-      // Call play directly inside the user gesture handler.
-      audio.play()
-        .then(() => {
-          if (disposed) return;
-
-          setIsPlaying(true);
-          removeScrollListeners();
-        })
-        .catch(() => {
-          // Keep listening and retry on the next real scroll gesture after cooldown.
-          attemptInProgress = false;
-          setIsPlaying(false);
-        });
-    };
-
-    const handleWheel = (event: WheelEvent) => {
-      // Ignore tiny trackpad noise.
-      if (Math.abs(event.deltaY) > 1) {
-        startMusic();
+      // Play immediately on first user interaction with pre-buffered audio
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            if (disposed) return;
+            setIsPlaying(true);
+            removeScrollListeners();
+          })
+          .catch(() => {
+            attemptInProgress = false;
+            setIsPlaying(false);
+          });
       }
     };
 
-    const handleTouchStart = (event: TouchEvent) => {
-      touchStartY = event.touches[0]?.clientY ?? null;
+    const handleWheel = () => {
+      startMusic();
     };
 
-    const handleTouchMove = (event: TouchEvent) => {
-      if (touchStartY === null || !event.touches[0]) return;
-
-      const currentY = event.touches[0].clientY;
-
-      // Start only after meaningful finger movement.
-      if (Math.abs(currentY - touchStartY) >= 6) {
-        startMusic();
-      }
+    const handleTouchStart = () => {
+      startMusic();
     };
 
-    const handleTouchEnd = () => {
-      touchStartY = null;
+    const handleTouchMove = () => {
+      startMusic();
+    };
+
+    const handlePointerDown = () => {
+      startMusic();
+    };
+
+    const handleNativeScroll = () => {
+      startMusic();
     };
 
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -102,14 +94,15 @@ export default function GlobalMusicPlayer() {
       window.removeEventListener("wheel", handleWheel, true);
       window.removeEventListener("touchstart", handleTouchStart, true);
       window.removeEventListener("touchmove", handleTouchMove, true);
-      window.removeEventListener("touchend", handleTouchEnd, true);
+      window.removeEventListener("pointerdown", handlePointerDown, true);
+      window.removeEventListener("scroll", handleNativeScroll, true);
       window.removeEventListener("keydown", handleKeyDown, true);
     };
 
     const handlePlay = () => setIsPlaying(true);
     const handlePause = () => setIsPlaying(false);
 
-    // Listen for genuine scrolling gestures.
+    // Listen for genuine scrolling and interaction gestures with zero delay
     window.addEventListener("wheel", handleWheel, {
       passive: true,
       capture: true,
@@ -125,7 +118,16 @@ export default function GlobalMusicPlayer() {
       capture: true,
     });
 
-    window.addEventListener("touchend", handleTouchEnd, true);
+    window.addEventListener("pointerdown", handlePointerDown, {
+      passive: true,
+      capture: true,
+    });
+
+    window.addEventListener("scroll", handleNativeScroll, {
+      passive: true,
+      capture: true,
+    });
+
     window.addEventListener("keydown", handleKeyDown, true);
 
     audio.addEventListener("play", handlePlay);
@@ -169,7 +171,7 @@ export default function GlobalMusicPlayer() {
         ref={audioRef}
         src="/audio/background-music.mp3"
         loop
-        preload="none"
+        preload="auto"
       />
 
       <button
