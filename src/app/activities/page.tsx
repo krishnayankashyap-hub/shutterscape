@@ -655,23 +655,23 @@ export default function ActivitiesPage() {
       const isMobile = vw < 768;
       const total = filteredData.length;
 
-      // Standard balanced card dimensions
+      // Larger, easy-to-see card dimensions
       const cardW = isMobile
-        ? Math.min(215, vw * 0.58)
-        : Math.min(245, Math.max(190, Math.min(vw * 0.175, vh * 0.25)));
-      const cardH = cardW * 0.62;
+        ? Math.min(270, vw * 0.64)
+        : Math.min(315, Math.max(265, Math.min(vw * 0.22, vh * 0.31)));
+      const cardH = cardW * 0.635;
 
-      // Balanced hexagonal radius so all 6 cards form a crisp aperture without clipping or overlapping
-      const apothem = cardW * 0.62;
-      const hexRadius = apothem + cardH * 0.38;
+      // Hexagonal radius: tightly wraps the 6 larger frames into a crisp aperture around WORKS '26 / '25
+      const apothem = cardW * 0.68;
+      const hexRadius = apothem + cardH * 0.42;
 
-      // Standard 3D Vertical Cylinder radius
+      // 3D Vertical Cylinder radius
       const cylRadius = isMobile
-        ? Math.min(195, vh * 0.24)
-        : Math.min(235, vh * 0.28);
+        ? Math.min(220, vh * 0.28)
+        : Math.min(285, vh * 0.33);
 
-      // Balanced optical stage offset so top frames clear the filter bar cleanly
-      const stageOffsetY = isMobile ? 14 : 22;
+      // Optical stage offset so top frames clear the filter bar cleanly
+      const stageOffsetY = isMobile ? 18 : 24;
 
       // Compute morph factor `t` (0 = Pure Hexagon, 1 = Pure 3D Cylinder)
       const rawMorph = Math.min(1, Math.max(0, progress / morphEnd));
@@ -768,11 +768,11 @@ export default function ActivitiesPage() {
         const cylRotX = -drumAngleDeg;
         const cylRotZ = 0;
 
-        // Balanced standard scale for cylinder frames
+        // Scale for cylinder frames
         const distFromCenter = Math.abs(delta);
         const cylScale = isMobile
-          ? Math.max(0.92, 1.08 - distFromCenter * 0.15)
-          : Math.max(0.94, 1.15 - distFromCenter * 0.2);
+          ? Math.max(0.92, 1.22 - distFromCenter * 0.2)
+          : Math.max(0.95, 1.34 - distFromCenter * 0.28);
 
         let cylOpacity = 0;
         if (distFromCenter <= 1.05) {
@@ -951,13 +951,13 @@ export default function ActivitiesPage() {
           </div>
 
           {/* ---------------------------------------------------------
-              5. RIGHT COLUMN: VERTICAL INDEX DIRECTORY ("WORKS '26" / "WORKS '25")
+              5. RIGHT COLUMN: COMPACT VERTICAL INDEX DIRECTORY (All contents visible)
               --------------------------------------------------------- */}
-          <aside className="hidden md:flex flex-col items-end justify-center absolute right-8 lg:right-14 top-1/2 -translate-y-1/2 z-30 text-right max-h-[68vh] overflow-y-auto no-scrollbar py-2">
-            <span className="font-mono text-[11px] font-bold tracking-[0.22em] uppercase text-[#141413] mb-3">
+          <aside className="hidden md:flex flex-col items-end justify-center absolute right-6 lg:right-10 top-1/2 -translate-y-1/2 z-30 text-right max-h-[88vh] overflow-y-auto no-scrollbar py-2">
+            <span className="font-mono text-[9px] sm:text-[9.5px] font-bold tracking-[0.24em] uppercase text-[#141413]/70 mb-2">
               {editionLabel}
             </span>
-            <ul className="flex flex-col gap-1.5">
+            <ul className="flex flex-col gap-0.5 sm:gap-1">
               {filteredData.map((ev, idx) => {
                 const isCurrent = isCylinderPhase && idx === activeIndex;
                 return (
@@ -965,10 +965,10 @@ export default function ActivitiesPage() {
                     <button
                       type="button"
                       onClick={() => scrollToCardIndex(idx)}
-                      className={`font-sans text-[11.5px] tracking-[0.04em] transition-all duration-300 cursor-pointer ${
+                      className={`font-sans text-[9px] sm:text-[9.5px] lg:text-[10px] leading-tight tracking-[0.02em] transition-all duration-200 cursor-pointer ${
                         isCurrent
-                          ? "text-[#141413] font-semibold -translate-x-1"
-                          : "text-[#141413]/35 hover:text-[#141413]/75 font-normal"
+                          ? "text-[#141413] font-bold -translate-x-1"
+                          : "text-[#141413]/40 hover:text-[#141413] font-normal"
                       }`}
                     >
                       {ev.title.split("—")[0].trim()}

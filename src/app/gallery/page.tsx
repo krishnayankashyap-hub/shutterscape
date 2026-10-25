@@ -536,19 +536,19 @@ export default function CinematicGalleryPage() {
               --------------------------------------------------------- */}
           <div
             ref={heroWrapRef}
-            className="pointer-events-none absolute inset-x-0 top-[17vh] sm:top-[18vh] z-10 flex flex-col items-center justify-center px-6 will-change-transform"
+            className="pointer-events-none absolute inset-x-0 top-[24vh] sm:top-[23vh] z-10 flex flex-col items-center justify-center px-6 will-change-transform"
           >
-            <span className="font-mono text-[10px] sm:text-xs tracking-[0.36em] uppercase text-[#B8860B] mb-2 font-bold">
+            <span className="font-mono text-[10px] sm:text-xs tracking-[0.36em] uppercase text-[#B8860B] mb-3 font-bold">
               FEATURED EXHIBITION ARCHIVE
             </span>
-            <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl lg:text-[76px] leading-[0.9] md:leading-[0.88] uppercase tracking-tighter text-[#141413] m-0 text-center w-full">
+            <h1 className="font-serif text-5xl sm:text-7xl md:text-[11vw] lg:text-[12.5vw] leading-[0.86] md:leading-[0.82] uppercase tracking-tighter text-[#141413] m-0 text-center w-full">
               Visual
               <br />
               <span className="text-[#D4A843] italic font-normal">
                 Archive.
               </span>
             </h1>
-            <p className="mt-3 sm:mt-4 max-w-lg font-body text-xs sm:text-sm text-[#141413]/70 text-center leading-relaxed">
+            <p className="mt-4 sm:mt-6 max-w-xl font-body text-sm sm:text-base text-[#141413]/70 text-center leading-relaxed">
               Scroll down to glide through the 3D panoramic filmstrip. Click any
               frame to launch the optical darkroom loupe.
             </p>
