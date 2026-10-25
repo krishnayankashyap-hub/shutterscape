@@ -42,35 +42,88 @@ export async function PUT(request: Request) {
     }
 
     const body = await request.json();
-    const { items } = body;
 
-    if (!Array.isArray(items)) {
-      return NextResponse.json({ error: "Items array is required" }, { status: 400 });
+    // Case 1: Bulk array of items { items: [...] }
+    if (Array.isArray(body.items)) {
+      for (let i = 0; i < body.items.length; i++) {
+        const it = body.items[i];
+        await PullInExhibit.findOneAndUpdate(
+          { code: it.code },
+          {
+            code: it.code,
+            title: it.title,
+            subTitle: it.subTitle || "",
+            src: it.src,
+            exif: it.exif || "",
+            focusDistance: it.focusDistance || "",
+            headline: it.headline,
+            subhead: it.subhead || "",
+            order: i + 1,
+          },
+          { upsert: true, new: true }
+        );
+      }
+      const updated = await PullInExhibit.find().sort({ order: 1 });
+      return NextResponse.json({ success: true, data: updated });
     }
 
-    for (let i = 0; i < items.length; i++) {
-      const it = items[i];
-      await PullInExhibit.findOneAndUpdate(
-        { code: it.code },
-        {
-          code: it.code,
-          title: it.title,
-          subTitle: it.subTitle || "",
-          src: it.src,
-          exif: it.exif || "",
-          focusDistance: it.focusDistance || "",
-          headline: it.headline,
-          subhead: it.subhead || "",
-          order: i + 1,
-        },
-        { upsert: true, new: true }
+    // Case 2: Direct array [...]
+    if (Array.isArray(body)) {
+      for (let i = 0; i < body.length; i++) {
+        const it = body[i];
+        await PullInExhibit.findOneAndUpdate(
+          { code: it.code },
+          {
+            code: it.code,
+            title: it.title,
+            subTitle: it.subTitle || "",
+            src: it.src,
+            exif: it.exif || "",
+            focusDistance: it.focusDistance || "",
+            headline: it.headline,
+            subhead: it.subhead || "",
+            order: i + 1,
+          },
+          { upsert: true, new: true }
+        );
+      }
+      const updated = await PullInExhibit.find().sort({ order: 1 });
+      return NextResponse.json({ success: true, data: updated });
+    }
+
+    // Case 3: Single item update from dashboard modal
+    const { _id, id, code, ...fields } = body;
+    const targetQuery = _id
+      ? { _id }
+      : id
+      ? { _id: id }
+      : code
+      ? { code }
+      : null;
+
+    if (!targetQuery) {
+      return NextResponse.json(
+        { error: "Exhibit code or ID is required" },
+        { status: 400 }
       );
     }
 
-    const updated = await PullInExhibit.find().sort({ order: 1 });
+    const updated = await PullInExhibit.findOneAndUpdate(
+      targetQuery,
+      {
+        ...(code ? { code } : {}),
+        ...fields,
+      },
+      { upsert: true, new: true }
+    );
+
     return NextResponse.json({ success: true, data: updated });
   } catch (error) {
     console.error("PUT /api/pullin-exhibits error:", error);
     return NextResponse.json({ error: "Failed to update corridor exhibits" }, { status: 500 });
   }
+}
+
+export async function POST(request: Request) {
+  return PUT(request);
 }

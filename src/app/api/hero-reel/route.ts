@@ -40,32 +40,83 @@ export async function PUT(request: Request) {
     }
 
     const body = await request.json();
-    const { items } = body;
 
-    if (!Array.isArray(items)) {
-      return NextResponse.json({ error: "Items array is required" }, { status: 400 });
+    // Case 1: Bulk array of items { items: [...] }
+    if (Array.isArray(body.items)) {
+      for (let i = 0; i < body.items.length; i++) {
+        const it = body.items[i];
+        await HeroReel.findOneAndUpdate(
+          { frameCode: it.frameCode },
+          {
+            frameCode: it.frameCode,
+            title: it.title,
+            src: it.src,
+            exif: it.exif,
+            order: i + 1,
+          },
+          { upsert: true, new: true }
+        );
+      }
+      const updated = await HeroReel.find().sort({ order: 1 });
+      return NextResponse.json({ success: true, data: updated });
     }
 
-    // Upsert or replace each frame
-    for (let i = 0; i < items.length; i++) {
-      const it = items[i];
-      await HeroReel.findOneAndUpdate(
-        { frameCode: it.frameCode },
-        {
-          frameCode: it.frameCode,
-          title: it.title,
-          src: it.src,
-          exif: it.exif,
-          order: i + 1,
-        },
-        { upsert: true, new: true }
+    // Case 2: Direct array [...]
+    if (Array.isArray(body)) {
+      for (let i = 0; i < body.length; i++) {
+        const it = body[i];
+        await HeroReel.findOneAndUpdate(
+          { frameCode: it.frameCode },
+          {
+            frameCode: it.frameCode,
+            title: it.title,
+            src: it.src,
+            exif: it.exif,
+            order: i + 1,
+          },
+          { upsert: true, new: true }
+        );
+      }
+      const updated = await HeroReel.find().sort({ order: 1 });
+      return NextResponse.json({ success: true, data: updated });
+    }
+
+    // Case 3: Single item update from dashboard modal
+    const { _id, id, frameCode, title, src, exif, order } = body;
+    const targetQuery = _id
+      ? { _id }
+      : id
+      ? { _id: id }
+      : frameCode
+      ? { frameCode }
+      : null;
+
+    if (!targetQuery) {
+      return NextResponse.json(
+        { error: "Frame Code or ID is required" },
+        { status: 400 }
       );
     }
 
-    const updated = await HeroReel.find().sort({ order: 1 });
+    const updated = await HeroReel.findOneAndUpdate(
+      targetQuery,
+      {
+        ...(frameCode ? { frameCode } : {}),
+        ...(title ? { title } : {}),
+        ...(src ? { src } : {}),
+        ...(exif !== undefined ? { exif } : {}),
+        ...(order ? { order } : {}),
+      },
+      { upsert: true, new: true }
+    );
+
     return NextResponse.json({ success: true, data: updated });
   } catch (error) {
     console.error("PUT /api/hero-reel error:", error);
     return NextResponse.json({ error: "Failed to update hero reel" }, { status: 500 });
   }
+}
+
+export async function POST(request: Request) {
+  return PUT(request);
 }
