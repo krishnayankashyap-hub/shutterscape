@@ -121,6 +121,7 @@ export default function GlobalBranding() {
       "scene-roster",
       "scene-timeline",
       "scene-credits",
+      "shutterscape-universal-footer",
     ];
 
     const performScrollCheck = () => {
