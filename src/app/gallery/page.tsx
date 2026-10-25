@@ -255,18 +255,18 @@ export default function CinematicGalleryPage() {
       isMobile = vw < 768;
 
       cardW = isMobile
-        ? Math.min(340, vw * 0.78)
-        : Math.min(720, Math.max(460, vw * 0.5));
+        ? Math.min(290, vw * 0.74)
+        : Math.min(500, Math.max(360, Math.min(vw * 0.36, vh * 0.55)));
       cardH = isMobile
-        ? Math.min(235, vh * 0.34)
-        : Math.min(395, Math.max(270, vh * 0.46));
-      const gap = isMobile ? 20 : 34;
+        ? Math.min(205, vh * 0.3)
+        : Math.min(310, Math.max(225, cardW * 0.62));
+      const gap = isMobile ? 18 : 28;
       stride = cardW + gap;
       sliceW = cardW / SLICES_PER_CARD;
 
       cylRadius = isMobile
-        ? Math.max(360, vw * 0.88)
-        : Math.max(690, vw * 0.54);
+        ? Math.max(340, vw * 0.82)
+        : Math.max(540, vw * 0.46);
 
       const total = filteredItems.length;
       for (let i = 0; i < total; i++) {
@@ -490,7 +490,7 @@ export default function CinematicGalleryPage() {
             ============================================================ */}
         <nav
           aria-label="Gallery Categories"
-          className="fixed top-[114px] sm:top-[128px] md:top-[144px] left-1/2 -translate-x-1/2 z-[9970] pointer-events-auto select-none w-max max-w-[94vw] overflow-x-auto no-scrollbar flex items-center justify-start sm:justify-center gap-2 sm:gap-6 md:gap-9 py-1.5 px-3 sm:px-4"
+          className="fixed top-[64px] sm:top-[68px] md:top-[72px] left-1/2 -translate-x-1/2 z-[9970] pointer-events-auto select-none w-max max-w-[94vw] overflow-x-auto no-scrollbar flex items-center justify-start sm:justify-center gap-2 sm:gap-6 md:gap-9 py-1.5 px-3 sm:px-4"
         >
           {CATEGORIES.map((cat) => {
             const isSelected = selectedCategory === cat;
@@ -536,19 +536,19 @@ export default function CinematicGalleryPage() {
               --------------------------------------------------------- */}
           <div
             ref={heroWrapRef}
-            className="pointer-events-none absolute inset-x-0 top-[24vh] sm:top-[23vh] z-10 flex flex-col items-center justify-center px-6 will-change-transform"
+            className="pointer-events-none absolute inset-x-0 top-[17vh] sm:top-[18vh] z-10 flex flex-col items-center justify-center px-6 will-change-transform"
           >
-            <span className="font-mono text-[10px] sm:text-xs tracking-[0.36em] uppercase text-[#B8860B] mb-3 font-bold">
+            <span className="font-mono text-[10px] sm:text-xs tracking-[0.36em] uppercase text-[#B8860B] mb-2 font-bold">
               FEATURED EXHIBITION ARCHIVE
             </span>
-            <h1 className="font-serif text-5xl sm:text-7xl md:text-[11vw] lg:text-[12.5vw] leading-[0.86] md:leading-[0.82] uppercase tracking-tighter text-[#141413] m-0 text-center w-full">
+            <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl lg:text-[76px] leading-[0.9] md:leading-[0.88] uppercase tracking-tighter text-[#141413] m-0 text-center w-full">
               Visual
               <br />
               <span className="text-[#D4A843] italic font-normal">
                 Archive.
               </span>
             </h1>
-            <p className="mt-4 sm:mt-6 max-w-xl font-body text-sm sm:text-base text-[#141413]/70 text-center leading-relaxed">
+            <p className="mt-3 sm:mt-4 max-w-lg font-body text-xs sm:text-sm text-[#141413]/70 text-center leading-relaxed">
               Scroll down to glide through the 3D panoramic filmstrip. Click any
               frame to launch the optical darkroom loupe.
             </p>
@@ -628,13 +628,13 @@ export default function CinematicGalleryPage() {
                           </span>
                         </div>
 
-                        {/* Giant Poster Typography & Larger Description inside the Frame */}
-                        <div className="absolute inset-x-6 bottom-5 flex items-end justify-between gap-4 pointer-events-none">
-                          <div className="max-w-[78%]">
-                            <h2 className="font-serif text-2xl sm:text-4xl md:text-[42px] text-white font-light leading-[0.95] tracking-tight">
+                        {/* Poster Typography & Description inside the Frame */}
+                        <div className="absolute inset-x-5 bottom-4 flex items-end justify-between gap-3 pointer-events-none">
+                          <div className="max-w-[80%]">
+                            <h2 className="font-serif text-xl sm:text-2xl md:text-[26px] text-white font-light leading-[1.05] tracking-tight">
                               {item.title}
                             </h2>
-                            <p className="mt-2 font-body text-xs sm:text-sm md:text-[15px] text-white/90 font-medium leading-snug line-clamp-2">
+                            <p className="mt-1.5 font-body text-[11px] sm:text-xs text-white/85 font-normal leading-snug line-clamp-2">
                               {item.description}
                             </p>
                           </div>
@@ -663,19 +663,19 @@ export default function CinematicGalleryPage() {
           <div
             ref={captionWrapRef}
             style={{ opacity: 0 }}
-            className="pointer-events-auto absolute bottom-4 sm:bottom-6 inset-x-0 z-30 flex flex-col items-center justify-center px-6 text-center will-change-transform"
+            className="pointer-events-auto absolute bottom-4 sm:bottom-5 inset-x-0 z-30 flex flex-col items-center justify-center px-6 text-center will-change-transform"
           >
             {currentItem && (
               <>
-                <h3 className="font-serif text-2xl sm:text-3xl md:text-[34px] text-[#141413] font-normal tracking-wide leading-tight">
+                <h3 className="font-serif text-lg sm:text-xl md:text-2xl text-[#141413] font-normal tracking-wide leading-tight">
                   {currentItem.title}
                 </h3>
 
-                <p className="mt-1.5 max-w-2xl font-body text-xs sm:text-sm md:text-base text-[#141413]/80 leading-relaxed font-normal">
+                <p className="mt-1 max-w-xl font-body text-xs sm:text-[13px] text-[#141413]/80 leading-relaxed font-normal">
                   {currentItem.description}
                 </p>
 
-                <p className="mt-2 font-mono text-[11px] sm:text-xs md:text-[13px] tracking-[0.22em] uppercase text-[#141413]/75 font-semibold">
+                <p className="mt-1.5 font-mono text-[10px] sm:text-[11px] tracking-[0.22em] uppercase text-[#141413]/75 font-semibold">
                   {currentItem.category} · BY {currentItem.photographer} ·{" "}
                   <span className="text-[#B8860B] font-bold">
                     {currentItem.exif}

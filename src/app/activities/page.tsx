@@ -655,23 +655,23 @@ export default function ActivitiesPage() {
       const isMobile = vw < 768;
       const total = filteredData.length;
 
-      // Larger, bolder base card dimensions
+      // Standard balanced card dimensions
       const cardW = isMobile
-        ? Math.min(250, vw * 0.62)
-        : Math.min(340, Math.max(265, Math.min(vw * 0.225, vh * 0.31)));
-      const cardH = cardW * 0.635;
+        ? Math.min(215, vw * 0.58)
+        : Math.min(245, Math.max(190, Math.min(vw * 0.175, vh * 0.25)));
+      const cardH = cardW * 0.62;
 
-      // Tightened hexagonal radius so the 6 larger frames form a crisp aperture around WORKS '26 / '25
-      const apothem = cardW * 0.72;
-      const hexRadius = apothem + cardH * 0.46;
+      // Balanced hexagonal radius so all 6 cards form a crisp aperture without clipping or overlapping
+      const apothem = cardW * 0.62;
+      const hexRadius = apothem + cardH * 0.38;
 
-      // Expanded 3D Vertical Cylinder radius to accommodate larger Rolodex cards
+      // Standard 3D Vertical Cylinder radius
       const cylRadius = isMobile
-        ? Math.min(220, vh * 0.28)
-        : Math.min(305, vh * 0.335);
+        ? Math.min(195, vh * 0.24)
+        : Math.min(235, vh * 0.28);
 
-      // Subtle downward optical stage offset so top frames clear the navbar & filter bar cleanly
-      const stageOffsetY = isMobile ? 18 : 26;
+      // Balanced optical stage offset so top frames clear the filter bar cleanly
+      const stageOffsetY = isMobile ? 14 : 22;
 
       // Compute morph factor `t` (0 = Pure Hexagon, 1 = Pure 3D Cylinder)
       const rawMorph = Math.min(1, Math.max(0, progress / morphEnd));
@@ -768,11 +768,11 @@ export default function ActivitiesPage() {
         const cylRotX = -drumAngleDeg;
         const cylRotZ = 0;
 
-        // Larger, commanding scale for the center and adjacent cylinder frames
+        // Balanced standard scale for cylinder frames
         const distFromCenter = Math.abs(delta);
         const cylScale = isMobile
-          ? Math.max(0.9, 1.26 - distFromCenter * 0.2)
-          : Math.max(0.95, 1.46 - distFromCenter * 0.32);
+          ? Math.max(0.92, 1.08 - distFromCenter * 0.15)
+          : Math.max(0.94, 1.15 - distFromCenter * 0.2);
 
         let cylOpacity = 0;
         if (distFromCenter <= 1.05) {
@@ -871,7 +871,7 @@ export default function ActivitiesPage() {
               1. TOP-CENTER MINIMAL FILTER BAR & RETURN LINK
               Positioned cleanly below the global ShutterScape HUD navbar
               --------------------------------------------------------- */}
-          <div className="absolute top-[82px] sm:top-[86px] left-1/2 -translate-x-1/2 z-40 flex items-center gap-3 sm:gap-5 px-4 py-1.5 rounded-full bg-[#F5F4F0]/90 backdrop-blur-md border border-[#141413]/10 max-w-[95vw] overflow-x-auto no-scrollbar shadow-xs">
+          <div className="absolute top-[64px] sm:top-[68px] left-1/2 -translate-x-1/2 z-40 flex items-center gap-3 sm:gap-5 px-4 py-1.5 rounded-full bg-[#F5F4F0]/90 backdrop-blur-md border border-[#141413]/10 max-w-[95vw] overflow-x-auto no-scrollbar shadow-xs">
             <Link
               href="/#scene-activity-showcase"
               className="font-mono text-[9.5px] sm:text-[10.5px] tracking-[0.2em] uppercase font-bold text-[#141413] hover:text-[#B8860B] transition-colors shrink-0 pr-2.5 border-r border-[#141413]/15"
@@ -902,12 +902,12 @@ export default function ActivitiesPage() {
               --------------------------------------------------------- */}
           <div
             ref={topBannerRef}
-            className="pointer-events-none absolute top-[126px] sm:top-[132px] left-5 sm:left-10 z-10 will-change-transform"
+            className="pointer-events-none absolute top-[104px] sm:top-[108px] left-5 sm:left-10 z-10 will-change-transform"
           >
             <span className="block font-mono text-[9px] sm:text-[10px] tracking-[0.28em] uppercase text-[#141413]/45 mb-1">
               CHRONOLOGICAL EXHIBITION // {editionLabel}
             </span>
-            <h1 className="font-heading text-[clamp(1.85rem,4.2vw,4.25rem)] font-black uppercase tracking-[-0.04em] text-[#141413] leading-[0.92]">
+            <h1 className="font-heading text-[clamp(1.4rem,2.5vw,2.5rem)] font-black uppercase tracking-[-0.03em] text-[#141413] leading-[0.95]">
               ACTIVITY ARCHIVE
             </h1>
           </div>
