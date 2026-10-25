@@ -1,332 +1,238 @@
 // src/app/about/page.tsx
 "use client";
 
-import React, { useEffect, useState, useCallback, useMemo } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SmoothScroller from "@/components/cinematic/SmoothScroller";
 
+gsap.registerPlugin(ScrollTrigger);
+
 // ==========================================
-// DATA PAYLOADS & VIBRANT PALETTE
+// DATA PAYLOADS
 // ==========================================
-export interface TeamMember {
-  _id?: string;
+interface MemberRecord {
   name: string;
   role: string;
   dept?: string;
-  tier: "MENTOR" | "LEAD" | "CORE" | "FOUNDER" | "LEGACY";
+  bio?: string;
   img: string;
-  bgColor: string;
-  bio: string[];
 }
 
-const CARD_PALETTE = [
-  "#00C781", // Vibrant Emerald (matches video card 1)
-  "#FFAB00", // Golden Amber (matches video card 2)
-  "#2684FF", // Royal Sky Blue (matches video card 3)
-  "#8777D9", // Editorial Violet
-  "#FF5630", // Warm Coral
-  "#00B8D9", // Cyan Teal
-];
-
-const MENTORS: TeamMember[] = [
+const MENTORS: MemberRecord[] = [
   {
     name: "Dr. Sangeeta Das",
-    role: "Faculty Coordinator",
+    role: "Coordinator",
     dept: "Dept. of Mechanical Engineering",
-    tier: "MENTOR",
+    bio: "As Faculty Coordinator of ShutterScape, Dr. Sangeeta Das guides the club's annual exhibitions, inter-university visual symposia, and archival documentation initiatives across Girijananda Chowdhury University.",
     img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=800&auto=format&fit=crop",
-    bgColor: "#00C781",
-    bio: [
-      "Dr. Sangeeta Das serves as the Faculty Coordinator of ShutterScape at Girijananda Chowdhury University, guiding the club's institutional vision, annual exhibitions, and interdisciplinary art-technology initiatives.",
-      "With a deep appreciation for visual documentation and campus heritage, she has championed student-led field expeditions across Assam, ensuring members have access to darkroom clinics, studio lighting equipment, and gallery spaces.",
-      "Under her mentorship, ShutterScape has grown into one of the university's most active cultural and creative collectives, bridging engineering precision with photographic storytelling.",
-    ],
   },
   {
     name: "Dr. Barsha Chhetri",
-    role: "Faculty Co-Coordinator",
-    dept: "Assistant Professor & Head (i/c), Dept. of Education",
-    tier: "MENTOR",
+    role: "Co-Coordinator",
+    dept: "Assistant Professor & Head (i/c) Dept. of Education",
+    bio: "Dr. Barsha Chhetri mentors student storytellers in visual literacy, cultural documentation, and curatorial ethics, bridging academic inquiry with creative expression.",
     img: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=800&auto=format&fit=crop",
-    bgColor: "#FFAB00",
-    bio: [
-      "Dr. Barsha Chhetri is the Faculty Co-Coordinator of ShutterScape and Assistant Professor & Head (i/c) in the Department of Education at Girijananda Chowdhury University.",
-      "She specializes in visual pedagogy and cultural curation, helping students frame human-interest stories, indigenous crafts, and environmental narratives with empathy and ethical depth.",
-      "She actively oversees the club's inter-university symposia, annual print salons, and community outreach workshops.",
-    ],
   },
 ];
 
-const LEADS: TeamMember[] = [
+const LEADS: MemberRecord[] = [
   {
     name: "Uttama Purkayastha",
-    role: "President",
-    dept: "Executive Leadership · 2025–26",
-    tier: "LEAD",
+    role: "PRESIDENT",
+    dept: "Executive Leadership · ShutterScape GCU",
+    bio: "Leads the creative direction, campus-wide exhibitions, and visual archive curation for ShutterScape, fostering a welcoming community for both analog and digital photographers.",
     img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800&auto=format&fit=crop",
-    bgColor: "#00C781",
-    bio: [
-      "Uttama Purkayastha leads ShutterScape as Club President, directing creative curation, campus-wide exhibitions, and national collegiate photography challenges.",
-      "Specializing in chiaroscuro portraiture and documentary storytelling, she has spearheaded the 'Frames Beyond Time' annual exhibition and established the permanent student visual archive at GCU.",
-      "Outside the studio, she mentors incoming freshmen on manual optics, 35mm film workflows, and editorial composition.",
-    ],
   },
   {
     name: "Ikhyt De Neog",
-    role: "Vice-President",
+    role: "VICE-PRESIDENT",
     dept: "Operations & Field Expeditions",
-    tier: "LEAD",
+    bio: "Coordinates outdoor photowalks, technical lighting workshops, and inter-collegiate photography challenges across Assam and the Northeast.",
     img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=800&auto=format&fit=crop",
-    bgColor: "#FFAB00",
-    bio: [
-      "Ikhyt De Neog serves as Vice-President of ShutterScape, overseeing outdoor photowalks, technical gear clinics, and production logistics across Guwahati and the Eastern Himalayas.",
-      "An avid landscape and nocturnal street photographer, he leads the Brahmaputra Heritage Photowalk series and trains members in long-exposure astrophotography and high-speed strobe sync.",
-      "He is passionate about building an inclusive creative environment where both smartphone creators and DSLR veterans thrive together.",
-    ],
   },
   {
     name: "Richita Sarma",
-    role: "Secretary",
-    dept: "Editorial & Archival Curation",
-    tier: "LEAD",
+    role: "SECRETARY",
+    dept: "Editorial & Archive Administration",
+    bio: "Oversees member onboarding, exhibition catalogs, and the preservation of student photographic plates within the permanent GCU archive.",
     img: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=800&auto=format&fit=crop",
-    bgColor: "#2684FF",
-    bio: [
-      "Richita Sarma is the Secretary of ShutterScape, managing club communications, exhibition catalogs, and collaborations with external cultural organizations.",
-      "Her photographic work focuses on architectural geometry, monsoon street life, and minimalist color theory, frequently featured in university publications.",
-      "She coordinates the club's weekly critique circles and curates the 'Frames of Moments' motion reel showcase.",
-    ],
   },
 ];
 
-const CORE_MEMBERS: TeamMember[] = [
+const CORE_MEMBERS: MemberRecord[] = [
   {
     name: "Sohaib Hussain",
     role: "Core Committee",
-    dept: "Documentary & High-Speed Optics",
-    tier: "CORE",
+    dept: "Documentary & Street Division",
+    bio: "Specializes in high-shutter action documentary and candid street narratives across Guwahati.",
     img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&auto=format&fit=crop",
-    bgColor: "#8777D9",
-    bio: [
-      "Sohaib Hussain is a Core Committee member specializing in festival documentary and high-shutter-speed action photography.",
-      "He leads on-ground coverage for major university cultural fests and conducts hands-on sessions on dynamic framing and color grading.",
-    ],
   },
   {
     name: "Mahadananda Dutta",
     role: "Core Committee",
-    dept: "Street & Monochrome Archive",
-    tier: "CORE",
+    dept: "Optics & Lighting Lead",
+    bio: "Focuses on studio strobe choreography, Chiaroscuro portraiture, and manual lens experimentation.",
     img: "https://images.unsplash.com/photo-1488161628813-04466f872be2?q=80&w=600&auto=format&fit=crop",
-    bgColor: "#00B8D9",
-    bio: [
-      "Mahadananda Dutta focuses on black-and-white street narratives and silver-halide film aesthetics across Guwahati's historic markets.",
-      "He manages exhibition print mounting and assists in curating the club's physical darkroom contact sheets.",
-    ],
   },
   {
     name: "Manash Pratim Sarma",
     role: "Core Committee",
-    dept: "Landscape & Environmental Study",
-    tier: "CORE",
+    dept: "Landscape & Expedition Lead",
+    bio: "Documents alpine ridges, riverfront twilight, and ecological heritage throughout Upper and Lower Assam.",
     img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=600&auto=format&fit=crop",
-    bgColor: "#00C781",
-    bio: [
-      "Manash Pratim Sarma documents Assam's tea estates, wetlands, and avian biodiversity using telephoto optics and natural dawn light.",
-      "He organizes early-morning nature walks to Deepor Beel and mentors members in wildlife tracking and conservation photography.",
-    ],
   },
   {
     name: "Mubina Ahmed",
     role: "Core Committee",
-    dept: "Portraiture & Studio Lighting",
-    tier: "CORE",
+    dept: "Curation & Print Design",
+    bio: "Manages exhibition sequencing, matte framing standards, and visual storytelling critiques.",
     img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=600&auto=format&fit=crop",
-    bgColor: "#FF5630",
-    bio: [
-      "Mubina Ahmed specializes in studio xenon strobe portraiture, fine-art lighting setups, and editorial fashion direction.",
-      "She runs the club's indoor portrait clinics, helping fellow students master catchlights, softboxes, and tonal falloff.",
-    ],
   },
   {
     name: "Pratyush B. Choudhury",
     role: "Core Committee",
-    dept: "Visual Media & Cinematography",
-    tier: "CORE",
+    dept: "Cinematography & Motion Reels",
+    bio: "Directs vertical motion reels, color grading workflows, and behind-the-scenes event films.",
     img: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=600&auto=format&fit=crop",
-    bgColor: "#FFAB00",
-    bio: [
-      "Pratyush B. Choudhury bridges still photography and motion cinematography, producing vertical reels and aftermovies for ShutterScape events.",
-      "He experiments with vintage prime lenses, anamorphic flares, and atmospheric sound design.",
-    ],
   },
   {
     name: "Hiya Das",
     role: "Core Committee",
-    dept: "Architectural & Spatial Form",
-    tier: "CORE",
+    dept: "Architectural & Spatial Study",
+    bio: "Explores brutalist geometry, symmetry, and natural shadow play across campus structures.",
     img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=600&auto=format&fit=crop",
-    bgColor: "#2684FF",
-    bio: [
-      "Hiya Das explores brutalist campus architecture, geometric symmetry, and leading lines through wide-angle perspectives.",
-      "She curates the architectural category of the Visual Archive and leads spatial composition walks on campus.",
-    ],
   },
 ];
 
-const FOUNDERS: TeamMember[] = [
+const FOUNDERS: MemberRecord[] = [
   {
     name: "Dheemaan Deka",
-    role: "Co-Founder (2023)",
-    dept: "Founding Vision & Direction",
-    tier: "FOUNDER",
+    role: "2023 // Co-Founder",
+    dept: "Founding Visionary",
+    bio: "Co-founded ShutterScape in 2023 to unite Girijananda Chowdhury University's visual artists under a single creative collective.",
     img: "https://images.unsplash.com/photo-1618077360395-f3068be8e001?q=80&w=800&auto=format&fit=crop",
-    bgColor: "#00C781",
-    bio: [
-      "Dheemaan Deka co-founded ShutterScape in 2023 with the vision of establishing a permanent, student-run photographic society at Girijananda Chowdhury University.",
-      "By bringing together a small group of passionate visual storytellers, he laid the foundation for the club's signature photowalks, annual exhibitions, and peer-mentorship culture.",
-    ],
   },
   {
     name: "Subhrajyoti Goswami",
-    role: "Co-Founder (2023)",
-    dept: "Founding Technical Lead",
-    tier: "FOUNDER",
+    role: "2023 // Co-Founder",
+    dept: "Founding Architect",
+    bio: "Established the club's signature photowalk culture, darkroom critique sessions, and annual campus print exhibitions.",
     img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=800&auto=format&fit=crop",
-    bgColor: "#2684FF",
-    bio: [
-      "Subhrajyoti Goswami co-founded ShutterScape in 2023, establishing the club's technical curriculum, manual photography workshops, and competitive circuit presence.",
-      "His dedication to craft and visual experimentation continues to inspire every new cohort of GCU photographers.",
-    ],
   },
 ];
 
-const LEGACY: TeamMember[] = [
+const LEGACY: MemberRecord[] = [
   {
     name: "Gargi Medhi",
     role: "Legacy Torchbearer",
-    dept: "Alumni Advisory · 2023–25",
-    tier: "LEGACY",
+    dept: "Alumni Mentorship Council",
+    bio: "Pioneered early portraiture symposia and continues to mentor incoming student photographers.",
     img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600&auto=format&fit=crop",
-    bgColor: "#FFAB00",
-    bio: [
-      "Gargi Medhi played a pivotal role in expanding ShutterScape's exhibition footprint and mentoring the current executive leadership cohort.",
-      "Her archival portraits and cultural essays remain a cornerstone of the club's permanent collection.",
-    ],
   },
   {
     name: "Dheemaan Deka",
     role: "Legacy Torchbearer",
-    dept: "Founding Alumnus",
-    tier: "LEGACY",
+    dept: "Founding Chapter",
+    bio: "Set the foundational creative benchmark for ShutterScape's visual archive.",
     img: "https://images.unsplash.com/photo-1618077360395-f3068be8e001?q=80&w=600&auto=format&fit=crop",
-    bgColor: "#00C781",
-    bio: [
-      "As a founding torchbearer, Dheemaan continues to advise the club on annual print salons and inter-collegiate collaborations.",
-    ],
   },
   {
     name: "Imran Farhat",
     role: "Legacy Torchbearer",
     dept: "Nocturnal & Street Archive",
-    tier: "LEGACY",
+    bio: "Known for low-light urban documentation and training junior members in manual exposure.",
     img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&auto=format&fit=crop",
-    bgColor: "#8777D9",
-    bio: [
-      "Imran Farhat pioneered the club's nocturnal street photography walks and Cinestill tungsten film studies across Guwahati.",
-      "His iconic rain-reflection frames are permanently exhibited in the ShutterScape Visual Archive.",
-    ],
   },
   {
     name: "Subhrajyoti Goswami",
     role: "Legacy Torchbearer",
-    dept: "Founding Alumnus",
-    tier: "LEGACY",
+    dept: "Founding Chapter",
+    bio: "Built the bridge between technical optics education and expressive visual art at GCU.",
     img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=600&auto=format&fit=crop",
-    bgColor: "#2684FF",
-    bio: [
-      "Subhrajyoti remains an active mentor to the technical wing, guiding optical experiments and darkroom workshops.",
-    ],
   },
 ];
 
-const SECTIONS = [
-  { id: "origins", label: "01 · Origins" },
-  { id: "leadership", label: "02 · Leadership" },
-  { id: "mentors", label: "03 · Mentors" },
-  { id: "core", label: "04 · Core Team" },
-  { id: "founders", label: "05 · Founders" },
-  { id: "legacy", label: "06 · Legacy" },
+// Atlassian-inspired vibrant backdrop themes that shift color on hover
+const CARD_THEMES = [
+  {
+    baseBg: "#F5B700", // Warm Gold
+    hoverBg: "#00C7E6", // Vivid Cyan
+    stripeColor: "rgba(17, 24, 39, 0.22)",
+  },
+  {
+    baseBg: "#00C7E6", // Vivid Cyan
+    hoverBg: "#F5B700", // Warm Gold
+    stripeColor: "rgba(17, 24, 39, 0.22)",
+  },
+  {
+    baseBg: "#4C9AFF", // Periwinkle Blue
+    hoverBg: "#10B981", // Emerald Mint
+    stripeColor: "rgba(255, 255, 255, 0.28)",
+  },
+  {
+    baseBg: "#FF6B6B", // Coral Rose
+    hoverBg: "#8B5CF6", // Electric Violet
+    stripeColor: "rgba(17, 24, 39, 0.2)",
+  },
+  {
+    baseBg: "#10B981", // Emerald Mint
+    hoverBg: "#F59E0B", // Amber Gold
+    stripeColor: "rgba(17, 24, 39, 0.2)",
+  },
+  {
+    baseBg: "#8B5CF6", // Royal Violet
+    hoverBg: "#00C7E6", // Vivid Cyan
+    stripeColor: "rgba(255, 255, 255, 0.25)",
+  },
+];
+
+interface CategoryItem {
+  id: string;
+  code: string;
+  title: string;
+  label: string;
+}
+
+const CATEGORIES: CategoryItem[] = [
+  { id: "origins", code: "01", title: "ORIGINS", label: "heroStart" },
+  { id: "mentors", code: "02", title: "THE TEACHERS", label: "mentorsStart" },
+  { id: "leads", code: "03", title: "BEHIND THE LENS", label: "leadsStart" },
+  { id: "core", code: "04", title: "CORE MEMBERS", label: "coreStart" },
+  { id: "founders", code: "05", title: "WHERE IT ALL STARTED", label: "foundersStart" },
+  { id: "legacy", code: "06", title: "CARRYING IT FORWARD", label: "legacyStart" },
 ];
 
 export default function AboutPage() {
-  const [mentors, setMentors] = useState<TeamMember[]>(MENTORS);
-  const [leads, setLeads] = useState<TeamMember[]>(LEADS);
-  const [coreMembers, setCoreMembers] = useState<TeamMember[]>(CORE_MEMBERS);
-  const [founders, setFounders] = useState<TeamMember[]>(FOUNDERS);
-  const [legacy, setLegacy] = useState<TeamMember[]>(LEGACY);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const tlRef = useRef<gsap.core.Timeline | null>(null);
 
-  const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
-  const [activeSection, setActiveSection] = useState<string>("origins");
+  const [activeCategory, setActiveCategory] = useState("origins");
+  const [mentors, setMentors] = useState<MemberRecord[]>(MENTORS);
+  const [leads, setLeads] = useState<MemberRecord[]>(LEADS);
+  const [coreMembers, setCoreMembers] = useState<MemberRecord[]>(CORE_MEMBERS);
+  const [founders, setFounders] = useState<MemberRecord[]>(FOUNDERS);
+  const [legacy, setLegacy] = useState<MemberRecord[]>(LEGACY);
 
-  // Helper to enrich dynamic API records with vibrant color & multi-paragraph bio if missing
-  const enrichMember = useCallback(
-    (raw: any, idx: number, fallbackList: TeamMember[]): TeamMember => {
-      const existing = fallbackList.find(
-        (m) => m.name.toLowerCase() === (raw.name || "").toLowerCase()
-      );
-      return {
-        _id: raw._id,
-        name: raw.name || existing?.name || "Club Member",
-        role:
-          raw.role ||
-          existing?.role ||
-          (raw.tier === "CORE" ? "Core Committee" : raw.tier || "Member"),
-        dept: raw.dept || existing?.dept || "Girijananda Chowdhury University",
-        tier: raw.tier || existing?.tier || "CORE",
-        img: raw.img || existing?.img || "",
-        bgColor:
-          raw.bgColor ||
-          existing?.bgColor ||
-          CARD_PALETTE[idx % CARD_PALETTE.length],
-        bio:
-          Array.isArray(raw.bio) && raw.bio.length > 0
-            ? raw.bio
-            : existing?.bio || [
-                `${raw.name} is an integral member of ShutterScape at Girijananda Chowdhury University, serving as ${
-                  raw.role || raw.tier
-                }.`,
-                "Passionate about visual storytelling, analog film aesthetics, and collaborative field documentation, they actively contribute to the club's exhibitions, workshops, and archival projects.",
-                "Through ShutterScape, they work alongside fellow student photographers to capture the culture, architecture, and natural landscapes of Assam.",
-              ],
-      };
-    },
-    []
-  );
+  // Selected member for the Atlassian-style split bio modal
+  const [selectedMember, setSelectedMember] = useState<{
+    member: MemberRecord;
+    themeIndex: number;
+  } | null>(null);
 
-  // Sync with live /api/committee CMS data
   useEffect(() => {
     fetch("/api/committee")
       .then((r) => r.json())
       .then((res) => {
-        if (res.data && Array.isArray(res.data) && res.data.length > 0) {
-          const m = res.data
-            .filter((it: any) => it.tier === "MENTOR")
-            .map((it: any, i: number) => enrichMember(it, i, MENTORS));
-          const l = res.data
-            .filter((it: any) => it.tier === "LEAD")
-            .map((it: any, i: number) => enrichMember(it, i, LEADS));
-          const c = res.data
-            .filter((it: any) => it.tier === "CORE")
-            .map((it: any, i: number) => enrichMember(it, i + 3, CORE_MEMBERS));
-          const f = res.data
-            .filter((it: any) => it.tier === "FOUNDER")
-            .map((it: any, i: number) => enrichMember(it, i, FOUNDERS));
-          const leg = res.data
-            .filter((it: any) => it.tier === "LEGACY")
-            .map((it: any, i: number) => enrichMember(it, i + 1, LEGACY));
-
+        if (res.data && res.data.length > 0) {
+          const m = res.data.filter((it: any) => it.tier === "MENTOR");
+          const l = res.data.filter((it: any) => it.tier === "LEAD");
+          const c = res.data.filter((it: any) => it.tier === "CORE");
+          const f = res.data.filter((it: any) => it.tier === "FOUNDER");
+          const leg = res.data.filter((it: any) => it.tier === "LEGACY");
           if (m.length > 0) setMentors(m);
           if (l.length > 0) setLeads(l);
           if (c.length > 0) setCoreMembers(c);
@@ -335,572 +241,793 @@ export default function AboutPage() {
         }
       })
       .catch(() => {});
-  }, [enrichMember]);
+  }, []);
 
-  // Flat list of all members for Next / Prev navigation inside the bio modal
-  const allMembers = useMemo(
-    () => [...leads, ...mentors, ...coreMembers, ...founders, ...legacy],
-    [leads, mentors, coreMembers, founders, legacy]
-  );
-
-  // Lock background scroll when Bio Modal is open
   useEffect(() => {
+    window.scrollTo(0, 0);
     const lenis = (
       window as unknown as {
-        __lenis?: { stop: () => void; start: () => void };
-      }
-    ).__lenis;
-
-    if (selectedMember) {
-      if (lenis && typeof lenis.stop === "function") lenis.stop();
-      document.body.style.overflow = "hidden";
-    } else {
-      if (lenis && typeof lenis.start === "function") lenis.start();
-      document.body.style.overflow = "";
-    }
-
-    return () => {
-      if (lenis && typeof lenis.start === "function") lenis.start();
-      document.body.style.overflow = "";
-    };
-  }, [selectedMember]);
-
-  // Keyboard navigation for Bio Modal (Escape, ArrowLeft, ArrowRight)
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (!selectedMember) return;
-      if (e.key === "Escape") {
-        setSelectedMember(null);
-      } else if (e.key === "ArrowRight") {
-        const idx = allMembers.findIndex(
-          (m) =>
-            m.name === selectedMember.name && m.tier === selectedMember.tier
-        );
-        if (idx !== -1) {
-          setSelectedMember(allMembers[(idx + 1) % allMembers.length]);
-        }
-      } else if (e.key === "ArrowLeft") {
-        const idx = allMembers.findIndex(
-          (m) =>
-            m.name === selectedMember.name && m.tier === selectedMember.tier
-        );
-        if (idx !== -1) {
-          setSelectedMember(
-            allMembers[(idx - 1 + allMembers.length) % allMembers.length]
-          );
-        }
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [selectedMember, allMembers]);
-
-  const scrollToSection = (id: string) => {
-    setActiveSection(id);
-    const el = document.getElementById(id);
-    if (!el) return;
-    const y = el.getBoundingClientRect().top + window.scrollY - 130;
-    const lenis = (
-      window as unknown as {
-        __lenis?: { scrollTo: (target: number, options?: { duration?: number }) => void };
+        __lenis?: { scrollTo: (target: number, options?: { immediate?: boolean }) => void };
       }
     ).__lenis;
     if (lenis && typeof lenis.scrollTo === "function") {
-      lenis.scrollTo(y, { duration: 1.0 });
-    } else {
-      window.scrollTo({ top: y, behavior: "smooth" });
+      lenis.scrollTo(0, { immediate: true });
     }
-  };
+  }, []);
 
-  // Reusable Team Member Card matching the exact video reference
-  const TeamCard = ({ member }: { member: TeamMember }) => (
-    <div
-      onClick={() => setSelectedMember(member)}
-      className="team-card group cursor-pointer flex flex-col items-center text-center"
-    >
-      {/* Vibrant Color-Block Portrait Container */}
+  // Close bio modal on Escape key
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSelectedMember(null);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
+
+  const jumpToSection = useCallback((label: string) => {
+    const tl = tlRef.current;
+    if (!tl || !containerRef.current) return;
+    const st = tl.scrollTrigger;
+    if (!st) return;
+
+    const labelTime = tl.labels[label] ?? 0;
+    const totalDuration = tl.duration();
+    const progress = totalDuration > 0 ? labelTime / totalDuration : 0;
+    const targetScroll = st.start + progress * (st.end - st.start);
+
+    const lenis = (
+      window as unknown as {
+        __lenis?: {
+          scrollTo: (target: number, options?: { duration?: number }) => void;
+        };
+      }
+    ).__lenis;
+
+    if (lenis && typeof lenis.scrollTo === "function") {
+      lenis.scrollTo(targetScroll, { duration: 1.2 });
+    } else {
+      window.scrollTo({ top: targetScroll, behavior: "smooth" });
+    }
+  }, []);
+
+  // GSAP MATCHMEDIA FORKING
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const mm = gsap.matchMedia();
+
+    // DESKTOP LANE: (min-width: 1024px)
+    mm.add("(min-width: 1024px)", () => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: container,
+          start: "top top",
+          end: "+=5200",
+          scrub: 1.1,
+          pin: true,
+          anticipatePin: 1,
+        },
+      });
+
+      tlRef.current = tl;
+
+      tl.eventCallback("onUpdate", () => {
+        const prog = tl.progress();
+        if (prog < 0.16) {
+          setActiveCategory("origins");
+        } else if (prog < 0.32) {
+          setActiveCategory("mentors");
+        } else if (prog < 0.5) {
+          setActiveCategory("leads");
+        } else if (prog < 0.7) {
+          setActiveCategory("core");
+        } else if (prog < 0.86) {
+          setActiveCategory("founders");
+        } else {
+          setActiveCategory("legacy");
+        }
+      });
+
+      tl.to(".campus-bg-image", { scale: 1.18, duration: 18, ease: "none" }, 0);
+      tl.to(".hero-scroll-guide", { opacity: 0, y: 15, duration: 0.8, ease: "power2.out" }, 0);
+
+      // SEQUENCE 1: HERO DIVE
+      tl.addLabel("heroStart", 0);
+      tl.to(".hero-word-shutter", { scale: 24, y: "-32vh", opacity: 0, duration: 2.4, ease: "power2.inOut" }, "heroStart");
+      tl.to(".hero-word-scape", { scale: 24, y: "32vh", opacity: 0, duration: 2.4, ease: "power2.inOut" }, "heroStart");
+      tl.fromTo(".hero-hidden-text", { opacity: 0, scale: 0.8, y: 50 }, { opacity: 1, scale: 1, y: 0, duration: 1.6, ease: "power2.out" }, "heroStart+=0.8");
+      tl.to(".hero-hidden-text", { opacity: 0, scale: 1.15, y: -45, duration: 1.2, ease: "power2.in" }, "heroStart+=3.4");
+
+      // SEQUENCE 2: MENTORS
+      tl.addLabel("mentorsStart", "heroStart+=4.2");
+      tl.fromTo(
+        ".ch-2-mentors",
+        { display: "none", opacity: 0, scale: 0.85, x: -40, y: 50, rotateY: 6, filter: "blur(22px)" },
+        { display: "flex", opacity: 1, scale: 1, x: 0, y: 0, rotateY: 0, filter: "blur(0px)", duration: 2, ease: "power3.out" },
+        "mentorsStart"
+      );
+      tl.to(".ch-2-mentors", { opacity: 0, scale: 1.15, x: 30, y: -40, rotateY: -4, filter: "blur(14px)", duration: 1.5, ease: "power2.in" }, "mentorsStart+=3");
+      tl.set(".ch-2-mentors", { display: "none" });
+
+      // SEQUENCE 3: LEADS
+      tl.addLabel("leadsStart", "mentorsStart+=4.2");
+      tl.fromTo(
+        ".ch-3-leads",
+        { display: "none", opacity: 0, scale: 0.9, x: 40, y: -40, rotateX: -6 },
+        { display: "flex", opacity: 1, scale: 1, x: 0, y: 0, rotateX: 0, duration: 1.8, ease: "power3.out" },
+        "leadsStart"
+      );
+      tl.to(".ch-3-leads", { opacity: 0, scale: 1.18, y: -30, duration: 1.4, ease: "power2.in" }, "leadsStart+=3");
+      tl.set(".ch-3-leads", { display: "none" });
+
+      // SEQUENCE 4: CORE MEMBERS
+      tl.addLabel("coreStart", "leadsStart+=3.8");
+      tl.fromTo(".ch-4-core", { display: "none", opacity: 0, y: "15vh", scale: 0.96 }, { display: "flex", opacity: 1, y: "0vh", scale: 1, duration: 1.6, ease: "power3.out" }, "coreStart+=0.3");
+      tl.fromTo(".core-row-1", { x: 15 }, { x: -8, duration: 3.2, ease: "none" }, "coreStart+=0.3");
+      tl.fromTo(".core-row-2", { x: -15 }, { x: 8, duration: 3.2, ease: "none" }, "coreStart+=0.3");
+      tl.to(".ch-4-core", { opacity: 0, y: "-15vh", scale: 0.96, duration: 1.3, ease: "power2.in" }, "coreStart+=3.2");
+      tl.set(".ch-4-core", { display: "none" });
+
+      // SEQUENCE 5: FOUNDERS
+      tl.addLabel("foundersStart", "coreStart+=4.2");
+      tl.fromTo(".ch-5-founders", { display: "none", opacity: 0, scale: 0.9, y: 30 }, { display: "flex", opacity: 1, scale: 1, y: 0, duration: 1.5, ease: "power2.out" }, "foundersStart+=0.3");
+      tl.to(".ch-5-founders", { opacity: 0, scale: 1.08, duration: 1.3, ease: "power2.in" }, "foundersStart+=3.2");
+      tl.set(".ch-5-founders", { display: "none" });
+
+      // SEQUENCE 6: LEGACY
+      tl.addLabel("legacyStart", "foundersStart+=4.2");
+      tl.fromTo(".ch-6-legacy", { display: "none", opacity: 0, y: 25 }, { display: "flex", opacity: 1, y: 0, duration: 1.3, ease: "power2.out" }, "legacyStart");
+      const calcSlideDistance = () => {
+        if (!trackRef.current) return -800;
+        const totalW = trackRef.current.scrollWidth;
+        const viewW = window.innerWidth;
+        return -(totalW - viewW + 60);
+      };
+      tl.to(trackRef.current, { x: calcSlideDistance, duration: 4.8, ease: "none" }, "legacyStart+=0.5");
+    });
+
+    // MOBILE LANE: (max-width: 1023px)
+    mm.add("(max-width: 1023px)", () => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: container,
+          start: "top top",
+          end: "+=3200",
+          scrub: 0.8,
+          pin: true,
+          anticipatePin: 1,
+        },
+      });
+
+      tlRef.current = tl;
+
+      tl.eventCallback("onUpdate", () => {
+        const prog = tl.progress();
+        if (prog < 0.16) {
+          setActiveCategory("origins");
+        } else if (prog < 0.32) {
+          setActiveCategory("mentors");
+        } else if (prog < 0.5) {
+          setActiveCategory("leads");
+        } else if (prog < 0.7) {
+          setActiveCategory("core");
+        } else if (prog < 0.86) {
+          setActiveCategory("founders");
+        } else {
+          setActiveCategory("legacy");
+        }
+      });
+
+      tl.to(".hero-scroll-guide", { opacity: 0, duration: 0.4 }, 0);
+
+      tl.addLabel("heroStart", 0);
+      tl.to(".hero-word-shutter", { scale: 4.5, y: "-18vh", opacity: 0, duration: 1.6, ease: "power1.inOut" }, "heroStart");
+      tl.to(".hero-word-scape", { scale: 4.5, y: "18vh", opacity: 0, duration: 1.6, ease: "power1.inOut" }, "heroStart");
+      tl.fromTo(".hero-hidden-text", { opacity: 0, y: 30, scale: 0.95 }, { opacity: 1, y: 0, scale: 1, duration: 1.0, ease: "power2.out" }, "heroStart+=0.6");
+      tl.to(".hero-hidden-text", { opacity: 0, y: -30, duration: 0.8, ease: "power2.in" }, "heroStart+=2.2");
+
+      tl.addLabel("mentorsStart", "heroStart+=2.8");
+      tl.fromTo(".ch-2-mentors", { display: "none", opacity: 0, y: 30 }, { display: "flex", opacity: 1, y: 0, duration: 1.0, ease: "power2.out" }, "mentorsStart");
+      tl.to(".ch-2-mentors", { opacity: 0, y: -30, duration: 0.8, ease: "power2.in" }, "mentorsStart+=2.0");
+      tl.set(".ch-2-mentors", { display: "none" });
+
+      tl.addLabel("leadsStart", "mentorsStart+=2.6");
+      tl.fromTo(".ch-3-leads", { display: "none", opacity: 0, y: 30 }, { display: "flex", opacity: 1, y: 0, duration: 1.0, ease: "power2.out" }, "leadsStart");
+      tl.to(".ch-3-leads", { opacity: 0, y: -30, duration: 0.8, ease: "power2.in" }, "leadsStart+=2.0");
+      tl.set(".ch-3-leads", { display: "none" });
+
+      tl.addLabel("coreStart", "leadsStart+=2.6");
+      tl.fromTo(".ch-4-core", { display: "none", opacity: 0, y: 30 }, { display: "flex", opacity: 1, y: 0, duration: 1.0, ease: "power2.out" }, "coreStart");
+      tl.to(".ch-4-core", { opacity: 0, y: -30, duration: 0.8, ease: "power2.in" }, "coreStart+=2.0");
+      tl.set(".ch-4-core", { display: "none" });
+
+      tl.addLabel("foundersStart", "coreStart+=2.6");
+      tl.fromTo(".ch-5-founders", { display: "none", opacity: 0, y: 30 }, { display: "flex", opacity: 1, y: 0, duration: 1.0, ease: "power2.out" }, "foundersStart");
+      tl.to(".ch-5-founders", { opacity: 0, y: -30, duration: 0.8, ease: "power2.in" }, "foundersStart+=2.0");
+      tl.set(".ch-5-founders", { display: "none" });
+
+      tl.addLabel("legacyStart", "foundersStart+=2.6");
+      tl.fromTo(".ch-6-legacy", { display: "none", opacity: 0, y: 20 }, { display: "flex", opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "legacyStart");
+      const calcMobileSlide = () => {
+        if (!trackRef.current) return -400;
+        const totalW = trackRef.current.scrollWidth;
+        const viewW = window.innerWidth;
+        return -(totalW - viewW + 24);
+      };
+      tl.to(trackRef.current, { x: calcMobileSlide, duration: 2.5, ease: "none" }, "legacyStart+=0.3");
+    });
+
+    const timer = setTimeout(() => ScrollTrigger.refresh(), 200);
+    return () => {
+      clearTimeout(timer);
+      mm.revert();
+    };
+  }, []);
+
+  // =========================================================================
+  // REUSABLE POP-OUT OVERLAPPING CARD (Matches Atlassian Video Reference)
+  // =========================================================================
+  const PopOutCard = ({
+    member,
+    themeIndex,
+    size = "normal",
+  }: {
+    member: MemberRecord;
+    themeIndex: number;
+    size?: "normal" | "compact";
+  }) => {
+    const theme = CARD_THEMES[themeIndex % CARD_THEMES.length];
+
+    return (
       <div
-        className="team-portrait-box relative w-full overflow-hidden transition-transform duration-300 ease-out group-hover:-translate-y-1.5"
-        style={{ backgroundColor: member.bgColor }}
+        onClick={() => setSelectedMember({ member, themeIndex })}
+        style={
+          {
+            "--card-bg": theme.baseBg,
+            "--card-hover-bg": theme.hoverBg,
+            "--stripe-color": theme.stripeColor,
+          } as React.CSSProperties
+        }
+        className="popout-member-card group relative flex flex-col items-center cursor-pointer pointer-events-auto select-none w-full"
       >
-        {/* Subtle inner radial highlight for studio depth */}
+        {/* Stage Area: Top 28% is open air so the portrait pops out above the colored block */}
         <div
-          className="pointer-events-none absolute inset-0 z-0"
-          style={{
-            background:
-              "radial-gradient(circle at 50% 25%, rgba(255,255,255,0.28) 0%, rgba(0,0,0,0.08) 100%)",
-          }}
-        />
+          className={`relative w-full ${
+            size === "compact"
+              ? "aspect-[4/4.6] max-h-[125px] sm:max-h-[195px] md:max-h-[230px]"
+              : "aspect-[3/3.8] max-h-[175px] sm:max-h-[255px] md:max-h-[320px]"
+          } flex items-end justify-center overflow-visible`}
+        >
+          {/* LOWER COLORED GEOMETRIC BACKDROP BLOCK (72% height, expands & shifts color on hover) */}
+          <div className="popout-backdrop absolute inset-x-0 bottom-0 h-[70%] group-hover:h-[76%] rounded-xl overflow-hidden transition-all duration-500 ease-out shadow-[0_20px_50px_rgba(0,0,0,0.65)]">
+            {/* Diagonal Geometric Stripe Accent (Top-Left & Bottom-Right corners like Atlassian) */}
+            <div
+              className="popout-stripes absolute -top-6 -left-6 w-24 h-24 sm:w-32 sm:h-32 opacity-75 group-hover:opacity-100 group-hover:rotate-12 group-hover:scale-110 transition-all duration-500 pointer-events-none"
+              style={{
+                backgroundImage:
+                  "repeating-linear-gradient(135deg, var(--stripe-color) 0px, var(--stripe-color) 5px, transparent 5px, transparent 11px)",
+              }}
+            />
+            <div
+              className="popout-stripes absolute -bottom-6 -right-6 w-24 h-24 sm:w-32 sm:h-32 opacity-50 group-hover:opacity-90 group-hover:-rotate-12 transition-all duration-500 pointer-events-none"
+              style={{
+                backgroundImage:
+                  "repeating-linear-gradient(135deg, var(--stripe-color) 0px, var(--stripe-color) 5px, transparent 5px, transparent 11px)",
+              }}
+            />
 
-        <div className="relative z-10 w-full h-full">
-          <Image
-            src={member.img}
-            alt={member.name}
-            fill
-            unoptimized
-            sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 320px"
-            className="object-cover object-top transition-transform duration-500 ease-out group-hover:scale-105 mix-blend-normal"
-          />
+            {/* Subtle inner sheen */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-black/25 via-transparent to-white/15 pointer-events-none" />
+          </div>
+
+          {/* POP-OUT PORTRAIT (Rises 28% above the colored backdrop card!) */}
+          <div className="relative z-10 w-[82%] h-[98%] rounded-t-[42%] rounded-b-lg overflow-hidden shadow-[0_14px_34px_rgba(0,0,0,0.55)] border-b-0 transition-transform duration-500 ease-out group-hover:-translate-y-2.5 group-hover:scale-[1.04]">
+            <Image
+              src={member.img}
+              alt={member.name}
+              fill
+              sizes="360px"
+              className="object-cover object-top grayscale contrast-115 group-hover:grayscale-0 group-hover:contrast-105 transition-all duration-500"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent opacity-60 group-hover:opacity-20 transition-opacity duration-500 pointer-events-none" />
+          </div>
+        </div>
+
+        {/* Name, Role & Dept Below the Pop-Out Card */}
+        <div
+          style={{ marginTop: size === "compact" ? "10px" : "14px" }}
+          className="text-center flex flex-col items-center"
+        >
+          <h3
+            className={`font-heading font-bold ${
+              size === "compact"
+                ? "text-[11px] sm:text-sm md:text-base"
+                : "text-xs sm:text-lg md:text-xl"
+            } text-white group-hover:text-[#D4A843] transition-colors tracking-tight relative inline-block`}
+          >
+            {member.name}
+            <span className="block h-[2px] w-0 group-hover:w-full bg-[#D4A843] transition-all duration-300 mx-auto mt-0.5" />
+          </h3>
+
+          <p
+            style={{ marginTop: "3px" }}
+            className={`font-mono ${
+              size === "compact"
+                ? "text-[7.5px] sm:text-[9px]"
+                : "text-[8.5px] sm:text-[10px]"
+            } tracking-[0.2em] text-[#D4A843] uppercase font-bold`}
+          >
+            {member.role}
+          </p>
+
+          {member.dept && size !== "compact" && (
+            <p
+              style={{ marginTop: "3px" }}
+              className="font-body text-[10px] sm:text-xs text-white/60 max-w-[230px] line-clamp-2"
+            >
+              {member.dept}
+            </p>
+          )}
         </div>
       </div>
-
-      {/* Centered Name, Role & "Read bio ->" Link Below Card */}
-      <div style={{ marginTop: "18px" }} className="flex flex-col items-center">
-        <h3 className="text-[18px] sm:text-[19px] font-bold text-[#172B4D] group-hover:text-[#0052CC] group-hover:underline underline-offset-4 transition-colors">
-          {member.name}
-        </h3>
-        <p
-          style={{ marginTop: "4px" }}
-          className="text-[13.5px] font-medium text-[#42526E]"
-        >
-          {member.role}
-        </p>
-        {member.dept && (
-          <p
-            style={{ marginTop: "2px" }}
-            className="text-[12px] text-[#6B778C] max-w-[240px]"
-          >
-            {member.dept}
-          </p>
-        )}
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            setSelectedMember(member);
-          }}
-          style={{ marginTop: "10px" }}
-          className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#0052CC] group-hover:text-[#0747A6] cursor-pointer bg-transparent border-0"
-        >
-          <span>Read bio</span>
-          <span className="transition-transform duration-200 group-hover:translate-x-1">
-            →
-          </span>
-        </button>
-      </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <SmoothScroller>
-      <main
-        id="about-team-root"
-        className="relative w-full min-h-screen bg-white text-[#172B4D] selection:bg-[#0052CC] selection:text-white overflow-x-clip"
-      >
-        {/* Scoped CSS to guarantee immunity against globals.css * { margin: 0; padding: 0 } */}
+      <main className="relative w-full max-w-[100vw] bg-[#050505] text-[#FAFAFA] selection:bg-[#D4A843] selection:text-black overflow-x-clip">
+        {/* Scoped CSS for Pop-Out Hover Color Morph & Split Bio Modal */}
         <style
           dangerouslySetInnerHTML={{
             __html: `
-          #about-team-root {
-            background-color: #FFFFFF !important;
-            color: #172B4D !important;
-            padding-top: 135px !important;
-            padding-bottom: 100px !important;
+          .popout-member-card .popout-backdrop {
+            background-color: var(--card-bg);
+            transition: background-color 0.45s cubic-bezier(0.22, 1, 0.36, 1), height 0.45s cubic-bezier(0.22, 1, 0.36, 1), transform 0.45s ease;
           }
-          #about-team-root .about-container {
-            max-width: 1180px !important;
-            margin-left: auto !important;
-            margin-right: auto !important;
-            padding-left: clamp(20px, 4vw, 48px) !important;
-            padding-right: clamp(20px, 4vw, 48px) !important;
-          }
-          #about-team-root .team-section {
-            padding-top: 64px !important;
-            padding-bottom: 64px !important;
-            border-bottom: 1px solid #EBECF0;
-          }
-          #about-team-root .team-portrait-box {
-            aspect-ratio: 1 / 1.06;
-            border-radius: 10px;
-            box-shadow: 0 10px 28px rgba(9, 30, 66, 0.12);
-          }
-          #about-team-root .bio-modal-backdrop {
-            padding: 20px !important;
-            background-color: rgba(9, 30, 66, 0.58);
-            backdrop-filter: blur(6px);
-          }
-          #about-team-root .bio-modal-card {
-            background-color: #26292E !important;
-            color: #FFFFFF !important;
-            max-width: 880px !important;
-            width: 100% !important;
-            border-radius: 12px !important;
-            padding: clamp(24px, 4vw, 48px) !important;
-            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.55) !important;
-          }
-          #about-team-root .nav-pill {
-            padding: 7px 14px !important;
-            border-radius: 9999px;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            transition: all 0.2s ease;
-            cursor: pointer;
-            white-space: nowrap;
+          .popout-member-card:hover .popout-backdrop {
+            background-color: var(--card-hover-bg);
           }
         `,
           }}
         />
 
-        {/* Top Dark Scrim so the Global White Navbar ("shutter scape | HOME // GALLERY...") stays 100% legible */}
+        {/* Cinematic Grain Overlay */}
         <div
-          className="pointer-events-none fixed top-0 inset-x-0 h-28 z-[9960]"
+          className="pointer-events-none fixed inset-0 z-[9999] opacity-[0.04] mix-blend-screen"
           style={{
-            background:
-              "linear-gradient(to bottom, rgba(5,5,7,0.88) 0%, rgba(5,5,7,0.45) 60%, rgba(255,255,255,0) 100%)",
+            backgroundImage:
+              "url('https://grainy-gradients.vercel.app/noise.svg')",
           }}
         />
 
         {/* ============================================================
-            STICKY SUB-NAVIGATION BAR & BACK BUTTON
+            BACK TO OUR STORY BUTTON
             ============================================================ */}
-        <div className="fixed top-[88px] sm:top-[96px] left-1/2 -translate-x-1/2 z-[9970] w-max max-w-[94vw] overflow-x-auto no-scrollbar">
-          <div
-            style={{ padding: "6px 10px" }}
-            className="flex items-center gap-1.5 sm:gap-2 rounded-full bg-white/95 backdrop-blur-md border border-[#DFE1E6] shadow-[0_8px_24px_rgba(9,30,66,0.08)]"
-          >
-            <Link
-              href="/#scene-about-showcase"
-              style={{ padding: "7px 14px" }}
-              className="font-mono text-[10.5px] tracking-[0.16em] uppercase font-bold text-[#172B4D] hover:text-[#0052CC] border-r border-[#DFE1E6] shrink-0"
-            >
-              ← OUR STORY
-            </Link>
-            {SECTIONS.map((sec) => {
-              const isActive = activeSection === sec.id;
-              return (
-                <button
-                  key={sec.id}
-                  type="button"
-                  onClick={() => scrollToSection(sec.id)}
-                  className={`nav-pill font-mono ${
+        <Link
+          href="/#scene-about-showcase"
+          className="group fixed top-28 md:top-6 left-4 md:left-8 z-[9990] pointer-events-auto inline-flex items-center gap-2 py-2 px-1 font-mono text-[9.5px] sm:text-[11px] uppercase tracking-[0.22em] font-bold text-[#D4A843] hover:text-white transition-colors duration-300 bg-transparent border-0 shadow-none"
+          title="Back to Discover Our Story"
+          aria-label="Back to Discover Our Story"
+        >
+          <span className="text-sm font-light transition-transform duration-300 group-hover:-translate-x-1.5 text-[#D4A843]">
+            ←
+          </span>
+          <span className="hidden sm:inline whitespace-nowrap transition-colors duration-300">
+            BACK TO OUR STORY
+          </span>
+          <span className="sm:hidden whitespace-nowrap transition-colors duration-300">
+            BACK
+          </span>
+        </Link>
+
+        {/* =========================================================
+            CLEAN MINIMALIST CATEGORY TASKBAR (Desktop Right Dock)
+            ========================================================= */}
+        <aside
+          aria-label="Story Chapter Navigation"
+          className="fixed right-6 sm:right-8 lg:right-10 top-1/2 -translate-y-1/2 z-[9970] hidden xl:flex flex-col items-end gap-3 select-none pointer-events-auto"
+        >
+          {CATEGORIES.map((cat) => {
+            const isActive = activeCategory === cat.id;
+            return (
+              <button
+                key={cat.id}
+                type="button"
+                onClick={() => jumpToSection(cat.label)}
+                className="group flex items-center justify-end gap-3 py-1 cursor-pointer transition-all duration-300 bg-transparent border-0 outline-none"
+                aria-label={`Jump to ${cat.title}`}
+              >
+                <span
+                  className={`font-mono text-[9.5px] tracking-[0.2em] uppercase transition-all duration-300 ${
                     isActive
-                      ? "bg-[#172B4D] text-white"
-                      : "bg-transparent text-[#5E6C84] hover:text-[#172B4D] hover:bg-[#F4F5F7]"
+                      ? "text-white font-semibold opacity-100"
+                      : "text-white/40 font-normal group-hover:text-white/80"
                   }`}
                 >
-                  {sec.label}
-                </button>
-              );
-            })}
-          </div>
+                  {cat.title}
+                </span>
+
+                <span
+                  className={`font-mono text-[9px] tracking-wider transition-colors duration-300 ${
+                    isActive
+                      ? "text-[#D4A843] font-bold"
+                      : "text-white/30 group-hover:text-white/60"
+                  }`}
+                >
+                  {cat.code}
+                </span>
+
+                <div
+                  className={`transition-all duration-300 rounded-full ${
+                    isActive
+                      ? "w-4 h-[2px] bg-[#D4A843] opacity-100"
+                      : "w-1.5 h-[1.5px] bg-white/25 opacity-60 group-hover:w-2.5 group-hover:bg-white/60"
+                  }`}
+                />
+              </button>
+            );
+          })}
+        </aside>
+
+        {/* Mobile Minimal Chapter Indicator */}
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9970] xl:hidden flex items-center gap-2 select-none pointer-events-none">
+          <span className="h-1.5 w-1.5 rounded-full bg-[#D4A843] animate-pulse" />
+          <span className="font-mono text-[9px] tracking-[0.25em] uppercase text-white/80 font-bold">
+            {CATEGORIES.find((c) => c.id === activeCategory)?.title ||
+              "ORIGINS"}
+          </span>
         </div>
 
-        <div className="about-container">
-          {/* ============================================================
-              SECTION 01: ORIGINS HERO ("More than just a camera club")
-              ============================================================ */}
-          <div
-            id="origins"
-            style={{ paddingTop: "36px", paddingBottom: "64px" }}
-            className="border-b border-[#EBECF0] flex flex-col items-center text-center"
-          >
-            <span
-              style={{ padding: "5px 14px", marginBottom: "16px" }}
-              className="inline-flex items-center gap-2 rounded-full bg-[#DEEBFF] text-[#0052CC] font-mono text-[11px] font-bold tracking-[0.2em] uppercase"
-            >
-              CHAPTER 01 // ORIGINS & MISSION
+        {/* =========================================================
+            MASTER CONTINUOUS TUNNEL CONTAINER
+            ========================================================= */}
+        <div
+          ref={containerRef}
+          className="relative w-full h-screen overflow-hidden"
+        >
+          <div className="master-bg absolute inset-0 z-0 bg-[#050505] pointer-events-none" />
+
+          {/* CAMPUS BACKGROUND */}
+          <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+            <div className="campus-bg-image absolute inset-0 will-change-transform">
+              <Image
+                src="/images/gcu-campus-sketch.jpg"
+                alt="GCU Campus Background"
+                fill
+                priority
+                sizes="100vw"
+                className="object-cover object-center opacity-30 brightness-[0.50] contrast-[1.15] will-change-transform"
+              />
+            </div>
+
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background:
+                  "radial-gradient(ellipse at 50% 50%, rgba(5,5,5,0.40) 0%, rgba(5,5,5,0.88) 100%)",
+              }}
+            />
+          </div>
+
+          {/* ANIMATED MOUSE SCROLL GUIDE */}
+          <div className="hero-scroll-guide absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 pointer-events-none select-none will-change-transform">
+            <div className="w-5 h-8 sm:w-6 sm:h-9 rounded-full border border-white/35 flex justify-center pt-1.5 shadow-lg bg-black/40 backdrop-blur-xs">
+              <div className="w-1 h-2 sm:h-2.5 bg-[#D4A843] rounded-full animate-bounce" />
+            </div>
+            <span className="font-mono text-[8.5px] sm:text-[9.5px] tracking-[0.3em] uppercase text-white/50 font-medium">
+              SCROLL TO DIVE
             </span>
+          </div>
 
-            <h1 className="font-serif text-4xl sm:text-6xl md:text-[64px] font-normal tracking-tight text-[#172B4D] leading-[1.06] max-w-3xl">
-              More than just{" "}
-              <span className="italic font-light text-[#0052CC]">
-                a camera club.
+          {/* ---------------------------------------------------------
+              CHAPTER 1: THE HERO DIVE
+              --------------------------------------------------------- */}
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-none px-4 overflow-hidden">
+            <div className="hero-massive-text flex flex-col items-center justify-center text-center select-none will-change-transform z-20">
+              <span className="hero-word-shutter font-heading text-5xl sm:text-7xl md:text-9xl lg:text-[11rem] xl:text-[13rem] font-black tracking-[-0.04em] text-white lowercase leading-[0.85] md:leading-[0.82] will-change-transform">
+                shutter
               </span>
-            </h1>
-
-            <p
-              style={{ marginTop: "22px" }}
-              className="font-body text-base sm:text-lg text-[#42526E] max-w-2xl leading-relaxed"
-            >
-              ShutterScape is the official photography society of{" "}
-              <strong className="font-semibold text-[#172B4D]">
-                Girijananda Chowdhury University
-              </strong>
-              , created for students who love to observe, capture, and tell
-              enduring stories through photographs.
-            </p>
-
-            <p
-              style={{ marginTop: "12px" }}
-              className="font-body text-sm sm:text-base text-[#5E6C84] max-w-xl leading-relaxed"
-            >
-              Whether you shoot on a flagship mirrorless rig, a 35mm film body,
-              or your smartphone — there is a place for your perspective here.
-              Click any team member below to read their full biography.
-            </p>
-          </div>
-
-          {/* ============================================================
-              SECTION 02: OUR LEADERSHIP TEAM (Matches Video 00:00 - 00:01)
-              ============================================================ */}
-          <div id="leadership" className="team-section">
-            <div
-              style={{ marginBottom: "48px" }}
-              className="flex flex-col items-center text-center"
-            >
-              <h2 className="font-sans text-3xl sm:text-4xl md:text-[40px] font-bold text-[#172B4D] tracking-tight">
-                Our leadership team
-              </h2>
-              <p
-                style={{ marginTop: "12px" }}
-                className="font-body text-sm sm:text-base text-[#5E6C84] max-w-xl"
-              >
-                With combined experience across documentary, studio optics, and
-                archival curation, we&apos;ve got a dedicated executive team at
-                the helm.
-              </p>
+              <span className="hero-word-scape font-heading text-5xl sm:text-7xl md:text-9xl lg:text-[11rem] xl:text-[13rem] font-light tracking-[-0.02em] text-white/95 lowercase leading-[0.85] md:leading-[0.82] -mt-1 sm:-mt-3 md:-mt-5 will-change-transform">
+                scape<span className="text-[#D4A843]">.</span>
+              </span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-10 max-w-5xl mx-auto">
-              {leads.map((lead, idx) => (
-                <TeamCard key={lead._id || idx} member={lead} />
-              ))}
+            <div className="hero-hidden-text absolute flex flex-col items-center text-center max-w-3xl px-4 sm:px-6 opacity-0 will-change-transform z-10">
+              <span className="font-mono text-[9px] sm:text-[11px] md:text-[13px] tracking-[0.45em] text-[#D4A843] uppercase font-bold mb-3 md:mb-4">
+                CHAPTER 01 // ORIGINS
+              </span>
+              <h2 className="font-serif text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-light italic text-white mb-3 sm:mb-5 leading-tight">
+                More than just <br />
+                <span className="text-[#D4A843] font-normal not-italic">
+                  a camera club.
+                </span>
+              </h2>
+              <div className="w-10 sm:w-14 h-[2px] bg-[#D4A843] mb-4 sm:mb-6" />
+              <p className="font-body text-xs sm:text-base md:text-lg font-light leading-relaxed text-[#FAFAFA]/90 mb-2 sm:mb-3 max-w-2xl">
+                Shutterscape is the photography club of Girijananda Chowdhury
+                University, created for students who love to observe, capture
+                and tell stories through photographs.
+              </p>
+              <p className="font-body text-[11px] sm:text-sm md:text-base font-light leading-relaxed text-[#FAFAFA]/70 max-w-2xl">
+                Whether you are a professional photographer or someone who
+                simply loves clicking pictures on your phone —{" "}
+                <span className="text-[#D4A843] font-medium">
+                  there’s a place for you here.
+                </span>
+              </p>
             </div>
           </div>
 
-          {/* ============================================================
-              SECTION 03: FACULTY MENTORS ("The Teachers Who Guide Us")
-              ============================================================ */}
-          <div id="mentors" className="team-section">
-            <div
-              style={{ marginBottom: "48px" }}
-              className="flex flex-col items-center text-center"
-            >
-              <h2 className="font-sans text-3xl sm:text-4xl md:text-[40px] font-bold text-[#172B4D] tracking-tight">
-                The teachers who guide us
+          {/* ---------------------------------------------------------
+              CHAPTER 2: MENTORS (Pop-Out Overlapping Cards)
+              --------------------------------------------------------- */}
+          <div className="ch-2-mentors absolute inset-0 z-20 flex flex-col items-center justify-center px-4 sm:px-6 opacity-0 pointer-events-none will-change-transform">
+            <div className="text-center mb-5 sm:mb-8 md:mb-10">
+              <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.4em] text-[#D4A843] uppercase mb-1 sm:mb-2 block font-semibold">
+                CHAPTER 02 // MENTORS
+              </span>
+              <h2 className="font-serif text-2xl sm:text-4xl md:text-6xl uppercase tracking-widest text-white/30 leading-none">
+                The Teachers Who{" "}
+                <span className="text-white font-normal">Guide Us</span>
               </h2>
-              <p
-                style={{ marginTop: "12px" }}
-                className="font-body text-sm sm:text-base text-[#5E6C84] max-w-xl"
-              >
-                Faculty coordinators providing institutional mentorship,
-                curatorial guidance, and academic support at GCU.
-              </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 md:gap-12 max-w-2xl mx-auto">
+            <div className="flex flex-row justify-center items-start gap-6 sm:gap-12 md:gap-20 w-full max-w-4xl mx-auto pointer-events-auto">
               {mentors.map((mentor, idx) => (
-                <TeamCard key={mentor._id || idx} member={mentor} />
+                <div
+                  key={idx}
+                  className="w-[46%] sm:w-[42%] max-w-[260px] md:max-w-[290px]"
+                >
+                  <PopOutCard member={mentor} themeIndex={idx} />
+                </div>
               ))}
             </div>
           </div>
 
-          {/* ============================================================
-              SECTION 04: CORE COMMITTEE MEMBERS
-              ============================================================ */}
-          <div id="core" className="team-section">
-            <div
-              style={{ marginBottom: "48px" }}
-              className="flex flex-col items-center text-center"
-            >
-              <h2 className="font-sans text-3xl sm:text-4xl md:text-[40px] font-bold text-[#172B4D] tracking-tight">
-                Core committee members
+          {/* ---------------------------------------------------------
+              CHAPTER 3: LEADS (Pop-Out Overlapping Cards)
+              --------------------------------------------------------- */}
+          <div className="ch-3-leads absolute inset-0 z-30 flex flex-col items-center justify-center px-3 sm:px-6 opacity-0 pointer-events-none will-change-transform">
+            <div className="text-center mb-5 sm:mb-8 md:mb-10">
+              <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.4em] text-[#D4A843] uppercase mb-1 sm:mb-2 block font-semibold">
+                CHAPTER 03 // LEADERSHIP
+              </span>
+              <h2 className="font-serif text-2xl sm:text-4xl md:text-6xl uppercase tracking-widest text-white leading-none">
+                Behind The Lens
               </h2>
-              <p
-                style={{ marginTop: "12px" }}
-                className="font-body text-sm sm:text-base text-[#5E6C84] max-w-xl"
-              >
-                The creative backbone of ShutterScape leading field expeditions,
-                darkroom clinics, and campus exhibitions.
-              </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-12 max-w-5xl mx-auto">
-              {coreMembers.map((member, idx) => (
-                <TeamCard key={member._id || idx} member={member} />
+            <div className="flex flex-row justify-center items-start gap-3 sm:gap-8 md:gap-12 w-full max-w-5xl mx-auto pointer-events-auto">
+              {leads.map((lead, idx) => (
+                <div
+                  key={idx}
+                  className="w-[31%] max-w-[155px] sm:max-w-[220px] md:max-w-[265px]"
+                >
+                  <PopOutCard member={lead} themeIndex={idx + 1} />
+                </div>
               ))}
             </div>
           </div>
 
-          {/* ============================================================
-              SECTION 05: FOUNDERS ("Where It All Started")
-              ============================================================ */}
-          <div id="founders" className="team-section">
-            <div
-              style={{ marginBottom: "48px" }}
-              className="flex flex-col items-center text-center"
-            >
-              <h2 className="font-sans text-3xl sm:text-4xl md:text-[40px] font-bold text-[#172B4D] tracking-tight">
-                Where it all started
-              </h2>
-              <p
-                style={{ marginTop: "12px" }}
-                className="font-body text-sm sm:text-base text-[#5E6C84] max-w-xl"
-              >
-                The 2023 co-founders who ignited the lens culture and
-                established ShutterScape at Girijananda Chowdhury University.
-              </p>
-            </div>
+          {/* ---------------------------------------------------------
+              CHAPTER 4: CORE MEMBERS (Pop-Out Overlapping Cards)
+              --------------------------------------------------------- */}
+          <div className="ch-4-core absolute inset-0 z-40 flex flex-col items-center justify-center px-3 sm:px-8 opacity-0 pointer-events-none text-white will-change-transform">
+            <div className="max-w-5xl mx-auto flex flex-col items-center w-full">
+              <div className="text-center mb-4 sm:mb-6 md:mb-8">
+                <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.4em] text-[#D4A843] uppercase mb-1 sm:mb-1.5 block font-bold">
+                  CHAPTER 04 // THE FOUNDATION
+                </span>
+                <h2 className="font-serif text-2xl sm:text-4xl md:text-6xl font-light uppercase tracking-tight text-white">
+                  Core <span className="font-bold">Members.</span>
+                </h2>
+              </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 md:gap-12 max-w-2xl mx-auto">
-              {founders.map((founder, idx) => (
-                <TeamCard key={founder._id || idx} member={founder} />
-              ))}
+              <div className="w-full max-w-4xl flex flex-col gap-4 sm:gap-6 md:gap-8 pointer-events-auto">
+                {/* Row 1 */}
+                <div className="core-row-1 grid grid-cols-3 gap-3 sm:gap-6 md:gap-10 will-change-transform">
+                  {coreMembers.slice(0, 3).map((member, idx) => (
+                    <PopOutCard
+                      key={idx}
+                      member={member}
+                      themeIndex={idx}
+                      size="compact"
+                    />
+                  ))}
+                </div>
+
+                {/* Row 2 */}
+                <div className="core-row-2 grid grid-cols-3 gap-3 sm:gap-6 md:gap-10 will-change-transform">
+                  {coreMembers.slice(3, 6).map((member, idx) => (
+                    <PopOutCard
+                      key={idx}
+                      member={member}
+                      themeIndex={idx + 3}
+                      size="compact"
+                    />
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* ============================================================
-              SECTION 06: LEGACY TORCHBEARERS ("Carrying It Forward")
-              ============================================================ */}
-          <div
-            id="legacy"
-            style={{ paddingTop: "64px", paddingBottom: "24px" }}
-          >
-            <div
-              style={{ marginBottom: "48px" }}
-              className="flex flex-col items-center text-center"
-            >
-              <h2 className="font-sans text-3xl sm:text-4xl md:text-[40px] font-bold text-[#172B4D] tracking-tight">
-                Carrying it forward
+          {/* ---------------------------------------------------------
+              CHAPTER 5: FOUNDERS (Pop-Out Overlapping Cards)
+              --------------------------------------------------------- */}
+          <div className="ch-5-founders absolute inset-0 z-50 flex flex-col items-center justify-center px-4 sm:px-6 opacity-0 pointer-events-none will-change-transform">
+            <div className="max-w-[950px] w-full mx-auto text-center">
+              <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.4em] text-[#D4A843] uppercase mb-1 sm:mb-2 block font-semibold">
+                CHAPTER 05 // GENESIS
+              </span>
+              <h2 className="font-serif text-2xl sm:text-4xl md:text-6xl uppercase tracking-widest text-white mb-5 sm:mb-8 md:mb-10">
+                Where It All Started
               </h2>
-              <p
-                style={{ marginTop: "12px" }}
-                className="font-body text-sm sm:text-base text-[#5E6C84] max-w-xl"
-              >
-                Alumni torchbearers whose photographs, leadership, and vision
-                continue to shape every new chapter of the archive.
-              </p>
+
+              <div className="flex flex-row justify-center items-start gap-6 sm:gap-12 md:gap-20 w-full pointer-events-auto">
+                {founders.map((founder, idx) => (
+                  <div
+                    key={idx}
+                    className="w-[46%] sm:w-[42%] max-w-[260px] md:max-w-[290px]"
+                  >
+                    <PopOutCard
+                      member={{
+                        ...founder,
+                        role: founder.role || "2023 // Co-Founder",
+                      }}
+                      themeIndex={idx + 2}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* ---------------------------------------------------------
+              CHAPTER 6: LEGACY (Pop-Out Overlapping Cards)
+              --------------------------------------------------------- */}
+          <div className="ch-6-legacy absolute inset-0 z-60 flex flex-col justify-center opacity-0 pointer-events-none overflow-hidden will-change-transform">
+            <div className="absolute top-12 sm:top-16 md:top-24 left-4 sm:left-12 md:left-20 z-20">
+              <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.4em] text-[#D4A843] uppercase mb-1 block font-semibold">
+                CHAPTER 06 // LEGACY
+              </span>
+              <h2 className="font-serif text-2xl sm:text-4xl md:text-6xl text-white italic">
+                Carrying it forward.
+              </h2>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+            <div
+              ref={trackRef}
+              className="flex items-center mt-14 sm:mt-16 pl-6 sm:pl-[12vw] md:pl-[20vw] gap-6 sm:gap-10 md:gap-16 w-fit will-change-transform pointer-events-auto"
+            >
               {legacy.map((person, idx) => (
-                <TeamCard key={person._id || idx} member={person} />
+                <div
+                  key={idx}
+                  className="flex-shrink-0 w-[165px] sm:w-[235px] md:w-[290px]"
+                >
+                  <PopOutCard
+                    member={{
+                      ...person,
+                      role: person.role || "Legacy Torchbearer",
+                    }}
+                    themeIndex={idx}
+                  />
+                </div>
               ))}
             </div>
           </div>
         </div>
 
-        {/* ============================================================
-            SPLIT-VIEW BIO MODAL (Matches Video Reference 00:02 Exactly)
-            ============================================================ */}
+        {/* =========================================================
+            INTERACTIVE SPLIT-VIEW MEMBER BIO MODAL (Matches 00:02 in Video)
+            ========================================================= */}
         {selectedMember && (
           <div
             role="dialog"
             aria-modal="true"
-            aria-label={`${selectedMember.name} Biography`}
             onClick={() => setSelectedMember(null)}
-            className="bio-modal-backdrop fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto"
+            style={{ padding: "20px" }}
+            className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-md flex items-center justify-center pointer-events-auto"
           >
             <div
               onClick={(e) => e.stopPropagation()}
-              className="bio-modal-card relative"
+              style={{ padding: "36px 32px" }}
+              className="relative w-full max-w-3xl bg-white text-[#172B4D] rounded-2xl shadow-[0_35px_90px_rgba(0,0,0,0.75)] flex flex-col md:flex-row items-center md:items-start gap-8"
             >
-              {/* Top-Right Close Button (✕) */}
+              {/* Top-Right Close Button */}
               <button
                 type="button"
                 onClick={() => setSelectedMember(null)}
-                aria-label="Close biography modal"
-                style={{ top: "20px", right: "22px", width: "36px", height: "36px" }}
-                className="absolute rounded-full bg-white/5 hover:bg-white/15 text-white/70 hover:text-white flex items-center justify-center text-lg font-light transition-colors cursor-pointer border-0"
+                aria-label="Close Member Bio"
+                className="absolute top-5 right-5 w-9 h-9 rounded-full bg-slate-100 hover:bg-[#172B4D] text-[#172B4D] hover:text-white flex items-center justify-center text-base font-bold transition-colors cursor-pointer"
               >
                 ✕
               </button>
 
-              {/* Split 2-Column Layout: Left Colored Portrait + Right Multi-Paragraph Bio */}
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10 items-start">
-                {/* LEFT COLUMN: Colored Portrait Card + Name & Role Underneath */}
-                <div className="md:col-span-5 flex flex-col items-center text-center">
+              {/* Left Column: Pop-Out Portrait + Name & Title */}
+              <div className="w-56 sm:w-64 shrink-0 flex flex-col items-center text-center">
+                <div className="relative w-full aspect-[3/3.6] flex items-end justify-center overflow-visible">
                   <div
-                    className="relative w-full max-w-[260px] aspect-[1/1.08] rounded-[10px] overflow-hidden shadow-2xl"
-                    style={{ backgroundColor: selectedMember.bgColor }}
+                    style={{
+                      backgroundColor:
+                        CARD_THEMES[
+                          selectedMember.themeIndex % CARD_THEMES.length
+                        ].baseBg,
+                    }}
+                    className="absolute inset-x-0 bottom-0 h-[72%] rounded-xl overflow-hidden shadow-md"
                   >
+                    <div
+                      className="absolute -top-6 -left-6 w-28 h-28 opacity-80 pointer-events-none"
+                      style={{
+                        backgroundImage:
+                          "repeating-linear-gradient(135deg, rgba(17,24,39,0.22) 0px, rgba(17,24,39,0.22) 5px, transparent 5px, transparent 11px)",
+                      }}
+                    />
+                  </div>
+
+                  <div className="relative z-10 w-[82%] h-[98%] rounded-t-[42%] rounded-b-lg overflow-hidden shadow-xl">
                     <Image
-                      src={selectedMember.img}
-                      alt={selectedMember.name}
+                      src={selectedMember.member.img}
+                      alt={selectedMember.member.name}
                       fill
-                      unoptimized
                       sizes="300px"
                       className="object-cover object-top"
                     />
                   </div>
+                </div>
 
-                  <h3
-                    style={{ marginTop: "18px" }}
-                    className="text-lg sm:text-xl font-bold text-white"
-                  >
-                    {selectedMember.name}
-                  </h3>
+                <h3
+                  style={{ marginTop: "16px" }}
+                  className="font-heading font-bold text-lg text-[#172B4D]"
+                >
+                  {selectedMember.member.name}
+                </h3>
+                <span
+                  style={{ marginTop: "4px" }}
+                  className="font-mono text-[10px] tracking-[0.18em] uppercase text-[#0052CC] font-bold"
+                >
+                  {selectedMember.member.role || "Core Committee"}
+                </span>
+              </div>
+
+              {/* Right Column: Narrative Bio & Department Details */}
+              <div className="flex-1 flex flex-col justify-center text-left">
+                <span className="font-mono text-[10px] tracking-[0.24em] uppercase text-slate-400 font-bold">
+                  SHUTTERSCAPE LEADERSHIP & ARCHIVE
+                </span>
+                <h4
+                  style={{ marginTop: "6px" }}
+                  className="font-serif text-2xl sm:text-3xl text-[#172B4D] font-normal"
+                >
+                  {selectedMember.member.name}
+                </h4>
+                {selectedMember.member.dept && (
                   <p
                     style={{ marginTop: "4px" }}
-                    className="text-xs sm:text-sm font-medium text-white/70"
+                    className="font-mono text-xs text-[#0052CC] font-semibold"
                   >
-                    {selectedMember.role}
+                    {selectedMember.member.dept}
                   </p>
-                  {selectedMember.dept && (
-                    <p
-                      style={{ marginTop: "2px" }}
-                      className="text-xs text-white/50"
-                    >
-                      {selectedMember.dept}
-                    </p>
-                  )}
-                </div>
+                )}
 
-                {/* RIGHT COLUMN: Multi-Paragraph Biography */}
-                <div className="md:col-span-7 flex flex-col justify-between h-full">
-                  <div className="flex flex-col gap-4">
-                    <span className="font-mono text-[10px] tracking-[0.24em] uppercase text-[#D4A843] font-bold">
-                      SHUTTERSCAPE // {selectedMember.tier} PROFILE
-                    </span>
+                <div
+                  style={{ marginTop: "16px", marginBottom: "16px" }}
+                  className="w-12 h-[2px] bg-[#F5B700]"
+                />
 
-                    {selectedMember.bio.map((paragraph, i) => (
-                      <p
-                        key={i}
-                        className="font-body text-[14px] sm:text-[15px] text-white/90 leading-[1.7] font-normal"
-                      >
-                        {paragraph}
-                      </p>
-                    ))}
-                  </div>
+                <p className="font-body text-sm text-slate-600 leading-relaxed">
+                  {selectedMember.member.bio ||
+                    `${selectedMember.member.name} is an integral member of ShutterScape at Girijananda Chowdhury University, contributing to visual storytelling, campus exhibitions, and archival documentation.`}
+                </p>
 
-                  {/* Previous / Next Team Member Controls */}
-                  <div
-                    style={{ marginTop: "28px", paddingTop: "18px" }}
-                    className="border-t border-white/10 flex items-center justify-between font-mono text-[11px] tracking-[0.18em] uppercase text-white/60"
-                  >
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const idx = allMembers.findIndex(
-                          (m) =>
-                            m.name === selectedMember.name &&
-                            m.tier === selectedMember.tier
-                        );
-                        if (idx !== -1) {
-                          setSelectedMember(
-                            allMembers[
-                              (idx - 1 + allMembers.length) % allMembers.length
-                            ]
-                          );
-                        }
-                      }}
-                      className="hover:text-white transition-colors cursor-pointer bg-transparent border-0 py-1"
-                    >
-                      ← PREV MEMBER
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const idx = allMembers.findIndex(
-                          (m) =>
-                            m.name === selectedMember.name &&
-                            m.tier === selectedMember.tier
-                        );
-                        if (idx !== -1) {
-                          setSelectedMember(
-                            allMembers[(idx + 1) % allMembers.length]
-                          );
-                        }
-                      }}
-                      className="hover:text-white transition-colors cursor-pointer bg-transparent border-0 py-1"
-                    >
-                      NEXT MEMBER →
-                    </button>
-                  </div>
-                </div>
+                <p
+                  style={{ marginTop: "12px" }}
+                  className="font-body text-xs text-slate-500 leading-relaxed"
+                >
+                  Working alongside student photographers and faculty mentors,
+                  they help curate 35mm contact sheets, mentor field
+                  photowalks, and preserve the creative culture of GCU.
+                </p>
               </div>
             </div>
           </div>
