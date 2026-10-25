@@ -2,6 +2,7 @@
 import GlobalMusicPlayer from "@/components/cinematic/GlobalMusicPlayer";
 import GlobalBranding from "@/components/cinematic/GlobalBranding";
 import CameraShutterLoader from "@/components/cinematic/CameraShutterLoader";
+import UniversalFooter from "@/components/cinematic/UniversalFooter";
 import type { Metadata, Viewport } from "next";
 import {
   Cormorant_Garamond,
@@ -96,6 +97,9 @@ export default function RootLayout({
 
         {/* Website pages and scenes */}
         {children}
+
+        {/* Global Universal Footer */}
+        <UniversalFooter />
       </body>
     </html>
   );

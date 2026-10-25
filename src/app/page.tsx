@@ -10,8 +10,6 @@ import PullInScene from "@/components/cinematic/PullInScene";
 import EditorialSpread from "@/components/cinematic/EditorialSpread";
 import TimelinePeek from "@/components/cinematic/TimelinePeek";
 import FramesOfMoments from "@/components/cinematic/FramesOfMoments";
-// Fixed Import: Ensure the filename exactly matches "Scene6Credits.tsx"
-import Scene6Credits from "@/components/cinematic/Scene6Credits";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -194,11 +192,6 @@ export default function Home() {
 
         <div id="scene-gallery" className="relative z-30">
           <FramesOfMoments />
-        </div>
-
-        {/* SCENE 6: The Credits & Footer */}
-        <div id="scene-credits" className="relative z-30">
-          <Scene6Credits />
         </div>
       </main>
     </SmoothScroller>

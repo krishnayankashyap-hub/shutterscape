@@ -7,7 +7,6 @@ import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SmoothScroller from "@/components/cinematic/SmoothScroller";
-import ClubFooter from "@/components/cinematic/ClubFooter";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -776,11 +775,6 @@ export default function AboutPage() {
           </div>
 
         </div>
-
-        {/* =========================================================
-            FOOTER: Unified Club Footer
-            ========================================================= */}
-        <ClubFooter variant="dark" />
       </main>
     </SmoothScroller>
   );
