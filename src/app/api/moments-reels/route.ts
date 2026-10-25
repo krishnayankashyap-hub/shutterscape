@@ -1,5 +1,6 @@
 // src/app/api/moments-reels/route.ts
 import { NextResponse } from "next/server";
+import mongoose from "mongoose";
 import { connectDB } from "@/lib/db";
 import { MomentsReel } from "@/models/MomentsReel";
 
@@ -62,13 +63,36 @@ export async function PUT(request: Request) {
 
     const body = await request.json();
     const { id, _id, ...updates } = body;
-    const targetId = id || _id;
+    const targetId = _id || id;
 
     if (!targetId) {
       return NextResponse.json({ error: "Reel ID is required" }, { status: 400 });
     }
 
-    const updated = await MomentsReel.findByIdAndUpdate(targetId, updates, { new: true });
+    let filter: Record<string, unknown>;
+    if (_id && mongoose.Types.ObjectId.isValid(_id)) {
+      filter = { _id };
+    } else if (id && mongoose.Types.ObjectId.isValid(id)) {
+      filter = { _id: id };
+    } else if (id) {
+      filter = { id };
+    } else {
+      filter = { id: _id };
+    }
+
+    const updated = await MomentsReel.findOneAndUpdate(filter, updates, {
+      returnDocument: "after",
+      new: true,
+    });
+
+    if (!updated) {
+      const created = await MomentsReel.create({
+        ...(id ? { id } : {}),
+        ...updates,
+      });
+      return NextResponse.json({ success: true, data: created });
+    }
+
     return NextResponse.json({ success: true, data: updated });
   } catch (error) {
     console.error("PUT /api/moments-reels error:", error);
@@ -90,7 +114,14 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: "Reel ID is required" }, { status: 400 });
     }
 
-    await MomentsReel.findByIdAndDelete(id);
+    let filter: Record<string, unknown>;
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      filter = { $or: [{ _id: id }, { id }] };
+    } else {
+      filter = { id };
+    }
+
+    await MomentsReel.findOneAndDelete(filter);
     return NextResponse.json({ success: true, message: "Reel deleted successfully" });
   } catch (error) {
     console.error("DELETE /api/moments-reels error:", error);

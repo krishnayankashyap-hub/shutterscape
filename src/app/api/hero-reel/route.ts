@@ -1,5 +1,6 @@
 // src/app/api/hero-reel/route.ts
 import { NextResponse } from "next/server";
+import mongoose from "mongoose";
 import { connectDB } from "@/lib/db";
 import { HeroReel } from "@/models/HeroReel";
 
@@ -83,13 +84,16 @@ export async function PUT(request: Request) {
 
     // Case 3: Single item update from dashboard modal
     const { _id, id, frameCode, title, src, exif, order } = body;
-    const targetQuery = _id
-      ? { _id }
-      : id
-      ? { _id: id }
-      : frameCode
-      ? { frameCode }
-      : null;
+    const targetQuery =
+      _id && mongoose.Types.ObjectId.isValid(_id)
+        ? { _id }
+        : id && mongoose.Types.ObjectId.isValid(id)
+        ? { _id: id }
+        : frameCode
+        ? { frameCode }
+        : id
+        ? { frameCode: id }
+        : null;
 
     if (!targetQuery) {
       return NextResponse.json(

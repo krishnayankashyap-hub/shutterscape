@@ -2,6 +2,7 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 
 export interface IGalleryFrame extends Document {
+  id?: string;
   title: string;
   category: "DOCUMENTARY" | "PORTRAITURE" | "LANDSCAPE" | "ARCHITECTURE" | "STREET" | "EXPERIMENTAL";
   photographer: string;
@@ -15,6 +16,7 @@ export interface IGalleryFrame extends Document {
 
 const GalleryFrameSchema = new Schema<IGalleryFrame>(
   {
+    id: { type: String },
     title: { type: String, required: true },
     category: {
       type: String,

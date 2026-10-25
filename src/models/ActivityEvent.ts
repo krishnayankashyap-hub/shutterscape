@@ -2,6 +2,7 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 
 export interface IActivityEvent extends Document {
+  id?: string;
   shortTitle: string;
   title: string;
   category: "PHOTOWALK" | "WORKSHOP" | "EXHIBITION" | "COMPETITION";
@@ -18,6 +19,7 @@ export interface IActivityEvent extends Document {
 
 const ActivityEventSchema = new Schema<IActivityEvent>(
   {
+    id: { type: String },
     shortTitle: { type: String, required: true },
     title: { type: String, required: true },
     category: {

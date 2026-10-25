@@ -1,5 +1,6 @@
 // src/app/api/pullin-exhibits/route.ts
 import { NextResponse } from "next/server";
+import mongoose from "mongoose";
 import { connectDB } from "@/lib/db";
 import { PullInExhibit } from "@/models/PullInExhibit";
 
@@ -93,13 +94,16 @@ export async function PUT(request: Request) {
 
     // Case 3: Single item update from dashboard modal
     const { _id, id, code, ...fields } = body;
-    const targetQuery = _id
-      ? { _id }
-      : id
-      ? { _id: id }
-      : code
-      ? { code }
-      : null;
+    const targetQuery =
+      _id && mongoose.Types.ObjectId.isValid(_id)
+        ? { _id }
+        : id && mongoose.Types.ObjectId.isValid(id)
+        ? { _id: id }
+        : code
+        ? { code }
+        : id
+        ? { code: id }
+        : null;
 
     if (!targetQuery) {
       return NextResponse.json(

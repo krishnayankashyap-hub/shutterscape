@@ -2,6 +2,7 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 
 export interface ICommitteeMember extends Document {
+  id?: string;
   name: string;
   role: string;
   tier: "MENTOR" | "LEAD" | "CORE" | "FOUNDER" | "LEGACY";
@@ -12,6 +13,7 @@ export interface ICommitteeMember extends Document {
 
 const CommitteeMemberSchema = new Schema<ICommitteeMember>(
   {
+    id: { type: String },
     name: { type: String, required: true },
     role: { type: String, required: true },
     tier: {

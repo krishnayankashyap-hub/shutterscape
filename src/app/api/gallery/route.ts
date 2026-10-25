@@ -1,5 +1,6 @@
 // src/app/api/gallery/route.ts
 import { NextResponse } from "next/server";
+import mongoose from "mongoose";
 import { connectDB } from "@/lib/db";
 import { GalleryFrame } from "@/models/GalleryFrame";
 
@@ -97,13 +98,36 @@ export async function PUT(request: Request) {
 
     const body = await request.json();
     const { id, _id, ...updates } = body;
-    const targetId = id || _id;
+    const targetId = _id || id;
 
     if (!targetId) {
       return NextResponse.json({ error: "Frame ID is required" }, { status: 400 });
     }
 
-    const updated = await GalleryFrame.findByIdAndUpdate(targetId, updates, { new: true });
+    let filter: Record<string, unknown>;
+    if (_id && mongoose.Types.ObjectId.isValid(_id)) {
+      filter = { _id };
+    } else if (id && mongoose.Types.ObjectId.isValid(id)) {
+      filter = { _id: id };
+    } else if (id) {
+      filter = { id };
+    } else {
+      filter = { id: _id };
+    }
+
+    const updated = await GalleryFrame.findOneAndUpdate(filter, updates, {
+      returnDocument: "after",
+      new: true,
+    });
+
+    if (!updated) {
+      const created = await GalleryFrame.create({
+        ...(id ? { id } : {}),
+        ...updates,
+      });
+      return NextResponse.json({ success: true, data: created });
+    }
+
     return NextResponse.json({ success: true, data: updated });
   } catch (error) {
     console.error("PUT /api/gallery error:", error);
@@ -125,7 +149,14 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: "Frame ID is required" }, { status: 400 });
     }
 
-    await GalleryFrame.findByIdAndDelete(id);
+    let filter: Record<string, unknown>;
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      filter = { $or: [{ _id: id }, { id }] };
+    } else {
+      filter = { id };
+    }
+
+    await GalleryFrame.findOneAndDelete(filter);
     return NextResponse.json({ success: true, message: "Frame deleted successfully" });
   } catch (error) {
     console.error("DELETE /api/gallery error:", error);

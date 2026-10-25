@@ -110,6 +110,15 @@ export default function FileUploadZone({
     const localPreviewUrl = URL.createObjectURL(file);
     onChange(localPreviewUrl);
 
+    // Validate video file size against Vercel's 4.5MB serverless payload limit
+    if (file.type.startsWith("video/") && file.size > 4 * 1024 * 1024) {
+      setUploadError(
+        `Video size (${formatBytes(file.size)}) exceeds Vercel's 4MB serverless upload limit. Please trim the clip, or click 'Paste URL instead' above to link any external video URL (Google Drive, Cloudinary, YouTube, Imgur, etc.).`
+      );
+      setIsUploading(false);
+      return;
+    }
+
     try {
       const optimizedFile = await compressImageIfNeeded(file);
       setFileSize(formatBytes(optimizedFile.size));
@@ -122,7 +131,21 @@ export default function FileUploadZone({
         body: formData,
       });
 
-      const data = await res.json();
+      if (res.status === 413) {
+        throw new Error(
+          "File exceeds Vercel's 4.5MB serverless upload limit. Please use a compressed file or click 'Paste URL instead' above."
+        );
+      }
+
+      let data: any = {};
+      try {
+        data = await res.json();
+      } catch {
+        throw new Error(
+          `Server responded with HTTP ${res.status}. Please check your connection or use 'Paste URL instead'.`
+        );
+      }
+
       if (!res.ok || !data.success) {
         throw new Error(data.message || "Upload failed. Please try again.");
       }

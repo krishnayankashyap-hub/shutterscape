@@ -1,5 +1,6 @@
 // src/app/api/activities/route.ts
 import { NextResponse } from "next/server";
+import mongoose from "mongoose";
 import { connectDB } from "@/lib/db";
 import { ActivityEvent } from "@/models/ActivityEvent";
 
@@ -100,13 +101,36 @@ export async function PUT(request: Request) {
 
     const body = await request.json();
     const { id, _id, ...updates } = body;
-    const targetId = id || _id;
+    const targetId = _id || id;
 
     if (!targetId) {
       return NextResponse.json({ error: "Event ID is required" }, { status: 400 });
     }
 
-    const updated = await ActivityEvent.findByIdAndUpdate(targetId, updates, { new: true });
+    let filter: Record<string, unknown>;
+    if (_id && mongoose.Types.ObjectId.isValid(_id)) {
+      filter = { _id };
+    } else if (id && mongoose.Types.ObjectId.isValid(id)) {
+      filter = { _id: id };
+    } else if (id) {
+      filter = { id };
+    } else {
+      filter = { id: _id };
+    }
+
+    const updated = await ActivityEvent.findOneAndUpdate(filter, updates, {
+      returnDocument: "after",
+      new: true,
+    });
+
+    if (!updated) {
+      const created = await ActivityEvent.create({
+        ...(id ? { id } : {}),
+        ...updates,
+      });
+      return NextResponse.json({ success: true, data: created });
+    }
+
     return NextResponse.json({ success: true, data: updated });
   } catch (error) {
     console.error("PUT /api/activities error:", error);
@@ -128,7 +152,14 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: "Event ID is required" }, { status: 400 });
     }
 
-    await ActivityEvent.findByIdAndDelete(id);
+    let filter: Record<string, unknown>;
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      filter = { $or: [{ _id: id }, { id }] };
+    } else {
+      filter = { id };
+    }
+
+    await ActivityEvent.findOneAndDelete(filter);
     return NextResponse.json({ success: true, message: "Event deleted successfully" });
   } catch (error) {
     console.error("DELETE /api/activities error:", error);

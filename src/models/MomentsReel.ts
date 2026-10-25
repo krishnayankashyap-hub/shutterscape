@@ -2,6 +2,7 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 
 export interface IMomentsReel extends Document {
+  id?: string;
   photographer: string;
   videoSrc: string;
   order: number;
@@ -9,6 +10,7 @@ export interface IMomentsReel extends Document {
 
 const MomentsReelSchema = new Schema<IMomentsReel>(
   {
+    id: { type: String },
     photographer: { type: String, required: true },
     videoSrc: { type: String, required: true },
     order: { type: Number, default: 0 },
