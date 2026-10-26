@@ -467,7 +467,7 @@ export default function CinematicGalleryPage() {
           className="pointer-events-none fixed inset-0 z-[9999] opacity-[0.025] mix-blend-multiply"
           style={{
             backgroundImage:
-              "url('https://grainy-gradients.vercel.app/noise.svg')",
+              "url('/noise.svg')",
           }}
         />
 

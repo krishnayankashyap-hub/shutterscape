@@ -686,97 +686,101 @@ export default function AboutPage() {
         <div
           className="pointer-events-none fixed inset-0 z-[9999] opacity-[0.04] mix-blend-screen"
           style={{
-            backgroundImage:
-              "url('https://grainy-gradients.vercel.app/noise.svg')",
+            backgroundImage: "url('/noise.svg')",
           }}
         />
 
         {/* ============================================================
-            BACK TO OUR STORY BUTTON
+            FIXED HUD OVERLAYS (Isolated from GSAP Pinned DOM to prevent insertBefore collisions)
             ============================================================ */}
-        <Link
-          href="/#scene-about-showcase"
-          className="group fixed top-28 md:top-6 left-4 md:left-8 z-[9990] pointer-events-auto inline-flex items-center gap-2 py-2 px-1 font-mono text-[9.5px] sm:text-[11px] uppercase tracking-[0.22em] font-bold text-[#D4A843] hover:text-white transition-colors duration-300 bg-transparent border-0 shadow-none"
-          title="Back to Discover Our Story"
-          aria-label="Back to Discover Our Story"
-        >
-          <span className="text-sm font-light transition-transform duration-300 group-hover:-translate-x-1.5 text-[#D4A843]">
-            ←
-          </span>
-          <span className="hidden sm:inline whitespace-nowrap transition-colors duration-300">
-            BACK TO OUR STORY
-          </span>
-          <span className="sm:hidden whitespace-nowrap transition-colors duration-300">
-            BACK
-          </span>
-        </Link>
+        <div className="about-fixed-overlays pointer-events-none fixed inset-0 z-[9970]">
+          {/* BACK TO OUR STORY BUTTON */}
+          <Link
+            href="/#scene-about-showcase"
+            className="group fixed top-28 md:top-6 left-4 md:left-8 z-[9990] pointer-events-auto inline-flex items-center gap-2 py-2 px-1 font-mono text-[9.5px] sm:text-[11px] uppercase tracking-[0.22em] font-bold text-[#D4A843] hover:text-white transition-colors duration-300 bg-transparent border-0 shadow-none"
+            title="Back to Discover Our Story"
+            aria-label="Back to Discover Our Story"
+          >
+            <span className="text-sm font-light transition-transform duration-300 group-hover:-translate-x-1.5 text-[#D4A843]">
+              ←
+            </span>
+            <span className="hidden sm:inline whitespace-nowrap transition-colors duration-300">
+              BACK TO OUR STORY
+            </span>
+            <span className="sm:hidden whitespace-nowrap transition-colors duration-300">
+              BACK
+            </span>
+          </Link>
 
-        {/* =========================================================
-            CLEAN MINIMALIST CATEGORY TASKBAR (Desktop Right Dock)
-            ========================================================= */}
-        <aside
-          aria-label="Story Chapter Navigation"
-          className="fixed right-6 sm:right-8 lg:right-10 top-1/2 -translate-y-1/2 z-[9970] hidden xl:flex flex-col items-end gap-3 select-none pointer-events-auto"
-        >
-          {CATEGORIES.map((cat) => {
-            const isActive = activeCategory === cat.id;
-            return (
-              <button
-                key={cat.id}
-                type="button"
-                onClick={() => jumpToSection(cat.id)}
-                className="group flex items-center justify-end gap-3 py-1 cursor-pointer transition-all duration-300 bg-transparent border-0 outline-none"
-                aria-label={`Jump to ${cat.title}`}
-              >
-                <span
-                  className={`font-mono text-[9.5px] tracking-[0.2em] uppercase transition-all duration-300 ${
-                    isActive
-                      ? "text-white font-semibold opacity-100"
-                      : "text-white/40 font-normal group-hover:text-white/80"
-                  }`}
+          {/* CLEAN MINIMALIST CATEGORY TASKBAR (Desktop Right Dock) */}
+          <aside
+            aria-label="Story Chapter Navigation"
+            className="fixed right-6 sm:right-8 lg:right-10 top-1/2 -translate-y-1/2 z-[9970] hidden xl:flex flex-col items-end gap-3 select-none pointer-events-auto"
+          >
+            {CATEGORIES.map((cat) => {
+              const isActive = activeCategory === cat.id;
+              return (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => jumpToSection(cat.id)}
+                  className="group flex items-center justify-end gap-3 py-1 cursor-pointer transition-all duration-300 bg-transparent border-0 outline-none"
+                  aria-label={`Jump to ${cat.title}`}
                 >
-                  {cat.title}
-                </span>
+                  <span
+                    className={`font-mono text-[9.5px] tracking-[0.2em] uppercase transition-all duration-300 ${
+                      isActive
+                        ? "text-white font-semibold opacity-100"
+                        : "text-white/40 font-normal group-hover:text-white/80"
+                    }`}
+                  >
+                    {cat.title}
+                  </span>
 
-                <span
-                  className={`font-mono text-[9px] tracking-wider transition-colors duration-300 ${
-                    isActive
-                      ? "text-[#D4A843] font-bold"
-                      : "text-white/30 group-hover:text-white/60"
-                  }`}
-                >
-                  {cat.code}
-                </span>
+                  <span
+                    className={`font-mono text-[9px] tracking-wider transition-colors duration-300 ${
+                      isActive
+                        ? "text-[#D4A843] font-bold"
+                        : "text-white/30 group-hover:text-white/60"
+                    }`}
+                  >
+                    {cat.code}
+                  </span>
 
-                <div
-                  className={`transition-all duration-300 rounded-full ${
-                    isActive
-                      ? "w-4 h-[2px] bg-[#D4A843] opacity-100"
-                      : "w-1.5 h-[1.5px] bg-white/25 opacity-60 group-hover:w-2.5 group-hover:bg-white/60"
-                  }`}
-                />
-              </button>
-            );
-          })}
-        </aside>
+                  <div
+                    className={`transition-all duration-300 rounded-full ${
+                      isActive
+                        ? "w-4 h-[2px] bg-[#D4A843] opacity-100"
+                        : "w-1.5 h-[1.5px] bg-white/25 opacity-60 group-hover:w-2.5 group-hover:bg-white/60"
+                    }`}
+                  />
+                </button>
+              );
+            })}
+          </aside>
 
-        {/* Mobile Minimal Chapter Indicator */}
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9970] xl:hidden flex items-center gap-2 select-none pointer-events-none">
-          <span className="h-1.5 w-1.5 rounded-full bg-[#D4A843] animate-pulse" />
-          <span className="font-mono text-[9px] tracking-[0.25em] uppercase text-white/80 font-bold">
-            {CATEGORIES.find((c) => c.id === activeCategory)?.title ||
-              "ORIGINS"}
-          </span>
-        </div>
+          {/* Mobile Minimal Chapter Indicator */}
+          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9970] xl:hidden flex items-center gap-2 select-none pointer-events-none">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#D4A843] animate-pulse" />
+            <span className="font-mono text-[9px] tracking-[0.25em] uppercase text-white/80 font-bold">
+              {CATEGORIES.find((c) => c.id === activeCategory)?.title ||
+                "ORIGINS"}
+            </span>
+          </div>
 
-        {/* Clean Minimalist Frameless Bottom Guide (Matches Screenshot 2) */}
-        {activeCategory !== "origins" && (
-          <div className="pointer-events-none fixed bottom-12 xl:bottom-5 left-1/2 -translate-x-1/2 z-[9960] flex items-center gap-2.5 font-mono text-[8.5px] sm:text-[9.5px] tracking-[0.26em] uppercase text-white/50 select-none transition-opacity duration-300">
+          {/* Clean Minimalist Frameless Bottom Guide (Matches Screenshot 2) */}
+          <div
+            className={`pointer-events-none fixed bottom-12 xl:bottom-5 left-1/2 -translate-x-1/2 z-[9960] flex items-center gap-2.5 font-mono text-[8.5px] sm:text-[9.5px] tracking-[0.26em] uppercase text-white/50 select-none transition-all duration-300 ${
+              activeCategory !== "origins"
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-2 pointer-events-none"
+            }`}
+          >
             <span>HOVER TO SEE COLOR</span>
             <span className="text-white/25">—</span>
             <span>CLICK TO KNOW ABOUT THEM</span>
           </div>
-        )}
+        </div>
 
         {/* =========================================================
             MASTER CONTINUOUS TUNNEL CONTAINER

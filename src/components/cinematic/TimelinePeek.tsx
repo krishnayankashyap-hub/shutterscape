@@ -342,7 +342,7 @@ export default function TimelinePeek() {
       {/* CSS Sticky Container prevents layout jumps and conflicts with GSAP Pins */}
       <div className="sticky top-0 w-full h-screen overflow-hidden bg-[#F4F4F5] flex flex-col justify-between">
         {/* Paper Grain Texture to match Scene 3 Light-Table */}
-        <div className="absolute inset-0 opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-multiply pointer-events-none z-0" />
+        <div className="absolute inset-0 opacity-[0.03] bg-[url('/noise.svg')] mix-blend-multiply pointer-events-none z-0" />
 
         {/* TOP HUD */}
         <div className="relative z-30 w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-12 pt-24 sm:pt-28 md:pt-36 flex items-center justify-between">

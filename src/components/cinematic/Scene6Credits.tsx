@@ -160,7 +160,7 @@ export default function Scene6Credits() {
           pointerEvents: "none",
           zIndex: 0,
           opacity: 0.03,
-          backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')",
+          backgroundImage: "url('/noise.svg')",
           mixBlendMode: "multiply",
         }}
       />

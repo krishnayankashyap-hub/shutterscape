@@ -308,7 +308,7 @@ export default function FramesOfMoments({ initialReels }: FramesOfMomentsProps =
       <div
         className="pointer-events-none absolute inset-0 z-0 opacity-[0.03]"
         style={{
-          backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')",
+          backgroundImage: "url('/noise.svg')",
           mixBlendMode: "overlay",
         }}
       />

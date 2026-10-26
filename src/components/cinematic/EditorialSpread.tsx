@@ -136,7 +136,7 @@ export default function EditorialSpread() {
       <div className="sticky top-0 w-full h-screen overflow-hidden bg-transparent flex items-center justify-center">
         
         <div ref={whiteBgRef} className="absolute inset-0 bg-[#F4F4F5] w-full h-full">
-          <div className="absolute inset-0 opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-multiply pointer-events-none" />
+          <div className="absolute inset-0 opacity-[0.03] bg-[url('/noise.svg')] mix-blend-multiply pointer-events-none" />
 
           {/* LAYER 1: PARALLAX FLOATING PRINTS (Z-10) */}
           <div className="absolute inset-0 z-10 pointer-events-none">
