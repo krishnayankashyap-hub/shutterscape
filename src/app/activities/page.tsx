@@ -133,7 +133,7 @@ const ARCHIVE_DATA: ArchiveEvent[] = [
     img: "https://images.unsplash.com/photo-1449844908441-8829872d2607?w=1200&q=85",
   },
   {
-    id: "ACT-26-05",
+    id: "ACT-26-07",
     year: "2026",
     shortTitle: "AVIAN OPTICS STUDY",
     title: "Mist, Avian Optics & Telephoto Study",
@@ -147,7 +147,7 @@ const ARCHIVE_DATA: ArchiveEvent[] = [
     img: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1200&q=85",
   },
   {
-    id: "ACT-26-06",
+    id: "ACT-26-08",
     year: "2026",
     shortTitle: "ALPENGLOW EXPEDITION",
     title: "Eastern Himalayan Alpenglow Field Study",
@@ -162,7 +162,7 @@ const ARCHIVE_DATA: ArchiveEvent[] = [
     isUpcoming: true,
   },
   {
-    id: "ACT-26-07",
+    id: "ACT-26-09",
     year: "2026",
     shortTitle: "NEON RAIN DRIFT",
     title: "Nocturnal Neon & Rain Reflections Clinic",
@@ -176,7 +176,7 @@ const ARCHIVE_DATA: ArchiveEvent[] = [
     img: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=1200&q=85",
   },
   {
-    id: "ACT-26-08",
+    id: "ACT-26-10",
     year: "2026",
     shortTitle: "MONSOON SILHOUETTES",
     title: "Monsoon Over Brahmaputra — Print Salon",
@@ -190,7 +190,7 @@ const ARCHIVE_DATA: ArchiveEvent[] = [
     img: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&q=85",
   },
   {
-    id: "ACT-26-09",
+    id: "ACT-26-11",
     year: "2026",
     shortTitle: "PRISM & DISPERSION",
     title: "Vintage Uncoated Optics & Flare Lab",
@@ -205,21 +205,7 @@ const ARCHIVE_DATA: ArchiveEvent[] = [
     isUpcoming: true,
   },
   {
-    id: "ACT-26-10",
-    year: "2026",
-    shortTitle: "BRUTALIST SHADOWS",
-    title: "Architectural Form & Concrete Shadows",
-    category: "COMPETITION",
-    date: "JUN 02, 2026",
-    location: "GCU Academic Complex",
-    description:
-      "Campus-wide architectural photography contest dissecting geometric louvers, cantilevers, and stark noon sun angles.",
-    exif: "28MM · F/11 · 1/250S",
-    filmStock: "ILFORD PAN F PLUS 50",
-    img: "https://images.unsplash.com/photo-1513694203232-719a280e022f?w=1200&q=85",
-  },
-  {
-    id: "ACT-26-11",
+    id: "ACT-26-12",
     year: "2026",
     shortTitle: "UMANANDA TWILIGHT",
     title: "Umananda Ghat Ferry Documentary Walk",
@@ -232,20 +218,6 @@ const ARCHIVE_DATA: ArchiveEvent[] = [
     filmStock: "KODAK GOLD 200",
     img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1200&q=85",
     isUpcoming: true,
-  },
-  {
-    id: "ACT-26-12",
-    year: "2026",
-    shortTitle: "PORTRAITURE GRAND PRIX",
-    title: "National Collegiate Portraiture Grand Prix",
-    category: "COMPETITION",
-    date: "MAR 14, 2026",
-    location: "GCU Creative Studio",
-    description:
-      "Annual portrait championship evaluating environmental storytelling, natural window light control, and tonal gradation.",
-    exif: "85MM · F/1.4 · 1/500S",
-    filmStock: "KODAK PORTRA 800",
-    img: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=1200&q=85",
   },
 
   // ==========================================
@@ -437,8 +409,8 @@ const FILTERS: { label: string; value: FilterKey }[] = [
 
 // Hexagonal edge angles (flat-top inner hexagon matching the video reference)
 const HEX_ANGLES_DEG = [-90, -30, 30, 90, 150, -150];
-// Card Z-rotations so inner edges form a seamless 6-sided aperture without upside-down cards
-const HEX_ROTATIONS_DEG = [0, 60, -60, 0, 60, -60];
+// Subtle aperture tilts: keeps cards upright, readable, and perfectly non-colliding
+const HEX_ROTATIONS_DEG = [0, -3, 3, 0, -3, 3];
 
 function renderFormattedDescription(text: string) {
   if (!text) return null;
@@ -700,23 +672,27 @@ export default function ActivitiesPage() {
       const isMobile = vw < 768;
       const total = filteredData.length;
 
-      // Larger, easy-to-see card dimensions
+      // Clean, responsive card dimensions calibrated for all laptop and desktop screens
       const cardW = isMobile
-        ? Math.min(270, vw * 0.64)
-        : Math.min(315, Math.max(265, Math.min(vw * 0.22, vh * 0.31)));
+        ? Math.min(260, vw * 0.65)
+        : Math.min(300, Math.max(240, Math.min(vw * 0.20, vh * 0.29)));
       const cardH = cardW * 0.635;
 
-      // Hexagonal radius: tightly wraps the 6 larger frames into a crisp aperture around WORKS '26 / '25
-      const apothem = cardW * 0.68;
-      const hexRadius = apothem + cardH * 0.42;
+      // Elliptical radial separation ensures adjacent cards NEVER touch, collide, or clip
+      const hexRadiusX = isMobile
+        ? Math.min(vw * 0.36, 150)
+        : Math.min(vw * 0.28, Math.max(310, cardW * 1.18));
+      const hexRadiusY = isMobile
+        ? Math.min(vh * 0.26, 160)
+        : Math.min(vh * 0.25, Math.max(195, cardH * 1.25));
 
       // 3D Vertical Cylinder radius
       const cylRadius = isMobile
-        ? Math.min(220, vh * 0.28)
-        : Math.min(285, vh * 0.33);
+        ? Math.min(210, vh * 0.26)
+        : Math.min(270, vh * 0.32);
 
       // Optical stage offset so top frames clear the filter bar cleanly
-      const stageOffsetY = isMobile ? 18 : 24;
+      const stageOffsetY = isMobile ? 12 : 20;
 
       // Compute morph factor `t` (0 = Pure Hexagon, 1 = Pure 3D Cylinder)
       const rawMorph = Math.min(1, Math.max(0, progress / morphEnd));
@@ -746,9 +722,9 @@ export default function ActivitiesPage() {
 
       // 1. Animate Top-Left "ACTIVITY ARCHIVE" banner
       if (topBannerRef.current) {
-        const bannerProgress = easeOut(Math.min(1, progress / 0.16));
+        const bannerProgress = easeOut(Math.min(1, progress / 0.12));
         topBannerRef.current.style.transform = `translate3d(0, ${
-          -bannerProgress * 90
+          -bannerProgress * 50
         }px, 0)`;
         topBannerRef.current.style.opacity = `${1 - bannerProgress}`;
       }
@@ -788,55 +764,64 @@ export default function ActivitiesPage() {
         let hexOpacity = 0;
 
         if (i < 6) {
-          const spinOffsetDeg = rawMorph * 24;
+          const spinOffsetDeg = rawMorph * 15;
           const angleDeg = HEX_ANGLES_DEG[i] + spinOffsetDeg;
           const angleRad = (angleDeg * Math.PI) / 180;
 
-          hexX = Math.cos(angleRad) * hexRadius;
-          hexY = Math.sin(angleRad) * hexRadius + stageOffsetY;
+          hexX = Math.cos(angleRad) * hexRadiusX;
+          hexY = Math.sin(angleRad) * hexRadiusY + stageOffsetY;
           hexZ = 0;
           hexRotX = 0;
           hexRotZ = HEX_ROTATIONS_DEG[i] + spinOffsetDeg;
-          hexScale = 1.02;
+          hexScale = 1.0;
           hexOpacity = 1;
         }
 
         // --- STATE B: 3D VERTICAL CYLINDER (ROLODEX) ---
         const delta = i - wheelIndex;
         const clampedDelta = Math.max(-2.2, Math.min(2.2, delta));
-        const drumAngleDeg = clampedDelta * 54;
+        const drumAngleDeg = clampedDelta * 52;
         const drumAngleRad = (drumAngleDeg * Math.PI) / 180;
 
         const cylX = 0;
         const cylY = Math.sin(drumAngleRad) * cylRadius + stageOffsetY;
-        const cylZ = (Math.cos(drumAngleRad) - 1) * 210;
+        const cylZ = (Math.cos(drumAngleRad) - 1) * 220;
         const cylRotX = -drumAngleDeg;
         const cylRotZ = 0;
 
         // Scale for cylinder frames
         const distFromCenter = Math.abs(delta);
         const cylScale = isMobile
-          ? Math.max(0.92, 1.22 - distFromCenter * 0.2)
-          : Math.max(0.95, 1.34 - distFromCenter * 0.28);
+          ? Math.max(0.92, 1.20 - distFromCenter * 0.2)
+          : Math.max(0.95, 1.30 - distFromCenter * 0.25);
 
+        // Cylinder opacity: smoothly fades cards before they ever reach an edge-on angle
         let cylOpacity = 0;
-        if (distFromCenter <= 1.05) {
-          cylOpacity = 1 - distFromCenter * 0.1;
-        } else if (distFromCenter < 1.55) {
-          cylOpacity = (1 - (distFromCenter - 1.05) / 0.5) * 0.85;
+        if (distFromCenter <= 0.5) {
+          cylOpacity = 1;
+        } else if (distFromCenter <= 1.0) {
+          cylOpacity = 1 - (distFromCenter - 0.5) * 0.35;
+        } else if (distFromCenter < 1.25) {
+          cylOpacity = (1 - (distFromCenter - 1.0) / 0.25) * 0.75;
         } else {
           cylOpacity = 0;
         }
 
         // --- LERP BETWEEN HEXAGON (t=0) AND CYLINDER (t=1) ---
+        // During pure aperture (t <= 0.25), only cards 0-5 exist; cards >= 6 remain completely hidden
+        const activeHexOpacity = i < 6 ? hexOpacity : 0;
+        const activeCylOpacity = rawMorph > 0.25 ? cylOpacity : 0;
+
         const x = hexX + (cylX - hexX) * t;
         const y = hexY + (cylY - hexY) * t;
         const z = hexZ + (cylZ - hexZ) * t;
         const rotX = hexRotX + (cylRotX - hexRotX) * t;
         const rotZ = hexRotZ + (cylRotZ - hexRotZ) * t;
         const scale = hexScale + (cylScale - hexScale) * t;
-        const opacity = hexOpacity + (cylOpacity - hexOpacity) * t;
+        const opacity =
+          activeHexOpacity + (activeCylOpacity - activeHexOpacity) * t;
 
+        const finalOpacity = Math.max(0, Math.min(1, opacity));
         el.style.width = `${cardW}px`;
         el.style.height = `${cardH}px`;
         el.style.marginLeft = `${-cardW / 2}px`;
@@ -846,9 +831,17 @@ export default function ActivitiesPage() {
         )}px, ${z.toFixed(2)}px) rotateX(${rotX.toFixed(
           2
         )}deg) rotateZ(${rotZ.toFixed(2)}deg) scale(${scale.toFixed(3)})`;
-        el.style.opacity = `${Math.max(0, Math.min(1, opacity)).toFixed(3)}`;
+        el.style.opacity = `${finalOpacity.toFixed(3)}`;
         el.style.zIndex = `${Math.round(100 - distFromCenter * 25)}`;
-        el.style.pointerEvents = opacity > 0.25 ? "auto" : "none";
+
+        // Complete visibility toggling eradicates all smear artifacts, edge-on lines & phantom drop shadows
+        if (finalOpacity <= 0.01) {
+          el.style.visibility = "hidden";
+          el.style.pointerEvents = "none";
+        } else {
+          el.style.visibility = "visible";
+          el.style.pointerEvents = finalOpacity > 0.25 ? "auto" : "none";
+        }
       }
     };
 
@@ -913,16 +906,20 @@ export default function ActivitiesPage() {
           className="relative w-full h-screen overflow-hidden select-none"
         >
           {/* ---------------------------------------------------------
-              1. TOP-CENTER MINIMAL FILTER BAR & RETURN LINK
-              Positioned cleanly below the global ShutterScape HUD navbar
+              1. TOP-LEFT EDITORIAL RETURN LINK
               --------------------------------------------------------- */}
-          <div className="absolute top-[64px] sm:top-[68px] left-1/2 -translate-x-1/2 z-40 flex items-center gap-3 sm:gap-5 px-4 py-1.5 rounded-full bg-[#F5F4F0]/90 backdrop-blur-md border border-[#141413]/10 max-w-[95vw] overflow-x-auto no-scrollbar shadow-xs">
-            <Link
-              href="/#scene-activity-showcase"
-              className="font-mono text-[9.5px] sm:text-[10.5px] tracking-[0.2em] uppercase font-bold text-[#141413] hover:text-[#B8860B] transition-colors shrink-0 pr-2.5 border-r border-[#141413]/15"
-            >
-              ← HOME
-            </Link>
+          <Link
+            href="/#scene-activity-showcase"
+            className="group fixed top-[112px] sm:top-[118px] left-5 sm:left-10 z-40 inline-flex items-center gap-2 py-1 px-1 font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.22em] font-bold text-[#141413] hover:text-[#B8860B] transition-colors"
+          >
+            <span className="transition-transform duration-300 group-hover:-translate-x-1">←</span>
+            <span>RETURN HOME</span>
+          </Link>
+
+          {/* ---------------------------------------------------------
+              2. TOP-CENTER MINIMAL FILTER BAR
+              --------------------------------------------------------- */}
+          <div className="fixed top-[64px] sm:top-[68px] md:top-[72px] left-1/2 -translate-x-1/2 z-40 flex items-center justify-start sm:justify-center gap-2 sm:gap-4 md:gap-5 px-4 sm:px-6 py-1.5 rounded-full bg-[#F5F4F0]/90 backdrop-blur-md border border-[#141413]/10 max-w-[92vw] overflow-x-auto no-scrollbar shadow-xs">
             {FILTERS.map((filter) => {
               const isActive = activeFilter === filter.value;
               return (
@@ -930,9 +927,9 @@ export default function ActivitiesPage() {
                   key={filter.value}
                   type="button"
                   onClick={() => handleFilterClick(filter.value)}
-                  className={`font-mono text-[9.5px] sm:text-[10.5px] tracking-[0.2em] uppercase transition-colors cursor-pointer shrink-0 ${
+                  className={`font-mono text-[9px] sm:text-[10px] tracking-[0.18em] uppercase transition-colors cursor-pointer shrink-0 py-0.5 ${
                     isActive
-                      ? "text-[#141413] font-bold underline underline-offset-4 decoration-[#141413]"
+                      ? "text-[#141413] font-bold border-b border-[#141413]"
                       : "text-[#141413]/45 hover:text-[#141413]"
                   }`}
                 >
@@ -943,16 +940,16 @@ export default function ActivitiesPage() {
           </div>
 
           {/* ---------------------------------------------------------
-              2. TOP-LEFT EDITORIAL HEADER (Unclipped & cleanly aligned)
+              3. TOP-LEFT EDITORIAL HEADER (Unclipped & cleanly aligned)
               --------------------------------------------------------- */}
           <div
             ref={topBannerRef}
-            className="pointer-events-none absolute top-[104px] sm:top-[108px] left-5 sm:left-10 z-10 will-change-transform"
+            className="pointer-events-none fixed top-[148px] sm:top-[156px] left-5 sm:left-10 z-20 will-change-transform"
           >
-            <span className="block font-mono text-[9px] sm:text-[10px] tracking-[0.28em] uppercase text-[#141413]/45 mb-1">
+            <span className="block font-mono text-[9px] sm:text-[9.5px] tracking-[0.26em] uppercase text-[#141413]/50 mb-1">
               CHRONOLOGICAL EXHIBITION // {editionLabel}
             </span>
-            <h1 className="font-heading text-[clamp(1.4rem,2.5vw,2.5rem)] font-black uppercase tracking-[-0.03em] text-[#141413] leading-[0.95]">
+            <h1 className="font-heading text-xl sm:text-2xl md:text-[28px] font-black uppercase tracking-[-0.03em] text-[#141413] leading-none">
               ACTIVITY ARCHIVE
             </h1>
           </div>
@@ -998,11 +995,11 @@ export default function ActivitiesPage() {
           {/* ---------------------------------------------------------
               5. RIGHT COLUMN: COMPACT VERTICAL INDEX DIRECTORY (All contents visible)
               --------------------------------------------------------- */}
-          <aside className="hidden md:flex flex-col items-end justify-center absolute right-6 lg:right-10 top-1/2 -translate-y-1/2 z-30 text-right max-h-[88vh] overflow-y-auto no-scrollbar py-2">
-            <span className="font-mono text-[9px] sm:text-[9.5px] font-bold tracking-[0.24em] uppercase text-[#141413]/70 mb-2">
+          <aside className="hidden lg:flex flex-col items-end justify-center fixed right-6 lg:right-10 top-1/2 -translate-y-1/2 z-30 text-right max-h-[82vh] overflow-y-auto no-scrollbar py-2">
+            <span className="font-mono text-[9px] font-bold tracking-[0.24em] uppercase text-[#141413]/70 mb-2">
               {editionLabel}
             </span>
-            <ul className="flex flex-col gap-0.5 sm:gap-1">
+            <ul className="flex flex-col gap-1">
               {filteredData.map((ev, idx) => {
                 const isCurrent = isCylinderPhase && idx === activeIndex;
                 return (
@@ -1010,7 +1007,7 @@ export default function ActivitiesPage() {
                     <button
                       type="button"
                       onClick={() => scrollToCardIndex(idx)}
-                      className={`font-sans text-[9px] sm:text-[9.5px] lg:text-[10px] leading-tight tracking-[0.02em] transition-all duration-200 cursor-pointer ${
+                      className={`font-sans text-[9.5px] lg:text-[10px] leading-tight tracking-[0.02em] transition-all duration-200 cursor-pointer block max-w-[210px] truncate ${
                         isCurrent
                           ? "text-[#141413] font-bold -translate-x-1"
                           : "text-[#141413]/40 hover:text-[#141413] font-normal"
