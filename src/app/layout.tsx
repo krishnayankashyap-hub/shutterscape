@@ -111,6 +111,18 @@ export default function RootLayout({
       className={`${cormorant.variable} ${sora.variable} ${inter.variable} ${spaceMono.variable} bg-[#030303] text-[#FAFAFA]`}
     >
       <head>
+        <link
+          rel="preload"
+          as="image"
+          href="/images/gcu-campus-anime.jpg"
+          fetchPriority="high"
+        />
+        <link
+          rel="preload"
+          as="image"
+          href="/api/media/6ade51a83071c6a522ea6397"
+          fetchPriority="high"
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `

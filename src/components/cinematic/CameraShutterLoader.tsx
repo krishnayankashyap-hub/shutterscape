@@ -5,6 +5,31 @@ import { usePathname } from "next/navigation";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+const CRITICAL_IMAGE_ASSETS = [
+  "/images/gcu-campus-anime.jpg",
+  "/images/gcu-campus-sketch.jpg",
+  // Hero Reel Frames (pre-decoded for instant display post-flash)
+  "/api/media/6ade51a83071c6a522ea6397",
+  "/api/media/6ade54effadbce637226b636",
+  "/api/media/6ade56029d67f6006e3db91a",
+  "/api/media/6ade565e741b0c577b2f4207",
+  // PullIn Corridor Exhibits
+  "/api/media/6ade5727c27b25f89317a56e",
+  "/api/media/6ade5fc397369901d08048bd",
+  "/api/media/6ade60493c562bf90f9b2a6c",
+  "/api/media/6ade60e5d43cca4cd02daa0f",
+  "/api/media/6ade61178ff4fc64ac7615e4",
+  "/api/media/6ade61c88ff4fc64ac7615e5",
+  "/api/media/6ade621f3c562bf90f9b2a6d",
+  "/api/media/6ade6265d43cca4cd02daa10",
+  // Activities Showcase Chapters
+  "/api/media/6ade723381e180affa193019",
+  "/api/media/6ade724a83870de2ac5f3cf2",
+  "/api/media/6ade73037d65124fe732c4ae",
+  "/api/media/6ade734e7d65124fe732c4af",
+  "/api/media/6ade73c583870de2ac5f3cf3",
+];
+
 export default function CameraShutterLoader() {
   const pathname = usePathname();
   const [flashActive, setFlashActive] = useState(false);
@@ -17,6 +42,33 @@ export default function CameraShutterLoader() {
 
   useEffect(() => {
     if (pathname?.startsWith("/admin")) return;
+
+    // 0. Aggressively preload & GPU-decode all critical visuals in parallel behind the shutter screen
+    if (typeof window !== "undefined") {
+      CRITICAL_IMAGE_ASSETS.forEach((src) => {
+        try {
+          const img = new Image();
+          img.src = src;
+          if (img.decode) {
+            img.decode().catch(() => {});
+          }
+        } catch {}
+      });
+
+      // Buffer initial Moments video reels into HTTP cache
+      const CRITICAL_VIDEOS = [
+        "/api/media/6adf475c3c63e8ae4ff0a9d4",
+        "/api/media/6ade6c0a40346d3181c85f3a",
+      ];
+      CRITICAL_VIDEOS.forEach((vSrc) => {
+        try {
+          const v = document.createElement("video");
+          v.preload = "auto";
+          v.src = vSrc;
+          v.load();
+        } catch {}
+      });
+    }
 
     // 1. Prevent browser from restoring raw scroll offsets before GSAP pins hydrate
     if (typeof window !== "undefined") {
@@ -147,6 +199,7 @@ export default function CameraShutterLoader() {
       loaderRef.current,
       {
         opacity: 0,
+        pointerEvents: "none",
         duration: 0.6,
         ease: "power3.inOut",
       },

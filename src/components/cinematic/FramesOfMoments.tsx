@@ -14,7 +14,7 @@ const REELS: ReelItem[] = [
   {
     id: "01",
     photographer: "World Photography Day",
-    videoSrc: "/videos/reel-1.mp4",
+    videoSrc: "/api/media/6adf475c3c63e8ae4ff0a9d4",
   },
   {
     id: "02",
@@ -24,22 +24,22 @@ const REELS: ReelItem[] = [
   {
     id: "03",
     photographer: "Wall Painting",
-    videoSrc: "/videos/reel-3.mp4",
+    videoSrc: "/api/media/6adf48963c63e8ae4ff0a9d7",
   },
   {
     id: "04",
     photographer: "Photography Workshop ",
-    videoSrc: "/videos/reel-4.mp4",
+    videoSrc: "/api/media/6adf48cd3c63e8ae4ff0a9d8",
   },
   {
     id: "05",
     photographer: "A New Beginning",
-    videoSrc: "/videos/reel-5.mp4",
+    videoSrc: "/api/media/6adf48403c63e8ae4ff0a9d6",
   },
   {
     id: "06",
     photographer: "Magic of Filmmaking",
-    videoSrc: "/videos/reel-6.mp4",
+    videoSrc: "/api/media/6adf47e63c63e8ae4ff0a9d5",
   },
 ];
 

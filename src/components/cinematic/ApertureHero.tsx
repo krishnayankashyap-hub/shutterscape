@@ -12,42 +12,42 @@ gsap.registerPlugin(ScrollTrigger);
 const USE_REAL_CAMERA_IMAGE = false;
 const REAL_CAMERA_SRC = "/images/real-camera.png";
 
-// 6 Disciplined Vertical 35mm Contact-Sheet Film Frames
+// 6 Disciplined Vertical 35mm Contact-Sheet Film Frames (Pre-seeded with real GCU Admin uploads for instant zero-lag render)
 const FILM_REEL_FRAMES = [
   {
     id: "01A",
     title: "SILENT PEAKS",
-    src: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400&auto=format&fit=crop&q=75",
-    exif: "85MM · F/1.4 · ISO 200",
+    src: "/api/media/6ade51a83071c6a522ea6397",
+    exif: "GCU Library",
   },
   {
     id: "02B",
-    title: "GOLDEN HORIZON",
-    src: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=400&auto=format&fit=crop&q=75",
-    exif: "35MM · F/2.0 · 1/1000S",
+    title: "Rainy hour",
+    src: "/api/media/6ade54effadbce637226b636",
+    exif: "GCU",
   },
   {
     id: "03C",
     title: "CANYON DRIFT",
-    src: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=400&auto=format&fit=crop&q=75",
-    exif: "50MM · F/1.8 · RAW",
+    src: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1200&auto=format&fit=crop&q=80",
+    exif: "GCU Greenery",
   },
   {
     id: "04D",
     title: "MIST & LIGHT",
-    src: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=400&auto=format&fit=crop&q=75",
-    exif: "24MM · F/2.8 · GOLDEN HR",
+    src: "/api/media/6ade56029d67f6006e3db91a",
+    exif: "FLAG",
   },
   {
     id: "05E",
-    title: "URBAN SOLITUDE",
-    src: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=400&auto=format&fit=crop&q=75",
-    exif: "35MM · F/1.4 · NIGHT",
+    title: "SOLITUDE",
+    src: "/api/media/6ade565e741b0c577b2f4207",
+    exif: "From Up",
   },
   {
     id: "06F",
     title: "ALPINE CREST",
-    src: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400&auto=format&fit=crop&q=75",
+    src: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=85",
     exif: "70MM · F/4.0 · DAWN",
   },
 ];
@@ -1221,7 +1221,7 @@ export default function ApertureHero() {
                   willChange: "transform",
                 }}
               >
-                {filmFrames.map((frame) => (
+                {filmFrames.map((frame, fIdx) => (
                   <div
                     key={frame.id}
                     style={{
@@ -1282,6 +1282,8 @@ export default function ApertureHero() {
                         src={frame.src}
                         alt={frame.title}
                         fill
+                        priority={fIdx < 3}
+                        unoptimized={frame.src.startsWith("/api/media/")}
                         sizes="210px"
                         style={{
                           objectFit: "cover",

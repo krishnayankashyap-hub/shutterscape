@@ -334,55 +334,74 @@ export default function AboutPage() {
         }
       });
 
-      tl.to(".campus-bg-image", { scale: 1.18, duration: 18, ease: "none" }, 0);
-      tl.to(".hero-scroll-guide", { opacity: 0, y: 15, duration: 0.8, ease: "power2.out" }, 0);
+      tl.fromTo(".campus-bg-image", { scale: 1.0 }, { scale: 1.18, duration: 18, ease: "none" }, 0);
+      tl.fromTo(".hero-scroll-guide", { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: 15, duration: 0.8, ease: "power2.out" }, 0);
 
-      // SEQUENCE 1: HERO DIVE
+      // SEQUENCE 1: HERO DIVE (Glitch-free calibrated zoom with autoAlpha compositor management)
       tl.addLabel("heroStart", 0);
-      tl.to(".hero-word-shutter", { scale: 24, y: "-32vh", opacity: 0, duration: 2.4, ease: "power2.inOut" }, "heroStart");
-      tl.to(".hero-word-scape", { scale: 24, y: "32vh", opacity: 0, duration: 2.4, ease: "power2.inOut" }, "heroStart");
-      tl.fromTo(".hero-hidden-text", { opacity: 0, scale: 0.8, y: 50 }, { opacity: 1, scale: 1, y: 0, duration: 1.6, ease: "power2.out" }, "heroStart+=0.8");
-      tl.to(".hero-hidden-text", { opacity: 0, scale: 1.15, y: -45, duration: 1.2, ease: "power2.in" }, "heroStart+=3.4");
+      tl.fromTo(
+        ".hero-word-shutter",
+        { scale: 1, y: "0vh", autoAlpha: 1 },
+        { scale: 4.8, y: "-28vh", autoAlpha: 0, duration: 2.2, ease: "power2.inOut" },
+        "heroStart"
+      );
+      tl.fromTo(
+        ".hero-word-scape",
+        { scale: 1, y: "0vh", autoAlpha: 1 },
+        { scale: 4.8, y: "28vh", autoAlpha: 0, duration: 2.2, ease: "power2.inOut" },
+        "heroStart"
+      );
+      tl.fromTo(
+        ".hero-hidden-text",
+        { autoAlpha: 0, scale: 0.8, y: 50 },
+        { autoAlpha: 1, scale: 1, y: 0, duration: 1.6, ease: "power2.out" },
+        "heroStart+=0.8"
+      );
+      tl.to(
+        ".hero-hidden-text",
+        { autoAlpha: 0, scale: 1.15, y: -45, duration: 1.2, ease: "power2.in" },
+        "heroStart+=3.4"
+      );
 
       // SEQUENCE 2: MENTORS
       tl.addLabel("mentorsStart", "heroStart+=4.2");
       tl.fromTo(
         ".ch-2-mentors",
-        { display: "none", opacity: 0, scale: 0.85, x: -40, y: 50, rotateY: 6, filter: "blur(22px)" },
-        { display: "flex", opacity: 1, scale: 1, x: 0, y: 0, rotateY: 0, filter: "blur(0px)", duration: 2, ease: "power3.out" },
+        { display: "none", autoAlpha: 0, scale: 0.85, x: -40, y: 50, rotateY: 6, filter: "blur(22px)" },
+        { display: "flex", autoAlpha: 1, scale: 1, x: 0, y: 0, rotateY: 0, filter: "blur(0px)", duration: 2, ease: "power3.out" },
         "mentorsStart"
       );
-      tl.to(".ch-2-mentors", { opacity: 0, scale: 1.15, x: 30, y: -40, rotateY: -4, filter: "blur(14px)", duration: 1.5, ease: "power2.in" }, "mentorsStart+=3");
+      tl.to(".ch-2-mentors", { autoAlpha: 0, scale: 1.15, x: 30, y: -40, rotateY: -4, filter: "blur(14px)", duration: 1.5, ease: "power2.in" }, "mentorsStart+=3");
       tl.set(".ch-2-mentors", { display: "none" });
 
       // SEQUENCE 3: LEADS
       tl.addLabel("leadsStart", "mentorsStart+=4.2");
       tl.fromTo(
         ".ch-3-leads",
-        { display: "none", opacity: 0, scale: 0.9, x: 40, y: -40, rotateX: -6 },
-        { display: "flex", opacity: 1, scale: 1, x: 0, y: 0, rotateX: 0, duration: 1.8, ease: "power3.out" },
+        { display: "none", autoAlpha: 0, scale: 0.9, x: 40, y: -40, rotateX: -6 },
+        { display: "flex", autoAlpha: 1, scale: 1, x: 0, y: 0, rotateX: 0, duration: 1.8, ease: "power3.out" },
         "leadsStart"
       );
-      tl.to(".ch-3-leads", { opacity: 0, scale: 1.18, y: -30, duration: 1.4, ease: "power2.in" }, "leadsStart+=3");
+      tl.to(".ch-3-leads", { autoAlpha: 0, scale: 1.18, y: -30, duration: 1.4, ease: "power2.in" }, "leadsStart+=3");
       tl.set(".ch-3-leads", { display: "none" });
 
       // SEQUENCE 4: CORE MEMBERS
       tl.addLabel("coreStart", "leadsStart+=3.8");
-      tl.fromTo(".ch-4-core", { display: "none", opacity: 0, y: "15vh", scale: 0.96 }, { display: "flex", opacity: 1, y: "0vh", scale: 1, duration: 1.6, ease: "power3.out" }, "coreStart+=0.3");
+      tl.fromTo(".ch-4-core", { display: "none", autoAlpha: 0, y: "15vh", scale: 0.96 }, { display: "flex", autoAlpha: 1, y: "0vh", scale: 1, duration: 1.6, ease: "power3.out" }, "coreStart+=0.3");
       tl.fromTo(".core-row-1", { x: 15 }, { x: -8, duration: 3.2, ease: "none" }, "coreStart+=0.3");
       tl.fromTo(".core-row-2", { x: -15 }, { x: 8, duration: 3.2, ease: "none" }, "coreStart+=0.3");
-      tl.to(".ch-4-core", { opacity: 0, y: "-15vh", scale: 0.96, duration: 1.3, ease: "power2.in" }, "coreStart+=3.2");
+      tl.to(".ch-4-core", { autoAlpha: 0, y: "-15vh", scale: 0.96, duration: 1.3, ease: "power2.in" }, "coreStart+=3.2");
       tl.set(".ch-4-core", { display: "none" });
 
       // SEQUENCE 5: FOUNDERS
       tl.addLabel("foundersStart", "coreStart+=4.2");
-      tl.fromTo(".ch-5-founders", { display: "none", opacity: 0, scale: 0.9, y: 30 }, { display: "flex", opacity: 1, scale: 1, y: 0, duration: 1.5, ease: "power2.out" }, "foundersStart+=0.3");
-      tl.to(".ch-5-founders", { opacity: 0, scale: 1.08, duration: 1.3, ease: "power2.in" }, "foundersStart+=3.2");
+      tl.fromTo(".ch-5-founders", { display: "none", autoAlpha: 0, scale: 0.9, y: 30 }, { display: "flex", autoAlpha: 1, scale: 1, y: 0, duration: 1.5, ease: "power2.out" }, "foundersStart+=0.3");
+      tl.to(".ch-5-founders", { autoAlpha: 0, scale: 1.08, duration: 1.3, ease: "power2.in" }, "foundersStart+=3.2");
       tl.set(".ch-5-founders", { display: "none" });
 
       // SEQUENCE 6: LEGACY
       tl.addLabel("legacyStart", "foundersStart+=4.2");
-      tl.fromTo(".ch-6-legacy", { display: "none", opacity: 0, y: 25 }, { display: "flex", opacity: 1, y: 0, duration: 1.3, ease: "power2.out" }, "legacyStart");
+      tl.fromTo(".ch-6-legacy", { display: "none", autoAlpha: 0, y: 25 }, { display: "flex", autoAlpha: 1, y: 0, duration: 1.3, ease: "power2.out" }, "legacyStart");
       const calcSlideDistance = () => {
         if (!trackRef.current) return -800;
         const totalW = trackRef.current.scrollWidth;
@@ -424,36 +443,80 @@ export default function AboutPage() {
         }
       });
 
-      tl.to(".hero-scroll-guide", { opacity: 0, duration: 0.4 }, 0);
+      tl.fromTo(".hero-scroll-guide", { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.4 }, 0);
 
       tl.addLabel("heroStart", 0);
-      tl.to(".hero-word-shutter", { scale: 4.5, y: "-18vh", opacity: 0, duration: 1.6, ease: "power1.inOut" }, "heroStart");
-      tl.to(".hero-word-scape", { scale: 4.5, y: "18vh", opacity: 0, duration: 1.6, ease: "power1.inOut" }, "heroStart");
-      tl.fromTo(".hero-hidden-text", { opacity: 0, y: 30, scale: 0.95 }, { opacity: 1, y: 0, scale: 1, duration: 1.0, ease: "power2.out" }, "heroStart+=0.6");
-      tl.to(".hero-hidden-text", { opacity: 0, y: -30, duration: 0.8, ease: "power2.in" }, "heroStart+=2.2");
+      tl.fromTo(
+        ".hero-word-shutter",
+        { scale: 1, y: "0vh", autoAlpha: 1 },
+        { scale: 4.2, y: "-18vh", autoAlpha: 0, duration: 1.6, ease: "power1.inOut" },
+        "heroStart"
+      );
+      tl.fromTo(
+        ".hero-word-scape",
+        { scale: 1, y: "0vh", autoAlpha: 1 },
+        { scale: 4.2, y: "18vh", autoAlpha: 0, duration: 1.6, ease: "power1.inOut" },
+        "heroStart"
+      );
+      tl.fromTo(
+        ".hero-hidden-text",
+        { autoAlpha: 0, y: 30, scale: 0.95 },
+        { autoAlpha: 1, y: 0, scale: 1, duration: 1.0, ease: "power2.out" },
+        "heroStart+=0.6"
+      );
+      tl.to(
+        ".hero-hidden-text",
+        { autoAlpha: 0, y: -30, duration: 0.8, ease: "power2.in" },
+        "heroStart+=2.2"
+      );
 
       tl.addLabel("mentorsStart", "heroStart+=2.8");
-      tl.fromTo(".ch-2-mentors", { display: "none", opacity: 0, y: 30 }, { display: "flex", opacity: 1, y: 0, duration: 1.0, ease: "power2.out" }, "mentorsStart");
-      tl.to(".ch-2-mentors", { opacity: 0, y: -30, duration: 0.8, ease: "power2.in" }, "mentorsStart+=2.0");
+      tl.fromTo(
+        ".ch-2-mentors",
+        { display: "none", autoAlpha: 0, y: 30 },
+        { display: "flex", autoAlpha: 1, y: 0, duration: 1.0, ease: "power2.out" },
+        "mentorsStart"
+      );
+      tl.to(".ch-2-mentors", { autoAlpha: 0, y: -30, duration: 0.8, ease: "power2.in" }, "mentorsStart+=2.0");
       tl.set(".ch-2-mentors", { display: "none" });
 
       tl.addLabel("leadsStart", "mentorsStart+=2.6");
-      tl.fromTo(".ch-3-leads", { display: "none", opacity: 0, y: 30 }, { display: "flex", opacity: 1, y: 0, duration: 1.0, ease: "power2.out" }, "leadsStart");
-      tl.to(".ch-3-leads", { opacity: 0, y: -30, duration: 0.8, ease: "power2.in" }, "leadsStart+=2.0");
+      tl.fromTo(
+        ".ch-3-leads",
+        { display: "none", autoAlpha: 0, y: 30 },
+        { display: "flex", autoAlpha: 1, y: 0, duration: 1.0, ease: "power2.out" },
+        "leadsStart"
+      );
+      tl.to(".ch-3-leads", { autoAlpha: 0, y: -30, duration: 0.8, ease: "power2.in" }, "leadsStart+=2.0");
       tl.set(".ch-3-leads", { display: "none" });
 
       tl.addLabel("coreStart", "leadsStart+=2.6");
-      tl.fromTo(".ch-4-core", { display: "none", opacity: 0, y: 30 }, { display: "flex", opacity: 1, y: 0, duration: 1.0, ease: "power2.out" }, "coreStart");
-      tl.to(".ch-4-core", { opacity: 0, y: -30, duration: 0.8, ease: "power2.in" }, "coreStart+=2.0");
+      tl.fromTo(
+        ".ch-4-core",
+        { display: "none", autoAlpha: 0, y: 30 },
+        { display: "flex", autoAlpha: 1, y: 0, duration: 1.0, ease: "power2.out" },
+        "coreStart"
+      );
+      tl.to(".ch-4-core", { autoAlpha: 0, y: -30, duration: 0.8, ease: "power2.in" }, "coreStart+=2.0");
       tl.set(".ch-4-core", { display: "none" });
 
       tl.addLabel("foundersStart", "coreStart+=2.6");
-      tl.fromTo(".ch-5-founders", { display: "none", opacity: 0, y: 30 }, { display: "flex", opacity: 1, y: 0, duration: 1.0, ease: "power2.out" }, "foundersStart");
-      tl.to(".ch-5-founders", { opacity: 0, y: -30, duration: 0.8, ease: "power2.in" }, "foundersStart+=2.0");
+      tl.fromTo(
+        ".ch-5-founders",
+        { display: "none", autoAlpha: 0, y: 30 },
+        { display: "flex", autoAlpha: 1, y: 0, duration: 1.0, ease: "power2.out" },
+        "foundersStart"
+      );
+      tl.to(".ch-5-founders", { autoAlpha: 0, y: -30, duration: 0.8, ease: "power2.in" }, "foundersStart+=2.0");
       tl.set(".ch-5-founders", { display: "none" });
 
       tl.addLabel("legacyStart", "foundersStart+=2.6");
-      tl.fromTo(".ch-6-legacy", { display: "none", opacity: 0, y: 20 }, { display: "flex", opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "legacyStart");
+      tl.fromTo(
+        ".ch-6-legacy",
+        { display: "none", autoAlpha: 0, y: 20 },
+        { display: "flex", autoAlpha: 1, y: 0, duration: 0.8, ease: "power2.out" },
+        "legacyStart"
+      );
       const calcMobileSlide = () => {
         if (!trackRef.current) return -400;
         const totalW = trackRef.current.scrollWidth;
