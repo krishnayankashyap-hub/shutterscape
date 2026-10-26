@@ -1087,162 +1087,158 @@ export default function ActivitiesPage() {
         </div>
 
         {/* =========================================================
-            ACTIVITY EXPANSIVE LIGHTBOX MODAL
+            ACTIVITY EXPANSIVE LIGHTBOX MODAL (Matched to Screenshot 2)
             ========================================================= */}
-        {activeModalEvent && (
-          <div
-            role="dialog"
-            aria-modal="true"
-            aria-label={activeModalEvent.title}
-            className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 md:p-8 bg-black/85 backdrop-blur-md animate-in fade-in duration-300"
-            onClick={() => setActiveModalEvent(null)}
-          >
+        {activeModalEvent && (() => {
+          const currIdx = filteredData.findIndex((ev) => ev.id === activeModalEvent.id);
+          const themeIndex = currIdx >= 0 ? currIdx : 0;
+          const themeBg = [
+            "#00C7E6", // Vivid Cyan (matches Screenshot 2)
+            "#F5B700", // Warm Gold
+            "#00C781", // Vibrant Emerald
+            "#7B68EE", // Periwinkle / Violet
+            "#FF6B6B", // Coral
+            "#FFAB00", // Amber
+          ][themeIndex % 6];
+
+          return (
             <div
-              className="relative w-[95vw] max-w-4xl max-h-[85vh] md:h-[600px] bg-[#FAF9F5] text-[#141413] border border-[#141413]/15 rounded-2xl overflow-hidden shadow-[0_30px_90px_rgba(0,0,0,0.65)] flex flex-col md:flex-row"
-              onClick={(e) => e.stopPropagation()}
+              role="dialog"
+              aria-modal="true"
+              onClick={() => setActiveModalEvent(null)}
+              style={{ padding: "20px" }}
+              className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-md flex items-center justify-center pointer-events-auto"
             >
-              {/* Close Button - positioned in top right of card with high z-index */}
-              <button
-                type="button"
-                onClick={() => setActiveModalEvent(null)}
-                className="absolute top-4 right-4 z-50 w-8 h-8 rounded-full bg-black/5 hover:bg-[#141413] hover:text-white text-[#141413] border border-black/10 flex items-center justify-center transition-all cursor-pointer text-xs"
-                aria-label="Close modal"
+              <div
+                onClick={(e) => e.stopPropagation()}
+                style={{ padding: "36px 32px" }}
+                className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto no-scrollbar bg-white text-[#172B4D] rounded-2xl shadow-[0_35px_90px_rgba(0,0,0,0.75)] flex flex-col md:flex-row items-center md:items-start gap-8"
               >
-                ✕
-              </button>
+                {/* Top-Right Close Button */}
+                <button
+                  type="button"
+                  onClick={() => setActiveModalEvent(null)}
+                  aria-label="Close Activity Details"
+                  className="absolute top-5 right-5 w-9 h-9 rounded-full bg-slate-100 hover:bg-[#172B4D] text-[#172B4D] hover:text-white flex items-center justify-center text-base font-bold transition-colors cursor-pointer"
+                >
+                  ✕
+                </button>
 
-              {/* Left Column: Framed Archival Photograph (Uncropped Full Image) */}
-              <div className="relative w-full md:w-[50%] h-[36vh] sm:h-[42vh] md:h-full bg-[#0B0B0E] p-4 sm:p-6 md:p-7 flex flex-col justify-between shrink-0 overflow-hidden border-b md:border-b-0 md:border-r border-black/10">
-                {/* Subtle ambient blur behind */}
-                <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-25">
-                  <Image
-                    src={activeModalEvent.img}
-                    alt=""
-                    fill
-                    sizes="400px"
-                    className="object-cover blur-2xl scale-110"
-                    aria-hidden="true"
-                  />
-                  <div className="absolute inset-0 bg-black/60" />
-                </div>
+                {/* Left Column: Pop-Out Portrait Frame + Name & Title */}
+                <div className="w-56 sm:w-64 shrink-0 flex flex-col items-center text-center">
+                  <div className="relative w-full aspect-[3/3.6] flex items-end justify-center overflow-visible">
+                    <div
+                      style={{
+                        backgroundColor: themeBg,
+                      }}
+                      className="absolute inset-x-0 bottom-0 h-[72%] rounded-xl overflow-hidden shadow-md"
+                    >
+                      <div
+                        className="absolute -top-6 -left-6 w-28 h-28 opacity-80 pointer-events-none"
+                        style={{
+                          backgroundImage:
+                            "repeating-linear-gradient(135deg, rgba(17,24,39,0.22) 0px, rgba(17,24,39,0.22) 5px, transparent 5px, transparent 11px)",
+                        }}
+                      />
+                    </div>
 
-                {/* Main Photograph Frame */}
-                <div className="relative w-full flex-1 flex items-center justify-center min-h-0">
-                  <div className="relative w-full h-full flex items-center justify-center">
-                    <Image
-                      src={activeModalEvent.img}
-                      alt={activeModalEvent.title}
-                      fill
-                      unoptimized
-                      sizes="(max-width: 768px) 95vw, 600px"
-                      className="object-contain drop-shadow-[0_16px_36px_rgba(0,0,0,0.85)] rounded-[3px]"
-                    />
+                    <div className="relative z-10 w-[84%] h-[98%] rounded-t-[42%] rounded-b-lg overflow-hidden shadow-xl bg-slate-900 flex items-center justify-center">
+                      <Image
+                        src={activeModalEvent.img}
+                        alt={activeModalEvent.title}
+                        fill
+                        unoptimized
+                        sizes="300px"
+                        className="object-cover object-top"
+                      />
+                    </div>
                   </div>
-                </div>
 
-                {/* Darkroom Technical Info Strip */}
-                <div className="relative z-10 mt-3 pt-3 border-t border-white/10 flex items-center justify-between font-mono text-[9px] sm:text-[9.5px] tracking-[0.22em] text-[#D4A843] uppercase bg-black/40 backdrop-blur-xs px-3 py-1.5 rounded">
-                  <span className="flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#D4A843]" />
-                    {activeModalEvent.filmStock}
+                  <h3
+                    style={{ marginTop: "16px" }}
+                    className="font-heading font-bold text-base sm:text-lg text-[#172B4D] leading-tight px-2"
+                  >
+                    {activeModalEvent.shortTitle || activeModalEvent.title.split("—")[0].trim()}
+                  </h3>
+                  <span
+                    style={{ marginTop: "4px" }}
+                    className="font-mono text-[10px] tracking-[0.18em] uppercase text-[#0052CC] font-bold"
+                  >
+                    {activeModalEvent.category} · {activeModalEvent.isUpcoming ? "UPCOMING" : "ARCHIVE"}
                   </span>
-                  <span className="text-white/60">{activeModalEvent.exif}</span>
                 </div>
-              </div>
 
-              {/* Right Column: Editorial Metadata & Curatorial Notes ("Side Writings") */}
-              <div className="relative w-full md:w-[50%] p-6 sm:p-8 md:p-9 flex flex-col justify-between overflow-y-auto bg-[#FAF9F5] no-scrollbar">
-                <div>
-                  {/* Top Bar: Category Pill + Status (leaves space for close button on right) */}
-                  <div className="flex items-center gap-2.5 pr-10 mb-4 sm:mb-5">
-                    <span className="px-3 py-1 rounded-full bg-[#141413]/5 border border-[#141413]/10 uppercase font-semibold text-[#141413] text-[9px] font-mono tracking-[0.22em]">
-                      {activeModalEvent.category}
-                    </span>
-                    {activeModalEvent.isUpcoming && (
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[9px] font-mono tracking-[0.2em] uppercase font-bold bg-[#D4A843]/15 text-[#9E721D] border border-[#D4A843]/30">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#D4A843] animate-pulse" />
-                        UPCOMING
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Title */}
-                  <h2 className="font-serif text-2xl sm:text-[27px] md:text-[29px] text-[#141413] font-normal tracking-tight leading-[1.25] mb-4">
+                {/* Right Column: Narrative Bio & Department Details */}
+                <div className="flex-1 flex flex-col justify-center text-left">
+                  <span className="font-mono text-[10px] tracking-[0.24em] uppercase text-slate-400 font-bold">
+                    SHUTTERSCAPE {activeModalEvent.category} & ARCHIVE
+                  </span>
+                  <h4
+                    style={{ marginTop: "6px" }}
+                    className="font-serif text-2xl sm:text-3xl text-[#172B4D] font-normal leading-snug"
+                  >
                     {activeModalEvent.title}
-                  </h2>
+                  </h4>
+                  <p
+                    style={{ marginTop: "4px" }}
+                    className="font-mono text-xs text-[#0052CC] font-semibold"
+                  >
+                    {activeModalEvent.date} · {activeModalEvent.location}
+                  </p>
 
-                  {/* Minimalist Hairline Specification Bar */}
-                  <div className="flex flex-wrap items-center gap-x-6 gap-y-2 py-3 border-y border-[#141413]/10 mb-5 font-mono text-xs">
-                    <div className="flex items-center gap-2">
-                      <span className="text-[8.5px] tracking-[0.25em] text-[#141413]/45 uppercase">
-                        DATE:
-                      </span>
-                      <span className="text-[12px] font-semibold text-[#141413]">
-                        {activeModalEvent.date}
-                      </span>
-                    </div>
-                    <div className="w-px h-3.5 bg-[#141413]/15 hidden sm:block" />
-                    <div className="flex items-center gap-2">
-                      <span className="text-[8.5px] tracking-[0.25em] text-[#141413]/45 uppercase">
-                        VENUE:
-                      </span>
-                      <span className="text-[12px] font-semibold text-[#141413] truncate max-w-[200px]">
-                        {activeModalEvent.location}
-                      </span>
-                    </div>
+                  <div
+                    style={{ marginTop: "16px", marginBottom: "16px" }}
+                    className="w-12 h-[2px] bg-[#F5B700]"
+                  />
+
+                  <div className="font-body text-sm text-slate-600 leading-relaxed space-y-3">
+                    {renderFormattedDescription(activeModalEvent.description)}
                   </div>
 
-                  {/* Curatorial Statement & Description ("The Writings") */}
-                  <div>
-                    <span className="block font-mono text-[9px] tracking-[0.28em] uppercase text-[#D4A843] font-bold mb-2.5">
-                      // CURATORIAL STATEMENT
+                  <p
+                    style={{ marginTop: "12px" }}
+                    className="font-body text-xs text-slate-500 leading-relaxed"
+                  >
+                    Captured on {activeModalEvent.filmStock} · {activeModalEvent.exif}
+                  </p>
+
+                  {/* Navigation controls */}
+                  <div
+                    style={{ marginTop: "20px", paddingTop: "14px" }}
+                    className="border-t border-slate-100 flex items-center justify-between font-mono text-[10px] tracking-[0.18em]"
+                  >
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const prevIdx =
+                          (currIdx - 1 + filteredData.length) % filteredData.length;
+                        setActiveModalEvent(filteredData[prevIdx]);
+                      }}
+                      className="text-[#0052CC] hover:underline font-bold cursor-pointer py-1"
+                    >
+                      ← PREV EVENT
+                    </button>
+
+                    <span className="text-slate-400 text-[9.5px]">
+                      {currIdx + 1} OF {filteredData.length}
                     </span>
-                    <div className="font-serif sm:font-sans text-[14.5px] sm:text-[15.5px] text-[#282724] leading-[1.85] font-normal space-y-3">
-                      {renderFormattedDescription(activeModalEvent.description)}
-                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const nextIdx = (currIdx + 1) % filteredData.length;
+                        setActiveModalEvent(filteredData[nextIdx]);
+                      }}
+                      className="text-[#0052CC] hover:underline font-bold cursor-pointer py-1"
+                    >
+                      NEXT EVENT →
+                    </button>
                   </div>
-                </div>
-
-                {/* Footer Navigation Bar */}
-                <div className="pt-4 mt-6 border-t border-[#141413]/10 flex items-center justify-between font-mono text-[9.5px] tracking-[0.2em] shrink-0">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const currIdx = filteredData.findIndex(
-                        (ev) => ev.id === activeModalEvent.id
-                      );
-                      const prevIdx =
-                        (currIdx - 1 + filteredData.length) %
-                        filteredData.length;
-                      setActiveModalEvent(filteredData[prevIdx]);
-                    }}
-                    className="inline-flex items-center px-3.5 py-1.5 rounded-full border border-black/10 text-[#141413] hover:bg-[#141413] hover:text-[#FAF9F5] transition-all cursor-pointer font-medium"
-                  >
-                    ← PREV
-                  </button>
-
-                  <span className="text-[#141413]/45 text-[9px] tracking-[0.24em]">
-                    FRAME {filteredData.findIndex((ev) => ev.id === activeModalEvent.id) + 1} OF {filteredData.length}
-                  </span>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const currIdx = filteredData.findIndex(
-                        (ev) => ev.id === activeModalEvent.id
-                      );
-                      const nextIdx = (currIdx + 1) % filteredData.length;
-                      setActiveModalEvent(filteredData[nextIdx]);
-                    }}
-                    className="inline-flex items-center px-3.5 py-1.5 rounded-full border border-black/10 text-[#141413] hover:bg-[#141413] hover:text-[#FAF9F5] transition-all cursor-pointer font-medium"
-                  >
-                    NEXT →
-                  </button>
                 </div>
               </div>
             </div>
-          </div>
-        )}
+          );
+        })()}
       </main>
     </SmoothScroller>
   );
