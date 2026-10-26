@@ -269,16 +269,37 @@ export default function AboutPage() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
 
-  const jumpToSection = useCallback((label: string) => {
+  const jumpToSection = useCallback((target: string) => {
     const tl = tlRef.current;
     if (!tl || !containerRef.current) return;
     const st = tl.scrollTrigger;
     if (!st) return;
 
-    const labelTime = tl.labels[label] ?? 0;
-    const totalDuration = tl.duration();
-    const progress = totalDuration > 0 ? labelTime / totalDuration : 0;
-    const targetScroll = st.start + progress * (st.end - st.start);
+    // Calibrated progress values where each chapter is 100% visible, centered, and active
+    const TARGET_PROGRESS: Record<string, number> = {
+      origins: 0.0,
+      heroStart: 0.0,
+      mentors: 0.22,
+      mentorsStart: 0.22,
+      leads: 0.38,
+      leadsStart: 0.38,
+      core: 0.53,
+      coreStart: 0.53,
+      founders: 0.69,
+      foundersStart: 0.69,
+      legacy: 0.84,
+      legacyStart: 0.84,
+    };
+
+    const targetProgress = TARGET_PROGRESS[target] ?? 0;
+    const targetScroll = st.start + targetProgress * (st.end - st.start);
+
+    const matchedCategory = CATEGORIES.find(
+      (c) => c.id === target || c.label === target
+    );
+    if (matchedCategory) {
+      setActiveCategory(matchedCategory.id);
+    }
 
     const lenis = (
       window as unknown as {
@@ -289,7 +310,7 @@ export default function AboutPage() {
     ).__lenis;
 
     if (lenis && typeof lenis.scrollTo === "function") {
-      lenis.scrollTo(targetScroll, { duration: 1.2 });
+      lenis.scrollTo(targetScroll, { duration: 1.0 });
     } else {
       window.scrollTo({ top: targetScroll, behavior: "smooth" });
     }
@@ -319,15 +340,15 @@ export default function AboutPage() {
 
       tl.eventCallback("onUpdate", () => {
         const prog = tl.progress();
-        if (prog < 0.16) {
+        if (prog < 0.12) {
           setActiveCategory("origins");
-        } else if (prog < 0.32) {
+        } else if (prog < 0.30) {
           setActiveCategory("mentors");
-        } else if (prog < 0.5) {
+        } else if (prog < 0.46) {
           setActiveCategory("leads");
-        } else if (prog < 0.7) {
+        } else if (prog < 0.61) {
           setActiveCategory("core");
-        } else if (prog < 0.86) {
+        } else if (prog < 0.77) {
           setActiveCategory("founders");
         } else {
           setActiveCategory("legacy");
@@ -428,15 +449,15 @@ export default function AboutPage() {
 
       tl.eventCallback("onUpdate", () => {
         const prog = tl.progress();
-        if (prog < 0.16) {
+        if (prog < 0.12) {
           setActiveCategory("origins");
-        } else if (prog < 0.32) {
+        } else if (prog < 0.30) {
           setActiveCategory("mentors");
-        } else if (prog < 0.5) {
+        } else if (prog < 0.46) {
           setActiveCategory("leads");
-        } else if (prog < 0.7) {
+        } else if (prog < 0.61) {
           setActiveCategory("core");
-        } else if (prog < 0.86) {
+        } else if (prog < 0.77) {
           setActiveCategory("founders");
         } else {
           setActiveCategory("legacy");
@@ -703,7 +724,7 @@ export default function AboutPage() {
               <button
                 key={cat.id}
                 type="button"
-                onClick={() => jumpToSection(cat.label)}
+                onClick={() => jumpToSection(cat.id)}
                 className="group flex items-center justify-end gap-3 py-1 cursor-pointer transition-all duration-300 bg-transparent border-0 outline-none"
                 aria-label={`Jump to ${cat.title}`}
               >
@@ -747,6 +768,15 @@ export default function AboutPage() {
               "ORIGINS"}
           </span>
         </div>
+
+        {/* Clean Minimalist Frameless Bottom Guide (Matches Screenshot 2) */}
+        {activeCategory !== "origins" && (
+          <div className="pointer-events-none fixed bottom-12 xl:bottom-5 left-1/2 -translate-x-1/2 z-[9960] flex items-center gap-2.5 font-mono text-[8.5px] sm:text-[9.5px] tracking-[0.26em] uppercase text-white/50 select-none transition-opacity duration-300">
+            <span>HOVER TO SEE COLOR</span>
+            <span className="text-white/25">—</span>
+            <span>CLICK TO KNOW ABOUT THEM</span>
+          </div>
+        )}
 
         {/* =========================================================
             MASTER CONTINUOUS TUNNEL CONTAINER
@@ -832,7 +862,7 @@ export default function AboutPage() {
               CHAPTER 2: MENTORS (Pop-Out Overlapping Cards)
               --------------------------------------------------------- */}
           <div className="ch-2-mentors absolute inset-0 z-20 flex flex-col items-center justify-center px-4 sm:px-6 opacity-0 pointer-events-none will-change-transform">
-            <div className="text-center mb-4 sm:mb-6 md:mb-8">
+            <div className="text-center mb-5 sm:mb-8 md:mb-10">
               <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.4em] text-[#D4A843] uppercase mb-1 sm:mb-2 block font-semibold">
                 CHAPTER 02 // MENTORS
               </span>
@@ -840,16 +870,6 @@ export default function AboutPage() {
                 The Teachers Who{" "}
                 <span className="text-white font-normal">Guide Us</span>
               </h2>
-              <div className="mt-3 sm:mt-4 inline-flex items-center gap-2 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-black/50 border border-[#D4A843]/35 backdrop-blur-md shadow-lg pointer-events-auto select-none">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#D4A843] animate-pulse" />
-                <span className="font-mono text-[8.5px] sm:text-[10px] tracking-[0.2em] text-[#D4A843] uppercase font-semibold">
-                  Hover to see color
-                </span>
-                <span className="text-white/30 text-[9px]">•</span>
-                <span className="font-mono text-[8.5px] sm:text-[10px] tracking-[0.2em] text-white/80 uppercase font-medium">
-                  Click to know about them
-                </span>
-              </div>
             </div>
 
             <div className="flex flex-row justify-center items-start gap-6 sm:gap-12 md:gap-20 w-full max-w-4xl mx-auto pointer-events-auto">
@@ -868,23 +888,13 @@ export default function AboutPage() {
               CHAPTER 3: LEADS (Pop-Out Overlapping Cards)
               --------------------------------------------------------- */}
           <div className="ch-3-leads absolute inset-0 z-30 flex flex-col items-center justify-center px-3 sm:px-6 opacity-0 pointer-events-none will-change-transform">
-            <div className="text-center mb-4 sm:mb-6 md:mb-8">
+            <div className="text-center mb-5 sm:mb-8 md:mb-10">
               <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.4em] text-[#D4A843] uppercase mb-1 sm:mb-2 block font-semibold">
                 CHAPTER 03 // LEADERSHIP
               </span>
               <h2 className="font-serif text-2xl sm:text-4xl md:text-6xl uppercase tracking-widest text-white leading-none">
                 Behind The Lens
               </h2>
-              <div className="mt-3 sm:mt-4 inline-flex items-center gap-2 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-black/50 border border-[#D4A843]/35 backdrop-blur-md shadow-lg pointer-events-auto select-none">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#D4A843] animate-pulse" />
-                <span className="font-mono text-[8.5px] sm:text-[10px] tracking-[0.2em] text-[#D4A843] uppercase font-semibold">
-                  Hover to see color
-                </span>
-                <span className="text-white/30 text-[9px]">•</span>
-                <span className="font-mono text-[8.5px] sm:text-[10px] tracking-[0.2em] text-white/80 uppercase font-medium">
-                  Click to know about them
-                </span>
-              </div>
             </div>
 
             <div className="flex flex-row justify-center items-start gap-3 sm:gap-8 md:gap-12 w-full max-w-5xl mx-auto pointer-events-auto">
