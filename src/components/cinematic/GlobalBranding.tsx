@@ -14,9 +14,9 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   { id: "home", title: "HOME", targetId: "exhibition-scroll-track", href: "/" },
-  { id: "gallery", title: "GALLERY", targetId: "scene-exhibition", href: "/#scene-exhibition" },
-  { id: "about", title: "ABOUT", targetId: "scene-about-showcase", href: "/#scene-about-showcase" },
-  { id: "timeline", title: "ACTIVITY", targetId: "scene-activity-showcase", href: "/#scene-activity-showcase" },
+  { id: "gallery", title: "GALLERY", targetId: "scene-exhibition", href: "/gallery" },
+  { id: "about", title: "ABOUT", targetId: "scene-about-showcase", href: "/about" },
+  { id: "timeline", title: "ACTIVITY", targetId: "scene-activity-showcase", href: "/activities" },
   { id: "moments", title: "MOMENTS", targetId: "scene-gallery", href: "/#scene-gallery" },
 ];
 
@@ -60,6 +60,8 @@ export default function GlobalBranding() {
       ? "timeline"
       : pathname === "/gallery"
       ? "gallery"
+      : pathname === "/about"
+      ? "about"
       : "home"
   );
   const [isLightBackground, setIsLightBackground] = useState(isLightPage);
@@ -68,6 +70,8 @@ export default function GlobalBranding() {
       ? "timeline"
       : pathname === "/gallery"
       ? "gallery"
+      : pathname === "/about"
+      ? "about"
       : "home"
   );
   const isLightRef = useRef(isLightPage);
@@ -295,13 +299,6 @@ export default function GlobalBranding() {
       if (e) e.preventDefault();
       if (typeof window === "undefined") return;
 
-      // If we are on /gallery or other subpages, navigate back to home target
-      if (pathname !== "/") {
-        router.push(item.href);
-        return;
-      }
-
-      // If on homepage:
       const lenis = (
         window as unknown as {
           __lenis?: {
@@ -313,6 +310,20 @@ export default function GlobalBranding() {
         }
       ).__lenis;
 
+      // 1. If on any subpage (/about, /gallery, /activities, etc.):
+      if (pathname !== "/") {
+        // If clicking the current page's button, smooth scroll to top
+        if (pathname === item.href) {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+          return;
+        }
+
+        // Navigate cleanly to the destination page without bouncing through home
+        router.push(item.href);
+        return;
+      }
+
+      // 2. If on homepage (pathname === "/"):
       if (item.id === "home" || item.targetId === "exhibition-scroll-track") {
         if (lenis) {
           lenis.scrollTo(0, { duration: 1.6 });
