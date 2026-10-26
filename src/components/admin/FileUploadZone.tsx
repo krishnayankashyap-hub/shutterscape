@@ -27,8 +27,11 @@ export default function FileUploadZone({
   const [showUrlInput, setShowUrlInput] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
   const [fileSize, setFileSize] = useState<string | null>(null);
+  const [localPreview, setLocalPreview] = useState<string | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const displayValue = localPreview || value;
 
   // Accepted file types
   const acceptTypes =
@@ -40,10 +43,10 @@ export default function FileUploadZone({
 
   const isVideo =
     accept === "video" ||
-    value.endsWith(".mp4") ||
-    value.endsWith(".webm") ||
-    value.endsWith(".mov") ||
-    value.includes("/videos/");
+    displayValue.endsWith(".mp4") ||
+    displayValue.endsWith(".webm") ||
+    displayValue.endsWith(".mov") ||
+    displayValue.includes("/videos/");
 
   const formatBytes = (bytes: number) => {
     if (bytes === 0) return "0 Bytes";
@@ -106,9 +109,9 @@ export default function FileUploadZone({
     setFileName(file.name);
     setFileSize(formatBytes(file.size));
 
-    // Zero-lag local object URL preview
+    // Zero-lag local object URL preview without polluting parent model with transient blob
     const localPreviewUrl = URL.createObjectURL(file);
-    onChange(localPreviewUrl);
+    setLocalPreview(localPreviewUrl);
 
     // Validate video file size against Vercel's 4.5MB serverless payload limit
     if (file.type.startsWith("video/") && file.size > 4 * 1024 * 1024) {
@@ -152,9 +155,11 @@ export default function FileUploadZone({
 
       // Permanent public static URL
       onChange(data.url);
+      setLocalPreview(null);
       setUploadError(null);
     } catch (err: any) {
       console.error("Upload error:", err);
+      setLocalPreview(null);
       setUploadError(err.message || "Failed to upload file from your device.");
     } finally {
       setIsUploading(false);
@@ -197,6 +202,7 @@ export default function FileUploadZone({
   const handleClear = (e: React.MouseEvent) => {
     e.stopPropagation();
     onChange("");
+    setLocalPreview(null);
     setFileName(null);
     setFileSize(null);
     setUploadError(null);
@@ -251,7 +257,7 @@ export default function FileUploadZone({
           className={`relative cursor-pointer rounded-xl border-2 border-dashed transition-all duration-200 overflow-hidden flex flex-col items-center justify-center ${
             isDragging
               ? "border-[#5D87FF] bg-[#ECF2FF] shadow-sm"
-              : value
+              : displayValue
               ? "border-[#EAEFF4] bg-[#F8FAFC] hover:border-[#DFE5EF]"
               : "border-[#DFE5EF] bg-[#F8FAFC] hover:border-[#5D87FF]/60 hover:bg-[#ECF2FF]/30"
           } min-h-[190px]`}
@@ -265,11 +271,11 @@ export default function FileUploadZone({
           />
 
           {/* ACTIVE PREVIEW (Image or Video) */}
-          {value ? (
+          {displayValue ? (
             <div className="relative w-full h-52 bg-[#0F172A] flex items-center justify-center overflow-hidden group">
               {isVideo ? (
                 <video
-                  src={value}
+                  src={displayValue}
                   autoPlay
                   loop
                   muted
@@ -278,7 +284,7 @@ export default function FileUploadZone({
                 />
               ) : (
                 <Image
-                  src={value}
+                  src={displayValue}
                   alt="Asset Preview"
                   fill
                   className="object-contain"

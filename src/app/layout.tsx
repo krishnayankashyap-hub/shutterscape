@@ -40,9 +40,58 @@ const spaceMono = Space_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ShutterScape | GCU Photography Club",
+  metadataBase: new URL("https://shutterscape-gcu.vercel.app"),
+  title: {
+    default: "ShutterScape | GCU Photography Club",
+    template: "%s | ShutterScape GCU",
+  },
   description:
-    "ShutterScape is the official photography club of Girijananda Chowdhury University. Observe, capture, and tell stories through photographs.",
+    "ShutterScape is the official photography club of Girijananda Chowdhury University. Observe, capture, and tell stories through light.",
+  keywords: [
+    "ShutterScape",
+    "GCU",
+    "Girijananda Chowdhury University",
+    "Photography Club",
+    "Guwahati",
+    "Assam",
+    "Darkroom",
+    "Photowalks",
+    "35mm Archive",
+    "Visual Storytelling",
+  ],
+  authors: [{ name: "ShutterScape GCU" }],
+  creator: "Girijananda Chowdhury University",
+  publisher: "ShutterScape",
+  icons: {
+    icon: "/images/shutterscape-logo-cropped.png",
+    shortcut: "/images/shutterscape-logo-cropped.png",
+    apple: "/images/shutterscape-logo-cropped.png",
+  },
+  openGraph: {
+    title: "ShutterScape | GCU Photography Club",
+    description:
+      "Observe, capture, and tell stories through light. Official photography club of Girijananda Chowdhury University.",
+    url: "https://shutterscape-gcu.vercel.app",
+    siteName: "ShutterScape GCU",
+    locale: "en_US",
+    type: "website",
+    images: [
+      {
+        url: "/images/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "ShutterScape - Official Photography Club of Girijananda Chowdhury University",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ShutterScape | GCU Photography Club",
+    description:
+      "Observe, capture, and tell stories through light. Official photography club of Girijananda Chowdhury University.",
+    images: ["/images/og-image.jpg"],
+    creator: "@shutterscape_gcu",
+  },
 };
 
 export const viewport: Viewport = {

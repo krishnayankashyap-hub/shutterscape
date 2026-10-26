@@ -228,11 +228,28 @@ export default function AboutPage() {
       .then((r) => r.json())
       .then((res) => {
         if (res.data && res.data.length > 0) {
-          const m = res.data.filter((it: any) => it.tier === "MENTOR");
-          const l = res.data.filter((it: any) => it.tier === "LEAD");
-          const c = res.data.filter((it: any) => it.tier === "CORE");
-          const f = res.data.filter((it: any) => it.tier === "FOUNDER");
-          const leg = res.data.filter((it: any) => it.tier === "LEGACY");
+          const sanitizeList = (items: any[], fallbackList: MemberRecord[]) => {
+            return items.map((it: any) => {
+              const fallback = fallbackList.find(
+                (f) => f.name.toLowerCase() === it.name?.trim().toLowerCase()
+              );
+              const isInvalidImg = !it.img || it.img.startsWith("blob:");
+              return {
+                ...it,
+                img: isInvalidImg
+                  ? fallback?.img ||
+                    "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800&auto=format&fit=crop"
+                  : it.img,
+                bio: it.bio || fallback?.bio || "",
+              };
+            });
+          };
+
+          const m = sanitizeList(res.data.filter((it: any) => it.tier === "MENTOR"), MENTORS);
+          const l = sanitizeList(res.data.filter((it: any) => it.tier === "LEAD"), LEADS);
+          const c = sanitizeList(res.data.filter((it: any) => it.tier === "CORE"), CORE_MEMBERS);
+          const f = sanitizeList(res.data.filter((it: any) => it.tier === "FOUNDER"), FOUNDERS);
+          const leg = sanitizeList(res.data.filter((it: any) => it.tier === "LEGACY"), LEGACY);
           if (m.length > 0) setMentors(m);
           if (l.length > 0) setLeads(l);
           if (c.length > 0) setCoreMembers(c);

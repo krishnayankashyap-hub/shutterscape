@@ -492,7 +492,12 @@ export default function ActivitiesPage() {
             description: item.description || "",
             exif: item.exif || "",
             filmStock: item.filmStock || "",
-            img: item.img || "",
+            img:
+              !item.img || item.img.startsWith("blob:")
+                ? ARCHIVE_DATA.find((a: ArchiveEvent) => a.title.toLowerCase() === item.title?.trim().toLowerCase())?.img ||
+                  ARCHIVE_DATA[idx % ARCHIVE_DATA.length]?.img ||
+                  "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&q=80&w=1200"
+                : item.img,
             isUpcoming: Boolean(item.isUpcoming),
           }));
           setArchiveData(mapped);
