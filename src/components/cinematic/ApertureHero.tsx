@@ -787,15 +787,6 @@ export default function ApertureHero() {
                 />
 
                 <polyline
-                  points="820,205 640,145 480,145"
-                  fill="none"
-                  stroke="#D4A843"
-                  strokeWidth="0.9"
-                  strokeOpacity="0.55"
-                />
-                <circle cx="480" cy="145" r="3" fill="#D4A843" />
-
-                <polyline
                   points="1140,260 1280,175 1440,175"
                   fill="none"
                   stroke="#D4A843"
@@ -885,34 +876,6 @@ export default function ApertureHero() {
 
             {!isMobile && (
               <>
-                <div
-                  className="font-mono"
-                  style={{
-                    position: "absolute",
-                    top: "11.2%",
-                    left: "25%",
-                    textAlign: "left",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontSize: "8.5px",
-                      letterSpacing: "0.24em",
-                      color: "#D4A843",
-                    }}
-                  >
-                  </div>
-                  <div
-                    style={{
-                      fontSize: "10px",
-                      letterSpacing: "0.18em",
-                      color: "rgba(232,232,232,0.75)",
-                      marginTop: "2px",
-                    }}
-                  >
-                  </div>
-                </div>
-
                 <div
                   className="font-mono"
                   style={{
@@ -1740,14 +1703,6 @@ export default function ApertureHero() {
                     stroke="#3A3A3A"
                     strokeWidth="1"
                   />
-                  <circle
-                    cx="154"
-                    y="254"
-                    r="7"
-                    fill="none"
-                    stroke="#8A8A8A"
-                    strokeWidth="2"
-                  />
                   <rect
                     x="932"
                     y="246"
@@ -1757,14 +1712,6 @@ export default function ApertureHero() {
                     fill="url(#dialCylinder)"
                     stroke="#3A3A3A"
                     strokeWidth="1"
-                  />
-                  <circle
-                    cx="946"
-                    y="254"
-                    r="7"
-                    fill="none"
-                    stroke="#8A8A8A"
-                    strokeWidth="2"
                   />
 
                   <rect
@@ -1845,14 +1792,6 @@ export default function ApertureHero() {
                     strokeWidth="1.2"
                   />
 
-                  <circle
-                    cx="358"
-                    y="184"
-                    r="10"
-                    fill="#080808"
-                    stroke="#3A3A3A"
-                    strokeWidth="1.8"
-                  />
                   <circle
                     ref={tallyLightRef}
                     cx="358"
