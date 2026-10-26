@@ -13,32 +13,32 @@ export interface ReelItem {
 const REELS: ReelItem[] = [
   {
     id: "01",
-    photographer: "Parambrata Sarkar",
+    photographer: "World Photography Day",
     videoSrc: "/videos/reel-1.mp4",
   },
   {
     id: "02",
-    photographer: "Sayan Saha",
-    videoSrc: "/videos/reel-2.mp4",
+    photographer: "Glimpse of Grooming Club’s Ramp Walk",
+    videoSrc: "/api/media/6ade6c0a40346d3181c85f3a",
   },
   {
     id: "03",
-    photographer: "Aman Baha",
+    photographer: "Wall Painting",
     videoSrc: "/videos/reel-3.mp4",
   },
   {
     id: "04",
-    photographer: "Sampad Dutta",
+    photographer: "Photography Workshop ",
     videoSrc: "/videos/reel-4.mp4",
   },
   {
     id: "05",
-    photographer: "Bituparna",
+    photographer: "A New Beginning",
     videoSrc: "/videos/reel-5.mp4",
   },
   {
     id: "06",
-    photographer: "Sohan Chandra",
+    photographer: "Magic of Filmmaking",
     videoSrc: "/videos/reel-6.mp4",
   },
 ];
