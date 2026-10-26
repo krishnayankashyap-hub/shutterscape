@@ -95,30 +95,30 @@ export default function CameraShutterLoader() {
     gsap.set(cameraRef.current, { scale: 0.88, opacity: 0 });
     gsap.set(flashRef.current, { opacity: 0 });
 
-    // Step 1: Camera enters and lens locks focus smoothly (0.5s)
+    // Step 1: Camera enters and lens locks focus smoothly (0.7s)
     tl.to(cameraRef.current, {
       scale: 1,
       opacity: 1,
-      duration: 0.5,
+      duration: 0.7,
       ease: "power2.out",
     });
 
-    // Step 2: Lens aperture rotates & contracts - autofocus calibration (0.5s, overlap 0.2s)
+    // Step 2: Lens aperture rotates & contracts - autofocus calibration (0.7s)
     if (apertureRingRef.current) {
       tl.to(
         apertureRingRef.current,
         {
           rotate: 90,
           scale: 0.92,
-          duration: 0.5,
+          duration: 0.7,
           ease: "power1.inOut",
         },
         "-=0.2"
       );
     }
 
-    // Step 3: Brief focus lock pause before shutter release (0.25s)
-    tl.to({}, { duration: 0.25 });
+    // Step 3: Steady focus lock pause before shutter release (0.6s)
+    tl.to({}, { duration: 0.6 });
 
     // Step 4: CAMERA SHUTTER CLICK + FLASH BURST! (0.1s)
     tl.call(() => {
@@ -130,16 +130,16 @@ export default function CameraShutterLoader() {
       flashRef.current,
       {
         opacity: 0.98,
-        duration: 0.08,
+        duration: 0.1,
         ease: "power4.in",
       },
       "+=0.02"
     );
 
-    // Step 5: Flash dissipates with optical bloom, revealing clean website (0.55s)
+    // Step 5: Flash dissipates with optical bloom, revealing clean website (0.7s)
     tl.to(flashRef.current, {
       opacity: 0,
-      duration: 0.55,
+      duration: 0.7,
       ease: "power2.out",
     });
 
@@ -147,10 +147,10 @@ export default function CameraShutterLoader() {
       loaderRef.current,
       {
         opacity: 0,
-        duration: 0.5,
+        duration: 0.6,
         ease: "power3.inOut",
       },
-      "-=0.25"
+      "-=0.3"
     );
 
     return () => {

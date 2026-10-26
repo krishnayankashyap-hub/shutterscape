@@ -121,10 +121,7 @@ export default function ApertureHero() {
             res.data.map((d: any, idx: number) => ({
               id: d.frameCode || String(idx + 1).padStart(2, "0"),
               title: d.title,
-              src:
-                !d.src || d.src.startsWith("blob:")
-                  ? FILM_REEL_FRAMES[idx % FILM_REEL_FRAMES.length]?.src || d.src
-                  : d.src,
+              src: d.src,
               exif: d.exif,
             }))
           );

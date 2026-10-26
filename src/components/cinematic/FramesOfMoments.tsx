@@ -61,10 +61,7 @@ export default function FramesOfMoments({ initialReels }: FramesOfMomentsProps =
             res.data.map((d: any, idx: number) => ({
               id: d._id || String(idx + 1).padStart(2, "0"),
               photographer: d.photographer,
-              videoSrc:
-                !d.videoSrc || d.videoSrc.startsWith("blob:")
-                  ? REELS[idx % REELS.length]?.videoSrc || `/videos/reel-${(idx % 6) + 1}.mp4`
-                  : d.videoSrc,
+              videoSrc: d.videoSrc,
             }))
           );
         }
