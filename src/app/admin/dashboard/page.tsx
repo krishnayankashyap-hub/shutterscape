@@ -473,12 +473,13 @@ export default function AdminDashboardPage() {
           font-family: -apple-system, BlinkMacSystemFont, "Plus Jakarta Sans", "Inter", "Segoe UI", Roboto, sans-serif;
           background-color: #F4F7FE;
           color: #1E293B;
+          font-size: 13px;
         }
         #cms-enterprise-root .cms-sidebar {
-          width: 280px;
+          width: 240px;
           background: #FFFFFF;
           border-right: 1px solid #EAEFF4;
-          box-shadow: 0 0 24px rgba(145, 158, 171, 0.08);
+          box-shadow: 0 0 20px rgba(145, 158, 171, 0.05);
         }
         @media (max-width: 1023px) {
           #cms-enterprise-root .cms-sidebar {
@@ -492,16 +493,16 @@ export default function AdminDashboardPage() {
           align-items: center;
           justify-content: space-between;
           width: 100%;
-          padding: 11px 16px !important;
-          margin-bottom: 6px !important;
-          border-radius: 10px;
-          font-size: 13.5px;
+          padding: 8px 12px !important;
+          margin-bottom: 3px !important;
+          border-radius: 8px;
+          font-size: 12.5px;
           font-weight: 600;
           color: #5A6A85;
           background: transparent;
           border: none;
           cursor: pointer;
-          transition: all 0.2s ease;
+          transition: all 0.18s ease;
         }
         #cms-enterprise-root .cms-nav-btn:hover {
           background-color: #F6F9FC;
@@ -510,25 +511,25 @@ export default function AdminDashboardPage() {
         #cms-enterprise-root .cms-nav-btn.active {
           background-color: #5D87FF;
           color: #FFFFFF;
-          box-shadow: 0 6px 16px rgba(93, 135, 255, 0.28);
+          box-shadow: 0 4px 12px rgba(93, 135, 255, 0.25);
         }
         #cms-enterprise-root .cms-card {
           background: #FFFFFF;
-          border-radius: 14px;
+          border-radius: 12px;
           border: 1px solid #EAEFF4;
-          box-shadow: 0 4px 20px rgba(145, 158, 171, 0.07);
-          transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+          box-shadow: 0 2px 12px rgba(145, 158, 171, 0.05);
+          transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
           overflow: hidden;
           display: flex;
           flex-direction: column;
         }
         #cms-enterprise-root .cms-card:hover {
-          transform: translateY(-3px);
-          box-shadow: 0 12px 28px rgba(145, 158, 171, 0.14);
+          transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(145, 158, 171, 0.1);
           border-color: #D5E0EE;
         }
         #cms-enterprise-root .cms-card-body {
-          padding: 20px !important;
+          padding: 12px 14px !important;
           display: flex;
           flex-direction: column;
           flex: 1;
@@ -536,47 +537,48 @@ export default function AdminDashboardPage() {
         }
         #cms-enterprise-root .cms-kpi-card {
           background: #FFFFFF;
-          border-radius: 14px;
+          border-radius: 12px;
           border: 1px solid #EAEFF4;
-          padding: 20px 22px !important;
-          box-shadow: 0 4px 18px rgba(145, 158, 171, 0.06);
+          padding: 12px 16px !important;
+          box-shadow: 0 2px 10px rgba(145, 158, 171, 0.04);
           display: flex;
           align-items: center;
           justify-content: space-between;
-          gap: 16px;
+          gap: 12px;
         }
         #cms-enterprise-root .cms-primary-btn {
           background: #5D87FF;
           color: #FFFFFF;
-          padding: 10px 20px !important;
-          border-radius: 10px;
-          font-size: 13px;
+          padding: 7px 14px !important;
+          border-radius: 8px;
+          font-size: 12px;
           font-weight: 600;
           border: none;
           display: inline-flex;
           align-items: center;
-          gap: 8px;
-          box-shadow: 0 4px 14px rgba(93, 135, 255, 0.3);
+          gap: 6px;
+          box-shadow: 0 3px 10px rgba(93, 135, 255, 0.25);
           cursor: pointer;
-          transition: all 0.2s ease;
+          transition: all 0.18s ease;
         }
         #cms-enterprise-root .cms-primary-btn:hover {
           background: #4570EA;
-          box-shadow: 0 6px 18px rgba(93, 135, 255, 0.4);
+          box-shadow: 0 4px 14px rgba(93, 135, 255, 0.35);
         }
         #cms-enterprise-root .cms-action-edit {
-          padding: 7px 14px !important;
-          border-radius: 8px;
+          padding: 5px 10px !important;
+          border-radius: 6px;
           border: 1px solid #DFE5EF;
           background: #FFFFFF;
           color: #2A3547;
-          font-size: 12px;
+          font-size: 11.5px;
           font-weight: 600;
           display: inline-flex;
           align-items: center;
-          gap: 6px;
+          justify-content: center;
+          gap: 5px;
           cursor: pointer;
-          transition: all 0.18s ease;
+          transition: all 0.16s ease;
         }
         #cms-enterprise-root .cms-action-edit:hover {
           background: #ECF2FF;
@@ -584,18 +586,19 @@ export default function AdminDashboardPage() {
           color: #5D87FF;
         }
         #cms-enterprise-root .cms-action-delete {
-          padding: 7px 14px !important;
-          border-radius: 8px;
+          padding: 5px 10px !important;
+          border-radius: 6px;
           border: 1px solid #FDEDE8;
           background: #FDEDE8;
           color: #FA896B;
-          font-size: 12px;
+          font-size: 11.5px;
           font-weight: 600;
           display: inline-flex;
           align-items: center;
-          gap: 6px;
+          justify-content: center;
+          gap: 5px;
           cursor: pointer;
-          transition: all 0.18s ease;
+          transition: all 0.16s ease;
         }
         #cms-enterprise-root .cms-action-delete:hover {
           background: #FA896B;
@@ -603,19 +606,19 @@ export default function AdminDashboardPage() {
           color: #FFFFFF;
         }
         #cms-enterprise-root .cms-filter-pill {
-          padding: 7px 15px !important;
-          border-radius: 8px;
-          font-size: 12px;
+          padding: 5px 12px !important;
+          border-radius: 7px;
+          font-size: 11.5px;
           font-weight: 600;
           border: none;
           cursor: pointer;
-          transition: all 0.18s ease;
+          transition: all 0.16s ease;
           white-space: nowrap;
         }
         #cms-enterprise-root .cms-filter-pill.active {
           background: #5D87FF;
           color: #FFFFFF;
-          box-shadow: 0 2px 8px rgba(93, 135, 255, 0.25);
+          box-shadow: 0 2px 6px rgba(93, 135, 255, 0.22);
         }
         #cms-enterprise-root .cms-filter-pill.inactive {
           background: transparent;
@@ -627,40 +630,40 @@ export default function AdminDashboardPage() {
         }
         #cms-enterprise-root .cms-search-input {
           width: 100%;
-          height: 42px;
-          padding: 8px 16px 8px 42px !important;
-          border-radius: 10px;
+          height: 36px;
+          padding: 6px 14px 6px 36px !important;
+          border-radius: 8px;
           border: 1px solid #DFE5EF;
           background: #F8FAFC;
-          font-size: 13px;
+          font-size: 12px;
           color: #2A3547;
           outline: none;
-          transition: all 0.2s ease;
+          transition: all 0.18s ease;
         }
         #cms-enterprise-root .cms-search-input:focus {
           background: #FFFFFF;
           border-color: #5D87FF;
-          box-shadow: 0 0 0 3px rgba(93, 135, 255, 0.12);
+          box-shadow: 0 0 0 2px rgba(93, 135, 255, 0.12);
         }
         #cms-enterprise-root .cms-form-input {
           width: 100%;
-          padding: 10px 14px !important;
-          border-radius: 9px;
+          padding: 8px 12px !important;
+          border-radius: 8px;
           border: 1px solid #DFE5EF;
           background: #FFFFFF;
-          font-size: 13px;
+          font-size: 12.5px;
           color: #2A3547;
           outline: none;
-          transition: border-color 0.2s ease, box-shadow 0.2s ease;
+          transition: border-color 0.18s ease, box-shadow 0.18s ease;
         }
         #cms-enterprise-root .cms-form-input:focus {
           border-color: #5D87FF;
-          box-shadow: 0 0 0 3px rgba(93, 135, 255, 0.12);
+          box-shadow: 0 0 0 2px rgba(93, 135, 255, 0.12);
         }
         #cms-enterprise-root .cms-badge {
-          padding: 4px 10px !important;
-          border-radius: 6px;
-          font-size: 10.5px;
+          padding: 3px 8px !important;
+          border-radius: 5px;
+          font-size: 9.5px;
           font-weight: 700;
           letter-spacing: 0.04em;
           text-transform: uppercase;
@@ -676,23 +679,23 @@ export default function AdminDashboardPage() {
         <div>
           {/* Brand Logo Header */}
           <div
-            style={{ padding: "22px 24px" }}
+            style={{ padding: "14px 18px" }}
             className="border-b border-[#EAEFF4] flex items-center justify-between"
           >
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2.5">
               <div
-                style={{ width: "36px", height: "36px" }}
-                className="rounded-xl bg-[#5D87FF] flex items-center justify-center text-white font-serif italic font-bold text-lg shadow-sm"
+                style={{ width: "30px", height: "30px" }}
+                className="rounded-lg bg-[#5D87FF] flex items-center justify-center text-white font-serif italic font-bold text-sm shadow-xs"
               >
                 S
               </div>
               <div>
-                <span className="block font-bold text-[16px] text-[#2A3547] tracking-tight leading-none">
+                <span className="block font-bold text-[14px] text-[#2A3547] tracking-tight leading-none">
                   ShutterScape
                 </span>
                 <span
-                  style={{ marginTop: "3px" }}
-                  className="block text-[11px] font-medium text-[#7C8FAC]"
+                  style={{ marginTop: "2px" }}
+                  className="block text-[10px] font-medium text-[#7C8FAC]"
                 >
                   Darkroom CMS v4.0
                 </span>
@@ -700,8 +703,8 @@ export default function AdminDashboardPage() {
             </div>
 
             <span
-              style={{ padding: "4px 10px" }}
-              className={`rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 ${
+              style={{ padding: "3px 8px" }}
+              className={`rounded-full text-[9px] font-bold uppercase tracking-wider flex items-center gap-1.5 ${
                 dbSource === "database"
                   ? "bg-[#E6FFFA] text-[#13DEB9]"
                   : "bg-[#FEF5E5] text-[#FFAE1F]"
@@ -717,10 +720,10 @@ export default function AdminDashboardPage() {
           </div>
 
           {/* Navigation Menu Groups */}
-          <div style={{ padding: "20px 18px" }}>
+          <div style={{ padding: "12px 14px" }}>
             <div
-              style={{ padding: "0 12px", marginBottom: "10px" }}
-              className="text-[11px] font-bold uppercase tracking-wider text-[#7C8FAC]"
+              style={{ padding: "0 10px", marginBottom: "6px" }}
+              className="text-[10px] font-bold uppercase tracking-wider text-[#7C8FAC]"
             >
               Content Archives
             </div>
@@ -759,11 +762,11 @@ export default function AdminDashboardPage() {
 
             <div
               style={{
-                padding: "0 12px",
-                marginTop: "22px",
-                marginBottom: "10px",
+                padding: "0 10px",
+                marginTop: "16px",
+                marginBottom: "6px",
               }}
-              className="text-[11px] font-bold uppercase tracking-wider text-[#7C8FAC]"
+              className="text-[10px] font-bold uppercase tracking-wider text-[#7C8FAC]"
             >
               Cinematic Scenes
             </div>
@@ -782,13 +785,13 @@ export default function AdminDashboardPage() {
                   }}
                   className={`cms-nav-btn ${isActive ? "active" : ""}`}
                 >
-                  <div className="flex items-center gap-3">
-                    {getTabIcon(tab.id, "w-4 h-4")}
+                  <div className="flex items-center gap-2.5">
+                    {getTabIcon(tab.id, "w-3.5 h-3.5")}
                     <span>{tab.label}</span>
                   </div>
                   <span
-                    style={{ padding: "2px 8px" }}
-                    className={`rounded-full text-[11px] font-bold ${
+                    style={{ padding: "1.5px 7px" }}
+                    className={`rounded-full text-[10px] font-bold ${
                       isActive
                         ? "bg-white/20 text-white"
                         : "bg-[#ECF2FF] text-[#5D87FF]"
@@ -804,17 +807,17 @@ export default function AdminDashboardPage() {
 
         {/* Bottom Profile & Live Website Card */}
         <div
-          style={{ padding: "18px 20px" }}
+          style={{ padding: "12px 14px" }}
           className="border-t border-[#EAEFF4] bg-[#FAFBFD]"
         >
           <Link
             href="/"
             target="_blank"
-            style={{ padding: "10px 14px", marginBottom: "14px" }}
-            className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#ECF2FF] hover:bg-[#5D87FF] text-[#5D87FF] hover:text-white text-xs font-bold transition-all"
+            style={{ padding: "7px 12px", marginBottom: "10px" }}
+            className="w-full flex items-center justify-center gap-2 rounded-lg bg-[#ECF2FF] hover:bg-[#5D87FF] text-[#5D87FF] hover:text-white text-[11px] font-bold transition-all"
           >
             <svg
-              className="w-3.5 h-3.5"
+              className="w-3 h-3"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -830,18 +833,18 @@ export default function AdminDashboardPage() {
           </Link>
 
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2.5">
               <div
-                style={{ width: "36px", height: "36px" }}
-                className="rounded-full bg-[#5D87FF] text-white flex items-center justify-center font-bold text-xs shadow-xs"
+                style={{ width: "30px", height: "30px" }}
+                className="rounded-full bg-[#5D87FF] text-white flex items-center justify-center font-bold text-[10.5px] shadow-xs"
               >
                 AD
               </div>
               <div>
-                <span className="block text-xs font-bold text-[#2A3547]">
+                <span className="block text-[11.5px] font-bold text-[#2A3547]">
                   Admin Lead
                 </span>
-                <span className="block text-[11px] text-[#7C8FAC]">
+                <span className="block text-[10px] text-[#7C8FAC]">
                   GCU ShutterScape
                 </span>
               </div>
@@ -850,8 +853,8 @@ export default function AdminDashboardPage() {
             <button
               type="button"
               onClick={handleLogout}
-              style={{ padding: "6px 12px" }}
-              className="rounded-lg bg-[#FDEDE8] hover:bg-[#FA896B] text-[#FA896B] hover:text-white text-xs font-bold transition-colors cursor-pointer"
+              style={{ padding: "4px 8px" }}
+              className="rounded-md bg-[#FDEDE8] hover:bg-[#FA896B] text-[#FA896B] hover:text-white text-[11px] font-bold transition-colors cursor-pointer"
             >
               Sign Out
             </button>
@@ -865,35 +868,35 @@ export default function AdminDashboardPage() {
       <div className="flex-1 min-w-0 min-h-screen flex flex-col">
         {/* Top Enterprise Header Bar */}
         <header
-          style={{ padding: "20px 32px" }}
-          className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-[#EAEFF4] flex flex-wrap items-center justify-between gap-4"
+          style={{ padding: "12px 24px" }}
+          className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-[#EAEFF4] flex flex-wrap items-center justify-between gap-3"
         >
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <div
-              style={{ width: "44px", height: "44px" }}
-              className="rounded-xl bg-[#ECF2FF] text-[#5D87FF] flex items-center justify-center shrink-0"
+              style={{ width: "36px", height: "36px" }}
+              className="rounded-lg bg-[#ECF2FF] text-[#5D87FF] flex items-center justify-center shrink-0"
             >
-              {getTabIcon(activeTab, "w-5 h-5")}
+              {getTabIcon(activeTab, "w-4 h-4")}
             </div>
             <div>
-              <h1 className="text-xl font-bold text-[#2A3547] tracking-tight">
+              <h1 className="text-base sm:text-lg font-bold text-[#2A3547] tracking-tight">
                 {activeTabMeta.label}
               </h1>
               <p
-                style={{ marginTop: "2px" }}
-                className="text-xs text-[#7C8FAC]"
+                style={{ marginTop: "1px" }}
+                className="text-[11px] text-[#7C8FAC]"
               >
                 {activeTabMeta.description}
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
             <button
               type="button"
               onClick={refreshAllData}
-              style={{ padding: "10px 14px" }}
-              className="rounded-xl border border-[#DFE5EF] bg-white hover:bg-[#F6F9FC] text-[#5A6A85] text-xs font-semibold flex items-center gap-2 cursor-pointer transition-colors"
+              style={{ padding: "7px 12px" }}
+              className="rounded-lg border border-[#DFE5EF] bg-white hover:bg-[#F6F9FC] text-[#5A6A85] text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition-colors"
             >
               <svg
                 className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`}
@@ -920,7 +923,7 @@ export default function AdminDashboardPage() {
                 className="cms-primary-btn"
               >
                 <svg
-                  className="w-4 h-4"
+                  className="w-3.5 h-3.5"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -949,115 +952,115 @@ export default function AdminDashboardPage() {
 
         {/* Main Workspace Container */}
         <div
-          style={{ padding: "28px 32px 48px" }}
-          className="flex-1 flex flex-col gap-6 max-w-[1680px] w-full mx-auto"
+          style={{ padding: "16px 24px 36px" }}
+          className="flex-1 flex flex-col gap-4 max-w-[1560px] w-full mx-auto"
         >
           {/* ============================================================
-              EXECUTIVE KPI SUMMARY ROW (MaterialPro Style)
+              EXECUTIVE KPI SUMMARY ROW (Standard Compact Sizing)
               ============================================================ */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
             <div className="cms-kpi-card">
               <div>
-                <span className="text-xs font-semibold text-[#7C8FAC] block">
+                <span className="text-[11px] font-semibold text-[#7C8FAC] block">
                   Visual Archive Frames
                 </span>
                 <span
-                  style={{ marginTop: "4px" }}
-                  className="text-2xl font-extrabold text-[#2A3547] block"
+                  style={{ marginTop: "2px" }}
+                  className="text-xl font-bold text-[#2A3547] block"
                 >
                   {galleryList.length}
                 </span>
                 <span
-                  style={{ marginTop: "4px" }}
-                  className="text-[11px] font-semibold text-[#13DEB9] block"
+                  style={{ marginTop: "2px" }}
+                  className="text-[10px] font-semibold text-[#13DEB9] block"
                 >
                   35mm & 120 Contact Sheets
                 </span>
               </div>
               <div
-                style={{ width: "48px", height: "48px" }}
-                className="rounded-2xl bg-[#ECF2FF] text-[#5D87FF] flex items-center justify-center shrink-0"
+                style={{ width: "38px", height: "38px" }}
+                className="rounded-xl bg-[#ECF2FF] text-[#5D87FF] flex items-center justify-center shrink-0"
               >
-                {getTabIcon("gallery", "w-6 h-6")}
+                {getTabIcon("gallery", "w-4 h-4")}
               </div>
             </div>
 
             <div className="cms-kpi-card">
               <div>
-                <span className="text-xs font-semibold text-[#7C8FAC] block">
+                <span className="text-[11px] font-semibold text-[#7C8FAC] block">
                   Chronology Events
                 </span>
                 <span
-                  style={{ marginTop: "4px" }}
-                  className="text-2xl font-extrabold text-[#2A3547] block"
+                  style={{ marginTop: "2px" }}
+                  className="text-xl font-bold text-[#2A3547] block"
                 >
                   {activityList.length}
                 </span>
                 <span
-                  style={{ marginTop: "4px" }}
-                  className="text-[11px] font-semibold text-[#5D87FF] block"
+                  style={{ marginTop: "2px" }}
+                  className="text-[10px] font-semibold text-[#5D87FF] block"
                 >
                   {activityList.filter((a) => a.isUpcoming).length} Upcoming
                   Live RSVP
                 </span>
               </div>
               <div
-                style={{ width: "48px", height: "48px" }}
-                className="rounded-2xl bg-[#E6FFFA] text-[#13DEB9] flex items-center justify-center shrink-0"
+                style={{ width: "38px", height: "38px" }}
+                className="rounded-xl bg-[#E6FFFA] text-[#13DEB9] flex items-center justify-center shrink-0"
               >
-                {getTabIcon("activities", "w-6 h-6")}
+                {getTabIcon("activities", "w-4 h-4")}
               </div>
             </div>
 
             <div className="cms-kpi-card">
               <div>
-                <span className="text-xs font-semibold text-[#7C8FAC] block">
+                <span className="text-[11px] font-semibold text-[#7C8FAC] block">
                   Committee Roster
                 </span>
                 <span
-                  style={{ marginTop: "4px" }}
-                  className="text-2xl font-extrabold text-[#2A3547] block"
+                  style={{ marginTop: "2px" }}
+                  className="text-xl font-bold text-[#2A3547] block"
                 >
                   {committeeList.length}
                 </span>
                 <span
-                  style={{ marginTop: "4px" }}
-                  className="text-[11px] font-semibold text-[#FFAE1F] block"
+                  style={{ marginTop: "2px" }}
+                  className="text-[10px] font-semibold text-[#FFAE1F] block"
                 >
                   Mentors, Leads & Core
                 </span>
               </div>
               <div
-                style={{ width: "48px", height: "48px" }}
-                className="rounded-2xl bg-[#FEF5E5] text-[#FFAE1F] flex items-center justify-center shrink-0"
+                style={{ width: "38px", height: "38px" }}
+                className="rounded-xl bg-[#FEF5E5] text-[#FFAE1F] flex items-center justify-center shrink-0"
               >
-                {getTabIcon("committee", "w-6 h-6")}
+                {getTabIcon("committee", "w-4 h-4")}
               </div>
             </div>
 
             <div className="cms-kpi-card">
               <div>
-                <span className="text-xs font-semibold text-[#7C8FAC] block">
+                <span className="text-[11px] font-semibold text-[#7C8FAC] block">
                   Scene Reels & Exhibits
                 </span>
                 <span
-                  style={{ marginTop: "4px" }}
-                  className="text-2xl font-extrabold text-[#2A3547] block"
+                  style={{ marginTop: "2px" }}
+                  className="text-xl font-bold text-[#2A3547] block"
                 >
                   {heroReelList.length + pullInList.length + reelsList.length}
                 </span>
                 <span
-                  style={{ marginTop: "4px" }}
-                  className="text-[11px] font-semibold text-[#FA896B] block"
+                  style={{ marginTop: "2px" }}
+                  className="text-[10px] font-semibold text-[#FA896B] block"
                 >
                   Hero, Corridor & Motion
                 </span>
               </div>
               <div
-                style={{ width: "48px", height: "48px" }}
-                className="rounded-2xl bg-[#FDEDE8] text-[#FA896B] flex items-center justify-center shrink-0"
+                style={{ width: "38px", height: "38px" }}
+                className="rounded-xl bg-[#FDEDE8] text-[#FA896B] flex items-center justify-center shrink-0"
               >
-                {getTabIcon("reels", "w-6 h-6")}
+                {getTabIcon("reels", "w-4 h-4")}
               </div>
             </div>
           </div>
@@ -1066,14 +1069,14 @@ export default function AdminDashboardPage() {
               ELEVATED SEARCH & SEGMENTED FILTER BAR CARD
               ============================================================ */}
           <div
-            style={{ padding: "16px 22px" }}
-            className="bg-white rounded-2xl border border-[#EAEFF4] shadow-[0_4px_20px_rgba(145,158,171,0.06)] flex flex-col lg:flex-row lg:items-center justify-between gap-4"
+            style={{ padding: "10px 16px" }}
+            className="bg-white rounded-xl border border-[#EAEFF4] shadow-[0_2px_12px_rgba(145,158,171,0.05)] flex flex-col lg:flex-row lg:items-center justify-between gap-3"
           >
             {/* Search Box with non-overlapping icon */}
-            <div className="relative w-full lg:w-96">
+            <div className="relative w-full lg:w-80">
               <svg
-                style={{ left: "14px" }}
-                className="w-4 h-4 text-[#7C8FAC] absolute top-1/2 -translate-y-1/2 pointer-events-none"
+                style={{ left: "12px" }}
+                className="w-3.5 h-3.5 text-[#7C8FAC] absolute top-1/2 -translate-y-1/2 pointer-events-none"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -1155,7 +1158,7 @@ export default function AdminDashboardPage() {
               TAB 1: VISUAL ARCHIVE GALLERY GRID
               ============================================================ */}
           {activeTab === "gallery" && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5">
               {galleryList
                 .filter((item) => {
                   if (
@@ -1188,18 +1191,18 @@ export default function AdminDashboardPage() {
                         loading="lazy"
                       />
                       <div
-                        style={{ top: "12px", left: "12px" }}
+                        style={{ top: "8px", left: "8px" }}
                         className="cms-badge absolute bg-white/95 text-[#5D87FF] shadow-xs"
                       >
                         {item.category}
                       </div>
                       <div
                         style={{
-                          bottom: "12px",
-                          right: "12px",
-                          padding: "4px 10px",
+                          bottom: "8px",
+                          right: "8px",
+                          padding: "3px 8px",
                         }}
-                        className="absolute rounded-md bg-[#2A3547]/85 backdrop-blur-xs text-white text-[10px] font-mono font-semibold"
+                        className="absolute rounded-md bg-[#2A3547]/85 backdrop-blur-xs text-white text-[9.5px] font-mono font-semibold"
                       >
                         {item.filmStock}
                       </div>
@@ -1207,35 +1210,35 @@ export default function AdminDashboardPage() {
 
                     <div className="cms-card-body">
                       <div>
-                        <h3 className="text-[15px] font-bold text-[#2A3547] group-hover:text-[#5D87FF] transition-colors line-clamp-1">
+                        <h3 className="text-[13.5px] font-bold text-[#2A3547] group-hover:text-[#5D87FF] transition-colors line-clamp-1">
                           {item.title}
                         </h3>
                         <p
-                          style={{ marginTop: "4px" }}
-                          className="text-xs font-semibold text-[#5D87FF]"
+                          style={{ marginTop: "2px" }}
+                          className="text-[11.5px] font-semibold text-[#5D87FF]"
                         >
                           By {item.photographer}
                         </p>
                         <p
-                          style={{ marginTop: "10px" }}
-                          className="text-xs text-[#7C8FAC] line-clamp-2 leading-relaxed min-h-[36px]"
+                          style={{ marginTop: "6px" }}
+                          className="text-[11px] text-[#7C8FAC] line-clamp-2 leading-relaxed min-h-[32px]"
                         >
                           {item.description}
                         </p>
                       </div>
 
                       <div
-                        style={{ marginTop: "18px", paddingTop: "14px" }}
-                        className="border-t border-[#EAEFF4] flex items-center justify-between gap-2"
+                        style={{ marginTop: "12px", paddingTop: "10px" }}
+                        className="border-t border-[#EAEFF4] flex items-center justify-between gap-1.5"
                       >
                         <span
-                          style={{ padding: "4px 8px" }}
-                          className="font-mono text-[11px] text-[#5A6A85] bg-[#F4F7FE] rounded-md truncate max-w-[130px]"
+                          style={{ padding: "3px 6px" }}
+                          className="font-mono text-[10px] text-[#5A6A85] bg-[#F4F7FE] rounded truncate max-w-[120px]"
                         >
                           {item.exif || item.location}
                         </span>
 
-                        <div className="flex items-center gap-2 shrink-0">
+                        <div className="flex items-center gap-1.5 shrink-0">
                           <button
                             type="button"
                             onClick={() => handleOpenEditModal(item)}
@@ -1264,13 +1267,13 @@ export default function AdminDashboardPage() {
               TAB 2: HERO CONTACT REEL (01A - 06F)
               ============================================================ */}
           {activeTab === "hero" && (
-            <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-4">
               <div
-                style={{ padding: "14px 20px" }}
-                className="rounded-xl bg-[#ECF2FF] border border-[#D3E2FF] text-[#5D87FF] text-xs font-semibold flex items-center gap-3"
+                style={{ padding: "10px 16px" }}
+                className="rounded-xl bg-[#ECF2FF] border border-[#D3E2FF] text-[#5D87FF] text-xs font-semibold flex items-center gap-2.5"
               >
                 <svg
-                  className="w-4 h-4 shrink-0"
+                  className="w-3.5 h-3.5 shrink-0"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -1285,13 +1288,13 @@ export default function AdminDashboardPage() {
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3.5">
                 {heroReelList.map((item, idx) => (
                   <div
                     key={item._id || item.frameCode || idx}
                     className="cms-card"
                   >
-                    <div className="relative aspect-[3/4] w-full bg-[#F1F5F9] overflow-hidden">
+                    <div className="relative aspect-[3/4] max-h-[220px] w-full bg-[#F1F5F9] overflow-hidden">
                       <Image
                         src={item.src || (item as any).img || "/images/og-image.jpg"}
                         alt={item.title}
@@ -1302,7 +1305,7 @@ export default function AdminDashboardPage() {
                         loading="lazy"
                       />
                       <div
-                        style={{ top: "12px", left: "12px" }}
+                        style={{ top: "8px", left: "8px" }}
                         className="cms-badge absolute bg-[#5D87FF] text-white shadow-xs"
                       >
                         {item.frameCode}
@@ -1311,12 +1314,12 @@ export default function AdminDashboardPage() {
 
                     <div className="cms-card-body">
                       <div>
-                        <h3 className="text-sm font-bold text-[#2A3547] line-clamp-1">
+                        <h3 className="text-xs font-bold text-[#2A3547] line-clamp-1">
                           {item.title}
                         </h3>
                         <p
-                          style={{ marginTop: "4px" }}
-                          className="font-mono text-[11px] text-[#7C8FAC]"
+                          style={{ marginTop: "2px" }}
+                          className="font-mono text-[10.5px] text-[#7C8FAC]"
                         >
                           {item.exif}
                         </p>
@@ -1325,7 +1328,7 @@ export default function AdminDashboardPage() {
                       <button
                         type="button"
                         onClick={() => handleOpenEditModal(item)}
-                        style={{ marginTop: "14px", width: "100%" }}
+                        style={{ marginTop: "10px", width: "100%" }}
                         className="cms-action-edit justify-center"
                       >
                         Change Frame
@@ -1341,13 +1344,13 @@ export default function AdminDashboardPage() {
               TAB 3: PULL-IN CORRIDOR EXHIBITS (01 - 08)
               ============================================================ */}
           {activeTab === "pullin" && (
-            <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-4">
               <div
-                style={{ padding: "14px 20px" }}
-                className="rounded-xl bg-[#ECF2FF] border border-[#D3E2FF] text-[#5D87FF] text-xs font-semibold flex items-center gap-3"
+                style={{ padding: "10px 16px" }}
+                className="rounded-xl bg-[#ECF2FF] border border-[#D3E2FF] text-[#5D87FF] text-xs font-semibold flex items-center gap-2.5"
               >
                 <svg
-                  className="w-4 h-4 shrink-0"
+                  className="w-3.5 h-3.5 shrink-0"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -1362,7 +1365,7 @@ export default function AdminDashboardPage() {
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
                 {pullInList.map((item, idx) => (
                   <div key={item._id || item.code || idx} className="cms-card">
                     <div className="relative aspect-[16/10] w-full bg-[#F1F5F9] overflow-hidden">
@@ -1376,7 +1379,7 @@ export default function AdminDashboardPage() {
                         loading="lazy"
                       />
                       <div
-                        style={{ top: "12px", left: "12px" }}
+                        style={{ top: "8px", left: "8px" }}
                         className="cms-badge absolute bg-[#5D87FF] text-white shadow-xs"
                       >
                         {item.code}
@@ -1385,28 +1388,28 @@ export default function AdminDashboardPage() {
 
                     <div className="cms-card-body">
                       <div>
-                        <h3 className="text-[15px] font-bold text-[#2A3547]">
+                        <h3 className="text-[13.5px] font-bold text-[#2A3547]">
                           {item.title}
                         </h3>
                         <p
-                          style={{ marginTop: "4px" }}
-                          className="text-xs font-semibold text-[#5D87FF]"
+                          style={{ marginTop: "2px" }}
+                          className="text-[11.5px] font-semibold text-[#5D87FF]"
                         >
                           {item.subTitle}
                         </p>
                         <p
-                          style={{ marginTop: "8px" }}
-                          className="text-xs text-[#7C8FAC] italic line-clamp-2"
+                          style={{ marginTop: "6px" }}
+                          className="text-[11px] text-[#7C8FAC] italic line-clamp-2"
                         >
                           &ldquo;{item.headline}&rdquo;
                         </p>
                       </div>
 
                       <div
-                        style={{ marginTop: "16px", paddingTop: "14px" }}
+                        style={{ marginTop: "12px", paddingTop: "10px" }}
                         className="border-t border-[#EAEFF4] flex items-center justify-between"
                       >
-                        <span className="font-mono text-[11px] text-[#7C8FAC]">
+                        <span className="font-mono text-[10.5px] text-[#7C8FAC]">
                           {item.exif}
                         </span>
                         <button
@@ -1428,7 +1431,7 @@ export default function AdminDashboardPage() {
               TAB 4: COMMITTEE ROSTER
               ============================================================ */}
           {activeTab === "committee" && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3.5">
               {committeeList
                 .filter((m) => {
                   if (!searchQuery) return true;
@@ -1452,7 +1455,7 @@ export default function AdminDashboardPage() {
                         loading="lazy"
                       />
                       <div
-                        style={{ top: "12px", left: "12px" }}
+                        style={{ top: "8px", left: "8px" }}
                         className="cms-badge absolute bg-white/95 text-[#5D87FF] shadow-xs"
                       >
                         {m.tier}
@@ -1461,19 +1464,19 @@ export default function AdminDashboardPage() {
 
                     <div className="cms-card-body">
                       <div>
-                        <h3 className="text-[15px] font-bold text-[#2A3547] line-clamp-1">
+                        <h3 className="text-[13px] font-bold text-[#2A3547] line-clamp-1">
                           {m.name}
                         </h3>
                         <p
-                          style={{ marginTop: "4px" }}
-                          className="text-xs font-semibold text-[#5D87FF]"
+                          style={{ marginTop: "2px" }}
+                          className="text-[11px] font-semibold text-[#5D87FF]"
                         >
                           {m.role}
                         </p>
                         {m.dept && (
                           <p
-                            style={{ marginTop: "4px" }}
-                            className="text-[11px] text-[#7C8FAC] line-clamp-1"
+                            style={{ marginTop: "2px" }}
+                            className="text-[10px] text-[#7C8FAC] line-clamp-1"
                           >
                             {m.dept}
                           </p>
@@ -1481,20 +1484,20 @@ export default function AdminDashboardPage() {
                       </div>
 
                       <div
-                        style={{ marginTop: "16px", paddingTop: "14px" }}
-                        className="border-t border-[#EAEFF4] flex items-center justify-between gap-2"
+                        style={{ marginTop: "10px", paddingTop: "8px" }}
+                        className="border-t border-[#EAEFF4] flex items-center gap-1.5"
                       >
                         <button
                           type="button"
                           onClick={() => handleOpenEditModal(m)}
-                          className="cms-action-edit"
+                          className="cms-action-edit flex-1 justify-center text-center"
                         >
                           Edit
                         </button>
                         <button
                           type="button"
                           onClick={() => handleDeleteItem(m._id || "")}
-                          className="cms-action-delete"
+                          className="cms-action-delete flex-1 justify-center text-center"
                         >
                           Delete
                         </button>
@@ -1509,7 +1512,7 @@ export default function AdminDashboardPage() {
               TAB 5: ACTIVITIES & TIMELINE
               ============================================================ */}
           {activeTab === "activities" && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5">
               {activityList
                 .filter((ev) => {
                   if (filterCategory !== "ALL" && ev.year !== filterCategory)
@@ -1536,14 +1539,14 @@ export default function AdminDashboardPage() {
                         loading="lazy"
                       />
                       <div
-                        style={{ top: "12px", left: "12px" }}
-                        className="absolute flex items-center gap-2"
+                        style={{ top: "8px", left: "8px" }}
+                        className="absolute flex items-center gap-1.5"
                       >
                         <span className="cms-badge bg-white/95 text-[#5D87FF] shadow-xs">
                           {ev.category} · {ev.year}
                         </span>
                         {ev.isUpcoming && (
-                          <span className="cms-badge bg-[#E6FFFA] text-[#13DEB9] shadow-xs flex items-center gap-1.5">
+                          <span className="cms-badge bg-[#E6FFFA] text-[#13DEB9] shadow-xs flex items-center gap-1">
                             <span className="w-1.5 h-1.5 rounded-full bg-[#13DEB9] animate-pulse" />
                             UPCOMING
                           </span>
@@ -1551,11 +1554,11 @@ export default function AdminDashboardPage() {
                       </div>
                       <div
                         style={{
-                          bottom: "12px",
-                          right: "12px",
-                          padding: "4px 10px",
+                          bottom: "8px",
+                          right: "8px",
+                          padding: "3px 8px",
                         }}
-                        className="absolute rounded-md bg-white/95 text-[11px] font-bold text-[#2A3547] shadow-xs"
+                        className="absolute rounded-md bg-white/95 text-[10px] font-bold text-[#2A3547] shadow-xs"
                       >
                         {ev.date}
                       </div>
@@ -1563,37 +1566,37 @@ export default function AdminDashboardPage() {
 
                     <div className="cms-card-body">
                       <div>
-                        <span className="text-[10.5px] tracking-wider text-[#7C8FAC] uppercase font-bold block">
+                        <span className="text-[10px] tracking-wider text-[#7C8FAC] uppercase font-bold block">
                           {ev.shortTitle}
                         </span>
                         <h3
-                          style={{ marginTop: "4px" }}
-                          className="text-[15px] font-bold text-[#2A3547]"
+                          style={{ marginTop: "2px" }}
+                          className="text-[13.5px] font-bold text-[#2A3547]"
                         >
                           {ev.title}
                         </h3>
                         <p
-                          style={{ marginTop: "4px" }}
-                          className="text-xs font-semibold text-[#5D87FF]"
+                          style={{ marginTop: "2px" }}
+                          className="text-[11.5px] font-semibold text-[#5D87FF]"
                         >
                           {ev.location}
                         </p>
                         <p
-                          style={{ marginTop: "10px" }}
-                          className="text-xs text-[#7C8FAC] line-clamp-2 leading-relaxed"
+                          style={{ marginTop: "6px" }}
+                          className="text-[11px] text-[#7C8FAC] line-clamp-2 leading-relaxed"
                         >
                           {ev.description}
                         </p>
                       </div>
 
                       <div
-                        style={{ marginTop: "18px", paddingTop: "14px" }}
+                        style={{ marginTop: "12px", paddingTop: "10px" }}
                         className="border-t border-[#EAEFF4] flex items-center justify-between"
                       >
-                        <span className="font-mono text-[11px] text-[#7C8FAC]">
+                        <span className="font-mono text-[10.5px] text-[#7C8FAC]">
                           {ev.filmStock || ev.exif}
                         </span>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1.5">
                           <button
                             type="button"
                             onClick={() => handleOpenEditModal(ev)}
@@ -1620,13 +1623,13 @@ export default function AdminDashboardPage() {
               TAB 6: MOTION VIDEO REELS
               ============================================================ */}
           {activeTab === "reels" && (
-            <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-4">
               <div
-                style={{ padding: "14px 20px" }}
-                className="rounded-xl bg-[#ECF2FF] border border-[#D3E2FF] text-[#5D87FF] text-xs font-semibold flex items-center gap-3"
+                style={{ padding: "10px 16px" }}
+                className="rounded-xl bg-[#ECF2FF] border border-[#D3E2FF] text-[#5D87FF] text-xs font-semibold flex items-center gap-2.5"
               >
                 <svg
-                  className="w-4 h-4 shrink-0"
+                  className="w-3.5 h-3.5 shrink-0"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -1642,10 +1645,10 @@ export default function AdminDashboardPage() {
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3.5">
                 {reelsList.map((reel, idx) => (
                   <div key={reel._id || idx} className="cms-card">
-                    <div className="relative aspect-[9/16] w-full bg-[#0F172A] flex items-center justify-center overflow-hidden">
+                    <div className="relative aspect-[9/16] max-h-[250px] w-full bg-[#0F172A] flex items-center justify-center overflow-hidden">
                       <video
                         src={reel.videoSrc}
                         muted
@@ -1655,7 +1658,7 @@ export default function AdminDashboardPage() {
                         className="w-full h-full object-cover"
                       />
                       <div
-                        style={{ top: "12px", left: "12px" }}
+                        style={{ top: "8px", left: "8px" }}
                         className="cms-badge absolute bg-white/95 text-[#5D87FF] shadow-xs"
                       >
                         REEL #{idx + 1}
@@ -1664,32 +1667,32 @@ export default function AdminDashboardPage() {
 
                     <div className="cms-card-body">
                       <div>
-                        <p className="text-[10px] font-bold text-[#7C8FAC] uppercase">
+                        <p className="text-[9.5px] font-bold text-[#7C8FAC] uppercase">
                           Creator
                         </p>
                         <h3
                           style={{ marginTop: "2px" }}
-                          className="text-sm font-bold text-[#2A3547] line-clamp-1"
+                          className="text-xs font-bold text-[#2A3547] line-clamp-1"
                         >
                           {reel.photographer}
                         </h3>
                       </div>
 
                       <div
-                        style={{ marginTop: "14px", paddingTop: "12px" }}
-                        className="border-t border-[#EAEFF4] flex items-center justify-between gap-2"
+                        style={{ marginTop: "10px", paddingTop: "8px" }}
+                        className="border-t border-[#EAEFF4] flex items-center gap-1.5"
                       >
                         <button
                           type="button"
                           onClick={() => handleOpenEditModal(reel)}
-                          className="cms-action-edit"
+                          className="cms-action-edit flex-1 justify-center text-center"
                         >
                           Replace
                         </button>
                         <button
                           type="button"
                           onClick={() => handleDeleteItem(reel._id || "")}
-                          className="cms-action-delete"
+                          className="cms-action-delete flex-1 justify-center text-center"
                         >
                           Delete
                         </button>
