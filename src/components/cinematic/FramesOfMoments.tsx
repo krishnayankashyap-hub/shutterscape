@@ -95,36 +95,34 @@ export default function FramesOfMoments({ initialReels }: FramesOfMomentsProps =
   }, []);
 
   // ============================================================
-  // FORCE ALL VIDEOS TO AUTOPLAY SIMULTANEOUSLY
+  // FORCE ALL VIDEOS TO AUTOPLAY SIMULTANEOUSLY & REACTIVELY
   // ============================================================
   useEffect(() => {
-    videoRefs.current.forEach((video) => {
-      if (video) {
-        video.muted = true;
-        video.playsInline = true;
-        video.play().catch(() => {});
-      }
-    });
-  }, []);
+    const playAll = () => {
+      videoRefs.current.forEach((video, i) => {
+        if (video) {
+          video.defaultMuted = true;
+          video.muted = activeAudioId !== reelsList[i]?.id;
+          video.playsInline = true;
+          const p = video.play();
+          if (p && typeof p.catch === "function") {
+            p.catch(() => {});
+          }
+        }
+      });
+    };
 
-  // ============================================================
-  // AUTO-PLAY AND SYNCHRONIZE ACTIVE VIDEO ON CHANGE
-  // ============================================================
-  useEffect(() => {
-    // When activeIndex changes, restart the active center video from 0s
-    const activeVid = videoRefs.current[activeIndex];
-    if (activeVid) {
-      activeVid.currentTime = 0;
-      activeVid.play().catch(() => {});
-    }
+    playAll();
+    const t1 = setTimeout(playAll, 100);
+    const t2 = setTimeout(playAll, 400);
+    const t3 = setTimeout(playAll, 1200);
 
-    // Ensure all videos keep playing simultaneously
-    videoRefs.current.forEach((vid) => {
-      if (vid) {
-        vid.play().catch(() => {});
-      }
-    });
-  }, [activeIndex]);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+    };
+  }, [reels, activeIndex, activeAudioId]);
 
   // ============================================================
   // AUTO-CHANGE TO NEXT VIDEO WHEN ACTIVE VIDEO FINISHES
@@ -373,6 +371,10 @@ export default function FramesOfMoments({ initialReels }: FramesOfMomentsProps =
                 <video
                   ref={(el) => {
                     videoRefs.current[index] = el;
+                    if (el) {
+                      el.defaultMuted = true;
+                      el.muted = activeAudioId !== reel.id;
+                    }
                   }}
                   src={reel.videoSrc}
                   autoPlay
@@ -380,11 +382,18 @@ export default function FramesOfMoments({ initialReels }: FramesOfMomentsProps =
                   muted={activeAudioId !== reel.id}
                   playsInline
                   preload="auto"
+                  onLoadedData={(e) => {
+                    const video = e.currentTarget;
+                    video.defaultMuted = true;
+                    video.muted = activeAudioId !== reel.id;
+                    video.play().catch(() => {});
+                  }}
                   onError={(e) => {
                     const video = e.currentTarget;
                     const fallback = `/videos/reel-${(index % 6) + 1}.mp4`;
-                    if (video.src !== fallback) {
+                    if (video.src && !video.src.endsWith(fallback)) {
                       video.src = fallback;
+                      video.load();
                       video.play().catch(() => {});
                     }
                   }}

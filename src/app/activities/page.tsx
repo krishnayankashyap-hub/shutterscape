@@ -409,8 +409,8 @@ const FILTERS: { label: string; value: FilterKey }[] = [
 
 // Hexagonal edge angles (flat-top inner hexagon matching the video reference)
 const HEX_ANGLES_DEG = [-90, -30, 30, 90, 150, -150];
-// Subtle aperture tilts: keeps cards upright, readable, and perfectly non-colliding
-const HEX_ROTATIONS_DEG = [0, -3, 3, 0, -3, 3];
+// Radial aperture tilts: cards dynamically curve along the circular ring
+const HEX_ROTATIONS_DEG = [0, 14, -14, 0, 14, -14];
 
 function renderFormattedDescription(text: string) {
   if (!text) return null;
@@ -678,13 +678,12 @@ export default function ActivitiesPage() {
         : Math.min(300, Math.max(240, Math.min(vw * 0.20, vh * 0.29)));
       const cardH = cardW * 0.635;
 
-      // Elliptical radial separation ensures adjacent cards NEVER touch, collide, or clip
-      const hexRadiusX = isMobile
-        ? Math.min(vw * 0.36, 150)
-        : Math.min(vw * 0.28, Math.max(310, cardW * 1.18));
-      const hexRadiusY = isMobile
-        ? Math.min(vh * 0.26, 160)
-        : Math.min(vh * 0.25, Math.max(195, cardH * 1.25));
+      // Circular radial separation: cards form a true, balanced circle around WORKS '26
+      const circleBase = isMobile
+        ? Math.min(vw * 0.35, vh * 0.28, 170)
+        : Math.min(vw * 0.23, vh * 0.30, 260);
+      const hexRadiusX = circleBase * (isMobile ? 1.05 : 1.08);
+      const hexRadiusY = circleBase;
 
       // 3D Vertical Cylinder radius
       const cylRadius = isMobile

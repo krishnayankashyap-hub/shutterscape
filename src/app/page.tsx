@@ -42,6 +42,30 @@ export default function Home() {
           }
         ).__lenis;
         if (lenis) lenis.scrollTo(0, { immediate: true });
+      } else if (window.location.hash) {
+        // Direct jump to anchor like /#scene-gallery when arriving from other pages
+        const targetId = window.location.hash.replace("#", "");
+        const scrollToHash = () => {
+          const el = document.getElementById(targetId);
+          if (el) {
+            const rect = el.getBoundingClientRect();
+            const top = rect.top + (window.scrollY || document.documentElement.scrollTop);
+            const lenis = (
+              window as unknown as {
+                __lenis?: {
+                  scrollTo: (
+                    target: number,
+                    options?: { duration?: number; immediate?: boolean }
+                  ) => void;
+                };
+              }
+            ).__lenis;
+            if (lenis) lenis.scrollTo(top, { duration: 1.0 });
+            else window.scrollTo({ top, behavior: "smooth" });
+          }
+        };
+        setTimeout(scrollToHash, 100);
+        setTimeout(scrollToHash, 400);
       }
     }
 
