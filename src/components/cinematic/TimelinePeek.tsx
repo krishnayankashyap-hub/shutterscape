@@ -289,8 +289,8 @@ export default function TimelinePeek() {
       if (validInnerImages.length > 0) {
         tl.fromTo(
           validInnerImages,
-          { xPercent: -12, scale: 1.15 },
-          { xPercent: 12, scale: 1.02, duration: 7, ease: "none" },
+          { xPercent: -3, scale: 1 },
+          { xPercent: 3, scale: 1, duration: 7, ease: "none" },
           0.5
         );
       }
@@ -423,12 +423,26 @@ export default function TimelinePeek() {
                     ))}
                   </div>
 
-                  <div className="relative w-full h-[180px] sm:h-[250px] md:h-[290px] lg:h-[320px] rounded-[3px] overflow-hidden border border-white/10">
+                  <div className="relative w-full h-[210px] sm:h-[270px] md:h-[310px] lg:h-[340px] rounded-[4px] overflow-hidden border border-white/10 bg-[#070709]">
+                    {/* Ambient subtle blur to give rich darkroom atmosphere without empty space */}
+                    <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30">
+                      <Image
+                        src={chapter.src}
+                        alt=""
+                        fill
+                        sizes="300px"
+                        className="object-cover blur-xl scale-110"
+                        aria-hidden="true"
+                      />
+                      <div className="absolute inset-0 bg-black/50" />
+                    </div>
+
+                    {/* Main Uncropped Image */}
                     <div
                       ref={(el) => {
                         innerImagesRef.current[idx] = el;
                       }}
-                      className="absolute inset-0 w-[124%] -left-[12%] h-full will-change-transform"
+                      className="relative w-full h-full p-2 sm:p-3 flex items-center justify-center will-change-transform"
                     >
                       <Image
                         src={chapter.src}
@@ -437,12 +451,12 @@ export default function TimelinePeek() {
                         priority={idx < 3}
                         loading={idx < 3 ? "eager" : "lazy"}
                         sizes="(max-width: 1024px) 90vw, 700px"
-                        className="object-cover"
+                        className="object-contain drop-shadow-[0_8px_24px_rgba(0,0,0,0.65)]"
                       />
                     </div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/10 pointer-events-none" />
 
-                    <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 right-3 sm:right-4 flex items-center justify-between font-mono text-[8.5px] sm:text-[9px] md:text-[11px] tracking-[0.2em] text-[#D4A843] pointer-events-none drop-shadow-md">
+                    {/* Micro Technical Stamp at bottom corners */}
+                    <div className="absolute bottom-2 sm:bottom-2.5 left-2.5 sm:left-3 right-2.5 sm:right-3 flex items-center justify-between font-mono text-[8px] sm:text-[9px] md:text-[10px] tracking-[0.2em] text-[#D4A843] pointer-events-none drop-shadow-md bg-black/60 backdrop-blur-xs px-2.5 py-1 rounded">
                       <span>{chapter.location}</span>
                       <span className="hidden md:inline">{chapter.exif}</span>
                     </div>
@@ -466,24 +480,24 @@ export default function TimelinePeek() {
                 <div className="h-2 sm:h-3 md:h-4 w-full shrink-0"></div>
 
                 {/* EDITORIAL CONTENT BELOW STRIP */}
-                <div className="relative z-10 px-1 md:px-2 flex flex-col md:flex-row justify-between items-start gap-3 md:gap-8">
+                <div className="relative z-10 px-1 md:px-2 flex flex-col md:flex-row justify-between items-start gap-3 md:gap-8 mt-1">
                   <div className="max-w-xl">
-                    <h3 className="font-serif text-lg sm:text-xl md:text-2xl text-[#050505] leading-[1.2] font-normal tracking-tight">
+                    <h3 className="font-serif text-lg sm:text-xl md:text-2xl text-[#050505] leading-[1.25] font-normal tracking-tight">
                       {chapter.title}
                     </h3>
-                    <p className="font-body text-xs sm:text-[13px] md:text-[14px] text-[#050505]/65 mt-1 sm:mt-2 leading-[1.5]">
+                    <p className="font-body text-xs sm:text-[13px] md:text-[14px] text-[#050505]/70 mt-1.5 sm:mt-2 leading-[1.6]">
                       {chapter.description}
                     </p>
                   </div>
 
                   <div className="shrink-0 pt-1 md:pt-2">
                     {chapter.isUpcoming ? (
-                      <span className="font-mono text-[9px] sm:text-[10px] md:text-[11px] tracking-[0.25em] text-[#D4A843] uppercase flex items-center gap-2">
+                      <span className="font-mono text-[9px] sm:text-[10px] md:text-[11px] tracking-[0.25em] text-[#D4A843] uppercase flex items-center gap-2 font-medium">
                         <span className="w-2 h-2 rounded-full bg-[#D4A843] animate-pulse" />
                         UPCOMING
                       </span>
                     ) : (
-                      <span className="font-mono text-[9px] sm:text-[10px] md:text-[11px] tracking-[0.25em] text-[#050505]/40 uppercase">
+                      <span className="font-mono text-[9px] sm:text-[10px] md:text-[11px] tracking-[0.25em] text-[#050505]/45 uppercase font-medium">
                         // {chapter.status}
                       </span>
                     )}
