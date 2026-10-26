@@ -771,55 +771,51 @@ export default function ApertureHero() {
               strokeOpacity="0.3"
             />
 
-            {!isMobile && (
-              <>
-                <line
-                  x1="265"
-                  y1="70"
-                  x2="265"
-                  y2="1010"
-                  stroke="#D4A843"
-                  strokeWidth="0.7"
-                  strokeOpacity="0.24"
-                />
-                <line
-                  x1="1655"
-                  y1="70"
-                  x2="1655"
-                  y2="1010"
-                  stroke="#D4A843"
-                  strokeWidth="0.7"
-                  strokeOpacity="0.24"
-                />
+            <line
+              x1="265"
+              y1="70"
+              x2="265"
+              y2="1010"
+              stroke="#D4A843"
+              strokeWidth="0.7"
+              strokeOpacity="0.24"
+            />
+            <line
+              x1="1655"
+              y1="70"
+              x2="1655"
+              y2="1010"
+              stroke="#D4A843"
+              strokeWidth="0.7"
+              strokeOpacity="0.24"
+            />
 
-                <polyline
-                  points="1140,260 1280,175 1440,175"
-                  fill="none"
-                  stroke="#D4A843"
-                  strokeWidth="0.9"
-                  strokeOpacity="0.55"
-                />
-                <circle cx="1440" cy="175" r="3" fill="#D4A843" />
+            <polyline
+              points="1140,260 1280,175 1440,175"
+              fill="none"
+              stroke="#D4A843"
+              strokeWidth="0.9"
+              strokeOpacity="0.55"
+            />
+            <circle cx="1440" cy="175" r="3" fill="#D4A843" />
 
-                <polyline
-                  points="690,710 580,825 440,825"
-                  fill="none"
-                  stroke="#D4A843"
-                  strokeWidth="0.9"
-                  strokeOpacity="0.55"
-                />
-                <circle cx="440" cy="825" r="3" fill="#D4A843" />
+            <polyline
+              points="690,710 580,825 440,825"
+              fill="none"
+              stroke="#D4A843"
+              strokeWidth="0.9"
+              strokeOpacity="0.55"
+            />
+            <circle cx="440" cy="825" r="3" fill="#D4A843" />
 
-                <polyline
-                  points="1180,710 1310,825 1470,825"
-                  fill="none"
-                  stroke="#D4A843"
-                  strokeWidth="0.9"
-                  strokeOpacity="0.55"
-                />
-                <circle cx="1470" cy="825" r="3" fill="#D4A843" />
-              </>
-            )}
+            <polyline
+              points="1180,710 1310,825 1470,825"
+              fill="none"
+              stroke="#D4A843"
+              strokeWidth="0.9"
+              strokeOpacity="0.55"
+            />
+            <circle cx="1470" cy="825" r="3" fill="#D4A843" />
 
             <circle
               cx="960"
@@ -880,213 +876,213 @@ export default function ApertureHero() {
               BEYOND THE LENS
             </div>
 
-            {!isMobile && (
-              <>
-                <div
-                  className="font-mono"
-                  style={{
-                    position: "absolute",
-                    top: "13.8%",
-                    right: "25%",
-                    textAlign: "right",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontSize: "8.5px",
-                      letterSpacing: "0.24em",
-                      color: "#D4A843",
-                    }}
-                  >
-                    02 // VIEWFINDER
-                  </div>
-                  <div
-                    style={{
-                      fontSize: "10px",
-                      letterSpacing: "0.18em",
-                      color: "rgba(232,232,232,0.75)",
-                      marginTop: "2px",
-                    }}
-                  >
-                    0.78X OPTICAL PRISM
-                  </div>
-                </div>
-
-                <div
-                  className="font-mono"
-                  style={{
-                    position: "absolute",
-                    bottom: "17.5%",
-                    left: "23%",
-                    textAlign: "left",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontSize: "8.5px",
-                      letterSpacing: "0.24em",
-                      color: "#D4A843",
-                    }}
-                  >
-                    03 // CHASSIS
-                  </div>
-                  <div
-                    style={{
-                      fontSize: "10px",
-                      letterSpacing: "0.18em",
-                      color: "rgba(232,232,232,0.75)",
-                      marginTop: "2px",
-                    }}
-                  >
-                    MAGNESIUM & VULCANITE
-                  </div>
-                </div>
-
-                <div
-                  className="font-mono"
-                  style={{
-                    position: "absolute",
-                    bottom: "17.5%",
-                    right: "23.5%",
-                    textAlign: "right",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontSize: "8.5px",
-                      letterSpacing: "0.24em",
-                      color: "#D4A843",
-                    }}
-                  >
-                    04 // DIAPHRAGM
-                  </div>
-                  <div
-                    style={{
-                      fontSize: "10px",
-                      letterSpacing: "0.18em",
-                      color: "rgba(232,232,232,0.75)",
-                      marginTop: "2px",
-                    }}
-                  >
-                    8-BLADE CARBON STEEL IRIS
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
-
-          {/* ============================================================
-              LEFT DISCIPLINED TELEMETRY RAIL (z-index: 15, Desktop)
-              ============================================================ */}
-          {!isMobile && (
             <div
-              ref={leftDisciplineRailRef}
+              className="font-mono"
               style={{
                 position: "absolute",
-                top: "135px",
-                bottom: "78px",
-                left: "clamp(24px, 2.8vw, 48px)",
-                width: "196px",
-                zIndex: 15,
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-                pointerEvents: "none",
+                top: isMobile ? "22%" : "13.8%",
+                right: isMobile ? "16%" : "25%",
+                textAlign: "right",
               }}
             >
               <div
-                className="font-mono"
                 style={{
-                  borderLeft: "1.5px solid #D4A843",
-                  paddingLeft: "14px",
+                  fontSize: isMobile ? "7px" : "8.5px",
+                  letterSpacing: "0.24em",
+                  color: "#D4A843",
                 }}
               >
-                <div
-                  style={{
-                    fontSize: "9px",
-                    letterSpacing: "0.26em",
-                    color: "#D4A843",
-                    marginBottom: "4px",
-                  }}
-                >
-                  OPTICAL BENCH // 01
-                </div>
-                <div
-                  style={{
-                    fontSize: "11px",
-                    letterSpacing: "0.18em",
-                    color: "#FAFAFA",
-                  }}
-                >
-                  85MM F/1.4 ASPH
-                </div>
-                <div
-                  style={{
-                    fontSize: "8.5px",
-                    letterSpacing: "0.18em",
-                    color: "#8A8A8A",
-                    marginTop: "3px",
-                  }}
-                >
-                  26.1445° N · 91.7362° E
-                </div>
+                02 // VIEWFINDER
               </div>
-
               <div
-                className="font-mono"
                 style={{
-                  position: "relative",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "12px",
-                  paddingLeft: "18px",
+                  fontSize: isMobile ? "8px" : "10px",
+                  letterSpacing: "0.18em",
+                  color: "rgba(232,232,232,0.75)",
+                  marginTop: "2px",
                 }}
               >
-                <div
-                  style={{
-                    position: "absolute",
-                    left: "0px",
-                    top: "4px",
-                    bottom: "4px",
-                    width: "1px",
-                    backgroundColor: "rgba(212, 168, 67, 0.28)",
-                  }}
-                />
-                {APERTURE_LADDER.map((item, idx) => {
-                  const isCurrent = idx === activeStopIdx;
-                  return (
-                    <div
-                      key={item.stop}
+                0.78X OPTICAL PRISM
+              </div>
+            </div>
+
+            <div
+              className="font-mono"
+              style={{
+                position: "absolute",
+                bottom: isMobile ? "22%" : "17.5%",
+                left: isMobile ? "16%" : "23%",
+                textAlign: "left",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: isMobile ? "7px" : "8.5px",
+                  letterSpacing: "0.24em",
+                  color: "#D4A843",
+                }}
+              >
+                03 // CHASSIS
+              </div>
+              <div
+                style={{
+                  fontSize: isMobile ? "8px" : "10px",
+                  letterSpacing: "0.18em",
+                  color: "rgba(232,232,232,0.75)",
+                  marginTop: "2px",
+                }}
+              >
+                MAGNESIUM & VULCANITE
+              </div>
+            </div>
+
+            <div
+              className="font-mono"
+              style={{
+                position: "absolute",
+                bottom: isMobile ? "22%" : "17.5%",
+                right: isMobile ? "16%" : "23.5%",
+                textAlign: "right",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: isMobile ? "7px" : "8.5px",
+                  letterSpacing: "0.24em",
+                  color: "#D4A843",
+                }}
+              >
+                04 // DIAPHRAGM
+              </div>
+              <div
+                style={{
+                  fontSize: isMobile ? "8px" : "10px",
+                  letterSpacing: "0.18em",
+                  color: "rgba(232,232,232,0.75)",
+                  marginTop: "2px",
+                }}
+              >
+                8-BLADE CARBON STEEL IRIS
+              </div>
+            </div>
+          </div>
+
+          {/* ============================================================
+              LEFT DISCIPLINED TELEMETRY RAIL (z-index: 15)
+              ============================================================ */}
+          <div
+            ref={leftDisciplineRailRef}
+            style={{
+              position: "absolute",
+              top: isMobile ? "108px" : "135px",
+              bottom: isMobile ? "64px" : "78px",
+              left: isMobile ? "8px" : "clamp(24px, 2.8vw, 48px)",
+              width: isMobile ? "68px" : "196px",
+              zIndex: 15,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              pointerEvents: "none",
+            }}
+          >
+            <div
+              className="font-mono"
+              style={{
+                borderLeft: isMobile ? "1px solid #D4A843" : "1.5px solid #D4A843",
+                paddingLeft: isMobile ? "6px" : "14px",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: isMobile ? "6.5px" : "9px",
+                  letterSpacing: isMobile ? "0.18em" : "0.26em",
+                  color: "#D4A843",
+                  marginBottom: isMobile ? "2px" : "4px",
+                }}
+              >
+                OPTICAL BENCH // 01
+              </div>
+              <div
+                style={{
+                  fontSize: isMobile ? "8px" : "11px",
+                  letterSpacing: "0.18em",
+                  color: "#FAFAFA",
+                }}
+              >
+                85MM F/1.4 ASPH
+              </div>
+              <div
+                style={{
+                  fontSize: isMobile ? "6px" : "8.5px",
+                  letterSpacing: "0.18em",
+                  color: "#8A8A8A",
+                  marginTop: isMobile ? "1px" : "3px",
+                }}
+              >
+                {isMobile ? "26.14°N 91.73°E" : "26.1445° N · 91.7362° E"}
+              </div>
+            </div>
+
+            <div
+              className="font-mono"
+              style={{
+                position: "relative",
+                display: "flex",
+                flexDirection: "column",
+                gap: isMobile ? "5px" : "12px",
+                paddingLeft: isMobile ? "10px" : "18px",
+              }}
+            >
+              <div
+                style={{
+                  position: "absolute",
+                  left: "0px",
+                  top: "4px",
+                  bottom: "4px",
+                  width: "1px",
+                  backgroundColor: "rgba(212, 168, 67, 0.28)",
+                }}
+              />
+              {APERTURE_LADDER.map((item, idx) => {
+                const isCurrent = idx === activeStopIdx;
+                return (
+                  <div
+                    key={item.stop}
+                    style={{
+                      position: "relative",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <span
                       style={{
-                        position: "relative",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
+                        position: "absolute",
+                        left: isMobile
+                          ? (isCurrent ? "-12px" : "-10px")
+                          : (isCurrent ? "-21.5px" : "-18px"),
+                        width: isMobile ? (isCurrent ? "4px" : "3px") : (isCurrent ? "7px" : "6px"),
+                        height: isMobile
+                          ? (isCurrent ? "4px" : "1px")
+                          : (isCurrent ? "7px" : "1px"),
+                        borderRadius: isCurrent ? "50%" : "0",
+                        backgroundColor: isCurrent
+                          ? "#FFE099"
+                          : "rgba(212, 168, 67, 0.4)",
+                        boxShadow: isCurrent ? "0 0 10px #D4A843" : "none",
+                      }}
+                    />
+                    <span
+                      style={{
+                        fontSize: isMobile ? "7px" : "10px",
+                        letterSpacing: isMobile ? "0.1em" : "0.16em",
+                        color: isCurrent ? "#FAFAFA" : "#8A8A8A",
+                        fontWeight: isCurrent ? 700 : 400,
                       }}
                     >
-                      <span
-                        style={{
-                          position: "absolute",
-                          left: isCurrent ? "-21.5px" : "-18px",
-                          width: isCurrent ? "7px" : "6px",
-                          height: isCurrent ? "7px" : "1px",
-                          borderRadius: isCurrent ? "50%" : "0",
-                          backgroundColor: isCurrent
-                            ? "#FFE099"
-                            : "rgba(212, 168, 67, 0.4)",
-                          boxShadow: isCurrent ? "0 0 10px #D4A843" : "none",
-                        }}
-                      />
-                      <span
-                        style={{
-                          fontSize: "10px",
-                          letterSpacing: "0.16em",
-                          color: isCurrent ? "#FAFAFA" : "#8A8A8A",
-                          fontWeight: isCurrent ? 700 : 400,
-                        }}
-                      >
-                        {item.stop}
-                      </span>
+                      {item.stop}
+                    </span>
+                    {!isMobile && (
                       <span
                         style={{
                           fontSize: "7.5px",
@@ -1098,251 +1094,256 @@ export default function ApertureHero() {
                       >
                         {item.mode}
                       </span>
-                    </div>
-                  );
-                })}
-              </div>
-
-              <div
-                className="font-mono"
-                style={{
-                  backgroundColor: "rgba(12, 12, 14, 0.78)",
-                  border: "1px solid rgba(255, 255, 255, 0.08)",
-                  borderLeft: "1.5px solid #D4A843",
-                  borderRadius: "6px",
-                  padding: "9px 12px",
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    fontSize: "8px",
-                    letterSpacing: "0.2em",
-                    color: "#D4A843",
-                    marginBottom: "6px",
-                  }}
-                >
-                  <span>LUMINANCE</span>
-                  <span>14.2 EV</span>
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "flex-end",
-                    gap: "2.5px",
-                    height: "24px",
-                  }}
-                >
-                  {WAVEFORM_BARS.map((h, i) => (
-                    <span
-                      key={i}
-                      style={{
-                        flex: 1,
-                        height: `${h}%`,
-                        backgroundColor:
-                          i > 6 && i < 16
-                            ? "rgba(212, 168, 67, 0.8)"
-                            : "rgba(138, 138, 138, 0.32)",
-                        borderRadius: "1px",
-                      }}
-                    />
-                  ))}
-                </div>
-              </div>
-
-              <div
-                className="font-mono"
-                style={{
-                  borderLeft: "1px solid rgba(255,255,255,0.2)",
-                  paddingLeft: "14px",
-                  fontSize: "8.5px",
-                  letterSpacing: "0.22em",
-                  lineHeight: 1.85,
-                  color: "#8A8A8A",
-                }}
-              >
-                <div style={{ color: "#E8E8E8" }}>CAPTURING</div>
-                <div>PEOPLE · PLACES</div>
-                <div>PERSPECTIVES</div>
-              </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
-          )}
 
-          {/* ============================================================
-              RIGHT DISCIPLINED 6-FRAME VERTICAL 35MM FILM REEL (z-index: 15, Desktop)
-              ============================================================ */}
-          {!isMobile && (
             <div
-              ref={rightFilmReelRailRef}
+              className="font-mono"
               style={{
-                position: "absolute",
-                top: "135px",
-                bottom: "74px",
-                right: "clamp(38px, 3.6vw, 66px)",
-                width: "clamp(172px, 15vw, 218px)",
-                zIndex: 15,
-                overflow: "hidden",
-                pointerEvents: "none",
-                display: "flex",
-                flexDirection: "column",
-                borderTop: "1px solid rgba(212, 168, 67, 0.4)",
-                borderBottom: "1px solid rgba(212, 168, 67, 0.4)",
-                backgroundColor: "rgba(8, 8, 10, 0.75)",
+                backgroundColor: "rgba(12, 12, 14, 0.78)",
+                border: "1px solid rgba(255, 255, 255, 0.08)",
+                borderLeft: isMobile ? "1px solid #D4A843" : "1.5px solid #D4A843",
+                borderRadius: isMobile ? "4px" : "6px",
+                padding: isMobile ? "4px 6px" : "9px 12px",
               }}
             >
               <div
-                className="font-mono"
                 style={{
-                  padding: "7px 10px",
-                  backgroundColor: "rgba(10, 10, 12, 0.95)",
-                  borderBottom: "1px solid rgba(212, 168, 67, 0.24)",
                   display: "flex",
                   justifyContent: "space-between",
-                  fontSize: "8px",
-                  letterSpacing: "0.22em",
+                  fontSize: isMobile ? "6px" : "8px",
+                  letterSpacing: "0.2em",
                   color: "#D4A843",
-                  zIndex: 3,
+                  marginBottom: isMobile ? "2px" : "6px",
                 }}
               >
-                <span>REEL // 01A–06F</span>
-                <span>6 FRAMES</span>
+                <span>{isMobile ? "LUM" : "LUMINANCE"}</span>
+                <span>14.2 EV</span>
               </div>
-
               <div
-                ref={rightFilmTrackRef}
                 style={{
                   display: "flex",
-                  flexDirection: "column",
-                  gap: "10px",
-                  padding: "10px",
-                  borderLeft: "1px solid rgba(212, 168, 67, 0.22)",
-                  borderRight: "1px solid rgba(212, 168, 67, 0.22)",
-                  willChange: "transform",
+                  alignItems: "flex-end",
+                  gap: isMobile ? "1.5px" : "2.5px",
+                  height: isMobile ? "14px" : "24px",
                 }}
               >
-                {filmFrames.map((frame, fIdx) => (
-                  <div
-                    key={frame.id}
+                {WAVEFORM_BARS.slice(0, isMobile ? 12 : 24).map((h, i) => (
+                  <span
+                    key={i}
                     style={{
-                      position: "relative",
-                      display: "flex",
-                      flexDirection: "column",
-                      padding: "6px 8px",
-                      backgroundColor: "rgba(16, 16, 18, 0.94)",
-                      border: "1px solid rgba(255, 255, 255, 0.08)",
-                      borderRadius: "6px",
-                      flexShrink: 0,
+                      flex: 1,
+                      height: `${h}%`,
+                      backgroundColor:
+                        i > (isMobile ? 3 : 6) && i < (isMobile ? 9 : 16)
+                          ? "rgba(212, 168, 67, 0.8)"
+                          : "rgba(138, 138, 138, 0.32)",
+                      borderRadius: "1px",
                     }}
-                  >
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        marginBottom: "5px",
-                      }}
-                    >
-                      <span
-                        className="font-mono"
-                        style={{
-                          fontSize: "8px",
-                          letterSpacing: "0.2em",
-                          color: "#D4A843",
-                        }}
-                      >
-                        ▸ {frame.id}
-                      </span>
-                      <div style={{ display: "flex", gap: "4px" }}>
-                        {Array.from({ length: 4 }).map((_, idx) => (
-                          <span
-                            key={idx}
-                            style={{
-                              width: "6px",
-                              height: "4px",
-                              borderRadius: "1px",
-                              backgroundColor: "#050505",
-                              border: "0.5px solid rgba(212,168,67,0.45)",
-                            }}
-                          />
-                        ))}
-                      </div>
-                    </div>
-
-                    <div
-                      style={{
-                        position: "relative",
-                        width: "100%",
-                        height: "88px",
-                        borderRadius: "4px",
-                        overflow: "hidden",
-                      }}
-                    >
-                      <Image
-                        src={frame.src}
-                        alt={frame.title}
-                        fill
-                        priority={fIdx < 3}
-                        unoptimized={frame.src.startsWith("/api/media/")}
-                        sizes="210px"
-                        style={{
-                          objectFit: "cover",
-                          filter: "contrast(1.08) brightness(0.92)",
-                        }}
-                      />
-                      <div
-                        style={{
-                          position: "absolute",
-                          inset: 0,
-                          background:
-                            "linear-gradient(to top, rgba(5,5,5,0.82) 0%, transparent 60%)",
-                        }}
-                      />
-                      <span
-                        className="font-display"
-                        style={{
-                          position: "absolute",
-                          bottom: "5px",
-                          left: "7px",
-                          fontSize: "11.5px",
-                          letterSpacing: "0.12em",
-                          color: "#FAFAFA",
-                        }}
-                      >
-                        {frame.title}
-                      </span>
-                    </div>
-
-                    <div
-                      className="font-mono"
-                      style={{
-                        marginTop: "5px",
-                        fontSize: "7.5px",
-                        letterSpacing: "0.14em",
-                        color: "#8A8A8A",
-                      }}
-                    >
-                      {frame.exif}
-                    </div>
-                  </div>
+                  />
                 ))}
               </div>
-
-              <div
-                style={{
-                  position: "absolute",
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  height: "36px",
-                  background:
-                    "linear-gradient(to top, rgba(8,8,10,0.95) 0%, transparent 100%)",
-                  pointerEvents: "none",
-                  zIndex: 2,
-                }}
-              />
             </div>
-          )}
+
+            <div
+              className="font-mono"
+              style={{
+                borderLeft: isMobile ? "1px solid rgba(255,255,255,0.2)" : "1px solid rgba(255,255,255,0.2)",
+                paddingLeft: isMobile ? "6px" : "14px",
+                fontSize: isMobile ? "6px" : "8.5px",
+                letterSpacing: isMobile ? "0.14em" : "0.22em",
+                lineHeight: isMobile ? 1.4 : 1.85,
+                color: "#8A8A8A",
+              }}
+            >
+              <div style={{ color: "#E8E8E8" }}>CAPTURING</div>
+              <div>PEOPLE · PLACES</div>
+              <div>PERSPECTIVES</div>
+            </div>
+          </div>
+
+          {/* ============================================================
+              RIGHT DISCIPLINED 6-FRAME VERTICAL 35MM FILM REEL (z-index: 15)
+              ============================================================ */}
+          <div
+            ref={rightFilmReelRailRef}
+            style={{
+              position: "absolute",
+              top: isMobile ? "108px" : "135px",
+              bottom: isMobile ? "64px" : "74px",
+              right: isMobile ? "8px" : "clamp(38px, 3.6vw, 66px)",
+              width: isMobile ? "68px" : "clamp(172px, 15vw, 218px)",
+              zIndex: 15,
+              overflow: "hidden",
+              pointerEvents: "none",
+              display: "flex",
+              flexDirection: "column",
+              borderTop: "1px solid rgba(212, 168, 67, 0.4)",
+              borderBottom: "1px solid rgba(212, 168, 67, 0.4)",
+              backgroundColor: "rgba(8, 8, 10, 0.75)",
+            }}
+          >
+            <div
+              className="font-mono"
+              style={{
+                padding: isMobile ? "4px 6px" : "7px 10px",
+                backgroundColor: "rgba(10, 10, 12, 0.95)",
+                borderBottom: "1px solid rgba(212, 168, 67, 0.24)",
+                display: "flex",
+                justifyContent: "space-between",
+                fontSize: isMobile ? "6px" : "8px",
+                letterSpacing: isMobile ? "0.14em" : "0.22em",
+                color: "#D4A843",
+                zIndex: 3,
+              }}
+            >
+              <span>{isMobile ? "REEL 01–06" : "REEL // 01A–06F"}</span>
+              <span>{isMobile ? "6F" : "6 FRAMES"}</span>
+            </div>
+
+            <div
+              ref={rightFilmTrackRef}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: isMobile ? "5px" : "10px",
+                padding: isMobile ? "5px 3px" : "10px",
+                borderLeft: "1px solid rgba(212, 168, 67, 0.22)",
+                borderRight: "1px solid rgba(212, 168, 67, 0.22)",
+                willChange: "transform",
+              }}
+            >
+              {filmFrames.map((frame, fIdx) => (
+                <div
+                  key={frame.id}
+                  style={{
+                    position: "relative",
+                    display: "flex",
+                    flexDirection: "column",
+                    padding: isMobile ? "3px 4px" : "6px 8px",
+                    backgroundColor: "rgba(16, 16, 18, 0.94)",
+                    border: "1px solid rgba(255, 255, 255, 0.08)",
+                    borderRadius: isMobile ? "3px" : "6px",
+                    flexShrink: 0,
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      marginBottom: isMobile ? "2px" : "5px",
+                    }}
+                  >
+                    <span
+                      className="font-mono"
+                      style={{
+                        fontSize: isMobile ? "6px" : "8px",
+                        letterSpacing: isMobile ? "0.12em" : "0.2em",
+                        color: "#D4A843",
+                      }}
+                    >
+                      ▸ {frame.id}
+                    </span>
+                    <div style={{ display: "flex", gap: "2px" }}>
+                      {Array.from({ length: isMobile ? 2 : 4 }).map((_, idx) => (
+                        <span
+                          key={idx}
+                          style={{
+                            width: isMobile ? "4px" : "6px",
+                            height: isMobile ? "3px" : "4px",
+                            borderRadius: "1px",
+                            backgroundColor: "#050505",
+                            border: "0.5px solid rgba(212,168,67,0.45)",
+                          }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+
+                  <div
+                    style={{
+                      position: "relative",
+                      width: "100%",
+                      height: isMobile ? "32px" : "88px",
+                      borderRadius: isMobile ? "2px" : "4px",
+                      overflow: "hidden",
+                    }}
+                  >
+                    <Image
+                      src={frame.src}
+                      alt={frame.title}
+                      fill
+                      priority={fIdx < 3}
+                      unoptimized={frame.src.startsWith("/api/media/")}
+                      sizes={isMobile ? "70px" : "210px"}
+                      style={{
+                        objectFit: "cover",
+                        filter: "contrast(1.08) brightness(0.92)",
+                      }}
+                    />
+                    <div
+                      style={{
+                        position: "absolute",
+                        inset: 0,
+                        background:
+                          "linear-gradient(to top, rgba(5,5,5,0.85) 0%, transparent 60%)",
+                      }}
+                    />
+                    <span
+                      className="font-display"
+                      style={{
+                        position: "absolute",
+                        bottom: isMobile ? "2px" : "5px",
+                        left: isMobile ? "3px" : "7px",
+                        fontSize: isMobile ? "6.5px" : "11.5px",
+                        letterSpacing: isMobile ? "0.08em" : "0.12em",
+                        color: "#FAFAFA",
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        maxWidth: "92%",
+                      }}
+                    >
+                      {frame.title}
+                    </span>
+                  </div>
+
+                  <div
+                    className="font-mono"
+                    style={{
+                      marginTop: isMobile ? "2px" : "5px",
+                      fontSize: isMobile ? "5.5px" : "7.5px",
+                      letterSpacing: isMobile ? "0.08em" : "0.14em",
+                      color: "#8A8A8A",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    {frame.exif}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div
+              style={{
+                position: "absolute",
+                left: 0,
+                right: 0,
+                bottom: 0,
+                height: isMobile ? "20px" : "36px",
+                background:
+                  "linear-gradient(to top, rgba(8,8,10,0.95) 0%, transparent 100%)",
+                pointerEvents: "none",
+                zIndex: 2,
+              }}
+            />
+          </div>
 
           {/* ============================================================
               LAYER 1 (z-index: 18): STATIONARY PHOTOREALISTIC CAMERA BODY, XENON FLASH & LENS BARREL
@@ -1363,8 +1364,8 @@ export default function ApertureHero() {
               <div
                 style={{
                   position: "relative",
-                  width: isMobile ? "min(90vw, 68vh, 520px)" : "min(64vw, 70vh, 740px)",
-                  height: isMobile ? "min(62vw, 47vh, 360px)" : "min(44vw, 48vh, 510px)",
+                  width: isMobile ? "min(54vw, 26vh, 210px)" : "min(64vw, 70vh, 740px)",
+                  height: isMobile ? "min(38vw, 18vh, 145px)" : "min(44vw, 48vh, 510px)",
                 }}
               >
                 <Image
@@ -1380,7 +1381,7 @@ export default function ApertureHero() {
               <svg
                 viewBox="0 0 1100 760"
                 style={{
-                  width: isMobile ? "min(90vw, 68vh, 520px)" : "min(64vw, 70vh, 740px)",
+                  width: isMobile ? "min(54vw, 26vh, 210px)" : "min(64vw, 70vh, 740px)",
                   height: "auto",
                   overflow: "visible",
                   filter: "drop-shadow(0 40px 90px rgba(0,0,0,0.96))",
@@ -2115,7 +2116,7 @@ export default function ApertureHero() {
             <svg
               viewBox="0 0 1100 760"
               style={{
-                width: isMobile ? "min(90vw, 68vh, 520px)" : "min(64vw, 70vh, 740px)",
+                width: isMobile ? "min(54vw, 26vh, 210px)" : "min(64vw, 70vh, 740px)",
                 height: "auto",
                 overflow: "visible",
               }}
@@ -2270,7 +2271,7 @@ export default function ApertureHero() {
             style={{
               position: "absolute",
               inset: isMobile
-                ? "68px 14px 64px 14px"
+                ? "82px 10px 58px 10px"
                 : "clamp(56px, 7.5vh, 68px) clamp(16px, 2.5vw, 32px) clamp(24px, 3vh, 32px) clamp(16px, 2.5vw, 32px)",
               zIndex: 25,
               display: "flex",
@@ -2286,11 +2287,11 @@ export default function ApertureHero() {
                 alignItems: "flex-start",
               }}
             >
-              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: isMobile ? "6px" : "10px" }}>
                 <div
                   style={{
-                    width: "18px",
-                    height: "18px",
+                    width: isMobile ? "14px" : "18px",
+                    height: isMobile ? "14px" : "18px",
                     borderTop: "1.5px solid rgba(212, 168, 67, 0.75)",
                     borderLeft: "1.5px solid rgba(212, 168, 67, 0.75)",
                   }}
@@ -2300,24 +2301,24 @@ export default function ApertureHero() {
                   style={{
                     display: "flex",
                     alignItems: "center",
-                    gap: "8px",
-                    fontSize: isMobile ? "9px" : "11px",
+                    gap: isMobile ? "6px" : "8px",
+                    fontSize: isMobile ? "8.5px" : "11px",
                     letterSpacing: "0.2em",
                     color: "#E8E8E8",
                   }}
                 >
                   <span
                     style={{
-                      width: "7px",
-                      height: "7px",
+                      width: isMobile ? "6px" : "7px",
+                      height: isMobile ? "6px" : "7px",
                       borderRadius: "50%",
                       backgroundColor: "#E53935",
                       boxShadow: "0 0 10px #E53935",
                       display: "inline-block",
                     }}
                   />
-                  <span>XENO
-                    {isMobile ? "RAW 14B · TTL" : "REC · RAW 14-BIT ·"}
+                  <span>
+                    {isMobile ? "XENOREC · RAW 14-BIT" : "XENOREC · RAW 14-BIT ·"}
                   </span>
                 </div>
               </div>
@@ -2336,11 +2337,11 @@ export default function ApertureHero() {
                 </div>
               )}
 
-              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: isMobile ? "6px" : "10px" }}>
                 <span
                   className="font-mono"
                   style={{
-                    fontSize: isMobile ? "9px" : "11px",
+                    fontSize: isMobile ? "8.5px" : "11px",
                     letterSpacing: "0.18em",
                     color: "#D4A843",
                   }}
@@ -2349,8 +2350,8 @@ export default function ApertureHero() {
                 </span>
                 <div
                   style={{
-                    width: "18px",
-                    height: "18px",
+                    width: isMobile ? "14px" : "18px",
+                    height: isMobile ? "14px" : "18px",
                     borderTop: "1.5px solid rgba(212, 168, 67, 0.75)",
                     borderRight: "1.5px solid rgba(212, 168, 67, 0.75)",
                   }}
@@ -2366,12 +2367,12 @@ export default function ApertureHero() {
               }}
             >
               <div
-                style={{ display: "flex", alignItems: "flex-end", gap: "12px" }}
+                style={{ display: "flex", alignItems: "flex-end", gap: isMobile ? "8px" : "12px" }}
               >
                 <div
                   style={{
-                    width: "18px",
-                    height: "18px",
+                    width: isMobile ? "14px" : "18px",
+                    height: isMobile ? "14px" : "18px",
                     borderBottom: "1.5px solid rgba(212, 168, 67, 0.75)",
                     borderLeft: "1.5px solid rgba(212, 168, 67, 0.75)",
                   }}
@@ -2380,8 +2381,8 @@ export default function ApertureHero() {
                   className="font-mono"
                   style={{
                     display: "flex",
-                    gap: isMobile ? "10px" : "18px",
-                    fontSize: isMobile ? "9px" : "11px",
+                    gap: isMobile ? "8px" : "18px",
+                    fontSize: isMobile ? "8.5px" : "11px",
                     letterSpacing: "0.18em",
                     color: "#8A8A8A",
                   }}
@@ -2390,17 +2391,17 @@ export default function ApertureHero() {
                     IRIS <strong style={{ color: "#D4A843" }}>{fStop}</strong>
                   </span>
                   <span>{shutterSpeed}</span>
-                  {!isMobile && <span>ISO 400</span>}
+                  <span>ISO 400</span>
                 </div>
               </div>
 
               <div
-                style={{ display: "flex", alignItems: "flex-end", gap: "12px" }}
+                style={{ display: "flex", alignItems: "flex-end", gap: isMobile ? "8px" : "12px" }}
               >
                 <span
                   className="font-mono"
                   style={{
-                    fontSize: isMobile ? "9px" : "11px",
+                    fontSize: isMobile ? "8.5px" : "11px",
                     letterSpacing: "0.2em",
                     color: "#8A8A8A",
                   }}
@@ -2409,8 +2410,8 @@ export default function ApertureHero() {
                 </span>
                 <div
                   style={{
-                    width: "18px",
-                    height: "18px",
+                    width: isMobile ? "14px" : "18px",
+                    height: isMobile ? "14px" : "18px",
                     borderBottom: "1.5px solid rgba(212, 168, 67, 0.75)",
                     borderRight: "1.5px solid rgba(212, 168, 67, 0.75)",
                   }}

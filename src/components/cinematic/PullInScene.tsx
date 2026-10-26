@@ -119,8 +119,7 @@ const EXHIBITION_PAIRINGS = [
 
 function getCardLaneStyle(lane: string, isMobile: boolean): React.CSSProperties {
   if (isMobile) {
-    if (lane === "center-stage") return { left: "50%", top: "34%", transform: "translate(-50%, -50%)" };
-    return { left: "50%", top: "34%", transform: "translate(-50%, -50%)" };
+    return { left: "50%", top: "26%", transform: "translate(-50%, -50%)" };
   }
   switch (lane) {
     case "left-top": return { left: "24%", top: "42%", transform: "translate(-50%, -50%)" };
@@ -142,10 +141,10 @@ function getTextPositionStyle(pos: string, isMobile: boolean): React.CSSProperti
   if (isMobile) {
     return { 
       left: "50%", 
-      top: "calc(34% + 130px)", 
+      top: "calc(26% + 115px)", 
       transform: "translateX(-50%)", 
       textAlign: "center", 
-      width: "90vw" 
+      width: "88vw" 
     };
   }
   switch (pos) {
@@ -490,17 +489,17 @@ export default function PullInScene() {
                 position: "absolute", 
                 ...laneStyle, 
                 // BALANCED CARD SIZES (Prevents overlap with stage text)
-                width: isMobile ? "min(88vw, 320px)" : item.lane === "center-stage" ? "clamp(320px, 30vw, 420px)" : "clamp(290px, 25vw, 380px)", 
+                width: isMobile ? "min(82vw, 290px)" : item.lane === "center-stage" ? "clamp(320px, 30vw, 420px)" : "clamp(290px, 25vw, 380px)", 
                 backgroundColor: "rgba(12, 12, 14, 0.92)", 
                 border: "1px solid rgba(212, 168, 67, 0.38)", 
                 borderRadius: "14px", 
-                padding: "12px 14px 14px 14px", 
+                padding: isMobile ? "10px 12px 12px 12px" : "12px 14px 14px 14px", 
                 boxShadow: "0 30px 75px rgba(0, 0, 0, 0.95), 0 0 28px rgba(212, 168, 67, 0.12)", 
                 backdropFilter: "blur(12px)", 
                 transformStyle: "preserve-3d", 
                 willChange: "transform, opacity" 
             }}>
-              <div className="font-mono" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "9px", paddingBottom: "7px", borderBottom: "1px solid rgba(255, 255, 255, 0.08)", fontSize: "9px", letterSpacing: "0.22em", color: "#D4A843" }}>
+              <div className="font-mono" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: isMobile ? "6px" : "9px", paddingBottom: isMobile ? "5px" : "7px", borderBottom: "1px solid rgba(255, 255, 255, 0.08)", fontSize: isMobile ? "8px" : "9px", letterSpacing: "0.22em", color: "#D4A843" }}>
                 <span>▸ {item.code}</span>
                 <div style={{ display: "flex", gap: "5px" }}>
                   {[0, 1, 2, 3, 4].map((hole) => (
@@ -513,7 +512,7 @@ export default function PullInScene() {
               <div style={{ 
                   position: "relative", 
                   width: "100%", 
-                  height: isMobile ? "140px" : item.lane === "center-stage" ? "185px" : "180px", 
+                  height: isMobile ? "120px" : item.lane === "center-stage" ? "185px" : "180px", 
                   borderRadius: "10px", 
                   overflow: "hidden", 
                   border: "1px solid rgba(255, 255, 255, 0.1)" 
@@ -533,11 +532,11 @@ export default function PullInScene() {
                   style={{ objectFit: "cover", filter: "contrast(1.06) brightness(0.95)" }}
                 />
                 <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(5,5,5,0.82) 0%, transparent 55%)" }} />
-                <div className="font-display" style={{ position: "absolute", bottom: "10px", left: "12px", fontSize: "17px", letterSpacing: "0.14em", color: "#FAFAFA" }}>
+                <div className="font-display" style={{ position: "absolute", bottom: isMobile ? "6px" : "10px", left: isMobile ? "8px" : "12px", fontSize: isMobile ? "14px" : "17px", letterSpacing: "0.14em", color: "#FAFAFA" }}>
                   {item.title}
                 </div>
               </div>
-              <div className="font-mono" style={{ marginTop: "10px", display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: "9.5px", letterSpacing: "0.14em", color: "#8A8A8A" }}>
+              <div className="font-mono" style={{ marginTop: isMobile ? "6px" : "10px", display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: isMobile ? "8px" : "9.5px", letterSpacing: "0.14em", color: "#8A8A8A" }}>
                 <span>{item.exif}</span>
                 <span style={{ color: "#D4A843", backgroundColor: "rgba(212, 168, 67, 0.12)", border: "1px solid rgba(212, 168, 67, 0.3)", padding: "2px 7px", borderRadius: "4px", fontSize: "8px" }}>RAW</span>
               </div>
@@ -550,18 +549,18 @@ export default function PullInScene() {
           const isLast = idx === exhibits.length - 1;
 
           return (
-            <div key={`text-${item.id}`} ref={(el) => { textRefs.current[idx] = el; }} style={{ position: "absolute", ...textStyle, maxWidth: isMobile ? "90vw" : item.lane === "center-stage" ? "min(90vw, 520px)" : "420px", zIndex: 30, pointerEvents: isLast ? "auto" : "none", willChange: "transform, opacity, clip-path" }}>
-              <div className="font-mono" style={{ display: "inline-block", fontSize: "10px", letterSpacing: "0.28em", color: "#D4A843", backgroundColor: "rgba(212, 168, 67, 0.1)", border: "1px solid rgba(212, 168, 67, 0.32)", padding: "3px 10px", borderRadius: "999px", marginBottom: "8px" }}>
+            <div key={`text-${item.id}`} ref={(el) => { textRefs.current[idx] = el; }} style={{ position: "absolute", ...textStyle, maxWidth: isMobile ? "88vw" : item.lane === "center-stage" ? "min(90vw, 520px)" : "420px", zIndex: 30, pointerEvents: isLast ? "auto" : "none", willChange: "transform, opacity, clip-path" }}>
+              <div className="font-mono" style={{ display: "inline-block", fontSize: isMobile ? "8.5px" : "10px", letterSpacing: "0.28em", color: "#D4A843", backgroundColor: "rgba(212, 168, 67, 0.1)", border: "1px solid rgba(212, 168, 67, 0.32)", padding: isMobile ? "2px 8px" : "3px 10px", borderRadius: "999px", marginBottom: isMobile ? "5px" : "8px" }}>
                 {item.code} · {item.focusDistance}
               </div>
-              <h2 className="font-display" style={{ fontSize: isMobile ? "clamp(1.2rem, 3.8vw, 1.5rem)" : "clamp(1.5rem, 2.2vw, 2.2rem)", fontWeight: 300, color: "#FAFAFA", lineHeight: 1.15, letterSpacing: "0.04em", textShadow: "0 12px 35px rgba(0, 0, 0, 0.85)" }}>
+              <h2 className="font-display" style={{ fontSize: isMobile ? "clamp(1.05rem, 3.6vw, 1.3rem)" : "clamp(1.5rem, 2.2vw, 2.2rem)", fontWeight: 300, color: "#FAFAFA", lineHeight: 1.15, letterSpacing: "0.04em", textShadow: "0 12px 35px rgba(0, 0, 0, 0.85)" }}>
                 {item.headline}
               </h2>
-              <p className="font-body" style={{ marginTop: "8px", fontSize: isMobile ? "12px" : "14px", fontWeight: 300, color: "#E8E8E8", lineHeight: 1.5, opacity: 0.85 }}>
+              <p className="font-body" style={{ marginTop: isMobile ? "4px" : "8px", fontSize: isMobile ? "11px" : "14px", fontWeight: 300, color: "#E8E8E8", lineHeight: 1.45, opacity: 0.85 }}>
                 {item.subhead}
               </p>
               {isLast && (
-                <div ref={finalCtaRef} style={{ marginTop: "16px", display: "inline-block" }}>
+                <div ref={finalCtaRef} style={{ marginTop: isMobile ? "10px" : "16px", display: "inline-block" }}>
                   <Link
                     href="/gallery"
                     className="group font-mono relative inline-flex items-center gap-3 min-h-[44px] py-2 px-1 text-[#D4A843] hover:text-white text-[11px] sm:text-[12.5px] tracking-[0.3em] uppercase font-bold transition-colors duration-300 cursor-pointer touch-manipulation bg-transparent border-0 shadow-none rounded-none focus-visible:outline-2 focus-visible:outline-[#D4A843] focus-visible:outline-offset-4"
@@ -583,49 +582,79 @@ export default function PullInScene() {
       </div>
 
       {/* HUD BAR */}
-      <div ref={hudBarRef} style={{ position: "absolute", inset: isMobile ? "68px 14px 64px 14px" : "clamp(56px, 7.5vh, 68px) clamp(16px, 2.5vw, 32px) clamp(24px, 3vh, 32px) clamp(16px, 2.5vw, 32px)", zIndex: 35, display: "flex", flexDirection: "column", justifyContent: "space-between", pointerEvents: "none" }}>
+      <div ref={hudBarRef} style={{ position: "absolute", inset: isMobile ? "82px 14px 58px 14px" : "clamp(56px, 7.5vh, 68px) clamp(16px, 2.5vw, 32px) clamp(24px, 3vh, 32px) clamp(16px, 2.5vw, 32px)", zIndex: 35, display: "flex", flexDirection: "column", justifyContent: "space-between", pointerEvents: "none" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-              <div style={{ width: "20px", height: "20px", borderTop: "1.5px solid rgba(212, 168, 67, 0.75)", borderLeft: "1.5px solid rgba(212, 168, 67, 0.75)" }} />
-              <span className="font-mono" style={{ fontSize: isMobile ? "9px" : "10.5px", letterSpacing: "0.26em", color: "#D4A843" }}>[ SCENE 02 // THE PULL-IN ]</span>
+          <div style={{ display: "flex", flexDirection: "column", gap: isMobile ? "3px" : "6px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: isMobile ? "8px" : "12px" }}>
+              <div style={{ width: isMobile ? "14px" : "20px", height: isMobile ? "14px" : "20px", borderTop: "1.5px solid rgba(212, 168, 67, 0.75)", borderLeft: "1.5px solid rgba(212, 168, 67, 0.75)" }} />
+              <span className="font-mono" style={{ fontSize: isMobile ? "8.5px" : "10.5px", letterSpacing: "0.26em", color: "#D4A843" }}>[ SCENE 02 // THE PULL-IN ]</span>
             </div>
-            <div className="font-mono hidden sm:flex" style={{ alignItems: "center", gap: "14px", paddingLeft: "32px", fontSize: "9.5px", letterSpacing: "0.22em", color: "#E8E8E8" }}>
+            <div className="font-mono flex" style={{ alignItems: "center", gap: isMobile ? "8px" : "14px", paddingLeft: isMobile ? "22px" : "32px", fontSize: isMobile ? "7.5px" : "9.5px", letterSpacing: isMobile ? "0.16em" : "0.22em", color: "#E8E8E8" }}>
               <span>FOCUS: <strong style={{ color: "#D4A843" }}>{focusDistanceText}</strong></span>
-              {!isMobile && <span>Z-AXIS: <strong ref={zAxisReadoutRef} style={{ color: "#FAFAFA" }}>{zAxisMM}</strong></span>}
+              <span>Z-AXIS: <strong ref={zAxisReadoutRef} style={{ color: "#FAFAFA" }}>{zAxisMM}</strong></span>
             </div>
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-            <span className="font-mono" style={{ fontSize: isMobile ? "9px" : "11px", letterSpacing: "0.22em", color: "#FAFAFA" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: isMobile ? "8px" : "12px" }}>
+            <span className="font-mono" style={{ fontSize: isMobile ? "8.5px" : "11px", letterSpacing: "0.22em", color: "#FAFAFA" }}>
               {String(activeFrameIndex + 1).padStart(2, "0")} / {String(exhibits.length).padStart(2, "0")}
             </span>
-            <div style={{ width: "20px", height: "20px", borderTop: "1.5px solid rgba(212, 168, 67, 0.75)", borderRight: "1.5px solid rgba(212, 168, 67, 0.75)" }} />
+            <div style={{ width: isMobile ? "14px" : "20px", height: isMobile ? "14px" : "20px", borderTop: "1.5px solid rgba(212, 168, 67, 0.75)", borderRight: "1.5px solid rgba(212, 168, 67, 0.75)" }} />
           </div>
         </div>
 
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
-          <div style={{ display: "flex", alignItems: "flex-end", gap: "12px" }}>
-            <div style={{ width: "20px", height: "20px", borderBottom: "1.5px solid rgba(212, 168, 67, 0.75)", borderLeft: "1.5px solid rgba(212, 168, 67, 0.75)" }} />
-            <span className="font-mono" style={{ fontSize: isMobile ? "8.5px" : "10px", letterSpacing: "0.22em", color: "#8A8A8A" }}>
-              {isMobile ? "RACK FOCUS" : "3D PERSPECTIVE CORRIDOR · RACK FOCUS ACTIVE"}
-            </span>
-          </div>
-          
-          <div style={{ display: "flex", alignItems: "center", gap: "6px", paddingBottom: "4px" }}>
-            {exhibits.map((item, idx) => {
-              const isCurrent = idx === activeFrameIndex;
-              const isPassed = idx < activeFrameIndex;
-              return (
-                <span key={item.id} style={{ width: isCurrent ? "22px" : "8px", height: "3px", borderRadius: "2px", backgroundColor: isCurrent ? "#D4A843" : isPassed ? "rgba(212, 168, 67, 0.45)" : "rgba(255, 255, 255, 0.16)", transition: "all 0.25s ease" }} />
-              );
-            })}
-          </div>
+        {isMobile ? (
+          <div style={{ display: "flex", flexDirection: "column", gap: "6px", width: "100%" }}>
+            <div style={{ textAlign: "center" }}>
+              <span className="font-mono" style={{ fontSize: "8px", letterSpacing: "0.22em", color: "#D4A843" }}>
+                ↓ SCROLL TO PULL FOCUS
+              </span>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
+              <div style={{ display: "flex", alignItems: "flex-end", gap: "8px" }}>
+                <div style={{ width: "14px", height: "14px", borderBottom: "1.5px solid rgba(212, 168, 67, 0.75)", borderLeft: "1.5px solid rgba(212, 168, 67, 0.75)" }} />
+                <span className="font-mono" style={{ fontSize: "7.5px", letterSpacing: "0.18em", color: "#8A8A8A" }}>
+                  RACK FOCUS
+                </span>
+              </div>
+              
+              <div style={{ display: "flex", alignItems: "center", gap: "4px", paddingBottom: "2px" }}>
+                {exhibits.map((item, idx) => {
+                  const isCurrent = idx === activeFrameIndex;
+                  const isPassed = idx < activeFrameIndex;
+                  return (
+                    <span key={item.id} style={{ width: isCurrent ? "14px" : "5px", height: "2.5px", borderRadius: "1.5px", backgroundColor: isCurrent ? "#D4A843" : isPassed ? "rgba(212, 168, 67, 0.45)" : "rgba(255, 255, 255, 0.16)", transition: "all 0.25s ease" }} />
+                  );
+                })}
+              </div>
 
-          <div style={{ display: "flex", alignItems: "flex-end", gap: "12px" }}>
-            <span className="font-mono" style={{ fontSize: isMobile ? "8.5px" : "10px", letterSpacing: "0.22em", color: "#D4A843" }}>↓ SCROLL TO PULL FOCUS</span>
-            <div style={{ width: "20px", height: "20px", borderBottom: "1.5px solid rgba(212, 168, 67, 0.75)", borderRight: "1.5px solid rgba(212, 168, 67, 0.75)" }} />
+              <div style={{ width: "14px", height: "14px", borderBottom: "1.5px solid rgba(212, 168, 67, 0.75)", borderRight: "1.5px solid rgba(212, 168, 67, 0.75)" }} />
+            </div>
           </div>
-        </div>
+        ) : (
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
+            <div style={{ display: "flex", alignItems: "flex-end", gap: "12px" }}>
+              <div style={{ width: "20px", height: "20px", borderBottom: "1.5px solid rgba(212, 168, 67, 0.75)", borderLeft: "1.5px solid rgba(212, 168, 67, 0.75)" }} />
+              <span className="font-mono" style={{ fontSize: "10px", letterSpacing: "0.22em", color: "#8A8A8A" }}>
+                3D PERSPECTIVE CORRIDOR · RACK FOCUS ACTIVE
+              </span>
+            </div>
+            
+            <div style={{ display: "flex", alignItems: "center", gap: "6px", paddingBottom: "4px" }}>
+              {exhibits.map((item, idx) => {
+                const isCurrent = idx === activeFrameIndex;
+                const isPassed = idx < activeFrameIndex;
+                return (
+                  <span key={item.id} style={{ width: isCurrent ? "22px" : "8px", height: "3px", borderRadius: "2px", backgroundColor: isCurrent ? "#D4A843" : isPassed ? "rgba(212, 168, 67, 0.45)" : "rgba(255, 255, 255, 0.16)", transition: "all 0.25s ease" }} />
+                );
+              })}
+            </div>
+
+            <div style={{ display: "flex", alignItems: "flex-end", gap: "12px" }}>
+              <span className="font-mono" style={{ fontSize: "10px", letterSpacing: "0.22em", color: "#D4A843" }}>↓ SCROLL TO PULL FOCUS</span>
+              <div style={{ width: "20px", height: "20px", borderBottom: "1.5px solid rgba(212, 168, 67, 0.75)", borderRight: "1.5px solid rgba(212, 168, 67, 0.75)" }} />
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
