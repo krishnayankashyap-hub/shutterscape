@@ -202,7 +202,10 @@ export default function PullInScene() {
                 ...orig,
                 title: matched.title || orig.title,
                 subTitle: matched.subTitle || orig.subTitle,
-                src: matched.src || orig.src,
+                src:
+                  matched.src && !matched.src.startsWith("blob:")
+                    ? matched.src
+                    : orig.src,
                 exif: matched.exif || orig.exif,
                 focusDistance: matched.focusDistance || orig.focusDistance,
                 headline: matched.headline || orig.headline,
@@ -515,7 +518,20 @@ export default function PullInScene() {
                   overflow: "hidden", 
                   border: "1px solid rgba(255, 255, 255, 0.1)" 
               }}>
-                <Image src={item.src} alt={item.title} fill priority={idx < 4} sizes="(max-width: 1024px) 100vw, 600px" style={{ objectFit: "cover", filter: "contrast(1.06) brightness(0.95)" }} />
+                <Image
+                  src={item.src}
+                  alt={item.title}
+                  fill
+                  priority={true}
+                  unoptimized={item.src.startsWith("/api/media/")}
+                  onError={(e) => {
+                    const target = e.currentTarget as HTMLImageElement;
+                    const fallback = EXHIBITION_PAIRINGS[idx]?.src || EXHIBITION_PAIRINGS[0].src;
+                    if (target.src !== fallback) target.src = fallback;
+                  }}
+                  sizes="(max-width: 1024px) 100vw, 600px"
+                  style={{ objectFit: "cover", filter: "contrast(1.06) brightness(0.95)" }}
+                />
                 <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(5,5,5,0.82) 0%, transparent 55%)" }} />
                 <div className="font-display" style={{ position: "absolute", bottom: "10px", left: "12px", fontSize: "17px", letterSpacing: "0.14em", color: "#FAFAFA" }}>
                   {item.title}

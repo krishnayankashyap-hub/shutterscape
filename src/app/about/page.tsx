@@ -228,11 +228,16 @@ export default function AboutPage() {
       .then((r) => r.json())
       .then((res) => {
         if (res.data && res.data.length > 0) {
-          const m = res.data.filter((it: any) => it.tier === "MENTOR");
-          const l = res.data.filter((it: any) => it.tier === "LEAD");
-          const c = res.data.filter((it: any) => it.tier === "CORE");
-          const f = res.data.filter((it: any) => it.tier === "FOUNDER");
-          const leg = res.data.filter((it: any) => it.tier === "LEGACY");
+          const cleanItem = (it: any, defaultImg = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800&auto=format&fit=crop") => ({
+            ...it,
+            img: it.img && !it.img.startsWith("blob:") ? it.img : defaultImg,
+          });
+
+          const m = res.data.filter((it: any) => it.tier === "MENTOR").map((it: any, i: number) => cleanItem(it, MENTORS[i]?.img));
+          const l = res.data.filter((it: any) => it.tier === "LEAD").map((it: any, i: number) => cleanItem(it, LEADS[i]?.img));
+          const c = res.data.filter((it: any) => it.tier === "CORE").map((it: any, i: number) => cleanItem(it, CORE_MEMBERS[i]?.img));
+          const f = res.data.filter((it: any) => it.tier === "FOUNDER").map((it: any, i: number) => cleanItem(it, FOUNDERS[i]?.img));
+          const leg = res.data.filter((it: any) => it.tier === "LEGACY").map((it: any, i: number) => cleanItem(it, LEGACY[i]?.img));
           if (m.length > 0) setMentors(m);
           if (l.length > 0) setLeads(l);
           if (c.length > 0) setCoreMembers(c);

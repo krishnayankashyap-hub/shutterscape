@@ -86,7 +86,15 @@ export default function CinematicGalleryPage() {
       .then((r) => r.json())
       .then((res) => {
         if (res.data && res.data.length > 0) {
-          setCollection(res.data);
+          setCollection(
+            res.data.map((item: any, idx: number) => ({
+              ...item,
+              src:
+                item.src && !item.src.startsWith("blob:")
+                  ? item.src
+                  : GALLERY_COLLECTION[idx % GALLERY_COLLECTION.length].src,
+            }))
+          );
         }
       })
       .catch(() => {});

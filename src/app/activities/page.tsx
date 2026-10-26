@@ -492,7 +492,10 @@ export default function ActivitiesPage() {
             description: item.description || "",
             exif: item.exif || "",
             filmStock: item.filmStock || "",
-            img: item.img || "",
+            img:
+              item.img && !item.img.startsWith("blob:")
+                ? item.img
+                : ARCHIVE_DATA[idx]?.img || ARCHIVE_DATA[0].img,
             isUpcoming: Boolean(item.isUpcoming),
           }));
           setArchiveData(mapped);

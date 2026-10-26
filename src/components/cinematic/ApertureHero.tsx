@@ -118,12 +118,18 @@ export default function ApertureHero() {
       .then((res) => {
         if (res.data && res.data.length > 0) {
           setFilmFrames(
-            res.data.map((d: any, idx: number) => ({
-              id: d.frameCode || String(idx + 1).padStart(2, "0"),
-              title: d.title,
-              src: d.src,
-              exif: d.exif,
-            }))
+            res.data.map((d: any, idx: number) => {
+              const defaultFrame = FILM_REEL_FRAMES[idx] || FILM_REEL_FRAMES[0];
+              return {
+                id: d.frameCode || String(idx + 1).padStart(2, "0"),
+                title: d.title || defaultFrame.title,
+                src:
+                  d.src && !d.src.startsWith("blob:")
+                    ? d.src
+                    : defaultFrame.src,
+                exif: d.exif || defaultFrame.exif,
+              };
+            })
           );
         }
       })

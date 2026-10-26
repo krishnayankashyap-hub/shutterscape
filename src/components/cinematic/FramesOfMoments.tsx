@@ -58,11 +58,18 @@ export default function FramesOfMoments({ initialReels }: FramesOfMomentsProps =
       .then((res) => {
         if (res.data && res.data.length > 0) {
           setReels(
-            res.data.map((d: any, idx: number) => ({
-              id: d._id || String(idx + 1).padStart(2, "0"),
-              photographer: d.photographer,
-              videoSrc: d.videoSrc,
-            }))
+            res.data.map((d: any, idx: number) => {
+              const defaultReel = REELS[idx % REELS.length];
+              const validVideoSrc =
+                d.videoSrc && !d.videoSrc.startsWith("blob:")
+                  ? d.videoSrc
+                  : defaultReel.videoSrc;
+              return {
+                id: d._id || String(idx + 1).padStart(2, "0"),
+                photographer: d.photographer || defaultReel.photographer,
+                videoSrc: validVideoSrc,
+              };
+            })
           );
         }
       })
@@ -373,6 +380,14 @@ export default function FramesOfMoments({ initialReels }: FramesOfMomentsProps =
                   muted={activeAudioId !== reel.id}
                   playsInline
                   preload="auto"
+                  onError={(e) => {
+                    const video = e.currentTarget;
+                    const fallback = `/videos/reel-${(index % 6) + 1}.mp4`;
+                    if (video.src !== fallback) {
+                      video.src = fallback;
+                      video.play().catch(() => {});
+                    }
+                  }}
                   onTimeUpdate={(e) => {
                     const video = e.currentTarget;
                     if (video.duration && !isNaN(video.duration)) {

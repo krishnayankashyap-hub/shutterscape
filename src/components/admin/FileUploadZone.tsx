@@ -27,6 +27,7 @@ export default function FileUploadZone({
   const [showUrlInput, setShowUrlInput] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
   const [fileSize, setFileSize] = useState<string | null>(null);
+  const [localPreview, setLocalPreview] = useState<string | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -106,15 +107,16 @@ export default function FileUploadZone({
     setFileName(file.name);
     setFileSize(formatBytes(file.size));
 
-    // Zero-lag local object URL preview
+    // Zero-lag local object URL preview for immediate visual feedback (NOT sent to DB)
     const localPreviewUrl = URL.createObjectURL(file);
-    onChange(localPreviewUrl);
+    setLocalPreview(localPreviewUrl);
 
     // Validate video file size against Vercel's 4.5MB serverless payload limit
     if (file.type.startsWith("video/") && file.size > 4 * 1024 * 1024) {
       setUploadError(
         `Video size (${formatBytes(file.size)}) exceeds Vercel's 4MB serverless upload limit. Please trim the clip, or click 'Paste URL instead' above to link any external video URL (Google Drive, Cloudinary, YouTube, Imgur, etc.).`
       );
+      setLocalPreview(null);
       setIsUploading(false);
       return;
     }
@@ -150,11 +152,13 @@ export default function FileUploadZone({
         throw new Error(data.message || "Upload failed. Please try again.");
       }
 
-      // Permanent public static URL
+      // Permanent public static URL saved to database state
       onChange(data.url);
+      setLocalPreview(null);
       setUploadError(null);
     } catch (err: any) {
       console.error("Upload error:", err);
+      setLocalPreview(null);
       setUploadError(err.message || "Failed to upload file from your device.");
     } finally {
       setIsUploading(false);
@@ -197,6 +201,7 @@ export default function FileUploadZone({
   const handleClear = (e: React.MouseEvent) => {
     e.stopPropagation();
     onChange("");
+    setLocalPreview(null);
     setFileName(null);
     setFileSize(null);
     setUploadError(null);
@@ -204,6 +209,8 @@ export default function FileUploadZone({
       fileInputRef.current.value = "";
     }
   };
+
+  const displayAssetUrl = localPreview || value;
 
   return (
     <div className={`space-y-2.5 ${className}`}>
@@ -265,11 +272,11 @@ export default function FileUploadZone({
           />
 
           {/* ACTIVE PREVIEW (Image or Video) */}
-          {value ? (
+          {displayAssetUrl ? (
             <div className="relative w-full h-52 bg-[#0F172A] flex items-center justify-center overflow-hidden group">
               {isVideo ? (
                 <video
-                  src={value}
+                  src={displayAssetUrl}
                   autoPlay
                   loop
                   muted
@@ -278,7 +285,7 @@ export default function FileUploadZone({
                 />
               ) : (
                 <Image
-                  src={value}
+                  src={displayAssetUrl}
                   alt="Asset Preview"
                   fill
                   className="object-contain"

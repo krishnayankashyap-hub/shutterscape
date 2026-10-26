@@ -133,20 +133,28 @@ export default function TimelinePeek() {
       .then((res) => {
         if (res.data && res.data.length > 0) {
           setChapters(
-            res.data.slice(0, 5).map((d: any, idx: number) => ({
-              id: String(idx + 1).padStart(2, "0"),
-              frameCode: `${21 + idx}A`,
-              filmStock: d.filmStock || "KODAK PORTRA 400",
-              status: d.isUpcoming ? "UPCOMING" : "COMPLETED",
-              isUpcoming: Boolean(d.isUpcoming),
-              category: d.category || "PHOTOWALK",
-              date: d.date,
-              location: d.location || "Guwahati",
-              title: d.title,
-              description: d.description || "",
-              exif: d.exif || "35MM · F/2.0",
-              src: d.img,
-            }))
+            res.data.slice(0, 5).map((d: any, idx: number) => {
+              const defaultChapter = ACTIVITY_CHAPTERS[idx] || ACTIVITY_CHAPTERS[0];
+              const validSrc =
+                d.img && !d.img.startsWith("blob:")
+                  ? d.img
+                  : defaultChapter.src;
+
+              return {
+                id: String(idx + 1).padStart(2, "0"),
+                frameCode: `${21 + idx}A`,
+                filmStock: d.filmStock || defaultChapter.filmStock,
+                status: d.isUpcoming ? "UPCOMING" : "COMPLETED",
+                isUpcoming: Boolean(d.isUpcoming),
+                category: d.category || defaultChapter.category,
+                date: d.date || defaultChapter.date,
+                location: d.location || defaultChapter.location,
+                title: d.title || defaultChapter.title,
+                description: d.description || defaultChapter.description,
+                exif: d.exif || defaultChapter.exif,
+                src: validSrc,
+              };
+            })
           );
         }
       })
@@ -430,9 +438,15 @@ export default function TimelinePeek() {
                         src={chapter.src}
                         alt=""
                         fill
+                        unoptimized={chapter.src.startsWith("/api/media/")}
                         sizes="300px"
                         className="object-cover blur-xl scale-110"
                         aria-hidden="true"
+                        onError={(e) => {
+                          const target = e.currentTarget as HTMLImageElement;
+                          const fallback = ACTIVITY_CHAPTERS[idx % ACTIVITY_CHAPTERS.length].src;
+                          if (target.src !== fallback) target.src = fallback;
+                        }}
                       />
                       <div className="absolute inset-0 bg-black/50" />
                     </div>
@@ -449,9 +463,15 @@ export default function TimelinePeek() {
                         alt={chapter.title}
                         fill
                         priority={idx < 3}
+                        unoptimized={chapter.src.startsWith("/api/media/")}
                         loading={idx < 3 ? "eager" : "lazy"}
                         sizes="(max-width: 1024px) 90vw, 700px"
                         className="object-contain drop-shadow-[0_8px_24px_rgba(0,0,0,0.65)]"
+                        onError={(e) => {
+                          const target = e.currentTarget as HTMLImageElement;
+                          const fallback = ACTIVITY_CHAPTERS[idx % ACTIVITY_CHAPTERS.length].src;
+                          if (target.src !== fallback) target.src = fallback;
+                        }}
                       />
                     </div>
 

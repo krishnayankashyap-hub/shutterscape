@@ -140,14 +140,14 @@ export default function EditorialSpread() {
 
           {/* LAYER 1: PARALLAX FLOATING PRINTS (Z-10) */}
           <div className="absolute inset-0 z-10 pointer-events-none">
-            <div ref={photo1Ref} className="absolute left-[5%] md:left-[10%] top-[100vh] w-[70vw] md:w-[35vw] h-[30vh] md:h-[45vh] shadow-[0_30px_80px_rgba(0,0,0,0.15)]">
-              <Image src="https://images.unsplash.com/photo-1452587925148-ce544e77e70d?w=1200&q=85" alt="GCU Photography" fill style={{ objectFit: "cover" }} />
+            <div ref={photo1Ref} className="absolute left-[5%] md:left-[10%] top-[100vh] w-[70vw] md:w-[35vw] h-[30vh] md:h-[45vh] shadow-[0_30px_80px_rgba(0,0,0,0.15)] bg-neutral-200 rounded-sm overflow-hidden">
+              <Image src="https://images.unsplash.com/photo-1452587925148-ce544e77e70d?w=800&auto=format&fit=crop&q=78" alt="GCU Photography" fill priority sizes="(max-width: 768px) 70vw, 35vw" style={{ objectFit: "cover" }} />
             </div>
-            <div ref={photo2Ref} className="absolute right-[5%] md:right-[15%] top-[100vh] w-[50vw] md:w-[22vw] h-[40vh] md:h-[60vh] shadow-[0_30px_80px_rgba(0,0,0,0.2)]">
-              <Image src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&q=85" alt="GCU Studio" fill style={{ objectFit: "cover" }} />
+            <div ref={photo2Ref} className="absolute right-[5%] md:right-[15%] top-[100vh] w-[50vw] md:w-[22vw] h-[40vh] md:h-[60vh] shadow-[0_30px_80px_rgba(0,0,0,0.2)] bg-neutral-200 rounded-sm overflow-hidden">
+              <Image src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&auto=format&fit=crop&q=78" alt="GCU Studio" fill priority sizes="(max-width: 768px) 50vw, 22vw" style={{ objectFit: "cover" }} />
             </div>
-            <div ref={photo3Ref} className="absolute left-[20%] md:left-[38%] top-[100vh] w-[60vw] md:w-[30vw] h-[25vh] md:h-[35vh] shadow-[0_20px_60px_rgba(0,0,0,0.12)]">
-              <Image src="https://images.unsplash.com/photo-1554223090-7e482851df45?w=1000&q=85" alt="GCU Field Work" fill style={{ objectFit: "cover" }} />
+            <div ref={photo3Ref} className="absolute left-[20%] md:left-[38%] top-[100vh] w-[60vw] md:w-[30vw] h-[25vh] md:h-[35vh] shadow-[0_20px_60px_rgba(0,0,0,0.12)] bg-neutral-200 rounded-sm overflow-hidden">
+              <Image src="https://images.unsplash.com/photo-1554223090-7e482851df45?w=800&auto=format&fit=crop&q=78" alt="GCU Field Work" fill priority sizes="(max-width: 768px) 60vw, 30vw" style={{ objectFit: "cover" }} />
             </div>
           </div>
 
