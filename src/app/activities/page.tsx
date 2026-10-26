@@ -1094,25 +1094,26 @@ export default function ActivitiesPage() {
             role="dialog"
             aria-modal="true"
             aria-label={activeModalEvent.title}
-            className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-6 md:p-10 bg-black/85 backdrop-blur-md animate-in fade-in duration-300"
+            className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 md:p-8 bg-black/85 backdrop-blur-md animate-in fade-in duration-300"
             onClick={() => setActiveModalEvent(null)}
           >
             <div
-              className="relative w-[96vw] max-w-5xl h-[88vh] max-h-[800px] bg-[#FAF9F5] text-[#141413] border border-black/15 rounded-2xl overflow-hidden shadow-[0_30px_90px_rgba(0,0,0,0.6)] flex flex-col md:flex-row"
+              className="relative w-[95vw] max-w-4xl max-h-[85vh] md:h-[600px] bg-[#FAF9F5] text-[#141413] border border-[#141413]/15 rounded-2xl overflow-hidden shadow-[0_30px_90px_rgba(0,0,0,0.65)] flex flex-col md:flex-row"
               onClick={(e) => e.stopPropagation()}
             >
+              {/* Close Button - positioned in top right of card with high z-index */}
               <button
                 type="button"
                 onClick={() => setActiveModalEvent(null)}
-                className="absolute top-3.5 right-3.5 z-40 w-9 h-9 rounded-full bg-white/90 text-[#141413] border border-black/10 hover:bg-[#141413] hover:text-white flex items-center justify-center transition-all cursor-pointer text-xs shadow-xs"
+                className="absolute top-4 right-4 z-50 w-8 h-8 rounded-full bg-black/5 hover:bg-[#141413] hover:text-white text-[#141413] border border-black/10 flex items-center justify-center transition-all cursor-pointer text-xs"
                 aria-label="Close modal"
               >
                 ✕
               </button>
 
-              {/* Left Column: Framed Photograph (Uncropped Full Image) */}
-              <div className="relative w-full md:w-[52%] lg:w-[50%] h-[38vh] sm:h-[45vh] md:h-full bg-[#0D0D11] p-3 sm:p-5 md:p-6 flex flex-col justify-between shrink-0 overflow-hidden border-b md:border-b-0 md:border-r border-black/10">
-                {/* Ambient Soft Blur Backdrop so negative space looks cinematic */}
+              {/* Left Column: Framed Archival Photograph (Uncropped Full Image) */}
+              <div className="relative w-full md:w-[50%] h-[36vh] sm:h-[42vh] md:h-full bg-[#0B0B0E] p-4 sm:p-6 md:p-7 flex flex-col justify-between shrink-0 overflow-hidden border-b md:border-b-0 md:border-r border-black/10">
+                {/* Subtle ambient blur behind */}
                 <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-25">
                   <Image
                     src={activeModalEvent.img}
@@ -1134,13 +1135,13 @@ export default function ActivitiesPage() {
                       fill
                       unoptimized
                       sizes="(max-width: 768px) 95vw, 600px"
-                      className="object-contain drop-shadow-[0_15px_35px_rgba(0,0,0,0.7)]"
+                      className="object-contain drop-shadow-[0_16px_36px_rgba(0,0,0,0.85)] rounded-[3px]"
                     />
                   </div>
                 </div>
 
                 {/* Darkroom Technical Info Strip */}
-                <div className="relative z-10 mt-3 pt-3 border-t border-white/10 flex items-center justify-between font-mono text-[9px] sm:text-[10px] tracking-[0.22em] text-[#D4A843] uppercase bg-black/40 backdrop-blur-xs px-3 py-1.5 rounded">
+                <div className="relative z-10 mt-3 pt-3 border-t border-white/10 flex items-center justify-between font-mono text-[9px] sm:text-[9.5px] tracking-[0.22em] text-[#D4A843] uppercase bg-black/40 backdrop-blur-xs px-3 py-1.5 rounded">
                   <span className="flex items-center gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#D4A843]" />
                     {activeModalEvent.filmStock}
@@ -1150,66 +1151,60 @@ export default function ActivitiesPage() {
               </div>
 
               {/* Right Column: Editorial Metadata & Curatorial Notes ("Side Writings") */}
-              <div className="relative w-full md:w-[48%] lg:w-[50%] p-6 sm:p-8 md:p-10 lg:p-11 flex flex-col justify-between overflow-y-auto bg-[#FAF9F5] no-scrollbar">
-                <div className="space-y-5 sm:space-y-6">
-                  {/* Category Pill + Archive ID + Status */}
-                  <div className="flex flex-wrap items-center justify-between gap-3 font-mono text-[10px] tracking-[0.22em] text-[#141413]/60">
-                    <div className="flex items-center gap-2">
-                      <span className="px-2.5 py-1 rounded-md bg-[#141413]/5 border border-[#141413]/10 uppercase font-semibold text-[#141413] text-[9.5px]">
-                        {activeModalEvent.category}
-                      </span>
-                      {activeModalEvent.isUpcoming && (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[9px] font-mono tracking-[0.2em] uppercase font-bold bg-[#D4A843]/15 text-[#996515] border border-[#D4A843]/30">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#D4A843] animate-pulse" />
-                          UPCOMING
-                        </span>
-                      )}
-                    </div>
-                    <span className="text-[10px] tracking-[0.25em] text-[#141413]/40">
-                      [{activeModalEvent.id}]
+              <div className="relative w-full md:w-[50%] p-6 sm:p-8 md:p-9 flex flex-col justify-between overflow-y-auto bg-[#FAF9F5] no-scrollbar">
+                <div>
+                  {/* Top Bar: Category Pill + Status (leaves space for close button on right) */}
+                  <div className="flex items-center gap-2.5 pr-10 mb-4 sm:mb-5">
+                    <span className="px-3 py-1 rounded-full bg-[#141413]/5 border border-[#141413]/10 uppercase font-semibold text-[#141413] text-[9px] font-mono tracking-[0.22em]">
+                      {activeModalEvent.category}
                     </span>
+                    {activeModalEvent.isUpcoming && (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[9px] font-mono tracking-[0.2em] uppercase font-bold bg-[#D4A843]/15 text-[#9E721D] border border-[#D4A843]/30">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#D4A843] animate-pulse" />
+                        UPCOMING
+                      </span>
+                    )}
                   </div>
 
                   {/* Title */}
-                  <div>
-                    <h2 className="font-serif text-2xl sm:text-3xl lg:text-[32px] text-[#141413] font-normal tracking-tight leading-[1.25]">
-                      {activeModalEvent.title}
-                    </h2>
-                  </div>
+                  <h2 className="font-serif text-2xl sm:text-[27px] md:text-[29px] text-[#141413] font-normal tracking-tight leading-[1.25] mb-4">
+                    {activeModalEvent.title}
+                  </h2>
 
-                  {/* Curated 2x2 Metadata Docket Grid */}
-                  <div className="grid grid-cols-2 gap-3 p-4 rounded-xl bg-black/[0.03] border border-black/[0.06] font-mono">
-                    <div>
-                      <span className="text-[#141413]/45 block text-[8.5px] tracking-[0.22em] uppercase mb-1">
-                        DATE / TIME
+                  {/* Minimalist Hairline Specification Bar */}
+                  <div className="flex flex-wrap items-center gap-x-6 gap-y-2 py-3 border-y border-[#141413]/10 mb-5 font-mono text-xs">
+                    <div className="flex items-center gap-2">
+                      <span className="text-[8.5px] tracking-[0.25em] text-[#141413]/45 uppercase">
+                        DATE:
                       </span>
-                      <span className="text-xs sm:text-[13px] font-semibold text-[#141413] block">
+                      <span className="text-[12px] font-semibold text-[#141413]">
                         {activeModalEvent.date}
                       </span>
                     </div>
-                    <div>
-                      <span className="text-[#141413]/45 block text-[8.5px] tracking-[0.22em] uppercase mb-1">
-                        LOCATION
+                    <div className="w-px h-3.5 bg-[#141413]/15 hidden sm:block" />
+                    <div className="flex items-center gap-2">
+                      <span className="text-[8.5px] tracking-[0.25em] text-[#141413]/45 uppercase">
+                        VENUE:
                       </span>
-                      <span className="text-xs sm:text-[13px] font-semibold text-[#141413] block truncate">
+                      <span className="text-[12px] font-semibold text-[#141413] truncate max-w-[200px]">
                         {activeModalEvent.location}
                       </span>
                     </div>
                   </div>
 
-                  {/* Editorial Description / Side Writings */}
-                  <div className="pt-2">
-                    <span className="block font-mono text-[9px] tracking-[0.26em] uppercase text-[#141413]/40 mb-3">
-                      CURATORIAL NOTES // DESCRIPTION
+                  {/* Curatorial Statement & Description ("The Writings") */}
+                  <div>
+                    <span className="block font-mono text-[9px] tracking-[0.28em] uppercase text-[#D4A843] font-bold mb-2.5">
+                      // CURATORIAL STATEMENT
                     </span>
-                    <div className="font-body text-sm sm:text-[15px] text-[#141413]/85 leading-[1.8] font-normal">
+                    <div className="font-serif sm:font-sans text-[14.5px] sm:text-[15.5px] text-[#282724] leading-[1.85] font-normal space-y-3">
                       {renderFormattedDescription(activeModalEvent.description)}
                     </div>
                   </div>
                 </div>
 
                 {/* Footer Navigation Bar */}
-                <div className="pt-6 mt-8 border-t border-[#141413]/10 flex items-center justify-between font-mono text-[10px] tracking-[0.2em]">
+                <div className="pt-4 mt-6 border-t border-[#141413]/10 flex items-center justify-between font-mono text-[9.5px] tracking-[0.2em] shrink-0">
                   <button
                     type="button"
                     onClick={() => {
@@ -1221,12 +1216,12 @@ export default function ActivitiesPage() {
                         filteredData.length;
                       setActiveModalEvent(filteredData[prevIdx]);
                     }}
-                    className="px-3.5 py-2 rounded-full border border-black/10 text-[#141413] hover:bg-black/5 hover:border-black/25 transition-all cursor-pointer flex items-center gap-1.5"
+                    className="inline-flex items-center px-3.5 py-1.5 rounded-full border border-black/10 text-[#141413] hover:bg-[#141413] hover:text-[#FAF9F5] transition-all cursor-pointer font-medium"
                   >
                     ← PREV
                   </button>
 
-                  <span className="text-[#141413]/40 text-[9.5px]">
+                  <span className="text-[#141413]/45 text-[9px] tracking-[0.24em]">
                     FRAME {filteredData.findIndex((ev) => ev.id === activeModalEvent.id) + 1} OF {filteredData.length}
                   </span>
 
@@ -1239,7 +1234,7 @@ export default function ActivitiesPage() {
                       const nextIdx = (currIdx + 1) % filteredData.length;
                       setActiveModalEvent(filteredData[nextIdx]);
                     }}
-                    className="px-3.5 py-2 rounded-full border border-black/10 text-[#141413] hover:bg-black/5 hover:border-black/25 transition-all cursor-pointer flex items-center gap-1.5"
+                    className="inline-flex items-center px-3.5 py-1.5 rounded-full border border-black/10 text-[#141413] hover:bg-[#141413] hover:text-[#FAF9F5] transition-all cursor-pointer font-medium"
                   >
                     NEXT →
                   </button>
