@@ -1179,12 +1179,13 @@ export default function AdminDashboardPage() {
                   >
                     <div className="relative aspect-[16/10] w-full bg-[#F1F5F9] overflow-hidden">
                       <Image
-                        src={item.src}
+                        src={item.src || (item as any).img || "/images/og-image.jpg"}
                         alt={item.title}
                         fill
                         className="object-cover group-hover:scale-105 transition-transform duration-500"
                         sizes="400px"
                         unoptimized
+                        loading="lazy"
                       />
                       <div
                         style={{ top: "12px", left: "12px" }}
@@ -1292,12 +1293,13 @@ export default function AdminDashboardPage() {
                   >
                     <div className="relative aspect-[3/4] w-full bg-[#F1F5F9] overflow-hidden">
                       <Image
-                        src={item.src}
+                        src={item.src || (item as any).img || "/images/og-image.jpg"}
                         alt={item.title}
                         fill
                         className="object-cover"
                         sizes="300px"
                         unoptimized
+                        loading="lazy"
                       />
                       <div
                         style={{ top: "12px", left: "12px" }}
@@ -1365,12 +1367,13 @@ export default function AdminDashboardPage() {
                   <div key={item._id || item.code || idx} className="cms-card">
                     <div className="relative aspect-[16/10] w-full bg-[#F1F5F9] overflow-hidden">
                       <Image
-                        src={item.src}
+                        src={item.src || (item as any).img || "/images/og-image.jpg"}
                         alt={item.title}
                         fill
                         className="object-cover"
                         sizes="400px"
                         unoptimized
+                        loading="lazy"
                       />
                       <div
                         style={{ top: "12px", left: "12px" }}
@@ -1440,12 +1443,13 @@ export default function AdminDashboardPage() {
                   <div key={m._id || idx} className="cms-card">
                     <div className="relative aspect-[4/5] w-full bg-[#F1F5F9] overflow-hidden">
                       <Image
-                        src={m.img}
+                        src={m.img || (m as any).src || "/images/og-image.jpg"}
                         alt={m.name}
                         fill
                         className="object-cover"
                         sizes="300px"
                         unoptimized
+                        loading="lazy"
                       />
                       <div
                         style={{ top: "12px", left: "12px" }}
@@ -1523,12 +1527,13 @@ export default function AdminDashboardPage() {
                   <div key={ev._id || idx} className="cms-card">
                     <div className="relative aspect-[16/10] w-full bg-[#F1F5F9] overflow-hidden">
                       <Image
-                        src={ev.img}
+                        src={ev.img || (ev as any).src || "/images/og-image.jpg"}
                         alt={ev.title}
                         fill
                         className="object-cover"
                         sizes="400px"
                         unoptimized
+                        loading="lazy"
                       />
                       <div
                         style={{ top: "12px", left: "12px" }}

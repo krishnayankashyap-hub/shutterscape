@@ -2,6 +2,7 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import { UploadMedia } from "@/models/UploadMedia";
+import sharp from "sharp";
 
 export async function POST(request: Request) {
   try {
@@ -16,9 +17,33 @@ export async function POST(request: Request) {
     }
 
     const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    const mimeType = file.type || "image/jpeg";
+    let buffer = Buffer.from(bytes);
+    let mimeType = file.type || "image/jpeg";
     const originalName = file.name || "upload.jpg";
+
+    // Auto-compress images to ultra-fast lightweight WebP before storing in MongoDB
+    if (
+      mimeType.startsWith("image/") &&
+      !mimeType.includes("svg") &&
+      !mimeType.includes("gif")
+    ) {
+      try {
+        const webpBuf = await sharp(buffer)
+          .resize({
+            width: 1600,
+            height: 1600,
+            fit: "inside",
+            withoutEnlargement: true,
+          })
+          .webp({ quality: 82 })
+          .toBuffer();
+        buffer = webpBuf;
+        mimeType = "image/webp";
+      } catch (compressionErr) {
+        console.warn("Upload image compression failed, using original:", compressionErr);
+      }
+    }
+
     const base64Data = buffer.toString("base64");
 
     const conn = await connectDB();
@@ -27,7 +52,7 @@ export async function POST(request: Request) {
       const media = await UploadMedia.create({
         filename: originalName,
         mimeType,
-        size: file.size,
+        size: buffer.length,
         data: base64Data,
       });
 
@@ -37,7 +62,7 @@ export async function POST(request: Request) {
         success: true,
         url: publicUrl,
         filename: originalName,
-        size: file.size,
+        size: buffer.length,
         mimeType,
       });
     }
@@ -48,7 +73,7 @@ export async function POST(request: Request) {
       success: true,
       url: dataUri,
       filename: originalName,
-      size: file.size,
+      size: buffer.length,
       mimeType,
     });
   } catch (error) {
