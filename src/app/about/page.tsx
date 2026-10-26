@@ -223,6 +223,10 @@ export default function AboutPage() {
     themeIndex: number;
   } | null>(null);
 
+  // See All Together full-screen ensemble state
+  const [showAllMembers, setShowAllMembers] = useState(false);
+  const [allFilter, setAllFilter] = useState("ALL");
+
   useEffect(() => {
     fetch("/api/committee")
       .then((r) => r.json())
@@ -260,14 +264,20 @@ export default function AboutPage() {
     }
   }, []);
 
-  // Close bio modal on Escape key
+  // Close modals on Escape key
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setSelectedMember(null);
+      if (e.key === "Escape") {
+        if (selectedMember) {
+          setSelectedMember(null);
+        } else {
+          setShowAllMembers(false);
+        }
+      }
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, []);
+  }, [selectedMember]);
 
   const jumpToSection = useCallback((target: string) => {
     const tl = tlRef.current;
@@ -712,6 +722,21 @@ export default function AboutPage() {
             </span>
           </Link>
 
+          {/* SEE ALL TOGETHER BUTTON */}
+          <button
+            type="button"
+            onClick={() => setShowAllMembers(true)}
+            className="group fixed top-28 md:top-6 right-4 md:right-8 z-[9990] pointer-events-auto inline-flex items-center gap-2 py-2 px-3 sm:px-4 rounded-full font-mono text-[9.5px] sm:text-[11px] uppercase tracking-[0.22em] font-bold text-[#D4A843] hover:text-white bg-black/60 hover:bg-[#D4A843]/20 border border-[#D4A843]/40 hover:border-[#D4A843] transition-all duration-300 backdrop-blur-md shadow-lg cursor-pointer"
+            title="See All Members Together"
+            aria-label="See All Members Together"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-[#D4A843] animate-pulse" />
+            <span>SEE ALL TOGETHER</span>
+            <span className="text-xs transition-transform duration-300 group-hover:scale-125">
+              ⊞
+            </span>
+          </button>
+
           {/* CLEAN MINIMALIST CATEGORY TASKBAR (Desktop Right Dock) */}
           <aside
             aria-label="Story Chapter Navigation"
@@ -757,6 +782,19 @@ export default function AboutPage() {
                 </button>
               );
             })}
+
+            {/* Shortcut: See All Together */}
+            <div className="pt-2 mt-1 border-t border-white/10 w-full flex justify-end">
+              <button
+                type="button"
+                onClick={() => setShowAllMembers(true)}
+                className="group flex items-center justify-end gap-2 py-1 cursor-pointer transition-colors duration-300 bg-transparent border-0 outline-none text-[#D4A843] hover:text-white font-mono text-[9px] tracking-[0.2em] uppercase font-bold"
+                aria-label="See All Members Together"
+              >
+                <span className="group-hover:underline">SEE ALL TOGETHER</span>
+                <span className="text-[10px]">⊞</span>
+              </button>
+            </div>
           </aside>
 
           {/* Mobile Minimal Chapter Indicator */}
@@ -1132,6 +1170,200 @@ export default function AboutPage() {
                   photowalks, and preserve the creative culture of GCU.
                 </p>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* =========================================================
+            "SEE ALL TOGETHER" FULL-SCREEN ENSEMBLE MODAL
+            ========================================================= */}
+        {showAllMembers && (
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="All Members Directory"
+            className="fixed inset-0 z-[9985] bg-[#050505]/96 backdrop-blur-2xl overflow-y-auto flex flex-col pointer-events-auto"
+          >
+            {/* Sticky Header Bar */}
+            <div className="sticky top-0 z-30 bg-[#050505]/92 backdrop-blur-md border-b border-white/10 px-4 sm:px-8 py-3.5 sm:py-4 flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <span className="w-2 h-2 rounded-full bg-[#D4A843] animate-pulse" />
+                <div>
+                  <span className="font-mono text-[8.5px] sm:text-[9.5px] tracking-[0.3em] text-[#D4A843] uppercase font-semibold block">
+                    CHAPTER ENSEMBLE // COMPLETE DIRECTORY
+                  </span>
+                  <h2 className="font-serif text-lg sm:text-2xl text-white font-normal uppercase tracking-wider">
+                    All Members Together
+                  </h2>
+                </div>
+              </div>
+
+              {/* Filter Tabs (Desktop) */}
+              <div className="hidden lg:flex items-center gap-1.5 bg-white/[0.04] p-1 rounded-full border border-white/10">
+                {[
+                  { key: "ALL", label: `ALL (${mentors.length + leads.length + coreMembers.length + founders.length + legacy.length})` },
+                  { key: "MENTORS", label: `MENTORS (${mentors.length})` },
+                  { key: "LEADERSHIP", label: `LEADERSHIP (${leads.length})` },
+                  { key: "CORE", label: `CORE (${coreMembers.length})` },
+                  { key: "FOUNDERS", label: `FOUNDERS (${founders.length})` },
+                  { key: "LEGACY", label: `LEGACY (${legacy.length})` },
+                ].map((tab) => {
+                  const isCur = allFilter === tab.key;
+                  return (
+                    <button
+                      key={tab.key}
+                      type="button"
+                      onClick={() => setAllFilter(tab.key)}
+                      className={`px-3 py-1 rounded-full font-mono text-[9px] tracking-[0.18em] uppercase transition-all cursor-pointer ${
+                        isCur
+                          ? "bg-[#D4A843] text-black font-bold shadow-md"
+                          : "text-white/60 hover:text-white hover:bg-white/[0.06]"
+                      }`}
+                    >
+                      {tab.label}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Close Button */}
+              <button
+                type="button"
+                onClick={() => setShowAllMembers(false)}
+                aria-label="Close All Members Modal"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/10 hover:bg-[#D4A843] text-white hover:text-black flex items-center justify-center font-bold text-base sm:text-lg transition-colors cursor-pointer shrink-0"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Mobile Filter Pill Bar */}
+            <div className="lg:hidden flex items-center gap-1.5 overflow-x-auto px-4 py-2.5 border-b border-white/5 bg-[#050505]">
+              {[
+                { key: "ALL", label: `ALL (${mentors.length + leads.length + coreMembers.length + founders.length + legacy.length})` },
+                { key: "MENTORS", label: `MENTORS (${mentors.length})` },
+                { key: "LEADERSHIP", label: `LEADS (${leads.length})` },
+                { key: "CORE", label: `CORE (${coreMembers.length})` },
+                { key: "FOUNDERS", label: `FOUNDERS (${founders.length})` },
+                { key: "LEGACY", label: `LEGACY (${legacy.length})` },
+              ].map((tab) => {
+                const isCur = allFilter === tab.key;
+                return (
+                  <button
+                    key={tab.key}
+                    type="button"
+                    onClick={() => setAllFilter(tab.key)}
+                    className={`shrink-0 px-3 py-1 rounded-full font-mono text-[8.5px] tracking-[0.16em] uppercase transition-all cursor-pointer ${
+                      isCur
+                        ? "bg-[#D4A843] text-black font-bold"
+                        : "text-white/50 hover:text-white bg-white/[0.04]"
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Modal Content Body */}
+            <div className="max-w-7xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-12 flex flex-col gap-10 sm:gap-14">
+              {[
+                {
+                  filterKey: "MENTORS",
+                  code: "CHAPTER 02 // MENTORS",
+                  title: "The Teachers Who Guide Us",
+                  members: mentors,
+                },
+                {
+                  filterKey: "LEADERSHIP",
+                  code: "CHAPTER 03 // LEADERSHIP",
+                  title: "Behind The Lens",
+                  members: leads,
+                },
+                {
+                  filterKey: "CORE",
+                  code: "CHAPTER 04 // THE FOUNDATION",
+                  title: "Core Members",
+                  members: coreMembers,
+                },
+                {
+                  filterKey: "FOUNDERS",
+                  code: "CHAPTER 05 // GENESIS",
+                  title: "Where It All Started",
+                  members: founders,
+                },
+                {
+                  filterKey: "LEGACY",
+                  code: "CHAPTER 06 // LEGACY",
+                  title: "Carrying It Forward",
+                  members: legacy,
+                },
+              ]
+                .filter((grp) => allFilter === "ALL" || allFilter === grp.filterKey)
+                .map((grp, gIdx) => (
+                  <div key={gIdx} className="flex flex-col gap-4 sm:gap-6">
+                    {/* Section Header */}
+                    <div className="border-b border-white/10 pb-3 flex items-baseline justify-between">
+                      <div>
+                        <span className="font-mono text-[8.5px] sm:text-[9.5px] tracking-[0.35em] text-[#D4A843] uppercase font-semibold">
+                          {grp.code}
+                        </span>
+                        <h3 className="font-serif text-xl sm:text-2xl text-white font-normal uppercase tracking-wider mt-0.5">
+                          {grp.title}
+                        </h3>
+                      </div>
+                      <span className="font-mono text-[9px] text-white/40 tracking-widest uppercase">
+                        {grp.members.length} {grp.members.length === 1 ? "MEMBER" : "MEMBERS"}
+                      </span>
+                    </div>
+
+                    {/* Member Cards Grid */}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-5">
+                      {grp.members.map((member, mIdx) => (
+                        <div
+                          key={mIdx}
+                          onClick={() =>
+                            setSelectedMember({
+                              member,
+                              themeIndex: (gIdx * 3 + mIdx) % CARD_THEMES.length,
+                            })
+                          }
+                          className="group relative flex flex-col items-center cursor-pointer select-none rounded-xl bg-white/[0.03] hover:bg-white/[0.07] border border-white/5 hover:border-[#D4A843]/40 p-3 sm:p-3.5 transition-all duration-300"
+                        >
+                          {/* Photo with Arch Top and Grayscale to Color Hover */}
+                          <div className="relative w-full aspect-[3/3.8] rounded-t-[38%] rounded-b-md overflow-hidden bg-black/40 mb-3 shadow-md">
+                            <Image
+                              src={member.img}
+                              alt={member.name}
+                              fill
+                              sizes="(max-width: 640px) 160px, 220px"
+                              className="object-cover object-top grayscale group-hover:grayscale-0 contrast-110 group-hover:scale-105 transition-all duration-500"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-20 transition-opacity duration-300 pointer-events-none" />
+                          </div>
+
+                          <h4 className="font-heading font-bold text-xs sm:text-sm text-white group-hover:text-[#D4A843] transition-colors text-center line-clamp-1 w-full">
+                            {member.name}
+                          </h4>
+
+                          <p className="font-mono text-[8px] sm:text-[9px] tracking-[0.16em] text-[#D4A843] uppercase font-bold text-center mt-1 line-clamp-1 w-full">
+                            {member.role}
+                          </p>
+
+                          {member.dept && (
+                            <p className="font-body text-[9px] sm:text-[10px] text-white/50 text-center mt-1 line-clamp-2 w-full">
+                              {member.dept}
+                            </p>
+                          )}
+
+                          <span className="mt-3 font-mono text-[8px] tracking-[0.2em] uppercase text-white/30 group-hover:text-white/80 transition-colors">
+                            VIEW BIO ↗
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
             </div>
           </div>
         )}
