@@ -264,6 +264,26 @@ export default function AboutPage() {
     }
   }, []);
 
+  // Stop Lenis and lock body scroll when See All Together is open so the modal can scroll naturally
+  useEffect(() => {
+    const lenis = (
+      window as unknown as {
+        __lenis?: { stop: () => void; start: () => void };
+      }
+    ).__lenis;
+    if (showAllMembers) {
+      lenis?.stop();
+      document.body.style.overflow = "hidden";
+    } else {
+      lenis?.start();
+      document.body.style.overflow = "";
+    }
+    return () => {
+      lenis?.start();
+      document.body.style.overflow = "";
+    };
+  }, [showAllMembers]);
+
   // Close modals on Escape key
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -1182,91 +1202,68 @@ export default function AboutPage() {
             role="dialog"
             aria-modal="true"
             aria-label="All Members Directory"
-            className="fixed inset-0 z-[9985] bg-[#050505]/96 backdrop-blur-2xl overflow-y-auto flex flex-col pointer-events-auto"
+            data-lenis-prevent="true"
+            onWheel={(e) => e.stopPropagation()}
+            onTouchMove={(e) => e.stopPropagation()}
+            className="fixed inset-0 z-[9985] bg-[#050505] overflow-y-auto overscroll-contain h-screen w-screen flex flex-col pointer-events-auto"
           >
             {/* Sticky Header Bar */}
-            <div className="sticky top-0 z-30 bg-[#050505]/92 backdrop-blur-md border-b border-white/10 px-4 sm:px-8 py-3.5 sm:py-4 flex items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <span className="w-2 h-2 rounded-full bg-[#D4A843] animate-pulse" />
-                <div>
-                  <span className="font-mono text-[8.5px] sm:text-[9.5px] tracking-[0.3em] text-[#D4A843] uppercase font-semibold block">
-                    CHAPTER ENSEMBLE // COMPLETE DIRECTORY
-                  </span>
-                  <h2 className="font-serif text-lg sm:text-2xl text-white font-normal uppercase tracking-wider">
-                    All Members Together
-                  </h2>
+            <div className="sticky top-0 z-30 bg-[#050505]/95 backdrop-blur-xl border-b border-white/10 px-4 sm:px-8 py-3.5 sm:py-4">
+              <div className="max-w-7xl mx-auto w-full flex flex-col md:flex-row items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <span className="w-2 h-2 rounded-full bg-[#D4A843] animate-pulse" />
+                  <div>
+                    <span className="font-mono text-[8.5px] sm:text-[9.5px] tracking-[0.3em] text-[#D4A843] uppercase font-bold block">
+                      CHAPTER ENSEMBLE // COMPLETE DIRECTORY
+                    </span>
+                    <h2 className="font-serif text-lg sm:text-2xl text-white font-normal uppercase tracking-wider">
+                      All Members Together
+                    </h2>
+                  </div>
                 </div>
-              </div>
 
-              {/* Filter Tabs (Desktop) */}
-              <div className="hidden lg:flex items-center gap-1.5 bg-white/[0.04] p-1 rounded-full border border-white/10">
-                {[
-                  { key: "ALL", label: `ALL (${mentors.length + leads.length + coreMembers.length + founders.length + legacy.length})` },
-                  { key: "MENTORS", label: `MENTORS (${mentors.length})` },
-                  { key: "LEADERSHIP", label: `LEADERSHIP (${leads.length})` },
-                  { key: "CORE", label: `CORE (${coreMembers.length})` },
-                  { key: "FOUNDERS", label: `FOUNDERS (${founders.length})` },
-                  { key: "LEGACY", label: `LEGACY (${legacy.length})` },
-                ].map((tab) => {
-                  const isCur = allFilter === tab.key;
-                  return (
-                    <button
-                      key={tab.key}
-                      type="button"
-                      onClick={() => setAllFilter(tab.key)}
-                      className={`px-3 py-1 rounded-full font-mono text-[9px] tracking-[0.18em] uppercase transition-all cursor-pointer ${
-                        isCur
-                          ? "bg-[#D4A843] text-black font-bold shadow-md"
-                          : "text-white/60 hover:text-white hover:bg-white/[0.06]"
-                      }`}
-                    >
-                      {tab.label}
-                    </button>
-                  );
-                })}
-              </div>
+                {/* Filter Tabs */}
+                <div className="flex flex-wrap items-center justify-center gap-1.5 bg-white/[0.04] p-1.5 rounded-full border border-white/10">
+                  {[
+                    { key: "ALL", label: `ALL (${mentors.length + leads.length + coreMembers.length + founders.length + legacy.length})` },
+                    { key: "MENTORS", label: `MENTORS (${mentors.length})` },
+                    { key: "LEADERSHIP", label: `LEADERSHIP (${leads.length})` },
+                    { key: "CORE", label: `CORE (${coreMembers.length})` },
+                    { key: "FOUNDERS", label: `FOUNDERS (${founders.length})` },
+                    { key: "LEGACY", label: `LEGACY (${legacy.length})` },
+                  ].map((tab) => {
+                    const isCur = allFilter === tab.key;
+                    return (
+                      <button
+                        key={tab.key}
+                        type="button"
+                        onClick={() => setAllFilter(tab.key)}
+                        className={`px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-full font-mono text-[8.5px] sm:text-[9.5px] tracking-[0.16em] uppercase transition-all cursor-pointer ${
+                          isCur
+                            ? "bg-[#D4A843] text-black font-bold shadow-md"
+                            : "text-white/60 hover:text-white hover:bg-white/[0.06]"
+                        }`}
+                      >
+                        {tab.label}
+                      </button>
+                    );
+                  })}
+                </div>
 
-              {/* Close Button */}
-              <button
-                type="button"
-                onClick={() => setShowAllMembers(false)}
-                aria-label="Close All Members Modal"
-                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/10 hover:bg-[#D4A843] text-white hover:text-black flex items-center justify-center font-bold text-base sm:text-lg transition-colors cursor-pointer shrink-0"
-              >
-                ✕
-              </button>
+                {/* Close Button */}
+                <button
+                  type="button"
+                  onClick={() => setShowAllMembers(false)}
+                  aria-label="Close All Members Modal"
+                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/10 hover:bg-[#D4A843] text-white hover:text-black flex items-center justify-center font-bold text-base sm:text-lg transition-colors cursor-pointer shrink-0"
+                >
+                  ✕
+                </button>
+              </div>
             </div>
 
-            {/* Mobile Filter Pill Bar */}
-            <div className="lg:hidden flex items-center gap-1.5 overflow-x-auto px-4 py-2.5 border-b border-white/5 bg-[#050505]">
-              {[
-                { key: "ALL", label: `ALL (${mentors.length + leads.length + coreMembers.length + founders.length + legacy.length})` },
-                { key: "MENTORS", label: `MENTORS (${mentors.length})` },
-                { key: "LEADERSHIP", label: `LEADS (${leads.length})` },
-                { key: "CORE", label: `CORE (${coreMembers.length})` },
-                { key: "FOUNDERS", label: `FOUNDERS (${founders.length})` },
-                { key: "LEGACY", label: `LEGACY (${legacy.length})` },
-              ].map((tab) => {
-                const isCur = allFilter === tab.key;
-                return (
-                  <button
-                    key={tab.key}
-                    type="button"
-                    onClick={() => setAllFilter(tab.key)}
-                    className={`shrink-0 px-3 py-1 rounded-full font-mono text-[8.5px] tracking-[0.16em] uppercase transition-all cursor-pointer ${
-                      isCur
-                        ? "bg-[#D4A843] text-black font-bold"
-                        : "text-white/50 hover:text-white bg-white/[0.04]"
-                    }`}
-                  >
-                    {tab.label}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Modal Content Body */}
-            <div className="max-w-7xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-12 flex flex-col gap-10 sm:gap-14">
+            {/* Modal Content Body - Centered & Professional */}
+            <div className="max-w-6xl mx-auto w-full px-4 sm:px-8 py-10 sm:py-14 flex flex-col gap-14 sm:gap-18">
               {[
                 {
                   filterKey: "MENTORS",
@@ -1301,24 +1298,23 @@ export default function AboutPage() {
               ]
                 .filter((grp) => allFilter === "ALL" || allFilter === grp.filterKey)
                 .map((grp, gIdx) => (
-                  <div key={gIdx} className="flex flex-col gap-4 sm:gap-6">
-                    {/* Section Header */}
-                    <div className="border-b border-white/10 pb-3 flex items-baseline justify-between">
-                      <div>
-                        <span className="font-mono text-[8.5px] sm:text-[9.5px] tracking-[0.35em] text-[#D4A843] uppercase font-semibold">
-                          {grp.code}
-                        </span>
-                        <h3 className="font-serif text-xl sm:text-2xl text-white font-normal uppercase tracking-wider mt-0.5">
-                          {grp.title}
-                        </h3>
-                      </div>
-                      <span className="font-mono text-[9px] text-white/40 tracking-widest uppercase">
+                  <div key={gIdx} className="flex flex-col items-center gap-6 sm:gap-8 w-full">
+                    {/* Centered Section Header */}
+                    <div className="text-center flex flex-col items-center">
+                      <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.35em] text-[#D4A843] uppercase font-bold mb-1">
+                        {grp.code}
+                      </span>
+                      <h3 className="font-serif text-2xl sm:text-3xl md:text-4xl text-white font-normal uppercase tracking-widest">
+                        {grp.title}
+                      </h3>
+                      <div className="w-12 h-[1.5px] bg-[#D4A843]/60 my-2.5 rounded-full" />
+                      <span className="font-mono text-[9px] text-white/40 tracking-[0.2em] uppercase">
                         {grp.members.length} {grp.members.length === 1 ? "MEMBER" : "MEMBERS"}
                       </span>
                     </div>
 
-                    {/* Member Cards Grid */}
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-5">
+                    {/* Centered Member Cards Flexbox */}
+                    <div className="flex flex-wrap items-stretch justify-center gap-5 sm:gap-7 md:gap-8 w-full">
                       {grp.members.map((member, mIdx) => (
                         <div
                           key={mIdx}
@@ -1328,37 +1324,38 @@ export default function AboutPage() {
                               themeIndex: (gIdx * 3 + mIdx) % CARD_THEMES.length,
                             })
                           }
-                          className="group relative flex flex-col items-center cursor-pointer select-none rounded-xl bg-white/[0.03] hover:bg-white/[0.07] border border-white/5 hover:border-[#D4A843]/40 p-3 sm:p-3.5 transition-all duration-300"
+                          className="group relative flex flex-col items-center cursor-pointer select-none rounded-2xl bg-white/[0.03] hover:bg-white/[0.07] border border-white/10 hover:border-[#D4A843]/50 p-4 transition-all duration-300 w-[165px] sm:w-[195px] md:w-[215px] shrink-0 hover:-translate-y-1.5 shadow-lg hover:shadow-[0_12px_30px_rgba(212,168,67,0.15)]"
                         >
-                          {/* Photo with Arch Top and Grayscale to Color Hover */}
-                          <div className="relative w-full aspect-[3/3.8] rounded-t-[38%] rounded-b-md overflow-hidden bg-black/40 mb-3 shadow-md">
+                          {/* Portrait with Arch Top */}
+                          <div className="relative w-full aspect-[3/3.7] rounded-t-[42%] rounded-b-lg overflow-hidden bg-[#0A0A0A] border border-white/10 shadow-md">
                             <Image
                               src={member.img}
                               alt={member.name}
                               fill
-                              sizes="(max-width: 640px) 160px, 220px"
+                              sizes="(max-width: 640px) 165px, 215px"
                               className="object-cover object-top grayscale group-hover:grayscale-0 contrast-110 group-hover:scale-105 transition-all duration-500"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-20 transition-opacity duration-300 pointer-events-none" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-60 group-hover:opacity-20 transition-opacity duration-300 pointer-events-none" />
                           </div>
 
-                          <h4 className="font-heading font-bold text-xs sm:text-sm text-white group-hover:text-[#D4A843] transition-colors text-center line-clamp-1 w-full">
+                          <h4 className="font-heading font-bold text-xs sm:text-sm text-white group-hover:text-[#D4A843] transition-colors text-center line-clamp-1 w-full mt-3 tracking-tight">
                             {member.name}
                           </h4>
 
-                          <p className="font-mono text-[8px] sm:text-[9px] tracking-[0.16em] text-[#D4A843] uppercase font-bold text-center mt-1 line-clamp-1 w-full">
+                          <p className="font-mono text-[8.5px] sm:text-[9.5px] tracking-[0.16em] text-[#D4A843] uppercase font-bold text-center mt-1 line-clamp-1 w-full">
                             {member.role}
                           </p>
 
                           {member.dept && (
-                            <p className="font-body text-[9px] sm:text-[10px] text-white/50 text-center mt-1 line-clamp-2 w-full">
+                            <p className="font-body text-[9.5px] sm:text-[10.5px] text-white/55 text-center mt-1 line-clamp-2 w-full">
                               {member.dept}
                             </p>
                           )}
 
-                          <span className="mt-3 font-mono text-[8px] tracking-[0.2em] uppercase text-white/30 group-hover:text-white/80 transition-colors">
-                            VIEW BIO ↗
-                          </span>
+                          <div className="mt-3 pt-2.5 border-t border-white/10 w-full flex items-center justify-center gap-1 font-mono text-[8px] tracking-[0.2em] uppercase text-white/40 group-hover:text-[#D4A843] transition-colors">
+                            <span>KNOW MORE</span>
+                            <span className="text-[9px]">↗</span>
+                          </div>
                         </div>
                       ))}
                     </div>
