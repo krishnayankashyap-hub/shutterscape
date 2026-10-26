@@ -1142,15 +1142,31 @@ export default function ActivitiesPage() {
                       />
                     </div>
 
-                    <div className="relative z-10 w-[84%] h-[98%] rounded-t-[42%] rounded-b-lg overflow-hidden shadow-xl bg-slate-900 flex items-center justify-center">
-                      <Image
-                        src={activeModalEvent.img}
-                        alt={activeModalEvent.title}
-                        fill
-                        unoptimized
-                        sizes="300px"
-                        className="object-cover object-top"
-                      />
+                    <div className="relative z-10 w-[88%] h-[98%] rounded-xl overflow-hidden shadow-xl bg-[#0F172A] flex items-center justify-center">
+                      {/* Ambient blur fill so letterbox borders look photographic */}
+                      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-35">
+                        <Image
+                          src={activeModalEvent.img}
+                          alt=""
+                          fill
+                          sizes="200px"
+                          className="object-cover blur-md scale-110"
+                          aria-hidden="true"
+                        />
+                        <div className="absolute inset-0 bg-black/40" />
+                      </div>
+
+                      {/* Full uncropped image */}
+                      <div className="relative w-full h-full flex items-center justify-center p-1.5">
+                        <Image
+                          src={activeModalEvent.img}
+                          alt={activeModalEvent.title}
+                          fill
+                          unoptimized
+                          sizes="300px"
+                          className="object-contain drop-shadow-md"
+                        />
+                      </div>
                     </div>
                   </div>
 
