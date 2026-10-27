@@ -434,7 +434,9 @@ export default function GlobalBranding() {
         pathname === "/activities"
           ? "top-2 sm:top-3 md:top-4"
           : "top-2 sm:top-3 md:top-4 lg:top-5"
-      } flex w-full z-[9980] pointer-events-none select-none justify-center`}
+      } ${
+        pathname === "/" ? "hidden lg:flex" : "flex"
+      } w-full z-[9980] pointer-events-none select-none justify-center`}
       role="banner"
       aria-label="Global Viewfinder Navigation"
     >

@@ -249,26 +249,11 @@ export default function MobileOilstainExperience() {
   );
   const [heroAnimKey, setHeroAnimKey] = useState(0);
   const [isHeroAnimReady, setIsHeroAnimReady] = useState(false);
-  const [isHeroMuted, setIsHeroMuted] = useState(MOBILE_HERO_MEDIA.defaultMuted);
 
   const archiveStartRef = useRef<HTMLDivElement>(null);
   const galleryMainScrollRef = useRef<HTMLDivElement>(null);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const heroVideoRef = useRef<HTMLVideoElement>(null);
-
-  const toggleHeroAudio = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    const vid = heroVideoRef.current;
-    if (!vid) return;
-    if (isHeroMuted) {
-      vid.muted = false;
-      setIsHeroMuted(false);
-      vid.play().catch(() => {});
-    } else {
-      vid.muted = true;
-      setIsHeroMuted(true);
-    }
-  };
 
   // Fetch Live Club Data from ShutterScape APIs
   useEffect(() => {
@@ -605,9 +590,38 @@ export default function MobileOilstainExperience() {
       />
 
       {/* ============================================================
+          0. STICKY TOP NAVBAR (Logo + Clean Outlined JOIN CLUB 26)
+          ============================================================ */}
+      <header className="sticky top-0 z-50 w-full bg-[#ECEBE6]/95 backdrop-blur-md border-b border-black/15 px-4 py-2.5 flex items-center justify-between">
+        <button
+          type="button"
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className="flex items-center cursor-pointer min-h-[30px]"
+          aria-label="ShutterScape Home"
+        >
+          <img
+            src="/images/shutterscape-brand-white.png"
+            alt="ShutterScape Logo"
+            className="h-6 w-auto object-contain brightness-0"
+          />
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setRegisterSubmitted(false);
+            setIsRegisterModalOpen(true);
+          }}
+          className="bg-transparent border border-black/25 text-[#111111] font-mono text-[9px] font-bold uppercase tracking-[0.15em] px-3.5 py-1.5 rounded-full hover:bg-black/5 active:scale-95 transition-all cursor-pointer"
+        >
+          JOIN CLUB 26
+        </button>
+      </header>
+
+      {/* ============================================================
           1. OPENING SPLASH HERO
           ============================================================ */}
-      <section className="relative w-full h-[100svh] min-h-[580px] bg-[#070709] text-white flex flex-col justify-between overflow-hidden">
+      <section className="relative w-full h-[calc(100svh-50px)] min-h-[540px] bg-[#070709] text-white flex flex-col justify-between overflow-hidden">
         <div className="absolute inset-0 z-0 overflow-hidden">
           {/* Fallback Poster Image (ensures zero black flash before video starts) */}
           <img
@@ -623,7 +637,7 @@ export default function MobileOilstainExperience() {
             poster={MOBILE_HERO_MEDIA.posterSrc}
             autoPlay
             loop
-            muted={isHeroMuted}
+            muted
             playsInline
             preload="auto"
             className="absolute inset-0 w-full h-full object-cover object-center brightness-[0.58] contrast-[1.08]"
@@ -639,14 +653,61 @@ export default function MobileOilstainExperience() {
           />
         </div>
 
-        {/* Top Viewfinder Micro-HUD — Offset pt-20 so GlobalBranding navbar sits cleanly above it */}
-        <div className="relative z-10 osl-pad-md pt-20 sm:pt-24 flex items-center justify-between font-mono text-[9px] tracking-[0.2em] text-white/75 uppercase">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#EF4444] animate-pulse" />
-            <span>XENOREC · RAW 14-BIT</span>
-          </div>
-          <span>@SHUTTERSCAPE_GCU</span>
-        </div>
+        {/* Universal Navbar (Aligned cleanly & boldly, NO DUPLICATE LOGO, NO XENOREC) */}
+        <nav
+          className="relative z-10 w-full pt-4 pb-1 px-4 flex items-center justify-center gap-2 sm:gap-3.5 font-mono text-[9.5px] uppercase tracking-[0.18em] font-bold text-white select-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]"
+          aria-label="Universal Navigation"
+        >
+          <button
+            type="button"
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className="relative py-1 text-[#D4A843] cursor-pointer"
+          >
+            <span>HOME</span>
+            <span className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-[#D4A843]" />
+          </button>
+
+          <span className="text-white/35">//</span>
+
+          <Link
+            href="/gallery"
+            className="relative py-1 text-white/80 hover:text-white transition-colors cursor-pointer"
+          >
+            <span>GALLERY</span>
+          </Link>
+
+          <span className="text-white/35">//</span>
+
+          <Link
+            href="/about"
+            className="relative py-1 text-white/80 hover:text-white transition-colors cursor-pointer"
+          >
+            <span>ABOUT</span>
+          </Link>
+
+          <span className="text-white/35">//</span>
+
+          <Link
+            href="/activities"
+            className="relative py-1 text-white/80 hover:text-white transition-colors cursor-pointer"
+          >
+            <span>ACTIVITY</span>
+          </Link>
+
+          <span className="text-white/35">//</span>
+
+          <button
+            type="button"
+            onClick={() =>
+              document
+                .getElementById("mobile-chronology-matrix")
+                ?.scrollIntoView({ behavior: "smooth" })
+            }
+            className="relative py-1 text-white/80 hover:text-white transition-colors cursor-pointer"
+          >
+            <span>MOMENTS</span>
+          </button>
+        </nav>
 
         <div
           key={heroAnimKey}
@@ -716,24 +777,7 @@ export default function MobileOilstainExperience() {
 
         <div className="relative z-10 w-full flex flex-col">
           <div className="osl-pad-sm flex items-center justify-between font-mono text-[8.5px] tracking-[0.2em] text-white/65 uppercase border-t border-white/10 bg-black/45 backdrop-blur-xs">
-            <div className="flex items-center gap-2.5">
-              {MOBILE_HERO_MEDIA.showAudioToggle && (
-                <button
-                  type="button"
-                  onClick={toggleHeroAudio}
-                  className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/10 border border-white/20 text-white font-mono text-[8px] uppercase tracking-[0.16em] hover:bg-white/20 active:scale-95 transition-all cursor-pointer"
-                  title={isHeroMuted ? "Unmute hero background video" : "Mute hero background video"}
-                >
-                  <span
-                    className={`w-1.5 h-1.5 rounded-full ${
-                      isHeroMuted ? "bg-white/40" : "bg-[#EF4444] animate-pulse"
-                    }`}
-                  />
-                  <span>{isHeroMuted ? "SOUND OFF" : "SOUND ON"}</span>
-                </button>
-              )}
-              <span>f/1.4 · 1/1000s · ISO 400</span>
-            </div>
+            <span>f/1.4 · 1/1000s · ISO 400</span>
             <span>GCU · ASSAM</span>
           </div>
 
