@@ -249,11 +249,26 @@ export default function MobileOilstainExperience() {
   );
   const [heroAnimKey, setHeroAnimKey] = useState(0);
   const [isHeroAnimReady, setIsHeroAnimReady] = useState(false);
+  const [isHeroMuted, setIsHeroMuted] = useState(true);
 
   const archiveStartRef = useRef<HTMLDivElement>(null);
   const galleryMainScrollRef = useRef<HTMLDivElement>(null);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const heroVideoRef = useRef<HTMLVideoElement>(null);
+
+  const toggleHeroAudio = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const vid = heroVideoRef.current;
+    if (!vid) return;
+    if (isHeroMuted) {
+      vid.muted = false;
+      setIsHeroMuted(false);
+      vid.play().catch(() => {});
+    } else {
+      vid.muted = true;
+      setIsHeroMuted(true);
+    }
+  };
 
   // Fetch Live Club Data from ShutterScape APIs
   useEffect(() => {
@@ -608,7 +623,7 @@ export default function MobileOilstainExperience() {
             poster={MOBILE_HERO_MEDIA.posterSrc}
             autoPlay
             loop
-            muted
+            muted={isHeroMuted}
             playsInline
             preload="auto"
             className="absolute inset-0 w-full h-full object-cover object-center brightness-[0.58] contrast-[1.08]"
@@ -624,61 +639,8 @@ export default function MobileOilstainExperience() {
           />
         </div>
 
-        {/* Universal Navbar (Generous breathing space, NO DUPLICATE LOGO, NO XENOREC) */}
-        <nav
-          className="relative z-10 w-full pt-7 sm:pt-8 pb-3 px-6 flex items-center justify-center gap-2 sm:gap-3.5 font-mono text-[9.5px] uppercase tracking-[0.18em] font-bold text-white select-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]"
-          aria-label="Universal Navigation"
-        >
-          <button
-            type="button"
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="relative py-1 text-[#D4A843] cursor-pointer"
-          >
-            <span>HOME</span>
-            <span className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-[#D4A843]" />
-          </button>
-
-          <span className="text-white/35">//</span>
-
-          <Link
-            href="/gallery"
-            className="relative py-1 text-white/80 hover:text-white transition-colors cursor-pointer"
-          >
-            <span>GALLERY</span>
-          </Link>
-
-          <span className="text-white/35">//</span>
-
-          <Link
-            href="/about"
-            className="relative py-1 text-white/80 hover:text-white transition-colors cursor-pointer"
-          >
-            <span>ABOUT</span>
-          </Link>
-
-          <span className="text-white/35">//</span>
-
-          <Link
-            href="/activities"
-            className="relative py-1 text-white/80 hover:text-white transition-colors cursor-pointer"
-          >
-            <span>ACTIVITY</span>
-          </Link>
-
-          <span className="text-white/35">//</span>
-
-          <button
-            type="button"
-            onClick={() =>
-              document
-                .getElementById("mobile-chronology-matrix")
-                ?.scrollIntoView({ behavior: "smooth" })
-            }
-            className="relative py-1 text-white/80 hover:text-white transition-colors cursor-pointer"
-          >
-            <span>MOMENTS</span>
-          </button>
-        </nav>
+        {/* Top Viewfinder Clearance for GlobalBranding Navbar (Matches Screenshot 2) */}
+        <div className="relative z-10 w-full pt-20 sm:pt-24 pointer-events-none" />
 
         <div
           key={heroAnimKey}
@@ -747,21 +709,59 @@ export default function MobileOilstainExperience() {
         </div>
 
         <div className="relative z-10 w-full flex flex-col">
-          <div className="osl-pad-sm flex items-center justify-between font-mono text-[8.5px] tracking-[0.2em] text-white/65 uppercase border-t border-white/10 bg-black/45 backdrop-blur-xs">
-            <span>f/1.4 · 1/1000s · ISO 400</span>
+          <div className="osl-pad-sm flex items-center justify-between font-mono text-[8.5px] tracking-[0.2em] text-white/55 uppercase border-t border-white/10 bg-black/45 backdrop-blur-xs">
+            <span className="pl-16">f/1.4 · 1/1000s · ISO 400</span>
             <span>GCU · ASSAM</span>
           </div>
 
-          <button
-            type="button"
-            onClick={() =>
-              archiveStartRef.current?.scrollIntoView({ behavior: "smooth" })
-            }
-            className="w-full flex items-center justify-between px-5 py-3.5 bg-[#D4A843] text-[#050505] font-mono text-[10.5px] font-bold tracking-[0.18em] uppercase cursor-pointer hover:bg-[#E5B955] transition-colors border-t border-black/20"
-          >
-            <span>ENTER THE DARKROOM ARCHIVE</span>
-            <span className="text-base leading-none font-bold">↓</span>
-          </button>
+          <div className="relative w-full">
+            {/* Circular Audio Toggle Button (Screenshot 3) */}
+            <button
+              type="button"
+              onClick={toggleHeroAudio}
+              className="absolute bottom-3.5 left-4 z-20 flex h-11 w-11 min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-[#D4A843]/60 bg-[#161513] text-[#D4A843] shadow-[0_4px_16px_rgba(0,0,0,0.6)] cursor-pointer active:scale-95 transition-transform"
+              title={isHeroMuted ? "Unmute video sound" : "Mute video sound"}
+              aria-label={isHeroMuted ? "Unmute video sound" : "Mute video sound"}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                {isHeroMuted ? (
+                  <>
+                    <line x1="23" y1="9" x2="17" y2="15" />
+                    <line x1="17" y1="9" x2="23" y2="15" />
+                  </>
+                ) : (
+                  <>
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+                  </>
+                )}
+              </svg>
+            </button>
+
+            {/* Gold Archive Button (Screenshot 3) */}
+            <button
+              type="button"
+              onClick={() =>
+                archiveStartRef.current?.scrollIntoView({ behavior: "smooth" })
+              }
+              style={{ padding: "16px 20px 16px 76px" }}
+              className="w-full flex items-center justify-between bg-[#D4A843] text-[#050505] font-mono text-[10.5px] font-bold tracking-[0.18em] uppercase cursor-pointer hover:bg-[#E5B955] transition-colors"
+            >
+              <span>ENTER THE DARKROOM ARCHIVE</span>
+              <span className="text-base leading-none">↓</span>
+            </button>
+          </div>
         </div>
       </section>
 

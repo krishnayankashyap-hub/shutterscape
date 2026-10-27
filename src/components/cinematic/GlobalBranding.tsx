@@ -92,8 +92,6 @@ export default function GlobalBranding() {
       : "home"
   );
   const isLightRef = useRef(isLightPage);
-  const [isScrolledPastHero, setIsScrolledPastHero] = useState(pathname !== "/");
-  const isScrolledPastHeroRef = useRef(pathname !== "/");
 
   // Synchronize activeNav and light background adaptation with RAF throttling
   useEffect(() => {
@@ -173,19 +171,6 @@ export default function GlobalBranding() {
       // 1. Scroll-spy active state determination (Desktop & Mobile)
       const offset = 220;
       const isMobile = window.innerWidth < 1024;
-
-      if (isMobile && pathname === "/") {
-        const heroThreshold = window.innerHeight * 0.72;
-        const pastHero = curY > heroThreshold;
-        if (isScrolledPastHeroRef.current !== pastHero) {
-          isScrolledPastHeroRef.current = pastHero;
-          setIsScrolledPastHero(pastHero);
-        }
-      } else if (!isScrolledPastHeroRef.current) {
-        isScrolledPastHeroRef.current = true;
-        setIsScrolledPastHero(true);
-      }
-
       let nextNav = "home";
 
       if (isMobile) {
@@ -449,19 +434,13 @@ export default function GlobalBranding() {
         pathname === "/activities"
           ? "top-2 sm:top-3 md:top-4"
           : "top-2 sm:top-3 md:top-4 lg:top-5"
-      } ${
-        pathname === "/"
-          ? isScrolledPastHero
-            ? "flex opacity-100 transition-all duration-500"
-            : "hidden lg:flex"
-          : "flex"
-      } w-full z-[9980] pointer-events-none select-none justify-center`}
+      } flex w-full z-[9980] pointer-events-none select-none justify-center`}
       role="banner"
       aria-label="Global Viewfinder Navigation"
     >
       {/* The shadow dynamically applies in dark environments and lifts cleanly in white environments */}
       <div
-        className="relative flex flex-wrap md:flex-nowrap items-center justify-between md:justify-center w-full max-w-7xl md:max-w-fit mx-auto gap-y-1 gap-x-3 sm:gap-4 md:gap-6 lg:gap-8 xl:gap-10 px-4 sm:px-6 pointer-events-auto transition-all duration-500"
+        className="relative flex flex-wrap md:flex-nowrap items-center justify-between md:justify-center w-full max-w-7xl md:max-w-fit mx-auto gap-y-1 gap-x-3 sm:gap-4 md:gap-6 lg:gap-8 xl:gap-10 px-5 sm:px-6 pointer-events-auto transition-all duration-500"
         style={{
           filter: isLightBackground
             ? "none"
