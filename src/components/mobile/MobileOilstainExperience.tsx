@@ -246,6 +246,7 @@ export default function MobileOilstainExperience() {
   const [activeAudioReelIdx, setActiveAudioReelIdx] = useState<number | null>(
     null
   );
+  const [heroAnimKey, setHeroAnimKey] = useState(0);
 
   const archiveStartRef = useRef<HTMLDivElement>(null);
   const galleryMainScrollRef = useRef<HTMLDivElement>(null);
@@ -463,6 +464,96 @@ export default function MobileOilstainExperience() {
           width: max-content;
           animation: oslRedMarquee 9s linear infinite;
         }
+        @keyframes oslLetterReveal {
+          0% {
+            opacity: 0;
+            transform: translateY(32px) rotateX(-75deg) scale(0.85);
+            filter: blur(8px);
+          }
+          65% {
+            opacity: 0.9;
+            filter: blur(2px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0) rotateX(0deg) scale(1);
+            filter: blur(0px);
+          }
+        }
+        #shutterscape-mobile-oilstain .osl-letter-char {
+          display: inline-block;
+          opacity: 0;
+          transform: translateY(32px) rotateX(-75deg) scale(0.85);
+          filter: blur(8px);
+          transform-origin: 50% 100%;
+          animation: oslLetterReveal 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+          will-change: transform, opacity, filter;
+        }
+        @keyframes oslFadeDown {
+          0% {
+            opacity: 0;
+            transform: translateY(-10px);
+            filter: blur(4px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+            filter: blur(0px);
+          }
+        }
+        #shutterscape-mobile-oilstain .osl-hero-badge {
+          opacity: 0;
+          animation: oslFadeDown 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.12s forwards;
+        }
+        @keyframes oslRuleExpand {
+          0% {
+            transform: scaleX(0);
+            opacity: 0;
+          }
+          100% {
+            transform: scaleX(1);
+            opacity: 1;
+          }
+        }
+        #shutterscape-mobile-oilstain .osl-hero-rule {
+          transform: scaleX(0);
+          animation: oslRuleExpand 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.08s forwards;
+          transform-origin: center;
+        }
+        @keyframes oslSubtitleReveal {
+          0% {
+            opacity: 0;
+            transform: translateY(12px);
+            letter-spacing: 0.16em;
+            filter: blur(4px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+            letter-spacing: 0.3em;
+            filter: blur(0px);
+          }
+        }
+        #shutterscape-mobile-oilstain .osl-hero-subtitle {
+          opacity: 0;
+          animation: oslSubtitleReveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) 1.05s forwards;
+        }
+        @keyframes oslTaglineReveal {
+          0% {
+            opacity: 0;
+            transform: translateY(14px);
+            filter: blur(5px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+            filter: blur(0px);
+          }
+        }
+        #shutterscape-mobile-oilstain .osl-hero-tagline {
+          opacity: 0;
+          animation: oslTaglineReveal 0.75s cubic-bezier(0.16, 1, 0.3, 1) 1.25s forwards;
+        }
       `,
         }}
       />
@@ -527,29 +618,47 @@ export default function MobileOilstainExperience() {
           <span>@SHUTTERSCAPE_GCU</span>
         </div>
 
-        <div className="relative z-10 px-4 py-6 flex flex-col items-center text-center my-auto w-full">
+        <div
+          key={heroAnimKey}
+          onClick={() => setHeroAnimKey((prev) => prev + 1)}
+          title="Tap to replay intro sequence"
+          className="relative z-10 px-4 py-6 flex flex-col items-center text-center my-auto w-full cursor-pointer select-none"
+        >
           <div className="flex items-center justify-center gap-2 mb-3 w-full">
-            <span className="w-4 h-[1px] bg-[#D4A843] shrink-0" />
-            <span className="font-mono text-[8.5px] tracking-[0.22em] uppercase text-[#D4A843] font-bold">
+            <span className="osl-hero-rule w-4 h-[1px] bg-[#D4A843] shrink-0" />
+            <span className="osl-hero-badge font-mono text-[8.5px] tracking-[0.22em] uppercase text-[#D4A843] font-bold">
               EST. 2023 · MORE THAN JUST A CAMERA CLUB
             </span>
-            <span className="w-4 h-[1px] bg-[#D4A843] shrink-0" />
+            <span className="osl-hero-rule w-4 h-[1px] bg-[#D4A843] shrink-0" />
           </div>
 
-          <h1 className="font-serif text-[clamp(1.85rem,9.2vw,3.4rem)] leading-[0.92] tracking-[0.04em] uppercase text-white font-normal drop-shadow-[0_10px_30px_rgba(0,0,0,0.85)] w-full text-center">
-            SHUTTERSCAPE
+          <h1
+            style={{ perspective: "900px" }}
+            className="font-serif text-[clamp(1.85rem,9.2vw,3.4rem)] leading-[0.92] tracking-[0.04em] uppercase text-white font-normal drop-shadow-[0_10px_30px_rgba(0,0,0,0.85)] w-full text-center"
+          >
+            {"SHUTTERSCAPE".split("").map((char, i) => (
+              <span
+                key={i}
+                className="osl-letter-char"
+                style={{
+                  animationDelay: `${0.26 + i * 0.05}s`,
+                }}
+              >
+                {char}
+              </span>
+            ))}
           </h1>
 
           <p
             style={{ marginTop: "12px" }}
-            className="font-mono text-[10px] tracking-[0.3em] uppercase text-white/90 font-semibold"
+            className="osl-hero-subtitle font-mono text-[10px] tracking-[0.3em] uppercase text-white/90 font-semibold"
           >
             GCU PHOTOGRAPHY CLUB
           </p>
 
           <p
             style={{ marginTop: "10px" }}
-            className="font-serif italic text-sm text-white/75 max-w-[280px]"
+            className="osl-hero-tagline font-serif italic text-sm text-white/75 max-w-[280px]"
           >
             &ldquo;Observe, capture, and tell stories through light.&rdquo;
           </p>
