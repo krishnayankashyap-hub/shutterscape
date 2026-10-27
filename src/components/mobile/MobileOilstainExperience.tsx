@@ -4,6 +4,7 @@
 
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import Link from "next/link";
+import { MOBILE_HERO_MEDIA } from "@/config/mobileHeroMedia";
 
 // ==========================================
 // FALLBACK DATASETS (Synced with Live APIs)
@@ -248,10 +249,26 @@ export default function MobileOilstainExperience() {
   );
   const [heroAnimKey, setHeroAnimKey] = useState(0);
   const [isHeroAnimReady, setIsHeroAnimReady] = useState(false);
+  const [isHeroMuted, setIsHeroMuted] = useState(MOBILE_HERO_MEDIA.defaultMuted);
 
   const archiveStartRef = useRef<HTMLDivElement>(null);
   const galleryMainScrollRef = useRef<HTMLDivElement>(null);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+  const heroVideoRef = useRef<HTMLVideoElement>(null);
+
+  const toggleHeroAudio = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const vid = heroVideoRef.current;
+    if (!vid) return;
+    if (isHeroMuted) {
+      vid.muted = false;
+      setIsHeroMuted(false);
+      vid.play().catch(() => {});
+    } else {
+      vid.muted = true;
+      setIsHeroMuted(true);
+    }
+  };
 
   // Fetch Live Club Data from ShutterScape APIs
   useEffect(() => {
@@ -591,14 +608,30 @@ export default function MobileOilstainExperience() {
           1. OPENING SPLASH HERO
           ============================================================ */}
       <section className="relative w-full h-[100svh] min-h-[580px] bg-[#070709] text-white flex flex-col justify-between overflow-hidden">
-        <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          {/* Fallback Poster Image (ensures zero black flash before video starts) */}
           <img
-            src="/images/gcu-campus-anime.jpg"
+            src={MOBILE_HERO_MEDIA.posterSrc}
             alt="Girijananda Chowdhury University Campus"
-            className="w-full h-full object-cover object-center brightness-[0.58] contrast-[1.08]"
+            className="absolute inset-0 w-full h-full object-cover object-center brightness-[0.58] contrast-[1.08]"
           />
+
+          {/* Autoplaying Hero Background Video */}
+          <video
+            ref={heroVideoRef}
+            src={MOBILE_HERO_MEDIA.videoSrc}
+            poster={MOBILE_HERO_MEDIA.posterSrc}
+            autoPlay
+            loop
+            muted={isHeroMuted}
+            playsInline
+            preload="auto"
+            className="absolute inset-0 w-full h-full object-cover object-center brightness-[0.58] contrast-[1.08]"
+          />
+
+          {/* Cinematic Vignette Overlay */}
           <div
-            className="absolute inset-0"
+            className="absolute inset-0 pointer-events-none"
             style={{
               background:
                 "linear-gradient(180deg, rgba(5,5,7,0.75) 0%, rgba(5,5,7,0.35) 45%, rgba(5,5,7,0.92) 100%)",
@@ -682,8 +715,25 @@ export default function MobileOilstainExperience() {
         </div>
 
         <div className="relative z-10 w-full flex flex-col">
-          <div className="osl-pad-sm flex items-center justify-between font-mono text-[8.5px] tracking-[0.2em] text-white/55 uppercase border-t border-white/10 bg-black/45 backdrop-blur-xs">
-            <span className="pl-16">f/1.4 · 1/1000s · ISO 400</span>
+          <div className="osl-pad-sm flex items-center justify-between font-mono text-[8.5px] tracking-[0.2em] text-white/65 uppercase border-t border-white/10 bg-black/45 backdrop-blur-xs">
+            <div className="flex items-center gap-2.5">
+              {MOBILE_HERO_MEDIA.showAudioToggle && (
+                <button
+                  type="button"
+                  onClick={toggleHeroAudio}
+                  className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/10 border border-white/20 text-white font-mono text-[8px] uppercase tracking-[0.16em] hover:bg-white/20 active:scale-95 transition-all cursor-pointer"
+                  title={isHeroMuted ? "Unmute hero background video" : "Mute hero background video"}
+                >
+                  <span
+                    className={`w-1.5 h-1.5 rounded-full ${
+                      isHeroMuted ? "bg-white/40" : "bg-[#EF4444] animate-pulse"
+                    }`}
+                  />
+                  <span>{isHeroMuted ? "SOUND OFF" : "SOUND ON"}</span>
+                </button>
+              )}
+              <span>f/1.4 · 1/1000s · ISO 400</span>
+            </div>
             <span>GCU · ASSAM</span>
           </div>
 
@@ -692,8 +742,7 @@ export default function MobileOilstainExperience() {
             onClick={() =>
               archiveStartRef.current?.scrollIntoView({ behavior: "smooth" })
             }
-            style={{ padding: "16px 20px 16px 76px" }}
-            className="w-full flex items-center justify-between bg-[#D4A843] text-[#050505] font-mono text-[10.5px] font-bold tracking-[0.18em] uppercase cursor-pointer"
+            className="w-full flex items-center justify-between px-5 py-4 bg-[#D4A843] text-[#050505] font-mono text-[10.5px] font-bold tracking-[0.18em] uppercase cursor-pointer hover:bg-[#E5B955] transition-colors"
           >
             <span>ENTER THE DARKROOM ARCHIVE</span>
             <span className="text-base leading-none">↓</span>
