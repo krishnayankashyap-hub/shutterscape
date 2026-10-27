@@ -962,21 +962,21 @@ export default function MobileOilstainExperience() {
 
       {/* ============================================================
           2. PAGE 2: COMPACT SINGLE-SCREEN ARCHIVE STAGE
-             All 4 elements fit on ONE screen at once (no huge empty gaps!):
+             All 4 elements fit on ONE screen at once with EQUAL, balanced vertical distribution:
              1. "shutterscape | 26" Header
-             2. 3D Moving Curved Ribbon (shifted up right below header)
-             3. "LIGHT IS MEMORY. MEMORY IS LIGHT." (shifted up right below ribbon)
-             4. Handmade Fountain-Pen Note ("The Shutterscape Family") right below!
+             2. 3D Moving Curved Ribbon
+             3. "LIGHT IS MEMORY. MEMORY IS LIGHT."
+             4. Handmade Fountain-Pen Note ("The Shutterscape Family")
           ============================================================ */}
       <section
         id="mobile-light-spec-section"
         ref={archiveSectionRef}
-        style={{ minHeight: "100svh", paddingBottom: "28px" }}
-        className="relative z-20 w-full bg-[#ECEBE6] text-[#111111] shadow-[0_-28px_70px_rgba(0,0,0,0.65)] flex flex-col justify-start overflow-hidden"
+        style={{ minHeight: "100svh" }}
+        className="relative z-20 w-full bg-[#ECEBE6] text-[#111111] shadow-[0_-28px_70px_rgba(0,0,0,0.65)] flex flex-col justify-between overflow-hidden"
       >
         {/* 1. Header Row: Real Shutterscape Logo on Left, "26" on Right */}
         <div
-          style={{ padding: "54px 20px 12px" }}
+          style={{ padding: "52px 20px 14px" }}
           className="relative z-10 flex items-center justify-between border-b border-black/10 shrink-0"
         >
           <div className="relative h-11 w-[130px] sm:h-12 sm:w-[155px] shrink-0">
@@ -995,7 +995,7 @@ export default function MobileOilstainExperience() {
           </span>
         </div>
 
-        {/* 2. 3D Concave Cylindrical Curved Auto-Ribbon (Shifted UP right below header!) */}
+        {/* 2. 3D Concave Cylindrical Curved Auto-Ribbon */}
         <div
           ref={ribbonDropWrapRef}
           onTouchStart={() => {
@@ -1011,8 +1011,9 @@ export default function MobileOilstainExperience() {
             isRibbonPausedRef.current = false;
           }}
           style={{
-            marginTop: "14px",
-            height: "196px",
+            marginTop: "16px",
+            marginBottom: "8px",
+            height: "206px",
             perspective: "720px",
             perspectiveOrigin: "50% 50%",
             transformStyle: "preserve-3d",
@@ -1114,22 +1115,21 @@ export default function MobileOilstainExperience() {
           })}
         </div>
 
-        {/* 3 & 4. "LIGHT IS MEMORY" + HANDMADE FOUNTAIN-PEN LETTER (Visible at once on the same screen!) */}
+        {/* 3 & 4. "LIGHT IS MEMORY" + HANDMADE FOUNTAIN-PEN LETTER (Evenly distributed across the lower screen) */}
         <div
           ref={lowerContentRiseRef}
           style={{ willChange: "transform, opacity" }}
-          className="relative z-10 flex flex-col items-center w-full"
+          className="relative z-10 flex-1 flex flex-col justify-evenly items-center w-full pb-8 sm:pb-10"
         >
-          {/* 3. LIGHT IS MEMORY. MEMORY IS LIGHT. (Shifted UP right below the 3D ribbon) */}
+          {/* 3. LIGHT IS MEMORY. MEMORY IS LIGHT. */}
           <div
             style={{
-              marginTop: "14px",
-              paddingTop: "8px",
-              paddingBottom: "14px",
+              paddingTop: "6px",
+              paddingBottom: "12px",
               paddingLeft: "20px",
               paddingRight: "20px",
             }}
-            className="w-full text-center border-b border-black/10"
+            className="w-full text-center border-b border-black/10 shrink-0"
           >
             <h2 className="font-heading font-black text-xl sm:text-2xl tracking-[-0.03em] uppercase leading-[0.96] text-[#111111]">
               LIGHT IS MEMORY.
@@ -1144,69 +1144,69 @@ export default function MobileOilstainExperience() {
             </p>
           </div>
 
-          {/* 4. AUTHENTIC HANDMADE FOUNTAIN-PEN LETTER (Fits directly below on the same screen!) */}
+          {/* 4. AUTHENTIC HANDMADE FOUNTAIN-PEN LETTER */}
           <div
             style={{
-              paddingTop: "22px",
-              paddingBottom: "18px",
+              paddingTop: "14px",
+              paddingBottom: "10px",
               paddingLeft: "22px",
               paddingRight: "22px",
             }}
-            className="relative w-full flex flex-col items-center justify-center"
+            className="relative w-full flex flex-col items-center justify-center shrink-0"
           >
             <div
               style={{
                 transform: "rotate(-5deg)",
-                maxWidth: "345px",
+                maxWidth: "355px",
               }}
               className="w-full flex flex-col select-none"
             >
               {/* Stanza 1 — Organic staggered left-indented lines */}
-              <div className="handmade-fountain-pen text-[18px] sm:text-[20px] leading-[1.42] tracking-[0.01em] text-left">
+              <div className="handmade-fountain-pen text-[19px] sm:text-[21px] leading-[1.46] tracking-[0.01em] text-left">
                 <p style={{ marginLeft: "4px" }}>
                   Every photograph holds a little piece of time,
                 </p>
-                <p style={{ marginLeft: "16px", marginTop: "2px" }}>
+                <p style={{ marginLeft: "16px", marginTop: "3px" }}>
                   every frame keeps a story alive.
                 </p>
               </div>
 
               {/* Stanza 2 — Organic staggered lines */}
               <div
-                style={{ marginTop: "14px" }}
-                className="handmade-fountain-pen text-[18px] sm:text-[20px] leading-[1.42] tracking-[0.01em] text-left"
+                style={{ marginTop: "16px" }}
+                className="handmade-fountain-pen text-[19px] sm:text-[21px] leading-[1.46] tracking-[0.01em] text-left"
               >
                 <p style={{ marginLeft: "22px" }}>
                   Through light, laughter, and the moments
                 </p>
-                <p style={{ marginLeft: "6px", marginTop: "2px" }}>
+                <p style={{ marginLeft: "6px", marginTop: "3px" }}>
                   in between, we learn to see the world a little differently.
                 </p>
               </div>
 
               {/* Bottom-Right Handmade Sign-Off: "The Shutterscape Family" */}
               <div
-                style={{ marginTop: "16px", paddingRight: "4px" }}
+                style={{ marginTop: "18px", paddingRight: "6px" }}
                 className="w-full flex flex-col items-end text-right"
               >
-                <span className="handmade-fountain-pen text-[15.5px] sm:text-[17px] text-[#1D1C1A]/85 leading-none">
+                <span className="handmade-fountain-pen text-[16.5px] sm:text-[18px] text-[#1D1C1A]/85 leading-none">
                   With love, light, and endless stories,
                 </span>
 
                 <div
-                  style={{ marginTop: "6px" }}
+                  style={{ marginTop: "8px" }}
                   className="flex flex-col items-end"
                 >
-                  <span className="handmade-signature-pen text-[31px] sm:text-[35px] leading-[0.88] tracking-[0.02em] text-[#111111]">
+                  <span className="handmade-signature-pen text-[33px] sm:text-[37px] leading-[0.88] tracking-[0.02em] text-[#111111]">
                     The Shutterscape Family
                   </span>
                   <svg
-                    width="155"
-                    height="12"
+                    width="165"
+                    height="13"
                     viewBox="0 0 220 20"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
-                    style={{ marginTop: "2px" }}
+                    style={{ marginTop: "3px" }}
                     className="text-[#1D1C1A]/75"
                   >
                     <path
