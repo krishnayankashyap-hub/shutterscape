@@ -247,6 +247,7 @@ export default function MobileOilstainExperience() {
     null
   );
   const [heroAnimKey, setHeroAnimKey] = useState(0);
+  const [isHeroAnimReady, setIsHeroAnimReady] = useState(false);
 
   const archiveStartRef = useRef<HTMLDivElement>(null);
   const galleryMainScrollRef = useRef<HTMLDivElement>(null);
@@ -275,7 +276,35 @@ export default function MobileOilstainExperience() {
     });
   }, []);
 
-  // Build the 8-frame Stop-Motion Flipbook Stack for the ORIGINS Matrix
+  // Synchronize Hero Letter-by-Letter Animation with Camera Shutter Preloader
+  useEffect(() => {
+    if (
+      typeof window !== "undefined" &&
+      (window as unknown as { __shutterLoaderDismissed?: boolean })
+        .__shutterLoaderDismissed
+    ) {
+      setIsHeroAnimReady(true);
+      return;
+    }
+
+    let triggered = false;
+    const triggerAnim = () => {
+      if (!triggered) {
+        triggered = true;
+        setIsHeroAnimReady(true);
+      }
+    };
+
+    window.addEventListener("shutterscape:loader-complete", triggerAnim);
+
+    // 2.65s fallback: fires right when the camera flash dissipates so hero letters start in full view
+    const timer = setTimeout(triggerAnim, 2650);
+
+    return () => {
+      window.removeEventListener("shutterscape:loader-complete", triggerAnim);
+      clearTimeout(timer);
+    };
+  }, []);
   const matrixStack = useMemo(() => {
     const combined = [
       ...gallery.slice(0, 6).map((g, i) => ({
@@ -467,12 +496,12 @@ export default function MobileOilstainExperience() {
         @keyframes oslLetterReveal {
           0% {
             opacity: 0;
-            transform: translateY(32px) rotateX(-75deg) scale(0.85);
-            filter: blur(8px);
+            transform: translateY(38px) rotateX(-75deg) scale(0.82);
+            filter: blur(12px);
           }
-          65% {
-            opacity: 0.9;
-            filter: blur(2px);
+          55% {
+            opacity: 0.85;
+            filter: blur(3px);
           }
           100% {
             opacity: 1;
@@ -483,17 +512,17 @@ export default function MobileOilstainExperience() {
         #shutterscape-mobile-oilstain .osl-letter-char {
           display: inline-block;
           opacity: 0;
-          transform: translateY(32px) rotateX(-75deg) scale(0.85);
-          filter: blur(8px);
+          transform: translateY(38px) rotateX(-75deg) scale(0.82);
+          filter: blur(12px);
           transform-origin: 50% 100%;
-          animation: oslLetterReveal 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+          animation: oslLetterReveal 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
           will-change: transform, opacity, filter;
         }
         @keyframes oslFadeDown {
           0% {
             opacity: 0;
-            transform: translateY(-10px);
-            filter: blur(4px);
+            transform: translateY(-12px);
+            filter: blur(5px);
           }
           100% {
             opacity: 1;
@@ -503,7 +532,7 @@ export default function MobileOilstainExperience() {
         }
         #shutterscape-mobile-oilstain .osl-hero-badge {
           opacity: 0;
-          animation: oslFadeDown 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.12s forwards;
+          animation: oslFadeDown 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.05s forwards;
         }
         @keyframes oslRuleExpand {
           0% {
@@ -517,15 +546,15 @@ export default function MobileOilstainExperience() {
         }
         #shutterscape-mobile-oilstain .osl-hero-rule {
           transform: scaleX(0);
-          animation: oslRuleExpand 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.08s forwards;
+          animation: oslRuleExpand 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.02s forwards;
           transform-origin: center;
         }
         @keyframes oslSubtitleReveal {
           0% {
             opacity: 0;
-            transform: translateY(12px);
-            letter-spacing: 0.16em;
-            filter: blur(4px);
+            transform: translateY(14px);
+            letter-spacing: 0.15em;
+            filter: blur(5px);
           }
           100% {
             opacity: 1;
@@ -536,13 +565,13 @@ export default function MobileOilstainExperience() {
         }
         #shutterscape-mobile-oilstain .osl-hero-subtitle {
           opacity: 0;
-          animation: oslSubtitleReveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) 1.05s forwards;
+          animation: oslSubtitleReveal 0.85s cubic-bezier(0.16, 1, 0.3, 1) 1.25s forwards;
         }
         @keyframes oslTaglineReveal {
           0% {
             opacity: 0;
-            transform: translateY(14px);
-            filter: blur(5px);
+            transform: translateY(16px);
+            filter: blur(6px);
           }
           100% {
             opacity: 1;
@@ -552,7 +581,7 @@ export default function MobileOilstainExperience() {
         }
         #shutterscape-mobile-oilstain .osl-hero-tagline {
           opacity: 0;
-          animation: oslTaglineReveal 0.75s cubic-bezier(0.16, 1, 0.3, 1) 1.25s forwards;
+          animation: oslTaglineReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) 1.5s forwards;
         }
       `,
         }}
@@ -625,11 +654,23 @@ export default function MobileOilstainExperience() {
           className="relative z-10 px-4 py-6 flex flex-col items-center text-center my-auto w-full cursor-pointer select-none"
         >
           <div className="flex items-center justify-center gap-2 mb-3 w-full">
-            <span className="osl-hero-rule w-4 h-[1px] bg-[#D4A843] shrink-0" />
-            <span className="osl-hero-badge font-mono text-[8.5px] tracking-[0.22em] uppercase text-[#D4A843] font-bold">
+            <span
+              className={`w-4 h-[1px] bg-[#D4A843] shrink-0 ${
+                isHeroAnimReady ? "osl-hero-rule" : "opacity-0"
+              }`}
+            />
+            <span
+              className={`font-mono text-[8.5px] tracking-[0.22em] uppercase text-[#D4A843] font-bold ${
+                isHeroAnimReady ? "osl-hero-badge" : "opacity-0"
+              }`}
+            >
               EST. 2023 · MORE THAN JUST A CAMERA CLUB
             </span>
-            <span className="osl-hero-rule w-4 h-[1px] bg-[#D4A843] shrink-0" />
+            <span
+              className={`w-4 h-[1px] bg-[#D4A843] shrink-0 ${
+                isHeroAnimReady ? "osl-hero-rule" : "opacity-0"
+              }`}
+            />
           </div>
 
           <h1
@@ -639,10 +680,14 @@ export default function MobileOilstainExperience() {
             {"SHUTTERSCAPE".split("").map((char, i) => (
               <span
                 key={i}
-                className="osl-letter-char"
-                style={{
-                  animationDelay: `${0.26 + i * 0.05}s`,
-                }}
+                className={isHeroAnimReady ? "osl-letter-char" : "opacity-0 inline-block"}
+                style={
+                  isHeroAnimReady
+                    ? {
+                        animationDelay: `${0.18 + i * 0.085}s`,
+                      }
+                    : { opacity: 0 }
+                }
               >
                 {char}
               </span>
@@ -651,14 +696,18 @@ export default function MobileOilstainExperience() {
 
           <p
             style={{ marginTop: "12px" }}
-            className="osl-hero-subtitle font-mono text-[10px] tracking-[0.3em] uppercase text-white/90 font-semibold"
+            className={`font-mono text-[10px] tracking-[0.3em] uppercase text-white/90 font-semibold ${
+              isHeroAnimReady ? "osl-hero-subtitle" : "opacity-0"
+            }`}
           >
             GCU PHOTOGRAPHY CLUB
           </p>
 
           <p
             style={{ marginTop: "10px" }}
-            className="osl-hero-tagline font-serif italic text-sm text-white/75 max-w-[280px]"
+            className={`font-serif italic text-sm text-white/75 max-w-[280px] ${
+              isHeroAnimReady ? "osl-hero-tagline" : "opacity-0"
+            }`}
           >
             &ldquo;Observe, capture, and tell stories through light.&rdquo;
           </p>

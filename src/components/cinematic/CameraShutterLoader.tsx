@@ -138,6 +138,8 @@ export default function CameraShutterLoader() {
         setDismissed(true);
         // Refresh ScrollTrigger pins cleanly once screen is revealed
         if (typeof window !== "undefined") {
+          (window as unknown as { __shutterLoaderDismissed?: boolean }).__shutterLoaderDismissed = true;
+          window.dispatchEvent(new CustomEvent("shutterscape:loader-complete"));
           ScrollTrigger.refresh();
         }
       },
