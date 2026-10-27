@@ -440,27 +440,26 @@ export default function GlobalBranding() {
     >
       {/* The shadow dynamically applies in dark environments and lifts cleanly in white environments */}
       <div
-        className="relative flex flex-wrap md:flex-nowrap items-center justify-between md:justify-center w-full max-w-full md:max-w-fit mx-auto gap-y-1 gap-x-3 sm:gap-4 md:gap-6 lg:gap-8 xl:gap-10 px-5 sm:px-6 pointer-events-auto transition-all duration-500"
+        className="relative flex items-center justify-center max-w-fit mx-auto gap-2 sm:gap-3 md:gap-5 lg:gap-6 px-3 sm:px-4 md:px-6 py-1 sm:py-1.5 pointer-events-auto transition-all duration-500"
         style={{
           filter: isLightBackground
             ? "none"
             : "drop-shadow(0 4px 12px rgba(0,0,0,0.85)) drop-shadow(0 1px 3px rgba(0,0,0,0.9))",
         }}
       >
-        
         {/* ============================================================
-            LEFT SIDE: SHUTTERSCAPE LOGO + REC (Brought closer to HOME)
+            LEFT: SHUTTERSCAPE LOGO + REC INDICATOR
             ============================================================ */}
-        <div className="order-1 flex items-center justify-start gap-2 sm:gap-3 shrink-0 z-10">
+        <div className="flex items-center justify-start gap-2 sm:gap-3 shrink-0 z-10">
           <button
             type="button"
             onClick={handleHomeClick}
-            className="group relative flex items-center shrink-0 cursor-pointer min-h-[38px] transition-transform duration-500 hover:opacity-75 focus-visible:outline-2 focus-visible:outline-[#D4A843]"
+            className="group relative flex items-center shrink-0 cursor-pointer min-h-[34px] sm:min-h-[38px] transition-transform duration-500 hover:opacity-75 focus-visible:outline-2 focus-visible:outline-[#D4A843]"
             title="ShutterScape Logo"
             aria-label="ShutterScape Home"
           >
             <div
-              className="relative h-6 w-[70px] sm:h-7 sm:w-[95px] md:h-7 md:w-[115px] transition-all duration-500"
+              className="relative h-5 w-[65px] sm:h-6 sm:w-[85px] md:h-7 md:w-[110px] transition-all duration-500"
               style={{
                 filter: isLightBackground
                   ? "brightness(0)"
@@ -471,7 +470,7 @@ export default function GlobalBranding() {
                 src="/images/shutterscape-brand-white.png"
                 alt="ShutterScape Logo"
                 fill
-                sizes="(max-width: 640px) 85px, (max-width: 768px) 110px, 125px"
+                sizes="(max-width: 640px) 75px, (max-width: 768px) 95px, 115px"
                 priority
                 unoptimized
                 className="object-contain"
@@ -481,7 +480,7 @@ export default function GlobalBranding() {
 
           {/* Viewfinder REC indicator */}
           <div
-            className="hidden lg:flex items-center gap-3 font-mono text-[9px] tracking-[0.25em] uppercase font-bold opacity-90 transition-colors duration-500"
+            className="hidden sm:flex items-center gap-2 sm:gap-2.5 font-mono text-[8.5px] md:text-[9px] tracking-[0.22em] uppercase font-bold opacity-90 transition-colors duration-500"
             style={{ color: textColor }}
           >
             <div className="flex items-center gap-1.5">
@@ -489,17 +488,17 @@ export default function GlobalBranding() {
               <span>REC</span>
             </div>
             <span
-              className="h-4 w-[1px] transition-colors duration-500"
+              className="h-3.5 w-[1px] transition-colors duration-500"
               style={{ backgroundColor: dividerColor }}
             />
           </div>
         </div>
 
         {/* ============================================================
-            CENTER: NAVIGATION ITEMS (HOME // GALLERY // ABOUT // ACTIVITY // MOMENTS)
+            NAVIGATION ITEMS: HOME // GALLERY // ABOUT // ACTIVITY // MOMENTS
             ============================================================ */}
         <nav
-          className="order-3 md:order-2 w-full max-w-full md:w-auto flex items-center justify-center gap-1 sm:gap-2 md:gap-2.5 lg:gap-3.5 md:shrink-0 mt-0.5 sm:mt-1 md:mt-0 z-20 overflow-x-auto no-scrollbar"
+          className="flex items-center justify-center gap-1 sm:gap-2 md:gap-2.5 lg:gap-3.5 shrink-0 z-20 overflow-x-auto no-scrollbar"
           aria-label="Primary Navigation"
         >
           {NAV_ITEMS.map((item, index) => {
@@ -511,7 +510,7 @@ export default function GlobalBranding() {
                   type="button"
                   onClick={(e) => handleNavClick(item, e)}
                   aria-current={isActive ? "page" : undefined}
-                  className="group relative flex flex-col items-center justify-center font-mono text-[9px] sm:text-[10px] md:text-[11px] lg:text-[11.5px] uppercase tracking-[0.14em] sm:tracking-[0.18em] font-bold transition-colors duration-300 cursor-pointer min-h-[34px] sm:min-h-[38px] px-1 sm:px-1.5 md:px-2 py-1 touch-manipulation focus-visible:outline-2 focus-visible:outline-[#D4A843]"
+                  className="group relative flex flex-col items-center justify-center font-mono text-[8.5px] sm:text-[9.5px] md:text-[11px] lg:text-[11.5px] uppercase tracking-[0.14em] sm:tracking-[0.18em] font-bold transition-colors duration-300 cursor-pointer min-h-[32px] sm:min-h-[38px] px-1 sm:px-1.5 md:px-2 py-1 touch-manipulation focus-visible:outline-2 focus-visible:outline-[#D4A843]"
                   style={{
                     color: isActive ? activeGoldColor : textColor,
                     opacity: isActive ? 1 : 0.75,
@@ -531,7 +530,7 @@ export default function GlobalBranding() {
                 {/* Technical Slash Separators */}
                 {index < NAV_ITEMS.length - 1 && (
                   <span
-                    className="font-mono text-[8px] sm:text-[9px] md:text-[10px] pointer-events-none select-none transition-colors duration-500 opacity-45"
+                    className="font-mono text-[7.5px] sm:text-[8.5px] md:text-[10px] pointer-events-none select-none transition-colors duration-500 opacity-45"
                     style={{ color: mutedTextColor }}
                   >
                     //
@@ -541,39 +540,6 @@ export default function GlobalBranding() {
             );
           })}
         </nav>
-
-        {/* ============================================================
-            RIGHT SIDE: GCU LOGO (Shifted inward from right edge to balance)
-            ============================================================ */}
-        <div className="order-2 md:order-3 flex items-center justify-end shrink-0 z-10 mr-6 sm:mr-8 md:mr-0 pr-2">
-          <a
-            href="https://gcu.ac.in"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group relative flex items-center shrink-0 min-h-[38px] transition-transform duration-500 hover:opacity-75 focus-visible:outline-2 focus-visible:outline-[#D4A843]"
-            title="Girijananda Chowdhury University"
-            aria-label="Girijananda Chowdhury University"
-          >
-            <div
-              className="relative h-6 w-[78px] sm:h-7 sm:w-[100px] md:h-7 md:w-[130px] transition-all duration-500"
-            >
-              <Image
-                src={
-                  isLightBackground
-                    ? "/images/gcu-logo-black-text.png"
-                    : "/images/gcu-logo-white-text.png"
-                }
-                alt="GCU Logo"
-                fill
-                sizes="(max-width: 640px) 100px, (max-width: 768px) 120px, 140px"
-                priority
-                unoptimized
-                className="object-contain"
-              />
-            </div>
-          </a>
-        </div>
-
       </div>
     </header>
   );

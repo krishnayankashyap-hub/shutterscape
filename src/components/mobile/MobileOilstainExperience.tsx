@@ -3,6 +3,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useMemo } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { MOBILE_HERO_MEDIA } from "@/config/mobileHeroMedia";
 
@@ -766,86 +767,163 @@ export default function MobileOilstainExperience() {
       </section>
 
       {/* ============================================================
-          2. SPLIT "SS — 26" POSTER & 4-ROW SPEC TABLE
+          2. EDITORIAL ARCHIVE: SHUTTERSCAPE LOGO + 26, CONTINUOUS FILM ROLL,
+             LIGHT IS MEMORY, & HANDWRITTEN PHOTOGRAPHY MESSAGE
           ============================================================ */}
       <section
         id="mobile-light-spec-section"
         ref={archiveStartRef}
-        className="relative w-full bg-[#ECEBE6] text-[#111111] border-b border-black/15"
+        className="relative w-full bg-[#ECEBE6] text-[#111111] overflow-hidden"
       >
-        <div className="osl-pad-md flex items-start justify-between leading-none">
-          <span className="font-heading font-black text-[22vw] tracking-[-0.06em] leading-[0.82] text-[#111111]">
-            SS
-          </span>
-          <span className="font-heading font-light text-[22vw] tracking-[-0.06em] leading-[0.82] text-[#111111]">
+        {/* Subtle gold-accent entry wash from the Darkroom CTA */}
+        <div className="absolute top-0 inset-x-0 h-12 bg-gradient-to-b from-[#D4A843]/15 via-[#D4A843]/5 to-transparent pointer-events-none" />
+
+        {/* Header Row: Real Shutterscape Logo on Left, "26" on Right */}
+        <div className="osl-pad-md flex items-center justify-between border-b border-black/10 pt-6 sm:pt-8 pb-4 sm:pb-6">
+          <div className="relative h-10 w-[120px] sm:h-14 sm:w-[160px] md:h-16 md:w-[190px] shrink-0">
+            <Image
+              src="/images/shutterscape-logo.png"
+              alt="ShutterScape Logo"
+              fill
+              sizes="(max-width: 640px) 120px, (max-width: 768px) 160px, 190px"
+              priority
+              unoptimized
+              className="object-contain object-left"
+            />
+          </div>
+          <span className="font-heading font-light text-5xl sm:text-6xl md:text-7xl tracking-[-0.05em] leading-none text-[#111111]/85 select-none">
             26
           </span>
         </div>
 
-        <div className="osl-pad-md flex flex-col items-center">
-          <div className="relative w-full aspect-[16/10] rounded-xs overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.18)] border border-black/15 bg-[#111111]">
-            <img
-              src={gallery[0]?.src || FALLBACK_GALLERY[0].src}
-              alt={gallery[0]?.title || "ShutterScape Featured Plate"}
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute top-3 left-3 px-2.5 py-1 bg-black/80 text-[#D4A843] font-mono text-[8.5px] tracking-[0.22em] uppercase">
-              PLATE // 01A · {gallery[0]?.filmStock || "KODAK TRI-X 400"}
+        {/* Continuously Moving 35mm Photographic Film Roll */}
+        <div className="relative w-full overflow-hidden my-6 sm:my-8 bg-[#0C0C0E] border-y border-black/25 shadow-[0_12px_36px_rgba(0,0,0,0.18)]">
+          {/* Top Film Sprocket Track & Technical Edge Text */}
+          <div className="w-full flex items-center justify-between px-3 py-1.5 border-b border-white/10 bg-black/60 font-mono text-[7px] sm:text-[8px] tracking-[0.24em] text-white/40 uppercase overflow-hidden select-none">
+            <div className="flex items-center gap-2">
+              <span className="inline-block w-2.5 h-1.5 rounded-[1px] bg-neutral-900 border border-white/15" />
+              <span className="inline-block w-2.5 h-1.5 rounded-[1px] bg-neutral-900 border border-white/15" />
+              <span className="inline-block w-2.5 h-1.5 rounded-[1px] bg-neutral-900 border border-white/15" />
+              <span className="text-[#D4A843]">SAFETY FILM 400</span>
+            </div>
+            <div className="hidden sm:flex items-center gap-3">
+              <span>EXPOSURE INDEX // ISO 400</span>
+              <span className="text-[#D4A843]/80">35MM ANALOG ARCHIVE</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span>RAW 14-BIT</span>
+              <span className="inline-block w-2.5 h-1.5 rounded-[1px] bg-neutral-900 border border-white/15" />
+              <span className="inline-block w-2.5 h-1.5 rounded-[1px] bg-neutral-900 border border-white/15" />
+              <span className="inline-block w-2.5 h-1.5 rounded-[1px] bg-neutral-900 border border-white/15" />
             </div>
           </div>
 
-          <div
-            style={{ marginTop: "36px", marginBottom: "28px" }}
-            className="text-center"
-          >
-            <h2 className="font-heading font-black text-2xl tracking-[-0.03em] uppercase leading-[0.95] text-[#111111]">
-              LIGHT IS MEMORY.
-              <br />
-              MEMORY IS LIGHT.
-            </h2>
-            <p
-              style={{ marginTop: "6px" }}
-              className="font-mono text-[9.5px] tracking-[0.2em] uppercase text-black/45"
-            >
-              [ GIRIJANANDA CHOWDHURY UNIVERSITY ]
-            </p>
+          {/* Marquee Track with Duplicated Photographs */}
+          <div className="py-3 sm:py-4 overflow-hidden">
+            <div className="flex w-max items-center animate-film-roll hover:[animation-play-state:paused]">
+              {[...gallery, ...gallery].map((item, idx) => {
+                const plateIndex = (idx % gallery.length) + 1;
+                const plateCode = plateIndex < 10 ? `0${plateIndex}` : `${plateIndex}`;
+
+                return (
+                  <div
+                    key={`${item.id || idx}-${idx}`}
+                    className="relative shrink-0 w-[240px] sm:w-[300px] md:w-[360px] aspect-[3/2] mx-2 sm:mx-3.5 bg-black rounded-xs overflow-hidden border border-white/15 shadow-[0_8px_24px_rgba(0,0,0,0.5)] group"
+                  >
+                    <img
+                      src={item.src}
+                      alt={item.title || "ShutterScape Film Archive"}
+                      className="w-full h-full object-cover select-none pointer-events-none transition-transform duration-700 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                    <div className="absolute top-2 left-2 px-2 py-0.5 bg-black/85 text-[#D4A843] font-mono text-[7.5px] sm:text-[8px] tracking-[0.2em] uppercase backdrop-blur-xs border border-white/10">
+                      PLATE // {plateCode} · {item.filmStock || "KODAK TRI-X 400"}
+                    </div>
+                    <div className="absolute inset-x-0 bottom-0 p-2 sm:p-2.5 bg-gradient-to-t from-black/90 via-black/50 to-transparent flex items-end justify-between">
+                      <span className="font-serif text-xs sm:text-sm text-white/95 truncate max-w-[70%]">
+                        {item.title}
+                      </span>
+                      <span className="font-mono text-[7.5px] tracking-[0.16em] uppercase text-white/60">
+                        {item.exif || "35MM"}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Bottom Film Sprocket Track & Frame Numbers */}
+          <div className="w-full flex items-center justify-between px-3 py-1.5 border-t border-white/10 bg-black/60 font-mono text-[7px] sm:text-[8px] tracking-[0.24em] text-white/40 uppercase overflow-hidden select-none">
+            <div className="flex items-center gap-2">
+              <span className="inline-block w-2.5 h-1.5 rounded-[1px] bg-neutral-900 border border-white/15" />
+              <span className="inline-block w-2.5 h-1.5 rounded-[1px] bg-neutral-900 border border-white/15" />
+              <span className="text-[#D4A843]">▶ 26A</span>
+            </div>
+            <div className="flex items-center gap-4">
+              <span>SHUTTERSCAPE LIVING ARCHIVE</span>
+              <span className="hidden sm:inline text-white/30">// LIGHT &amp; SILHOUETTES</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-[#D4A843]">▶ 27</span>
+              <span className="inline-block w-2.5 h-1.5 rounded-[1px] bg-neutral-900 border border-white/15" />
+              <span className="inline-block w-2.5 h-1.5 rounded-[1px] bg-neutral-900 border border-white/15" />
+            </div>
           </div>
         </div>
 
-        <div className="w-full border-b border-black/15">
-          <div className="osl-spec-row">
-            <span className="font-serif italic text-3xl text-black/80 leading-none">
-              2,023
-            </span>
-            <span className="font-mono text-[9.5px] tracking-[0.2em] uppercase text-black/50">
-              ESTABLISHED // GCU ASSAM
-            </span>
-          </div>
-          <div className="osl-spec-row">
-            <span className="font-serif italic text-3xl text-black/80 leading-none">
-              35mm
-            </span>
-            <span className="font-mono text-[9.5px] tracking-[0.2em] uppercase text-black/50">
-              OPTICAL FORMAT // RAW 14-BIT
-            </span>
-          </div>
-          <div className="osl-spec-row">
-            <span className="font-serif italic text-3xl text-black/80 leading-none">
-              {gallery.length}
-            </span>
-            <span className="font-mono text-[9.5px] tracking-[0.2em] uppercase text-black/50">
-              CURATED EXHIBITION PLATES
-            </span>
-          </div>
-          <div className="osl-spec-row">
-            <span className="font-serif italic text-3xl text-black/80 leading-none">
-              {activities.length}
-            </span>
-            <span className="font-mono text-[9.5px] tracking-[0.2em] uppercase text-black/50">
-              CHRONOLOGY ARCHIVE EVENTS
-            </span>
+        {/* Headline: LIGHT IS MEMORY. MEMORY IS LIGHT. */}
+        <div className="text-center px-4 sm:px-6 pt-6 sm:pt-10 pb-4 sm:pb-6">
+          <h2 className="font-heading font-black text-2xl sm:text-3xl md:text-4xl tracking-[-0.03em] uppercase leading-[0.96] text-[#111111]">
+            LIGHT IS MEMORY.
+            <br />
+            MEMORY IS LIGHT.
+          </h2>
+          <p
+            style={{ marginTop: "8px" }}
+            className="font-mono text-[9px] sm:text-[10px] tracking-[0.24em] uppercase text-black/45"
+          >
+            [ GIRIJANANDA CHOWDHURY UNIVERSITY ]
+          </p>
+        </div>
+
+        {/* ============================================================
+            HANDWRITTEN PHOTOGRAPHY MESSAGE: PERSONAL NOTE FROM SHUTTERSCAPE FAMILY
+            (Inspired by personal letter reference on warm cream stationery paper)
+            ============================================================ */}
+        <div className="relative w-full px-6 sm:px-12 md:px-20 pt-8 sm:pt-14 pb-16 sm:pb-24 flex flex-col items-center justify-center text-center">
+          <div className="max-w-2xl mx-auto flex flex-col items-center gap-6 sm:gap-8">
+            {/* Subtle photographic memory emblem / divider */}
+            <div className="w-12 h-[1px] bg-black/15 mb-2" />
+
+            <div className="space-y-4 sm:space-y-6 text-[#161616] font-handwriting text-2xl sm:text-3xl md:text-4xl leading-[1.4] sm:leading-[1.5] tracking-wide select-none">
+              <p>
+                Every photograph holds a little piece of time.
+                <br />
+                Every frame keeps a story alive.
+              </p>
+
+              <p className="pt-2">
+                Through light, laughter, and the moments in between,
+                <br />
+                we learn to see the world a little differently.
+              </p>
+            </div>
+
+            {/* Handwritten Signature Sign-Off */}
+            <div className="pt-6 sm:pt-8 flex flex-col items-center sm:items-end w-full max-w-md sm:pr-8">
+              <p className="font-handwriting text-xl sm:text-2xl md:text-3xl text-[#161616]/85 italic">
+                With love, light, and endless stories,
+              </p>
+              <p className="font-signature text-3xl sm:text-4xl md:text-5xl text-[#111111] mt-2 tracking-tight">
+                The Shutterscape Family
+              </p>
+            </div>
           </div>
         </div>
+
+        {/* Controlled Gold-to-Dark Transition into Section 3 (Dark Editorial Showcase) */}
+        <div className="w-full h-16 sm:h-24 bg-gradient-to-b from-[#ECEBE6] via-[#1E1D1B] to-[#141416] border-t border-black/10" />
       </section>
 
       {/* ============================================================

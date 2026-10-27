@@ -1,4 +1,5 @@
 /* src/app/globals.css */
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Dancing+Script:wght@400;600;700&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -130,5 +131,34 @@ main > section {
   }
   50% {
     transform: translateY(-8px);
+  }
+}
+
+/* ====== HANDWRITING & EDITORIAL SCRIPT ====== */
+.font-handwriting {
+  font-family: 'Caveat', 'Dancing Script', cursive, sans-serif;
+}
+.font-signature {
+  font-family: 'Dancing Script', 'Caveat', cursive, sans-serif;
+}
+
+/* ====== CONTINUOUS FILM ROLL RUNNER ====== */
+@keyframes filmRollTrack {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-film-roll {
+  animation: filmRollTrack 34s linear infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-film-roll {
+    animation-duration: 90s;
   }
 }
