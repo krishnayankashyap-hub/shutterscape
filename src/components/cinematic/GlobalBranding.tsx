@@ -440,7 +440,7 @@ export default function GlobalBranding() {
     >
       {/* The shadow dynamically applies in dark environments and lifts cleanly in white environments */}
       <div
-        className="relative flex flex-wrap md:flex-nowrap items-center justify-between md:justify-center w-full max-w-7xl md:max-w-fit mx-auto gap-y-1 gap-x-3 sm:gap-4 md:gap-6 lg:gap-8 xl:gap-10 px-5 sm:px-6 pointer-events-auto transition-all duration-500"
+        className="relative flex flex-wrap md:flex-nowrap items-center justify-between md:justify-center w-full max-w-full md:max-w-fit mx-auto gap-y-1 gap-x-3 sm:gap-4 md:gap-6 lg:gap-8 xl:gap-10 px-5 sm:px-6 pointer-events-auto transition-all duration-500"
         style={{
           filter: isLightBackground
             ? "none"
@@ -499,7 +499,7 @@ export default function GlobalBranding() {
             CENTER: NAVIGATION ITEMS (HOME // GALLERY // ABOUT // ACTIVITY // MOMENTS)
             ============================================================ */}
         <nav
-          className="order-3 md:order-2 w-full md:w-auto flex items-center justify-center gap-1 sm:gap-2 md:gap-2.5 lg:gap-3.5 shrink-0 mt-0.5 sm:mt-1 md:mt-0 z-20"
+          className="order-3 md:order-2 w-full max-w-full md:w-auto flex items-center justify-center gap-1 sm:gap-2 md:gap-2.5 lg:gap-3.5 md:shrink-0 mt-0.5 sm:mt-1 md:mt-0 z-20 overflow-x-auto no-scrollbar"
           aria-label="Primary Navigation"
         >
           {NAV_ITEMS.map((item, index) => {
@@ -545,7 +545,7 @@ export default function GlobalBranding() {
         {/* ============================================================
             RIGHT SIDE: GCU LOGO (Shifted inward from right edge to balance)
             ============================================================ */}
-        <div className="order-2 md:order-3 flex items-center justify-end shrink-0 z-10 mr-4 sm:mr-6 md:mr-0 pr-1">
+        <div className="order-2 md:order-3 flex items-center justify-end shrink-0 z-10 mr-6 sm:mr-8 md:mr-0 pr-2">
           <a
             href="https://gcu.ac.in"
             target="_blank"
