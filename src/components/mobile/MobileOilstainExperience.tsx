@@ -590,38 +590,9 @@ export default function MobileOilstainExperience() {
       />
 
       {/* ============================================================
-          0. STICKY TOP NAVBAR (Logo + Clean Rectangular JOIN CLUB 26)
-          ============================================================ */}
-      <header className="sticky top-0 z-50 w-full bg-[#ECEBE6]/95 backdrop-blur-md border-b border-black/15 px-6 py-3 flex items-center justify-between">
-        <button
-          type="button"
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="flex items-center cursor-pointer min-h-[32px] hover:opacity-80 transition-opacity"
-          aria-label="ShutterScape Home"
-        >
-          <img
-            src="/images/shutterscape-brand-white.png"
-            alt="ShutterScape Logo"
-            className="h-6 w-auto object-contain brightness-0"
-          />
-        </button>
-
-        <button
-          type="button"
-          onClick={() => {
-            setRegisterSubmitted(false);
-            setIsRegisterModalOpen(true);
-          }}
-          className="bg-transparent border border-black/35 text-[#111111] font-mono text-[9.5px] font-bold uppercase tracking-[0.16em] px-3.5 py-1.5 rounded-none hover:bg-black/5 active:scale-95 transition-all cursor-pointer"
-        >
-          JOIN CLUB 26
-        </button>
-      </header>
-
-      {/* ============================================================
           1. OPENING SPLASH HERO
           ============================================================ */}
-      <section className="relative w-full h-[calc(100svh-54px)] min-h-[550px] bg-[#070709] text-white flex flex-col justify-between overflow-hidden">
+      <section className="relative w-full h-[100svh] min-h-[580px] bg-[#070709] text-white flex flex-col justify-between overflow-hidden">
         <div className="absolute inset-0 z-0 overflow-hidden">
           {/* Fallback Poster Image (ensures zero black flash before video starts) */}
           <img
@@ -655,7 +626,7 @@ export default function MobileOilstainExperience() {
 
         {/* Universal Navbar (Generous breathing space, NO DUPLICATE LOGO, NO XENOREC) */}
         <nav
-          className="relative z-10 w-full pt-8 pb-3 px-6 flex items-center justify-center gap-2 sm:gap-3.5 font-mono text-[9.5px] uppercase tracking-[0.18em] font-bold text-white select-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]"
+          className="relative z-10 w-full pt-7 sm:pt-8 pb-3 px-6 flex items-center justify-center gap-2 sm:gap-3.5 font-mono text-[9.5px] uppercase tracking-[0.18em] font-bold text-white select-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]"
           aria-label="Universal Navigation"
         >
           <button
@@ -786,10 +757,10 @@ export default function MobileOilstainExperience() {
             onClick={() =>
               archiveStartRef.current?.scrollIntoView({ behavior: "smooth" })
             }
-            className="w-full flex items-center justify-between px-6 py-5 bg-[#D4A843] text-[#050505] font-mono text-[11px] font-bold tracking-[0.2em] uppercase cursor-pointer hover:bg-[#E5B955] transition-colors border-t border-black/25 shadow-lg"
+            className="w-full flex items-center justify-between px-5 py-3.5 bg-[#D4A843] text-[#050505] font-mono text-[10.5px] font-bold tracking-[0.18em] uppercase cursor-pointer hover:bg-[#E5B955] transition-colors border-t border-black/20"
           >
             <span>ENTER THE DARKROOM ARCHIVE</span>
-            <span className="text-xl leading-none font-bold">↓</span>
+            <span className="text-base leading-none font-bold">↓</span>
           </button>
         </div>
       </section>
