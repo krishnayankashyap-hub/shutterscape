@@ -1,5 +1,4 @@
 
-import GlobalMusicPlayer from "@/components/cinematic/GlobalMusicPlayer";
 import GlobalBranding from "@/components/cinematic/GlobalBranding";
 import CameraShutterLoader from "@/components/cinematic/CameraShutterLoader";
 import UniversalFooter from "@/components/cinematic/UniversalFooter";
@@ -152,9 +151,6 @@ export default function RootLayout({
 
         {/* Global branding header (ShutterScape & GCU) */}
         <GlobalBranding />
-
-        {/* Global background music player */}
-        <GlobalMusicPlayer />
 
         {/* Website pages and scenes */}
         {children}
