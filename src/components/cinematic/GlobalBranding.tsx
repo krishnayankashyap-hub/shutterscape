@@ -92,6 +92,8 @@ export default function GlobalBranding() {
       : "home"
   );
   const isLightRef = useRef(isLightPage);
+  const [isScrolledPastHero, setIsScrolledPastHero] = useState(pathname !== "/");
+  const isScrolledPastHeroRef = useRef(pathname !== "/");
 
   // Synchronize activeNav and light background adaptation with RAF throttling
   useEffect(() => {
@@ -171,6 +173,19 @@ export default function GlobalBranding() {
       // 1. Scroll-spy active state determination (Desktop & Mobile)
       const offset = 220;
       const isMobile = window.innerWidth < 1024;
+
+      if (isMobile && pathname === "/") {
+        const heroThreshold = window.innerHeight * 0.72;
+        const pastHero = curY > heroThreshold;
+        if (isScrolledPastHeroRef.current !== pastHero) {
+          isScrolledPastHeroRef.current = pastHero;
+          setIsScrolledPastHero(pastHero);
+        }
+      } else if (!isScrolledPastHeroRef.current) {
+        isScrolledPastHeroRef.current = true;
+        setIsScrolledPastHero(true);
+      }
+
       let nextNav = "home";
 
       if (isMobile) {
@@ -435,7 +450,11 @@ export default function GlobalBranding() {
           ? "top-2 sm:top-3 md:top-4"
           : "top-2 sm:top-3 md:top-4 lg:top-5"
       } ${
-        pathname === "/" ? "hidden lg:flex" : "flex"
+        pathname === "/"
+          ? isScrolledPastHero
+            ? "flex opacity-100 transition-all duration-500"
+            : "hidden lg:flex"
+          : "flex"
       } w-full z-[9980] pointer-events-none select-none justify-center`}
       role="banner"
       aria-label="Global Viewfinder Navigation"
