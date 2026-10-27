@@ -25,6 +25,23 @@ function getTargetScrollY(targetId: string): number | null {
   const vh = window.innerHeight;
   if (targetId === "home" || targetId === "exhibition-scroll-track") return 0;
 
+  const isMobile = window.innerWidth < 1024;
+  if (isMobile) {
+    let mobileTargetId = targetId;
+    if (targetId === "scene-exhibition") mobileTargetId = "mobile-dark-showcase";
+    else if (targetId === "scene-about-showcase" || targetId === "scene-roster") mobileTargetId = "mobile-light-about-section";
+    else if (targetId === "scene-activity-showcase" || targetId === "scene-timeline") mobileTargetId = "mobile-chronology-matrix";
+    else if (targetId === "scene-gallery" || targetId === "moments") mobileTargetId = "mobile-chronology-matrix";
+
+    const el = document.getElementById(mobileTargetId);
+    if (el) {
+      const rect = el.getBoundingClientRect();
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      return Math.max(0, Math.round(rect.top + scrollTop - 70));
+    }
+    return 0;
+  }
+
   const el = document.getElementById(targetId);
   if (el) {
     const rect = el.getBoundingClientRect();
@@ -126,6 +143,10 @@ export default function GlobalBranding() {
       "scene-timeline",
       "scene-credits",
       "shutterscape-universal-footer",
+      "mobile-light-spec-section",
+      "mobile-light-bento-section",
+      "mobile-light-about-section",
+      "mobile-chronology-matrix",
     ];
 
     let lastCheckedY = -999;
@@ -147,22 +168,38 @@ export default function GlobalBranding() {
         return;
       }
 
-      // 1. Scroll-spy active state determination
+      // 1. Scroll-spy active state determination (Desktop & Mobile)
       const offset = 220;
-      const galleryEl = document.getElementById("scene-gallery");
-      const timelineEl = document.getElementById("scene-timeline");
-      const rosterEl = document.getElementById("scene-roster");
-      const exhibitionEl = document.getElementById("scene-exhibition");
-
+      const isMobile = window.innerWidth < 1024;
       let nextNav = "home";
-      if (galleryEl && galleryEl.getBoundingClientRect().top <= offset) {
-        nextNav = "moments";
-      } else if (timelineEl && timelineEl.getBoundingClientRect().top <= offset) {
-        nextNav = "timeline";
-      } else if (rosterEl && rosterEl.getBoundingClientRect().top <= offset) {
-        nextNav = "about";
-      } else if (exhibitionEl && exhibitionEl.getBoundingClientRect().top <= offset) {
-        nextNav = "gallery";
+
+      if (isMobile) {
+        const momentsEl = document.getElementById("mobile-chronology-matrix");
+        const aboutEl = document.getElementById("mobile-light-about-section");
+        const showcaseEl = document.getElementById("mobile-dark-showcase");
+
+        if (momentsEl && momentsEl.getBoundingClientRect().top <= offset) {
+          nextNav = "moments";
+        } else if (aboutEl && aboutEl.getBoundingClientRect().top <= offset) {
+          nextNav = "about";
+        } else if (showcaseEl && showcaseEl.getBoundingClientRect().top <= offset) {
+          nextNav = "gallery";
+        }
+      } else {
+        const galleryEl = document.getElementById("scene-gallery");
+        const timelineEl = document.getElementById("scene-timeline");
+        const rosterEl = document.getElementById("scene-roster");
+        const exhibitionEl = document.getElementById("scene-exhibition");
+
+        if (galleryEl && galleryEl.getBoundingClientRect().top <= offset) {
+          nextNav = "moments";
+        } else if (timelineEl && timelineEl.getBoundingClientRect().top <= offset) {
+          nextNav = "timeline";
+        } else if (rosterEl && rosterEl.getBoundingClientRect().top <= offset) {
+          nextNav = "about";
+        } else if (exhibitionEl && exhibitionEl.getBoundingClientRect().top <= offset) {
+          nextNav = "gallery";
+        }
       }
 
       if (activeNavRef.current !== nextNav) {
@@ -175,7 +212,7 @@ export default function GlobalBranding() {
       let isOverLight = false;
       for (const id of lightSectionIds) {
         const el = document.getElementById(id);
-        if (el) {
+        if (el && el.offsetParent !== null) {
           const rect = el.getBoundingClientRect();
           if (rect.top <= headerY && rect.bottom >= headerY) {
             isOverLight = true;
@@ -397,9 +434,7 @@ export default function GlobalBranding() {
         pathname === "/activities"
           ? "top-2 sm:top-3 md:top-4"
           : "top-2 sm:top-3 md:top-4 lg:top-5"
-      } ${
-        pathname === "/" ? "hidden lg:flex" : "flex"
-      } w-full z-[9980] pointer-events-none select-none justify-center`}
+      } flex w-full z-[9980] pointer-events-none select-none justify-center`}
       role="banner"
       aria-label="Global Viewfinder Navigation"
     >

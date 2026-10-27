@@ -588,42 +588,9 @@ export default function MobileOilstainExperience() {
       />
 
       {/* ============================================================
-          0. STICKY BRUTALIST TOP NAVBAR
-          ============================================================ */}
-      <header className="sticky top-0 z-50 w-full bg-[#ECEBE6]/95 backdrop-blur-md border-b border-black/15 osl-pad-sm flex items-center justify-between">
-        <button
-          type="button"
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="font-heading font-black text-sm tracking-[-0.03em] uppercase text-[#111111] cursor-pointer"
-        >
-          SHUTTERSCAPE
-        </button>
-
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => setIsGalleryDrawerOpen(true)}
-            className="osl-btn-pill bg-transparent border border-black/25 text-[#111111] font-mono text-[9px] font-bold uppercase tracking-[0.15em] cursor-pointer"
-          >
-            GALLERY
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setRegisterSubmitted(false);
-              setIsRegisterModalOpen(true);
-            }}
-            className="osl-btn-pill bg-[#111111] text-[#FAFAFA] font-mono text-[9px] font-bold uppercase tracking-[0.15em] cursor-pointer"
-          >
-            JOIN CLUB 26
-          </button>
-        </div>
-      </header>
-
-      {/* ============================================================
           1. OPENING SPLASH HERO
           ============================================================ */}
-      <section className="relative w-full h-[calc(100svh-52px)] min-h-[540px] bg-[#070709] text-white flex flex-col justify-between overflow-hidden">
+      <section className="relative w-full h-[100svh] min-h-[580px] bg-[#070709] text-white flex flex-col justify-between overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
             src="/images/gcu-campus-anime.jpg"
@@ -639,7 +606,8 @@ export default function MobileOilstainExperience() {
           />
         </div>
 
-        <div className="relative z-10 osl-pad-md flex items-center justify-between font-mono text-[9px] tracking-[0.2em] text-white/75 uppercase">
+        {/* Top Viewfinder Micro-HUD — Offset pt-20 so GlobalBranding navbar sits cleanly above it */}
+        <div className="relative z-10 osl-pad-md pt-20 sm:pt-24 flex items-center justify-between font-mono text-[9px] tracking-[0.2em] text-white/75 uppercase">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-[#EF4444] animate-pulse" />
             <span>XENOREC · RAW 14-BIT</span>
@@ -737,6 +705,7 @@ export default function MobileOilstainExperience() {
           2. SPLIT "SS — 26" POSTER & 4-ROW SPEC TABLE
           ============================================================ */}
       <section
+        id="mobile-light-spec-section"
         ref={archiveStartRef}
         className="relative w-full bg-[#ECEBE6] text-[#111111] border-b border-black/15"
       >
@@ -818,7 +787,7 @@ export default function MobileOilstainExperience() {
       {/* ============================================================
           3. DARK EDITORIAL SHOWCASE + "GALLERY +" DRAWER TRIGGER
           ============================================================ */}
-      <section className="w-full bg-[#141416] text-white">
+      <section id="mobile-dark-showcase" className="w-full bg-[#141416] text-white">
         <div className="osl-pad-lg">
           <h2 className="font-heading font-black text-xl tracking-[-0.02em] uppercase leading-none text-white">
             SHUTTERSCAPE
@@ -877,7 +846,7 @@ export default function MobileOilstainExperience() {
       {/* ============================================================
           4. LIGHT SHOWCASE + 3-COLUMN BENTO GRID (ORIGIN | BEAUTY | ASYLUM)
           ============================================================ */}
-      <section className="w-full bg-[#ECEBE6] text-[#111111]">
+      <section id="mobile-light-bento-section" className="w-full bg-[#ECEBE6] text-[#111111]">
         <div className="osl-pad-lg flex flex-col items-center">
           <div className="relative w-full aspect-[16/10] rounded-xs overflow-hidden border border-black/15 shadow-md">
             <img
@@ -940,7 +909,7 @@ export default function MobileOilstainExperience() {
       {/* ============================================================
           5. "ABOUT" BANNER + 3-TAB SWITCHER + AUTOMATIC STOP-MOTION PHOTO MATRIX
           ============================================================ */}
-      <section className="w-full bg-[#FAF9F5] text-[#111111] border-t border-black/15">
+      <section id="mobile-light-about-section" className="w-full bg-[#FAF9F5] text-[#111111] border-t border-black/15">
         {/* Fixed ABOUT Banner: Image is absolute inset-0 so "ABOUT" sits dead-center! */}
         <div className="relative w-full aspect-[16/10] bg-[#111111] flex items-center justify-center overflow-hidden">
           <img
