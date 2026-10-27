@@ -229,7 +229,7 @@ const FALLBACK_REELS = [
 type AboutTabKey = "ORIGINS" | "LEADERSHIP" | "LEGACY";
 type PillarKey = "ORIGIN" | "BEAUTY" | "ASYLUM" | null;
 
-// 10 hardware-accelerated cylindrical slices per frame (Matches Screen Recording 4)
+// 10 hardware-accelerated cylindrical slices per frame
 const SLICES_PER_CARD = 10;
 const SLICE_INDICES = Array.from({ length: SLICES_PER_CARD }, (_, i) => i);
 
@@ -255,17 +255,14 @@ export default function MobileOilstainExperience() {
   const [isHeroAnimReady, setIsHeroAnimReady] = useState(false);
   const [isHeroMuted, setIsHeroMuted] = useState(true);
 
-  // Page 1 -> Page 2 Oilstainlab Transition States (Matches Screen Recording 1)
-  const [isCurtainWiping, setIsCurtainWiping] = useState(false);
-  const [isSection2Revealed, setIsSection2Revealed] = useState(false);
-
-  const archiveStartRef = useRef<HTMLDivElement>(null);
+  const archiveScrollTrackRef = useRef<HTMLDivElement>(null);
+  const ribbonDropWrapRef = useRef<HTMLDivElement>(null);
+  const headlineRiseWrapRef = useRef<HTMLDivElement>(null);
   const galleryMainScrollRef = useRef<HTMLDivElement>(null);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const heroVideoRef = useRef<HTMLVideoElement>(null);
 
-  // Refs for the 3D Concave Cylindrical Curved Auto-Ribbon (Matches Screen Recording 4)
-  const curvedStageRef = useRef<HTMLDivElement>(null);
+  // Refs for the 3D Concave Cylindrical Curved Auto-Ribbon
   const curvedCardOuterRefs = useRef<(HTMLDivElement | null)[]>([]);
   const curvedSliceRefs = useRef<(HTMLDivElement | null)[][]>([]);
   const curvedSliceInnerRefs = useRef<(HTMLDivElement | null)[][]>([]);
@@ -286,45 +283,62 @@ export default function MobileOilstainExperience() {
     }
   };
 
-  // Trigger Oilstainlab Page 1 -> Page 2 Shutter Curtain Transition + Drop-In Reveal
+  // Smoothly scroll past Page 1 into the Page 2 scrubbed stage when tapping the gold CTA bar
   const handleEnterArchiveTransition = () => {
-    setIsCurtainWiping(true);
-    setIsSection2Revealed(false);
-
-    setTimeout(() => {
-      archiveStartRef.current?.scrollIntoView({ behavior: "instant" as ScrollBehavior });
-    }, 340);
-
-    setTimeout(() => {
-      setIsCurtainWiping(false);
-      setIsSection2Revealed(true);
-    }, 780);
+    const track = archiveScrollTrackRef.current;
+    if (!track) return;
+    const rect = track.getBoundingClientRect();
+    const targetTop =
+      window.scrollY + rect.top + window.innerHeight * 0.52;
+    window.scrollTo({ top: targetTop, behavior: "smooth" });
   };
 
-  // Trigger Section 2 Staged Drop-In Choreography when scrolling naturally from Page 1 to Page 2
+  // =========================================================================
+  // REAL-TIME SCROLL-SCRUBBED SWIPE CHOREOGRAPHY (Page 1 -> Page 2)
+  // Exactly replicates Oilstainlab's HF-11 top-overlap -> center drop-in!
+  // =========================================================================
   useEffect(() => {
-    const sec2 = archiveStartRef.current;
-    if (!sec2 || typeof window === "undefined" || !("IntersectionObserver" in window)) {
-      setIsSection2Revealed(true);
-      return;
-    }
+    const updateScrollChoreography = () => {
+      const track = archiveScrollTrackRef.current;
+      const ribbonWrap = ribbonDropWrapRef.current;
+      const headlineWrap = headlineRiseWrapRef.current;
+      if (!track || !ribbonWrap || !headlineWrap) return;
 
-    const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsSection2Revealed(true);
-          } else if (entry.boundingClientRect.top > 0) {
-            // Reset when user scrolls back up to Page 1 so the transition replays cleanly
-            setIsSection2Revealed(false);
-          }
-        });
-      },
-      { threshold: 0.18 }
-    );
+      const rect = track.getBoundingClientRect();
+      const vh = window.innerHeight;
 
-    obs.observe(sec2);
-    return () => obs.disconnect();
+      // Progress 0: Section 2 is entering the viewport over Page 1
+      // Progress 1: Section 2 has settled into its pinned center state
+      const raw = (vh * 0.35 - rect.top) / (vh * 0.58);
+      const p = Math.max(0, Math.min(1, raw));
+      // Cubic ease-out for silky finger-swipe response
+      const ease = 1 - Math.pow(1 - p, 3);
+
+      // At p=0, the 3D Curved Ribbon sits high (-112px) overlapping the "shutterscape | 26" header
+      // As you swipe down (p -> 1), it glides down into the center slot (0px) with full scale!
+      const dropY = (1 - ease) * -112;
+      const scale = 0.86 + ease * 0.14;
+      ribbonWrap.style.transform = `translate3d(0, ${dropY.toFixed(
+        1
+      )}px, 0) scale(${scale.toFixed(3)})`;
+
+      // Simultaneously, "LIGHT IS MEMORY. MEMORY IS LIGHT." rises and fades in below the ribbon
+      const textP = Math.max(0, Math.min(1, (p - 0.22) / 0.78));
+      const textY = (1 - textP) * 34;
+      headlineWrap.style.transform = `translate3d(0, ${textY.toFixed(1)}px, 0)`;
+      headlineWrap.style.opacity = `${textP.toFixed(3)}`;
+    };
+
+    updateScrollChoreography();
+    window.addEventListener("scroll", updateScrollChoreography, {
+      passive: true,
+    });
+    window.addEventListener("resize", updateScrollChoreography);
+
+    return () => {
+      window.removeEventListener("scroll", updateScrollChoreography);
+      window.removeEventListener("resize", updateScrollChoreography);
+    };
   }, []);
 
   // Fetch Live Club Data from ShutterScape APIs
@@ -379,15 +393,13 @@ export default function MobileOilstainExperience() {
   }, []);
 
   // =========================================================================
-  // 3D CONCAVE CYLINDRICAL CURVED RIBBON ENGINE (Matches Screen Recording 4!)
-  // Moves automatically at a slow, luxury standard speed (0.16 cards/sec)
+  // 3D CONCAVE CYLINDRICAL CURVED RIBBON ENGINE (Slow, Luxury Standard Speed)
   // =========================================================================
   useEffect(() => {
     const total = gallery.length;
     if (total === 0) return;
 
     let vw = window.innerWidth;
-    // Standard well-proportioned card geometry matching Screen Recording 4
     let cardW = Math.min(325, Math.max(265, vw * 0.78));
     let cardH = Math.round(cardW * 0.63);
     let gap = 22;
@@ -444,7 +456,6 @@ export default function MobileOilstainExperience() {
       lastTime = now;
 
       if (!isRibbonPausedRef.current) {
-        // Slow, graceful standard speed: 0.16 cards per second (~6.25s per frame)
         playheadRef.current = (playheadRef.current + dt * 0.16) % total;
       }
 
@@ -454,7 +465,6 @@ export default function MobileOilstainExperience() {
         const cardEl = curvedCardOuterRefs.current[i];
         if (!cardEl) continue;
 
-        // Shortest circular distance for seamless infinite wrapping
         let deltaCards = i - currentFloatIdx;
         if (deltaCards > total / 2) deltaCards -= total;
         if (deltaCards < -total / 2) deltaCards += total;
@@ -486,7 +496,6 @@ export default function MobileOilstainExperience() {
           const rawPhi = u / cylRadius;
           const phi = Math.max(-1.35, Math.min(1.35, rawPhi));
 
-          // Concave cylindrical 3D projection matching Screen Recording 4
           const cylX = cylRadius * Math.sin(phi);
           const cylZ = cylRadius * (1 - Math.cos(phi));
           const rotYDeg = -((phi * 180) / Math.PI);
@@ -602,13 +611,39 @@ export default function MobileOilstainExperience() {
   return (
     <div
       id="shutterscape-mobile-oilstain"
-      className="w-full min-h-screen bg-[#ECEBE6] text-[#111111] font-sans select-none overflow-x-hidden"
+      className="w-full min-h-screen bg-[#ECEBE6] text-[#111111] font-sans select-none overflow-x-clip"
     >
-      {/* Scoped Stylesheet + Authentic Handwritten Google Fonts (Caveat & Herr Von Muellerhoff) */}
+      {/* Inline SVG Ink-Bleed Filter so the Handmade Writing looks like real fountain pen ink on cotton paper */}
+      <svg
+        width="0"
+        height="0"
+        className="absolute pointer-events-none opacity-0"
+        aria-hidden="true"
+      >
+        <defs>
+          <filter id="handmade-ink-bleed" x="-5%" y="-5%" width="110%" height="110%">
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency="0.04"
+              numOctaves="3"
+              result="noise"
+            />
+            <feDisplacementMap
+              in="SourceGraphic"
+              in2="noise"
+              scale="0.7"
+              xChannelSelector="R"
+              yChannelSelector="G"
+            />
+          </filter>
+        </defs>
+      </svg>
+
+      {/* Scoped Stylesheet + Authentic Handmade Fountain-Pen Google Fonts */}
       <style
         dangerouslySetInnerHTML={{
           __html: `
-        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600&family=Herr+Von+Muellerhoff&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Nothing+You+Could+Do&family=Reenie+Beanie&display=swap');
 
         #shutterscape-mobile-oilstain {
           background-color: #ECEBE6;
@@ -618,13 +653,6 @@ export default function MobileOilstainExperience() {
         #shutterscape-mobile-oilstain .osl-pad-md { padding: 20px 18px !important; }
         #shutterscape-mobile-oilstain .osl-pad-lg { padding: 30px 20px !important; }
         #shutterscape-mobile-oilstain .osl-btn-pill { padding: 7px 12px !important; }
-        #shutterscape-mobile-oilstain .osl-spec-row {
-          padding: 14px 20px !important;
-          border-top: 1px solid rgba(17, 17, 17, 0.14);
-          display: flex;
-          align-items: baseline;
-          justify-content: space-between;
-        }
         #shutterscape-mobile-oilstain .osl-bar-btn {
           padding: 16px 20px !important;
           display: flex;
@@ -690,39 +718,18 @@ export default function MobileOilstainExperience() {
           color: rgba(17, 17, 17, 0.55);
           text-transform: uppercase;
         }
-        /* Velaa-Style Handwritten Fonts (Screenshot 5) */
-        #shutterscape-mobile-oilstain .velaa-handwriting {
-          font-family: 'Caveat', cursive !important;
-          font-weight: 500;
-        }
-        #shutterscape-mobile-oilstain .velaa-signature {
-          font-family: 'Herr Von Muellerhoff', cursive !important;
+        /* Authentic Handmade Fountain-Pen Script (Velaa Reference Style) */
+        #shutterscape-mobile-oilstain .handmade-fountain-pen {
+          font-family: 'Nothing You Could Do', cursive !important;
           font-weight: 400;
+          color: #1D1C1A;
+          filter: url(#handmade-ink-bleed);
         }
-        /* Page 1 -> Page 2 Staged Drop-In Choreography (Screen Recording 1) */
-        #shutterscape-mobile-oilstain .osl-drop-stage {
-          transition: transform 0.95s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.85s ease;
-          will-change: transform, opacity;
-        }
-        #shutterscape-mobile-oilstain .osl-drop-stage.hidden-stage {
-          transform: translate3d(0, -56px, 0) scale(0.9);
-          opacity: 0;
-        }
-        #shutterscape-mobile-oilstain .osl-drop-stage.visible-stage {
-          transform: translate3d(0, 0, 0) scale(1);
-          opacity: 1;
-        }
-        #shutterscape-mobile-oilstain .osl-rise-stage {
-          transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.18s, opacity 0.85s ease 0.18s;
-          will-change: transform, opacity;
-        }
-        #shutterscape-mobile-oilstain .osl-rise-stage.hidden-stage {
-          transform: translate3d(0, 32px, 0);
-          opacity: 0;
-        }
-        #shutterscape-mobile-oilstain .osl-rise-stage.visible-stage {
-          transform: translate3d(0, 0, 0);
-          opacity: 1;
+        #shutterscape-mobile-oilstain .handmade-signature-pen {
+          font-family: 'Reenie Beanie', cursive !important;
+          font-weight: 400;
+          color: #141311;
+          filter: url(#handmade-ink-bleed);
         }
         @keyframes oslRedMarquee {
           0% { transform: translate3d(0%, 0, 0); }
@@ -796,21 +803,9 @@ export default function MobileOilstainExperience() {
       />
 
       {/* ============================================================
-          OILSTAINLAB SHUTTER CURTAIN WIPE OVERLAY (Page 1 -> Page 2 Transition)
-          Matches 00:01 of Video 1 with clean cream curtain & bottom pulsing dot
+          1. OPENING SPLASH HERO (Sticky z-10 so Page 2 physically wipes up over it on swipe!)
           ============================================================ */}
-      <div
-        className={`fixed inset-0 z-[9995] bg-[#ECEBE6] pointer-events-none flex flex-col items-center justify-end pb-12 transition-transform duration-500 ease-in-out ${
-          isCurtainWiping ? "translate-y-0" : "translate-y-full"
-        }`}
-      >
-        <span className="w-3.5 h-3.5 rounded-full bg-[#111111]/35 animate-ping" />
-      </div>
-
-      {/* ============================================================
-          1. OPENING SPLASH HERO
-          ============================================================ */}
-      <section className="relative w-full h-[100svh] min-h-[580px] bg-[#070709] text-white flex flex-col justify-between overflow-hidden">
+      <section className="sticky top-0 z-10 w-full h-[100svh] min-h-[580px] bg-[#070709] text-white flex flex-col justify-between overflow-hidden">
         <div className="absolute inset-0 z-0 overflow-hidden">
           <img
             src={MOBILE_HERO_MEDIA.posterSrc}
@@ -966,308 +961,266 @@ export default function MobileOilstainExperience() {
       </section>
 
       {/* ============================================================
-          2. EDITORIAL ARCHIVE:
-             - SHUTTERSCAPE LOGO + "26" HEADER
-             - 3D CONCAVE CYLINDRICAL CURVED AUTO-MOVING RIBBON (Screen Recording 4)
-             - "LIGHT IS MEMORY" + 4-ROW SPEC TABLE (Screen Recording 1)
-             - VELAA-STYLE SLANTED HANDWRITTEN NOTE (Screenshot 5)
+          2. PAGE 2: OILSTAINLAB SCROLL-SCRUBBED STAGE + HANDMADE LETTER
+             (Wipes physically up over Page 1 as you swipe down!)
           ============================================================ */}
       <section
         id="mobile-light-spec-section"
-        ref={archiveStartRef}
-        className="relative w-full bg-[#ECEBE6] text-[#111111] overflow-hidden"
+        className="relative z-20 w-full bg-[#ECEBE6] text-[#111111] shadow-[0_-28px_70px_rgba(0,0,0,0.65)]"
       >
-        {/* Header Row: Real Shutterscape Logo on Left, "26" on Right */}
-        <div
-          style={{ padding: "28px 20px 20px" }}
-          className="flex items-center justify-between border-b border-black/15"
-        >
-          <div className="relative h-11 w-[135px] sm:h-14 sm:w-[165px] shrink-0">
-            <Image
-              src="/images/shutterscape-logo.png"
-              alt="ShutterScape Logo"
-              fill
-              sizes="165px"
-              priority
-              unoptimized
-              className="object-contain object-left"
-            />
-          </div>
-          <span className="font-heading font-light text-5xl sm:text-6xl tracking-[-0.05em] leading-none text-[#111111] select-none">
-            26
-          </span>
-        </div>
-
         {/* ------------------------------------------------------------
-            3D CONCAVE CYLINDRICAL CURVED AUTO-RIBBON (Matches Screen Recording 4!)
-            Drops in from the top on Page 1 -> Page 2 transition (Screen Recording 1)
-            and glides automatically at a slow, luxury standard speed.
+            PART 2A: 155SVH SCROLL-SCRUBBED STICKY STAGE
+            As you swipe down from Page 1, the 3D Curved Ribbon starts overlapping
+            "shutterscape | 26" at the top and glides smoothly down into the center!
             ------------------------------------------------------------ */}
         <div
-          ref={curvedStageRef}
-          onTouchStart={() => {
-            isRibbonPausedRef.current = true;
-          }}
-          onTouchEnd={() => {
-            isRibbonPausedRef.current = false;
-          }}
-          onMouseEnter={() => {
-            isRibbonPausedRef.current = true;
-          }}
-          onMouseLeave={() => {
-            isRibbonPausedRef.current = false;
-          }}
-          style={{
-            marginTop: "42px",
-            marginBottom: "46px",
-            height: "245px",
-            perspective: "720px",
-            perspectiveOrigin: "50% 50%",
-            transformStyle: "preserve-3d",
-          }}
-          className={`relative w-full flex items-center justify-center overflow-visible osl-drop-stage ${
-            isSection2Revealed ? "visible-stage" : "hidden-stage"
-          }`}
+          ref={archiveScrollTrackRef}
+          style={{ height: "155svh" }}
+          className="relative w-full"
         >
-          {gallery.map((item, cardIdx) => {
-            if (!curvedSliceRefs.current[cardIdx]) {
-              curvedSliceRefs.current[cardIdx] = [];
-            }
-            if (!curvedSliceInnerRefs.current[cardIdx]) {
-              curvedSliceInnerRefs.current[cardIdx] = [];
-            }
+          <div className="sticky top-0 w-full h-[100svh] overflow-hidden flex flex-col justify-between bg-[#ECEBE6]">
+            {/* Header Row: Real Shutterscape Logo on Left, "26" on Right (Below Global Top Bar) */}
+            <div
+              style={{ padding: "64px 20px 16px" }}
+              className="relative z-10 flex items-center justify-between border-b border-black/10"
+            >
+              <div className="relative h-12 w-[140px] sm:h-14 sm:w-[170px] shrink-0">
+                <Image
+                  src="/images/shutterscape-logo.png"
+                  alt="ShutterScape Logo"
+                  fill
+                  sizes="170px"
+                  priority
+                  unoptimized
+                  className="object-contain object-left"
+                />
+              </div>
+              <span className="font-heading font-light text-5xl sm:text-6xl tracking-[-0.05em] leading-none text-[#111111] select-none">
+                26
+              </span>
+            </div>
 
-            return (
-              <div
-                key={item._id || item.id || cardIdx}
-                ref={(el) => {
-                  curvedCardOuterRefs.current[cardIdx] = el;
-                }}
-                onClick={() => {
-                  setActiveGalleryIdx(cardIdx);
-                  setIsGalleryDrawerOpen(true);
-                }}
-                className="absolute top-1/2 left-1/2 cursor-pointer group"
-                style={{
-                  transformStyle: "preserve-3d",
-                }}
-              >
-                {SLICE_INDICES.map((s) => (
+            {/* Centerpiece: 3D Concave Cylindrical Curved Auto-Ribbon (Scrubs down from top!) */}
+            <div
+              ref={ribbonDropWrapRef}
+              onTouchStart={() => {
+                isRibbonPausedRef.current = true;
+              }}
+              onTouchEnd={() => {
+                isRibbonPausedRef.current = false;
+              }}
+              onMouseEnter={() => {
+                isRibbonPausedRef.current = true;
+              }}
+              onMouseLeave={() => {
+                isRibbonPausedRef.current = false;
+              }}
+              style={{
+                height: "240px",
+                perspective: "720px",
+                perspectiveOrigin: "50% 50%",
+                transformStyle: "preserve-3d",
+                willChange: "transform",
+              }}
+              className="relative z-20 w-full flex items-center justify-center overflow-visible my-auto"
+            >
+              {gallery.map((item, cardIdx) => {
+                if (!curvedSliceRefs.current[cardIdx]) {
+                  curvedSliceRefs.current[cardIdx] = [];
+                }
+                if (!curvedSliceInnerRefs.current[cardIdx]) {
+                  curvedSliceInnerRefs.current[cardIdx] = [];
+                }
+
+                return (
                   <div
-                    key={s}
+                    key={item._id || item.id || cardIdx}
                     ref={(el) => {
-                      curvedSliceRefs.current[cardIdx][s] = el;
+                      curvedCardOuterRefs.current[cardIdx] = el;
                     }}
-                    className="absolute top-0 overflow-hidden will-change-transform"
+                    onClick={() => {
+                      setActiveGalleryIdx(cardIdx);
+                      setIsGalleryDrawerOpen(true);
+                    }}
+                    className="absolute top-1/2 left-1/2 cursor-pointer group"
                     style={{
                       transformStyle: "preserve-3d",
-                      backfaceVisibility: "hidden",
                     }}
                   >
-                    <div
-                      ref={(el) => {
-                        curvedSliceInnerRefs.current[cardIdx][s] = el;
-                      }}
-                      className="relative overflow-hidden rounded-[6px] bg-[#0B0B0E] border border-black/20 will-change-transform shadow-[0_18px_45px_rgba(0,0,0,0.28)]"
-                      style={{
-                        backgroundImage: `linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.22) 50%, rgba(0,0,0,0.3) 100%), url(${item.src})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                      }}
-                    >
-                      {/* Top-Left Category Stamp & Top-Right Film Stock (Exact Match to Screen Recording 4) */}
+                    {SLICE_INDICES.map((s) => (
                       <div
-                        style={{ padding: "12px 14px" }}
-                        className="absolute top-0 inset-x-0 flex items-center justify-between pointer-events-none"
+                        key={s}
+                        ref={(el) => {
+                          curvedSliceRefs.current[cardIdx][s] = el;
+                        }}
+                        className="absolute top-0 overflow-hidden will-change-transform"
+                        style={{
+                          transformStyle: "preserve-3d",
+                          backfaceVisibility: "hidden",
+                        }}
                       >
-                        <span
-                          style={{ padding: "3px 8px" }}
-                          className="rounded bg-black/80 border border-white/20 font-mono text-[8px] uppercase tracking-[0.2em] text-[#D4A843] font-semibold"
+                        <div
+                          ref={(el) => {
+                            curvedSliceInnerRefs.current[cardIdx][s] = el;
+                          }}
+                          className="relative overflow-hidden rounded-[6px] bg-[#0B0B0E] border border-black/20 will-change-transform shadow-[0_18px_45px_rgba(0,0,0,0.28)]"
+                          style={{
+                            backgroundImage: `linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.22) 50%, rgba(0,0,0,0.3) 100%), url(${item.src})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                          }}
                         >
-                          {item.category || "ARCHIVE"}
-                        </span>
-                        <span className="font-mono text-[8px] tracking-[0.2em] text-white/85 uppercase font-medium">
-                          {item.filmStock || "KODAK TRI-X 400"}
-                        </span>
-                      </div>
-
-                      {/* Bottom-Left Serif Title + Description & Bottom-Right Gold INSPECT Pill */}
-                      <div
-                        style={{ padding: "14px" }}
-                        className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 pointer-events-none"
-                      >
-                        <div className="max-w-[74%]">
-                          <h3 className="font-serif text-xl sm:text-2xl text-white font-light leading-[0.98] tracking-tight truncate">
-                            {item.title}
-                          </h3>
-                          <p
-                            style={{ marginTop: "4px" }}
-                            className="font-body text-[10px] text-white/85 line-clamp-1"
+                          {/* Top-Left Category Stamp & Top-Right Film Stock */}
+                          <div
+                            style={{ padding: "12px 14px" }}
+                            className="absolute top-0 inset-x-0 flex items-center justify-between pointer-events-none"
                           >
-                            {item.description}
-                          </p>
+                            <span
+                              style={{ padding: "3px 8px" }}
+                              className="rounded bg-black/80 border border-white/20 font-mono text-[8px] uppercase tracking-[0.2em] text-[#D4A843] font-semibold"
+                            >
+                              {item.category || "ARCHIVE"}
+                            </span>
+                            <span className="font-mono text-[8px] tracking-[0.2em] text-white/85 uppercase font-medium">
+                              {item.filmStock || "KODAK TRI-X 400"}
+                            </span>
+                          </div>
+
+                          {/* Bottom-Left Serif Title + Description & Bottom-Right Gold INSPECT Pill */}
+                          <div
+                            style={{ padding: "14px" }}
+                            className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 pointer-events-none"
+                          >
+                            <div className="max-w-[74%]">
+                              <h3 className="font-serif text-xl sm:text-2xl text-white font-light leading-[0.98] tracking-tight truncate">
+                                {item.title}
+                              </h3>
+                              <p
+                                style={{ marginTop: "4px" }}
+                                className="font-body text-[10px] text-white/85 line-clamp-1"
+                              >
+                                {item.description}
+                              </p>
+                            </div>
+
+                            <span
+                              style={{ padding: "4px 10px" }}
+                              className="shrink-0 rounded-full bg-[#D4A843] text-[#050505] font-mono text-[7.5px] font-bold uppercase tracking-[0.18em]"
+                            >
+                              INSPECT ↗
+                            </span>
+                          </div>
                         </div>
-
-                        <span
-                          style={{ padding: "4px 10px" }}
-                          className="shrink-0 rounded-full bg-[#D4A843] text-[#050505] font-mono text-[7.5px] font-bold uppercase tracking-[0.18em]"
-                        >
-                          INSPECT ↗
-                        </span>
                       </div>
-                    </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            );
-          })}
-        </div>
+                );
+              })}
+            </div>
 
-        {/* ------------------------------------------------------------
-            GENEROUS BREATHING SPACE + "LIGHT IS MEMORY" + 4-ROW SPEC TABLE
-            ------------------------------------------------------------ */}
-        <div
-          className={`osl-rise-stage ${
-            isSection2Revealed ? "visible-stage" : "hidden-stage"
-          }`}
-        >
-          <div
-            style={{
-              paddingTop: "18px",
-              paddingBottom: "38px",
-              paddingLeft: "20px",
-              paddingRight: "20px",
-            }}
-            className="text-center"
-          >
-            <h2 className="font-heading font-black text-2xl sm:text-3xl tracking-[-0.03em] uppercase leading-[0.98] text-[#111111]">
-              LIGHT IS MEMORY.
-              <br />
-              MEMORY IS LIGHT.
-            </h2>
-            <p
-              style={{ marginTop: "10px" }}
-              className="font-mono text-[9.5px] tracking-[0.24em] uppercase text-black/45"
+            {/* Bottom Statement in Sticky Stage: LIGHT IS MEMORY. MEMORY IS LIGHT. */}
+            <div
+              ref={headlineRiseWrapRef}
+              style={{
+                paddingTop: "12px",
+                paddingBottom: "52px",
+                paddingLeft: "20px",
+                paddingRight: "20px",
+                willChange: "transform, opacity",
+              }}
+              className="relative z-10 text-center border-b border-black/10"
             >
-              [ GIRIJANANDA CHOWDHURY UNIVERSITY ]
-            </p>
-          </div>
-
-          {/* 4-Row Hairline Spec Sheet (Matches Screen Recording 1) */}
-          <div className="w-full border-b border-black/15">
-            <div className="osl-spec-row">
-              <span className="font-serif italic text-3xl text-black/80 leading-none">
-                2,023
-              </span>
-              <span className="font-mono text-[9.5px] tracking-[0.2em] uppercase text-black/50">
-                ESTABLISHED // GCU ASSAM
-              </span>
-            </div>
-            <div className="osl-spec-row">
-              <span className="font-serif italic text-3xl text-black/80 leading-none">
-                35mm
-              </span>
-              <span className="font-mono text-[9.5px] tracking-[0.2em] uppercase text-black/50">
-                OPTICAL FORMAT // RAW 14-BIT
-              </span>
-            </div>
-            <div className="osl-spec-row">
-              <span className="font-serif italic text-3xl text-black/80 leading-none">
-                {gallery.length}
-              </span>
-              <span className="font-mono text-[9.5px] tracking-[0.2em] uppercase text-black/50">
-                CURATED EXHIBITION PLATES
-              </span>
-            </div>
-            <div className="osl-spec-row">
-              <span className="font-serif italic text-3xl text-black/80 leading-none">
-                {activities.length}
-              </span>
-              <span className="font-mono text-[9.5px] tracking-[0.2em] uppercase text-black/50">
-                CHRONOLOGY ARCHIVE EVENTS
-              </span>
+              <h2 className="font-heading font-black text-2xl sm:text-3xl tracking-[-0.03em] uppercase leading-[0.98] text-[#111111]">
+                LIGHT IS MEMORY.
+                <br />
+                MEMORY IS LIGHT.
+              </h2>
+              <p
+                style={{ marginTop: "10px" }}
+                className="font-mono text-[9.5px] tracking-[0.24em] uppercase text-black/45"
+              >
+                [ GIRIJANANDA CHOWDHURY UNIVERSITY ]
+              </p>
             </div>
           </div>
         </div>
 
         {/* ============================================================
-            VELAA-STYLE SLANTED HANDWRITTEN PHOTOGRAPHY LETTER (Matches Screenshot 5!)
+            PART 2B: AUTHENTIC HANDMADE FOUNTAIN-PEN LETTER
+            (2,023 / 35mm / 25 / 24 middle table completely removed!)
+            Ends with "The Shutterscape Family" in organic ink handwriting.
             ============================================================ */}
         <div
           style={{
-            paddingTop: "84px",
-            paddingBottom: "92px",
-            paddingLeft: "28px",
-            paddingRight: "28px",
+            paddingTop: "76px",
+            paddingBottom: "96px",
+            paddingLeft: "24px",
+            paddingRight: "24px",
           }}
           className="relative w-full bg-[#ECEBE6] flex flex-col items-center justify-center overflow-hidden"
         >
           <div
             style={{
-              transform: "rotate(-5.5deg)",
-              maxWidth: "350px",
+              transform: "rotate(-6deg)",
+              maxWidth: "360px",
             }}
-            className="w-full flex flex-col items-center text-center select-none"
+            className="w-full flex flex-col select-none"
           >
-            {/* Stanza 1 */}
-            <p className="velaa-handwriting text-[27px] sm:text-[31px] leading-[1.28] text-[#1A1917] tracking-[0.01em]">
-              Every photograph holds a little piece of time,
-              <br />
-              every frame keeps a story alive.
-            </p>
+            {/* Stanza 1 — Organic staggered left-indented lines like a real handwritten letter */}
+            <div className="handmade-fountain-pen text-[21px] sm:text-[24px] leading-[1.55] tracking-[0.01em] text-left">
+              <p style={{ marginLeft: "4px" }}>
+                Every photograph holds a little piece of time,
+              </p>
+              <p style={{ marginLeft: "18px", marginTop: "4px" }}>
+                every frame keeps a story alive.
+              </p>
+            </div>
 
-            {/* Stanza 2 */}
-            <p
-              style={{ marginTop: "24px" }}
-              className="velaa-handwriting text-[27px] sm:text-[31px] leading-[1.28] text-[#1A1917] tracking-[0.01em]"
-            >
-              Through light, laughter, and the moments in between,
-              <br />
-              we learn to see the world a little differently.
-            </p>
-
-            {/* Bottom-Right Authentic Fountain-Pen Dual Signature + "+" Mark (Exact Match to Screenshot 5) */}
+            {/* Stanza 2 — Organic staggered lines */}
             <div
-              style={{ marginTop: "28px", paddingRight: "10px" }}
-              className="w-full flex flex-col items-end"
+              style={{ marginTop: "26px" }}
+              className="handmade-fountain-pen text-[21px] sm:text-[24px] leading-[1.55] tracking-[0.01em] text-left"
             >
-              <span className="velaa-handwriting text-[22px] text-[#1A1917]/85 leading-none">
-                With love, light &amp; endless stories,
+              <p style={{ marginLeft: "26px" }}>
+                Through light, laughter, and the moments
+              </p>
+              <p style={{ marginLeft: "8px", marginTop: "4px" }}>
+                in between, we learn to see the world a little differently.
+              </p>
+            </div>
+
+            {/* Bottom-Right Handmade Sign-Off: "The Shutterscape Family" */}
+            <div
+              style={{ marginTop: "34px", paddingRight: "6px" }}
+              className="w-full flex flex-col items-end text-right"
+            >
+              <span className="handmade-fountain-pen text-[18px] sm:text-[20px] text-[#1D1C1A]/85 leading-none">
+                With love, light, and endless stories,
               </span>
 
               <div
-                style={{ marginTop: "10px" }}
-                className="flex items-center gap-3 text-[#1A1917]"
+                style={{ marginTop: "12px" }}
+                className="flex flex-col items-end"
               >
-                <span className="velaa-signature text-[34px] leading-none tracking-wide">
-                  ShutterScape
+                <span className="handmade-signature-pen text-[36px] sm:text-[42px] leading-[0.9] tracking-[0.02em] text-[#111111]">
+                  The Shutterscape Family
                 </span>
-                <span className="velaa-handwriting text-[24px] leading-none font-semibold">
-                  +
-                </span>
-                {/* Hand-drawn fountain pen flourish SVG */}
+                {/* Subtle hand-drawn fountain pen underline stroke */}
                 <svg
-                  width="54"
-                  height="38"
-                  viewBox="0 0 80 56"
+                  width="175"
+                  height="16"
+                  viewBox="0 0 220 20"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
-                  className="text-[#1A1917]"
+                  style={{ marginTop: "4px" }}
+                  className="text-[#1D1C1A]/75"
                 >
                   <path
-                    d="M12 46C22 24 34 8 40 6C44 5 35 32 32 42C30 48 44 26 56 22C62 20 58 30 68 26"
+                    d="M4 14C58 6 138 4 214 9C182 11 140 13 112 16"
                     stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M20 30C34 27 52 24 72 20"
-                    stroke="currentColor"
-                    strokeWidth="1.4"
+                    strokeWidth="1.35"
                     strokeLinecap="round"
                   />
-                  <circle cx="64" cy="12" r="1.5" fill="currentColor" />
                 </svg>
               </div>
             </div>
@@ -1280,7 +1233,7 @@ export default function MobileOilstainExperience() {
           ============================================================ */}
       <section
         id="mobile-dark-showcase"
-        className="w-full bg-[#141416] text-white"
+        className="relative z-20 w-full bg-[#141416] text-white"
       >
         <div className="osl-pad-lg">
           <h2 className="font-heading font-black text-xl tracking-[-0.02em] uppercase leading-none text-white">
@@ -1342,7 +1295,7 @@ export default function MobileOilstainExperience() {
           ============================================================ */}
       <section
         id="mobile-light-bento-section"
-        className="w-full bg-[#ECEBE6] text-[#111111]"
+        className="relative z-20 w-full bg-[#ECEBE6] text-[#111111]"
       >
         <div className="osl-pad-lg flex flex-col items-center">
           <div className="relative w-full aspect-[16/10] rounded-xs overflow-hidden border border-black/15 shadow-md">
@@ -1408,7 +1361,7 @@ export default function MobileOilstainExperience() {
           ============================================================ */}
       <section
         id="mobile-light-about-section"
-        className="w-full bg-[#FAF9F5] text-[#111111] border-t border-black/15"
+        className="relative z-20 w-full bg-[#FAF9F5] text-[#111111] border-t border-black/15"
       >
         <div className="relative w-full aspect-[16/10] bg-[#111111] flex items-center justify-center overflow-hidden">
           <img
@@ -1626,7 +1579,7 @@ export default function MobileOilstainExperience() {
           ============================================================ */}
       <section
         id="mobile-chronology-matrix"
-        className="w-full bg-[#ECEBE6] text-[#111111] border-t border-black/15"
+        className="relative z-20 w-full bg-[#ECEBE6] text-[#111111] border-t border-black/15"
       >
         <div className="osl-pad-lg pb-4">
           <span className="font-mono text-[9.5px] tracking-[0.22em] uppercase text-black/50 block mb-2">
