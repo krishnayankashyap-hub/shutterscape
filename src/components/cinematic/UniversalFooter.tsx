@@ -17,7 +17,9 @@ export default function UniversalFooter() {
   return (
     <footer
       id="shutterscape-universal-footer"
-      className="relative z-30 w-full bg-[#FFFFFF] text-[#0A0A0A] border-t border-black/10 overflow-hidden select-none"
+      className={`relative z-30 w-full bg-[#FFFFFF] text-[#0A0A0A] border-t border-black/10 overflow-hidden select-none ${
+        pathname === "/" ? "hidden lg:block" : "block"
+      }`}
     >
       <style
         dangerouslySetInnerHTML={{

@@ -10,6 +10,7 @@ import PullInScene from "@/components/cinematic/PullInScene";
 import EditorialSpread from "@/components/cinematic/EditorialSpread";
 import TimelinePeek from "@/components/cinematic/TimelinePeek";
 import FramesOfMoments from "@/components/cinematic/FramesOfMoments";
+import MobileOilstainExperience from "@/components/mobile/MobileOilstainExperience";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -121,9 +122,9 @@ export default function Home() {
 
   return (
     <SmoothScroller>
-      {/* GLOBAL FIXED WEBSITE PROGRESS BAR */}
+      {/* GLOBAL FIXED WEBSITE PROGRESS BAR (Desktop only) */}
       <div
-        className="fixed top-0 bottom-0 right-1.5 sm:right-3.5 w-5 pointer-events-none z-[9990] flex justify-center"
+        className="hidden lg:flex fixed top-0 bottom-0 right-1.5 sm:right-3.5 w-5 pointer-events-none z-[9990] justify-center"
       >
         <svg
           viewBox="0 0 24 1000"
@@ -169,55 +170,67 @@ export default function Home() {
         />
       </div>
 
-      <main className="bg-[#030303] min-h-screen text-white overflow-x-clip">
-        <div
-          id="exhibition-scroll-track"
-          className="relative w-full h-[1400vh] bg-[#030303]"
-        >
-          {/* Target anchor for GALLERY navigation -> Exhibit 08H */}
+      {/* ============================================================
+          DESKTOP EXPERIENCE (>= 1024px) - 100% UNTOUCHED
+          ============================================================ */}
+      <div className="hidden lg:block">
+        <main className="bg-[#030303] min-h-screen text-white overflow-x-clip">
           <div
-            id="scene-exhibition"
-            className="absolute left-0 w-full pointer-events-none"
-            style={{ top: "1248vh", height: "1px" }}
-          />
-
-          <div
-            id="exhibition-pinned-viewport"
-            className="sticky top-0 w-full h-screen overflow-hidden bg-[#030303]"
+            id="exhibition-scroll-track"
+            className="relative w-full h-[1400vh] bg-[#030303]"
           >
-            <div className="absolute inset-0 z-10">
-              <ApertureHero />
-            </div>
-            <div className="absolute inset-0 z-20">
-              <PullInScene />
+            {/* Target anchor for GALLERY navigation -> Exhibit 08H */}
+            <div
+              id="scene-exhibition"
+              className="absolute left-0 w-full pointer-events-none"
+              style={{ top: "1248vh", height: "1px" }}
+            />
+
+            <div
+              id="exhibition-pinned-viewport"
+              className="sticky top-0 w-full h-screen overflow-hidden bg-[#030303]"
+            >
+              <div className="absolute inset-0 z-10">
+                <ApertureHero />
+              </div>
+              <div className="absolute inset-0 z-20">
+                <PullInScene />
+              </div>
             </div>
           </div>
-        </div>
 
-        <div id="scene-roster" className="relative z-30">
-          {/* Target anchor for ABOUT navigation -> "Discover Our Story" / 5-Tier Roster */}
-          <div
-            id="scene-about-showcase"
-            className="absolute left-0 w-full pointer-events-none"
-            style={{ top: "282vh", height: "1px" }}
-          />
-          <EditorialSpread />
-        </div>
+          <div id="scene-roster" className="relative z-30">
+            {/* Target anchor for ABOUT navigation -> "Discover Our Story" / 5-Tier Roster */}
+            <div
+              id="scene-about-showcase"
+              className="absolute left-0 w-full pointer-events-none"
+              style={{ top: "282vh", height: "1px" }}
+            />
+            <EditorialSpread />
+          </div>
 
-        <div id="scene-timeline" className="relative z-30">
-          {/* Target anchor for ACTIVITY navigation -> "Living Visual Chronicle" */}
-          <div
-            id="scene-activity-showcase"
-            className="absolute left-0 w-full pointer-events-none"
-            style={{ top: "305vh", height: "1px" }}
-          />
-          <TimelinePeek />
-        </div>
+          <div id="scene-timeline" className="relative z-30">
+            {/* Target anchor for ACTIVITY navigation -> "Living Visual Chronicle" */}
+            <div
+              id="scene-activity-showcase"
+              className="absolute left-0 w-full pointer-events-none"
+              style={{ top: "305vh", height: "1px" }}
+            />
+            <TimelinePeek />
+          </div>
 
-        <div id="scene-gallery" className="relative z-30">
-          <FramesOfMoments />
-        </div>
-      </main>
+          <div id="scene-gallery" className="relative z-30">
+            <FramesOfMoments />
+          </div>
+        </main>
+      </div>
+
+      {/* ============================================================
+          MOBILE EXPERIENCE (< 1024px) - SWISS-BRUTALIST EDITORIAL
+          ============================================================ */}
+      <div className="block lg:hidden">
+        <MobileOilstainExperience />
+      </div>
     </SmoothScroller>
   );
 }
