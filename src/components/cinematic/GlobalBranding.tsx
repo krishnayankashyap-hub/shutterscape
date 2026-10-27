@@ -543,9 +543,9 @@ export default function GlobalBranding() {
         </nav>
 
         {/* ============================================================
-            RIGHT SIDE: GCU LOGO (Brought a little left to match ShutterScape logo)
+            RIGHT SIDE: GCU LOGO (Shifted inward from right edge to balance)
             ============================================================ */}
-        <div className="order-2 md:order-3 flex items-center justify-end shrink-0 z-10 pr-3 sm:pr-4 md:pr-0">
+        <div className="order-2 md:order-3 flex items-center justify-end shrink-0 z-10 mr-4 sm:mr-6 md:mr-0 pr-1">
           <a
             href="https://gcu.ac.in"
             target="_blank"
