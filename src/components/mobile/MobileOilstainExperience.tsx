@@ -228,6 +228,60 @@ const FALLBACK_REELS = [
 
 type AboutTabKey = "ORIGINS" | "LEADERSHIP" | "LEGACY";
 type PillarKey = "ORIGIN" | "BEAUTY" | "ASYLUM" | null;
+type NavTabId = "home" | "gallery" | "about" | "activity" | "moments";
+
+const FLOATING_NAV_ITEMS: {
+  id: NavTabId;
+  label: string;
+  sectionId: string;
+}[] = [
+  { id: "home", label: "Home", sectionId: "mobile-hero-top" },
+  { id: "gallery", label: "Gallery", sectionId: "mobile-light-spec-section" },
+  { id: "about", label: "About", sectionId: "mobile-light-about-section" },
+  { id: "activity", label: "Activity", sectionId: "mobile-light-bento-section" },
+  { id: "moments", label: "Moments", sectionId: "mobile-chronology-matrix" },
+];
+
+// Clean Minimalist Icons matching the "Modern Floating Navbar - UI Kit" screenshot
+function renderFloatingNavIcon(id: NavTabId, isActive: boolean) {
+  const strokeColor = isActive ? "#FFFFFF" : "#64748B";
+  switch (id) {
+    case "home":
+      return (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={strokeColor} strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M3 10.5L12 3l9 7.5v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-9z" />
+          <circle cx="12" cy="14" r="2.5" />
+        </svg>
+      );
+    case "gallery":
+      return (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={strokeColor} strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="11" cy="11" r="7" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+      );
+    case "about":
+      return (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={strokeColor} strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2L12 3z" />
+          <path d="M18 4l.8 2.2L21 7l-2.2.8L18 10l-.8-2.2L15 7l2.2-.8L18 4z" />
+        </svg>
+      );
+    case "activity":
+      return (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={strokeColor} strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+          <polygon points="22 3 2 11 11 14 14 22 22 3" />
+        </svg>
+      );
+    case "moments":
+      return (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={strokeColor} strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="8" r="4" />
+          <path d="M5 20a7 7 0 0 1 14 0" />
+        </svg>
+      );
+  }
+}
 
 // 10 hardware-accelerated cylindrical slices per frame
 const SLICES_PER_CARD = 10;
@@ -240,6 +294,7 @@ export default function MobileOilstainExperience() {
   const [reels, setReels] = useState<any[]>(FALLBACK_REELS);
 
   // Interactive UI States
+  const [activeNavTab, setActiveNavTab] = useState<NavTabId>("home");
   const [isGalleryDrawerOpen, setIsGalleryDrawerOpen] = useState(false);
   const [activeGalleryIdx, setActiveGalleryIdx] = useState(0);
   const [activePillarSheet, setActivePillarSheet] = useState<PillarKey>(null);
@@ -285,13 +340,58 @@ export default function MobileOilstainExperience() {
 
   // Smoothly scroll to Page 2 when tapping the gold CTA bar
   const handleEnterArchiveTransition = () => {
+    setActiveNavTab("gallery");
     archiveSectionRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  // Handle Floating Bottom Navbar Tab Click
+  const handleFloatingNavClick = (item: (typeof FLOATING_NAV_ITEMS)[number]) => {
+    setActiveNavTab(item.id);
+    if (item.id === "home") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    const target = document.getElementById(item.sectionId);
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  // Automatically sync Active Floating Navbar Tab as user scrolls through sections
+  useEffect(() => {
+    const onScrollSyncNav = () => {
+      const vh = window.innerHeight;
+      const scrollY = window.scrollY;
+      if (scrollY < vh * 0.45) {
+        setActiveNavTab("home");
+        return;
+      }
+
+      const checkOrder: { id: NavTabId; elId: string }[] = [
+        { id: "moments", elId: "mobile-chronology-matrix" },
+        { id: "about", elId: "mobile-light-about-section" },
+        { id: "activity", elId: "mobile-light-bento-section" },
+        { id: "gallery", elId: "mobile-light-spec-section" },
+      ];
+
+      for (const entry of checkOrder) {
+        const el = document.getElementById(entry.elId);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= vh * 0.52) {
+            setActiveNavTab(entry.id);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener("scroll", onScrollSyncNav, { passive: true });
+    return () => window.removeEventListener("scroll", onScrollSyncNav);
+  }, []);
+
   // =========================================================================
   // COMPACT SINGLE-SCREEN SCROLL-SCRUBBED SWIPE CHOREOGRAPHY (Page 1 -> Page 2)
-  // Scrubs as Page 2 wipes up over Page 1 (rect.top from 58% vh -> 0px)
-  // Zero extra page length needed!
   // =========================================================================
   useEffect(() => {
     const updateScrollChoreography = () => {
@@ -303,20 +403,16 @@ export default function MobileOilstainExperience() {
       const rect = sec.getBoundingClientRect();
       const vh = window.innerHeight;
 
-      // As Page 2 slides up over the sticky Page 1 hero (rect.top goes from 0.58*vh -> 0):
       const raw = (vh * 0.58 - rect.top) / (vh * 0.58);
       const p = Math.max(0, Math.min(1, raw));
       const ease = 1 - Math.pow(1 - p, 3);
 
-      // At p=0, the 3D Curved Ribbon overlaps "shutterscape | 26" (-64px)
-      // At p=1, it settles cleanly right below "shutterscape | 26" (0px)
       const dropY = (1 - ease) * -64;
       const scale = 0.88 + ease * 0.12;
       ribbonWrap.style.transform = `translate3d(0, ${dropY.toFixed(
         1
       )}px, 0) scale(${scale.toFixed(3)})`;
 
-      // Simultaneously, "LIGHT IS MEMORY" + Handmade Note rise into place directly below
       const textP = Math.max(0, Math.min(1, (p - 0.15) / 0.85));
       const textY = (1 - textP) * 24;
       lowerWrap.style.transform = `translate3d(0, ${textY.toFixed(1)}px, 0)`;
@@ -602,10 +698,33 @@ export default function MobileOilstainExperience() {
     (m) => m.tier === "FOUNDER" || m.tier === "CORE" || m.tier === "LEGACY"
   );
 
+  // Calculate SVG Concave Liquid Notch coordinate for the Modern Floating Navbar
+  const activeNavIndex = Math.max(
+    0,
+    FLOATING_NAV_ITEMS.findIndex((it) => it.id === activeNavTab)
+  );
+  // SVG coordinate system width = 360, height = 66, 5 columns => centers at 36, 108, 180, 252, 324
+  const notchCenterX = 36 + activeNavIndex * 72;
+  const floatingNavSvgPath = `
+    M 30 0
+    L ${notchCenterX - 36} 0
+    C ${notchCenterX - 24} 0, ${notchCenterX - 23} 28, ${notchCenterX} 28
+    C ${notchCenterX + 23} 28, ${notchCenterX + 24} 0, ${notchCenterX + 36} 0
+    L 330 0
+    A 30 30 0 0 1 360 30
+    L 360 36
+    A 30 30 0 0 1 330 66
+    L 30 66
+    A 30 30 0 0 1 0 36
+    L 0 30
+    A 30 30 0 0 1 30 0
+    Z
+  `;
+
   return (
     <div
       id="shutterscape-mobile-oilstain"
-      className="w-full min-h-screen bg-[#ECEBE6] text-[#111111] font-sans select-none overflow-x-clip"
+      className="w-full min-h-screen bg-[#ECEBE6] text-[#111111] font-sans select-none overflow-x-clip pb-24"
     >
       {/* Inline SVG Ink-Bleed Filter so the Handmade Writing looks like real fountain pen ink on cotton paper */}
       <svg
@@ -644,6 +763,13 @@ export default function MobileOilstainExperience() {
         dangerouslySetInnerHTML={{
           __html: `
         @import url('https://fonts.googleapis.com/css2?family=Nothing+You+Could+Do&family=Reenie+Beanie&display=swap');
+
+        /* Hide the old GlobalBranding top text links on mobile (< 1024px) so only our Modern Floating Navbar & Logo show! */
+        @media (max-width: 1023px) {
+          header[aria-label="Global Viewfinder Navigation"] {
+            display: none !important;
+          }
+        }
 
         #shutterscape-mobile-oilstain {
           background-color: #ECEBE6;
@@ -803,9 +929,155 @@ export default function MobileOilstainExperience() {
       />
 
       {/* ============================================================
+          MODERN FLOATING TOP SHUTTERSCAPE BRAND PILL (Mobile Only)
+          Displays the ShutterScape Logo + GCU / Join button cleanly at top
+          ============================================================ */}
+      <div
+        style={{ padding: "8px 14px" }}
+        className="fixed top-3 inset-x-3.5 z-[9980] rounded-full bg-[#0A0A0D]/90 backdrop-blur-xl border border-white/15 shadow-[0_10px_30px_rgba(0,0,0,0.35)] flex items-center justify-between pointer-events-auto"
+      >
+        <button
+          type="button"
+          onClick={() => {
+            setActiveNavTab("home");
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+          className="flex items-center gap-2.5 cursor-pointer"
+        >
+          <div className="relative h-6 w-24">
+            <Image
+              src="/images/shutterscape-brand-white.png"
+              alt="ShutterScape Logo"
+              fill
+              sizes="96px"
+              priority
+              unoptimized
+              className="object-contain object-left"
+            />
+          </div>
+          <span className="h-3.5 w-[1px] bg-white/20" />
+          <span className="flex items-center gap-1 font-mono text-[8.5px] tracking-[0.2em] text-[#EF4444] font-bold uppercase">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#EF4444] animate-pulse" />
+            REC
+          </span>
+        </button>
+
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => {
+              setRegisterSubmitted(false);
+              setIsRegisterModalOpen(true);
+            }}
+            style={{ padding: "5px 11px" }}
+            className="rounded-full bg-[#D4A843] text-[#050505] font-mono text-[8.5px] font-bold tracking-[0.16em] uppercase cursor-pointer"
+          >
+            JOIN &apos;26
+          </button>
+          <a
+            href="https://gcu.ac.in"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="relative h-5 w-16 opacity-90"
+            title="Girijananda Chowdhury University"
+          >
+            <img
+              src="/images/gcu-logo-white-text.png"
+              alt="GCU"
+              className="w-full h-full object-contain object-right"
+            />
+          </a>
+        </div>
+      </div>
+
+      {/* ============================================================
+          MODERN FLOATING LIQUID-NOTCH NAVBAR (Exact Match to Screenshot!)
+          Features the carved SVG concave notch cradle + elevated circular
+          active button + bold active label underneath
+          ============================================================ */}
+      <nav
+        aria-label="Mobile Floating Navigation"
+        className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[9985] w-[92vw] max-w-[375px] h-[66px] select-none pointer-events-auto"
+      >
+        {/* Carved SVG Pill with Smooth Concave Liquid Notch */}
+        <svg
+          viewBox="0 0 360 66"
+          preserveAspectRatio="none"
+          className="w-full h-full drop-shadow-[0_18px_38px_rgba(0,0,0,0.45)] overflow-visible"
+        >
+          <path
+            d={floatingNavSvgPath}
+            fill="#0A0A0D"
+            stroke="rgba(255,255,255,0.12)"
+            strokeWidth="1"
+            style={{ transition: "d 0.38s cubic-bezier(0.22, 1, 0.36, 1)" }}
+          />
+        </svg>
+
+        {/* Elevated Circular Active Icon Button sitting inside the Concave Notch */}
+        <div
+          style={{
+            left: `${(activeNavIndex + 0.5) * 20}%`,
+            top: "-18px",
+            width: "44px",
+            height: "44px",
+            transition: "left 0.38s cubic-bezier(0.22, 1, 0.36, 1)",
+          }}
+          className="absolute -translate-x-1/2 rounded-full bg-[#0A0A0D] border border-white/20 shadow-[0_8px_20px_rgba(0,0,0,0.55)] flex items-center justify-center pointer-events-none z-20"
+        >
+          {renderFloatingNavIcon(activeNavTab, true)}
+        </div>
+
+        {/* 5 Interactive Tab Columns */}
+        <div className="absolute inset-0 grid grid-cols-5 items-center z-10">
+          {FLOATING_NAV_ITEMS.map((item) => {
+            const isActive = item.id === activeNavTab;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => handleFloatingNavClick(item)}
+                className="relative h-full w-full flex flex-col items-center justify-center cursor-pointer bg-transparent border-0 outline-none"
+              >
+                {/* Inactive Icon (fades out when elevated into the top notch circle) */}
+                <span
+                  style={{
+                    transform: isActive ? "translateY(-14px) scale(0.5)" : "translateY(-2px) scale(1)",
+                    opacity: isActive ? 0 : 0.65,
+                    transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)",
+                  }}
+                  className="flex items-center justify-center"
+                >
+                  {renderFloatingNavIcon(item.id, false)}
+                </span>
+
+                {/* Tab Label (Bold white when active under the notch, muted grey when inactive) */}
+                <span
+                  style={{
+                    marginTop: isActive ? "16px" : "4px",
+                    transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)",
+                  }}
+                  className={`font-sans text-[11px] tracking-[0.01em] leading-none ${
+                    isActive
+                      ? "text-white font-semibold"
+                      : "text-[#64748B] font-normal"
+                  }`}
+                >
+                  {item.label}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </nav>
+
+      {/* ============================================================
           1. OPENING SPLASH HERO (Sticky z-10 so Page 2 physically wipes up over it on swipe!)
           ============================================================ */}
-      <section className="sticky top-0 z-10 w-full h-[100svh] min-h-[580px] bg-[#070709] text-white flex flex-col justify-between overflow-hidden">
+      <section
+        id="mobile-hero-top"
+        className="sticky top-0 z-10 w-full h-[100svh] min-h-[580px] bg-[#070709] text-white flex flex-col justify-between overflow-hidden"
+      >
         <div className="absolute inset-0 z-0 overflow-hidden">
           <img
             src={MOBILE_HERO_MEDIA.posterSrc}
@@ -834,8 +1106,8 @@ export default function MobileOilstainExperience() {
           />
         </div>
 
-        {/* Top Viewfinder Clearance for GlobalBranding Navbar */}
-        <div className="relative z-10 w-full pt-20 sm:pt-24 pointer-events-none" />
+        {/* Top Clearance for Floating Brand Pill */}
+        <div className="relative z-10 w-full pt-16 pointer-events-none" />
 
         <div
           key={heroAnimKey}
@@ -905,9 +1177,12 @@ export default function MobileOilstainExperience() {
           </p>
         </div>
 
-        <div className="relative z-10 w-full flex flex-col">
+        <div
+          style={{ paddingBottom: "88px" }}
+          className="relative z-10 w-full flex flex-col"
+        >
           <div className="osl-pad-sm flex items-center justify-between font-mono text-[8.5px] tracking-[0.2em] text-white/55 uppercase border-t border-white/10 bg-black/45 backdrop-blur-xs">
-            <span className="pl-16">f/1.4 · 1/1000s · ISO 400</span>
+            <span className="pl-14">f/1.4 · 1/1000s · ISO 400</span>
             <span>GCU · ASSAM</span>
           </div>
 
@@ -915,7 +1190,7 @@ export default function MobileOilstainExperience() {
             <button
               type="button"
               onClick={toggleHeroAudio}
-              className="absolute bottom-3.5 left-4 z-20 flex h-11 w-11 min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-[#D4A843]/60 bg-[#161513] text-[#D4A843] shadow-[0_4px_16px_rgba(0,0,0,0.6)] cursor-pointer active:scale-95 transition-transform"
+              className="absolute bottom-2.5 left-3.5 z-20 flex h-10 w-10 items-center justify-center rounded-full border border-[#D4A843]/60 bg-[#161513] text-[#D4A843] shadow-[0_4px_16px_rgba(0,0,0,0.6)] cursor-pointer active:scale-95 transition-transform"
               title={isHeroMuted ? "Unmute video sound" : "Mute video sound"}
               aria-label={
                 isHeroMuted ? "Unmute video sound" : "Mute video sound"
@@ -923,8 +1198,8 @@ export default function MobileOilstainExperience() {
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="18"
-                height="18"
+                width="16"
+                height="16"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -950,8 +1225,8 @@ export default function MobileOilstainExperience() {
             <button
               type="button"
               onClick={handleEnterArchiveTransition}
-              style={{ padding: "16px 20px 16px 76px" }}
-              className="w-full flex items-center justify-between bg-[#D4A843] text-[#050505] font-mono text-[10.5px] font-bold tracking-[0.18em] uppercase cursor-pointer hover:bg-[#E5B955] transition-colors"
+              style={{ padding: "14px 20px 14px 64px" }}
+              className="w-full flex items-center justify-between bg-[#D4A843] text-[#050505] font-mono text-[10px] font-bold tracking-[0.18em] uppercase cursor-pointer hover:bg-[#E5B955] transition-colors"
             >
               <span>ENTER THE DARKROOM ARCHIVE</span>
               <span className="text-base leading-none">↓</span>
@@ -962,7 +1237,7 @@ export default function MobileOilstainExperience() {
 
       {/* ============================================================
           2. PAGE 2: COMPACT SINGLE-SCREEN ARCHIVE STAGE
-             All 4 elements fit on ONE screen at once with EQUAL, balanced vertical distribution:
+             All 4 elements fit on ONE screen at once:
              1. "shutterscape | 26" Header
              2. 3D Moving Curved Ribbon
              3. "LIGHT IS MEMORY. MEMORY IS LIGHT."
@@ -971,20 +1246,20 @@ export default function MobileOilstainExperience() {
       <section
         id="mobile-light-spec-section"
         ref={archiveSectionRef}
-        style={{ minHeight: "100svh" }}
+        style={{ minHeight: "100svh", paddingBottom: "88px" }}
         className="relative z-20 w-full bg-[#ECEBE6] text-[#111111] shadow-[0_-28px_70px_rgba(0,0,0,0.65)] flex flex-col justify-between overflow-hidden"
       >
         {/* 1. Header Row: Real Shutterscape Logo on Left, "26" on Right */}
         <div
-          style={{ padding: "52px 20px 14px" }}
+          style={{ padding: "58px 20px 12px" }}
           className="relative z-10 flex items-center justify-between border-b border-black/10 shrink-0"
         >
-          <div className="relative h-11 w-[130px] sm:h-12 sm:w-[155px] shrink-0">
+          <div className="relative h-10 w-[125px] sm:h-12 sm:w-[150px] shrink-0">
             <Image
               src="/images/shutterscape-logo.png"
               alt="ShutterScape Logo"
               fill
-              sizes="155px"
+              sizes="150px"
               priority
               unoptimized
               className="object-contain object-left"
@@ -1011,9 +1286,9 @@ export default function MobileOilstainExperience() {
             isRibbonPausedRef.current = false;
           }}
           style={{
-            marginTop: "16px",
-            marginBottom: "8px",
-            height: "206px",
+            marginTop: "12px",
+            marginBottom: "6px",
+            height: "190px",
             perspective: "720px",
             perspectiveOrigin: "50% 50%",
             transformStyle: "preserve-3d",
@@ -1067,7 +1342,6 @@ export default function MobileOilstainExperience() {
                         backgroundPosition: "center",
                       }}
                     >
-                      {/* Top-Left Category Stamp & Top-Right Film Stock */}
                       <div
                         style={{ padding: "10px 12px" }}
                         className="absolute top-0 inset-x-0 flex items-center justify-between pointer-events-none"
@@ -1083,7 +1357,6 @@ export default function MobileOilstainExperience() {
                         </span>
                       </div>
 
-                      {/* Bottom-Left Serif Title + Description & Bottom-Right Gold INSPECT Pill */}
                       <div
                         style={{ padding: "11px 12px" }}
                         className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-2 pointer-events-none"
@@ -1115,17 +1388,17 @@ export default function MobileOilstainExperience() {
           })}
         </div>
 
-        {/* 3 & 4. "LIGHT IS MEMORY" + HANDMADE FOUNTAIN-PEN LETTER (Evenly distributed across the lower screen) */}
+        {/* 3 & 4. "LIGHT IS MEMORY" + HANDMADE FOUNTAIN-PEN LETTER */}
         <div
           ref={lowerContentRiseRef}
           style={{ willChange: "transform, opacity" }}
-          className="relative z-10 flex-1 flex flex-col justify-evenly items-center w-full pb-8 sm:pb-10"
+          className="relative z-10 flex-1 flex flex-col justify-evenly items-center w-full"
         >
           {/* 3. LIGHT IS MEMORY. MEMORY IS LIGHT. */}
           <div
             style={{
-              paddingTop: "6px",
-              paddingBottom: "12px",
+              paddingTop: "4px",
+              paddingBottom: "10px",
               paddingLeft: "20px",
               paddingRight: "20px",
             }}
@@ -1137,7 +1410,7 @@ export default function MobileOilstainExperience() {
               MEMORY IS LIGHT.
             </h2>
             <p
-              style={{ marginTop: "6px" }}
+              style={{ marginTop: "5px" }}
               className="font-mono text-[8.5px] tracking-[0.22em] uppercase text-black/45"
             >
               [ GIRIJANANDA CHOWDHURY UNIVERSITY ]
@@ -1147,8 +1420,8 @@ export default function MobileOilstainExperience() {
           {/* 4. AUTHENTIC HANDMADE FOUNTAIN-PEN LETTER */}
           <div
             style={{
-              paddingTop: "14px",
-              paddingBottom: "10px",
+              paddingTop: "10px",
+              paddingBottom: "6px",
               paddingLeft: "22px",
               paddingRight: "22px",
             }}
@@ -1161,52 +1434,49 @@ export default function MobileOilstainExperience() {
               }}
               className="w-full flex flex-col select-none"
             >
-              {/* Stanza 1 — Organic staggered left-indented lines */}
-              <div className="handmade-fountain-pen text-[19px] sm:text-[21px] leading-[1.46] tracking-[0.01em] text-left">
+              <div className="handmade-fountain-pen text-[18px] sm:text-[20px] leading-[1.42] tracking-[0.01em] text-left">
                 <p style={{ marginLeft: "4px" }}>
                   Every photograph holds a little piece of time,
                 </p>
-                <p style={{ marginLeft: "16px", marginTop: "3px" }}>
+                <p style={{ marginLeft: "16px", marginTop: "2px" }}>
                   every frame keeps a story alive.
                 </p>
               </div>
 
-              {/* Stanza 2 — Organic staggered lines */}
               <div
-                style={{ marginTop: "16px" }}
-                className="handmade-fountain-pen text-[19px] sm:text-[21px] leading-[1.46] tracking-[0.01em] text-left"
+                style={{ marginTop: "12px" }}
+                className="handmade-fountain-pen text-[18px] sm:text-[20px] leading-[1.42] tracking-[0.01em] text-left"
               >
                 <p style={{ marginLeft: "22px" }}>
                   Through light, laughter, and the moments
                 </p>
-                <p style={{ marginLeft: "6px", marginTop: "3px" }}>
+                <p style={{ marginLeft: "6px", marginTop: "2px" }}>
                   in between, we learn to see the world a little differently.
                 </p>
               </div>
 
-              {/* Bottom-Right Handmade Sign-Off: "The Shutterscape Family" */}
               <div
-                style={{ marginTop: "18px", paddingRight: "6px" }}
+                style={{ marginTop: "14px", paddingRight: "6px" }}
                 className="w-full flex flex-col items-end text-right"
               >
-                <span className="handmade-fountain-pen text-[16.5px] sm:text-[18px] text-[#1D1C1A]/85 leading-none">
+                <span className="handmade-fountain-pen text-[16px] sm:text-[17.5px] text-[#1D1C1A]/85 leading-none">
                   With love, light, and endless stories,
                 </span>
 
                 <div
-                  style={{ marginTop: "8px" }}
+                  style={{ marginTop: "6px" }}
                   className="flex flex-col items-end"
                 >
-                  <span className="handmade-signature-pen text-[33px] sm:text-[37px] leading-[0.88] tracking-[0.02em] text-[#111111]">
+                  <span className="handmade-signature-pen text-[32px] sm:text-[36px] leading-[0.88] tracking-[0.02em] text-[#111111]">
                     The Shutterscape Family
                   </span>
                   <svg
-                    width="165"
-                    height="13"
+                    width="160"
+                    height="12"
                     viewBox="0 0 220 20"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
-                    style={{ marginTop: "3px" }}
+                    style={{ marginTop: "2px" }}
                     className="text-[#1D1C1A]/75"
                   >
                     <path

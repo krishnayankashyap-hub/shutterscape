@@ -66,6 +66,56 @@ function getTargetScrollY(targetId: string): number | null {
   }
 }
 
+const FLOATING_NAV_ITEMS = [
+  { id: "home", label: "Home", href: "/" },
+  { id: "gallery", label: "Gallery", href: "/gallery" },
+  { id: "about", label: "About", href: "/about" },
+  { id: "timeline", label: "Activity", href: "/activities" },
+  { id: "moments", label: "Moments", href: "/#scene-gallery" },
+];
+
+function renderFloatingNavIcon(id: string, isActive: boolean) {
+  const strokeColor = isActive ? "#FFFFFF" : "#64748B";
+  switch (id) {
+    case "home":
+      return (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={strokeColor} strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M3 10.5L12 3l9 7.5v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-9z" />
+          <circle cx="12" cy="14" r="2.5" />
+        </svg>
+      );
+    case "gallery":
+      return (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={strokeColor} strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="11" cy="11" r="7" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+      );
+    case "about":
+      return (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={strokeColor} strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2L12 3z" />
+          <path d="M18 4l.8 2.2L21 7l-2.2.8L18 10l-.8-2.2L15 7l2.2-.8L18 4z" />
+        </svg>
+      );
+    case "timeline":
+    case "activity":
+      return (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={strokeColor} strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+          <polygon points="22 3 2 11 11 14 14 22 22 3" />
+        </svg>
+      );
+    case "moments":
+    default:
+      return (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={strokeColor} strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="8" r="4" />
+          <path d="M5 20a7 7 0 0 1 14 0" />
+        </svg>
+      );
+  }
+}
+
 export default function GlobalBranding() {
   const router = useRouter();
   const pathname = usePathname();
@@ -428,119 +478,218 @@ export default function GlobalBranding() {
     return null;
   }
 
+  // Calculate SVG Concave Liquid Notch coordinate for Mobile Subpages
+  const activeFloatingIndex = Math.max(
+    0,
+    FLOATING_NAV_ITEMS.findIndex((it) => it.id === activeNav)
+  );
+  const notchCenterX = 36 + activeFloatingIndex * 72;
+  const floatingNavSvgPath = `
+    M 30 0
+    L ${notchCenterX - 36} 0
+    C ${notchCenterX - 24} 0, ${notchCenterX - 23} 28, ${notchCenterX} 28
+    C ${notchCenterX + 23} 28, ${notchCenterX + 24} 0, ${notchCenterX + 36} 0
+    L 330 0
+    A 30 30 0 0 1 360 30
+    L 360 36
+    A 30 30 0 0 1 330 66
+    L 30 66
+    A 30 30 0 0 1 0 36
+    L 0 30
+    A 30 30 0 0 1 30 0
+    Z
+  `;
+
   return (
-    <header
-      className={`fixed ${
-        pathname === "/activities"
-          ? "top-2 sm:top-3 md:top-4"
-          : "top-2 sm:top-3 md:top-4 lg:top-5"
-      } flex w-full z-[9980] pointer-events-none select-none justify-center`}
-      role="banner"
-      aria-label="Global Viewfinder Navigation"
-    >
-      {/* The shadow dynamically applies in dark environments and lifts cleanly in white environments */}
-      <div
-        className="relative flex items-center justify-center max-w-fit mx-auto gap-2 sm:gap-3 md:gap-5 lg:gap-6 px-3 sm:px-4 md:px-6 py-1 sm:py-1.5 pointer-events-auto transition-all duration-500"
-        style={{
-          filter: isLightBackground
-            ? "none"
-            : "drop-shadow(0 4px 12px rgba(0,0,0,0.85)) drop-shadow(0 1px 3px rgba(0,0,0,0.9))",
-        }}
+    <>
+      <header
+        className={`fixed ${
+          pathname === "/activities"
+            ? "top-2 sm:top-3 md:top-4"
+            : "top-2 sm:top-3 md:top-4 lg:top-5"
+        } flex w-full z-[9980] pointer-events-none select-none justify-center`}
+        role="banner"
+        aria-label="Global Viewfinder Navigation"
       >
-        {/* ============================================================
-            LEFT: SHUTTERSCAPE LOGO + REC INDICATOR
-            ============================================================ */}
-        <div className="flex items-center justify-start gap-2 sm:gap-3 shrink-0 z-10">
-          <button
-            type="button"
-            onClick={handleHomeClick}
-            className="group relative flex items-center shrink-0 cursor-pointer min-h-[34px] sm:min-h-[38px] transition-transform duration-500 hover:opacity-75 focus-visible:outline-2 focus-visible:outline-[#D4A843]"
-            title="ShutterScape Logo"
-            aria-label="ShutterScape Home"
-          >
-            <div
-              className="relative h-5 w-[65px] sm:h-6 sm:w-[85px] md:h-7 md:w-[110px] transition-all duration-500"
-              style={{
-                filter: isLightBackground
-                  ? "brightness(0)"
-                  : "none",
-              }}
+        {/* The shadow dynamically applies in dark environments and lifts cleanly in white environments */}
+        <div
+          className="relative flex items-center justify-center max-w-fit mx-auto gap-2 sm:gap-3 md:gap-5 lg:gap-6 px-3 sm:px-4 md:px-6 py-1 sm:py-1.5 pointer-events-auto transition-all duration-500"
+          style={{
+            filter: isLightBackground
+              ? "none"
+              : "drop-shadow(0 4px 12px rgba(0,0,0,0.85)) drop-shadow(0 1px 3px rgba(0,0,0,0.9))",
+          }}
+        >
+          {/* ============================================================
+              LEFT: SHUTTERSCAPE LOGO + REC INDICATOR
+              ============================================================ */}
+          <div className="flex items-center justify-start gap-2 sm:gap-3 shrink-0 z-10">
+            <button
+              type="button"
+              onClick={handleHomeClick}
+              className="group relative flex items-center shrink-0 cursor-pointer min-h-[34px] sm:min-h-[38px] transition-transform duration-500 hover:opacity-75 focus-visible:outline-2 focus-visible:outline-[#D4A843]"
+              title="ShutterScape Logo"
+              aria-label="ShutterScape Home"
             >
-              <Image
-                src="/images/shutterscape-brand-white.png"
-                alt="ShutterScape Logo"
-                fill
-                sizes="(max-width: 640px) 75px, (max-width: 768px) 95px, 115px"
-                priority
-                unoptimized
-                className="object-contain"
+              <div
+                className="relative h-5 w-[65px] sm:h-6 sm:w-[85px] md:h-7 md:w-[110px] transition-all duration-500"
+                style={{
+                  filter: isLightBackground
+                    ? "brightness(0)"
+                    : "none",
+                }}
+              >
+                <Image
+                  src="/images/shutterscape-brand-white.png"
+                  alt="ShutterScape Logo"
+                  fill
+                  sizes="(max-width: 640px) 75px, (max-width: 768px) 95px, 115px"
+                  priority
+                  unoptimized
+                  className="object-contain"
+                />
+              </div>
+            </button>
+
+            {/* Viewfinder REC indicator */}
+            <div
+              className="hidden sm:flex items-center gap-2 sm:gap-2.5 font-mono text-[8.5px] md:text-[9px] tracking-[0.22em] uppercase font-bold opacity-90 transition-colors duration-500"
+              style={{ color: textColor }}
+            >
+              <div className="flex items-center gap-1.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#EF4444] animate-pulse" />
+                <span>REC</span>
+              </div>
+              <span
+                className="h-3.5 w-[1px] transition-colors duration-500"
+                style={{ backgroundColor: dividerColor }}
               />
             </div>
-          </button>
-
-          {/* Viewfinder REC indicator */}
-          <div
-            className="hidden sm:flex items-center gap-2 sm:gap-2.5 font-mono text-[8.5px] md:text-[9px] tracking-[0.22em] uppercase font-bold opacity-90 transition-colors duration-500"
-            style={{ color: textColor }}
-          >
-            <div className="flex items-center gap-1.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#EF4444] animate-pulse" />
-              <span>REC</span>
-            </div>
-            <span
-              className="h-3.5 w-[1px] transition-colors duration-500"
-              style={{ backgroundColor: dividerColor }}
-            />
           </div>
-        </div>
 
-        {/* ============================================================
-            NAVIGATION ITEMS: HOME // GALLERY // ABOUT // ACTIVITY // MOMENTS
-            ============================================================ */}
-        <nav
-          className="flex items-center justify-center gap-1 sm:gap-2 md:gap-2.5 lg:gap-3.5 shrink-0 z-20 overflow-x-auto no-scrollbar"
-          aria-label="Primary Navigation"
-        >
-          {NAV_ITEMS.map((item, index) => {
-            const isActive = activeNav === item.id;
+          {/* ============================================================
+              NAVIGATION ITEMS: HOME // GALLERY // ABOUT // ACTIVITY // MOMENTS
+              (Hidden on mobile < 1024px to prevent duplicating the Modern Floating Navbar)
+              ============================================================ */}
+          <nav
+            className="hidden lg:flex items-center justify-center gap-1 sm:gap-2 md:gap-2.5 lg:gap-3.5 shrink-0 z-20 overflow-x-auto no-scrollbar"
+            aria-label="Primary Navigation"
+          >
+            {NAV_ITEMS.map((item, index) => {
+              const isActive = activeNav === item.id;
 
-            return (
-              <React.Fragment key={item.id}>
-                <button
-                  type="button"
-                  onClick={(e) => handleNavClick(item, e)}
-                  aria-current={isActive ? "page" : undefined}
-                  className="group relative flex flex-col items-center justify-center font-mono text-[8.5px] sm:text-[9.5px] md:text-[11px] lg:text-[11.5px] uppercase tracking-[0.14em] sm:tracking-[0.18em] font-bold transition-colors duration-300 cursor-pointer min-h-[32px] sm:min-h-[38px] px-1 sm:px-1.5 md:px-2 py-1 touch-manipulation focus-visible:outline-2 focus-visible:outline-[#D4A843]"
-                  style={{
-                    color: isActive ? activeGoldColor : textColor,
-                    opacity: isActive ? 1 : 0.75,
-                  }}
-                >
-                  <span>{item.title}</span>
-
-                  {/* Sharp Gold Underline for Active/Hover State */}
-                  <span
-                    className={`absolute bottom-0.5 w-full h-[1.5px] transition-transform duration-500 ease-out origin-center ${
-                      isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
-                    }`}
-                    style={{ backgroundColor: activeGoldColor }}
-                  />
-                </button>
-
-                {/* Technical Slash Separators */}
-                {index < NAV_ITEMS.length - 1 && (
-                  <span
-                    className="font-mono text-[7.5px] sm:text-[8.5px] md:text-[10px] pointer-events-none select-none transition-colors duration-500 opacity-45"
-                    style={{ color: mutedTextColor }}
+              return (
+                <React.Fragment key={item.id}>
+                  <button
+                    type="button"
+                    onClick={(e) => handleNavClick(item, e)}
+                    aria-current={isActive ? "page" : undefined}
+                    className="group relative flex flex-col items-center justify-center font-mono text-[8.5px] sm:text-[9.5px] md:text-[11px] lg:text-[11.5px] uppercase tracking-[0.14em] sm:tracking-[0.18em] font-bold transition-colors duration-300 cursor-pointer min-h-[32px] sm:min-h-[38px] px-1 sm:px-1.5 md:px-2 py-1 touch-manipulation focus-visible:outline-2 focus-visible:outline-[#D4A843]"
+                    style={{
+                      color: isActive ? activeGoldColor : textColor,
+                      opacity: isActive ? 1 : 0.75,
+                    }}
                   >
-                    //
+                    <span>{item.title}</span>
+
+                    {/* Sharp Gold Underline for Active/Hover State */}
+                    <span
+                      className={`absolute bottom-0.5 w-full h-[1.5px] transition-transform duration-500 ease-out origin-center ${
+                        isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                      }`}
+                      style={{ backgroundColor: activeGoldColor }}
+                    />
+                  </button>
+
+                  {/* Technical Slash Separators */}
+                  {index < NAV_ITEMS.length - 1 && (
+                    <span
+                      className="font-mono text-[7.5px] sm:text-[8.5px] md:text-[10px] pointer-events-none select-none transition-colors duration-500 opacity-45"
+                      style={{ color: mutedTextColor }}
+                    >
+                      //
+                    </span>
+                  )}
+                </React.Fragment>
+              );
+            })}
+          </nav>
+        </div>
+      </header>
+
+      {/* Modern Floating Liquid-Notch Navbar for Mobile Subpages (Gallery, About, Activities) */}
+      {pathname !== "/" && (
+        <nav
+          aria-label="Mobile Floating Navigation"
+          className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[9985] w-[92vw] max-w-[375px] h-[66px] select-none pointer-events-auto lg:hidden"
+        >
+          {/* Carved SVG Pill with Smooth Concave Liquid Notch */}
+          <svg
+            viewBox="0 0 360 66"
+            preserveAspectRatio="none"
+            className="w-full h-full drop-shadow-[0_18px_38px_rgba(0,0,0,0.45)] overflow-visible"
+          >
+            <path
+              d={floatingNavSvgPath}
+              fill="#0A0A0D"
+              stroke="rgba(255,255,255,0.12)"
+              strokeWidth="1"
+              style={{ transition: "d 0.38s cubic-bezier(0.22, 1, 0.36, 1)" }}
+            />
+          </svg>
+
+          {/* Elevated Circular Active Icon Button */}
+          <div
+            style={{
+              left: `${(activeFloatingIndex + 0.5) * 20}%`,
+              top: "-18px",
+              width: "44px",
+              height: "44px",
+              transition: "left 0.38s cubic-bezier(0.22, 1, 0.36, 1)",
+            }}
+            className="absolute -translate-x-1/2 rounded-full bg-[#0A0A0D] border border-white/20 shadow-[0_8px_20px_rgba(0,0,0,0.55)] flex items-center justify-center pointer-events-none z-20"
+          >
+            {renderFloatingNavIcon(activeNav, true)}
+          </div>
+
+          {/* 5 Interactive Tab Columns */}
+          <div className="absolute inset-0 grid grid-cols-5 items-center z-10">
+            {FLOATING_NAV_ITEMS.map((item) => {
+              const isActive = activeNav === item.id;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => router.push(item.href)}
+                  className="relative h-full w-full flex flex-col items-center justify-center cursor-pointer bg-transparent border-0 outline-none"
+                >
+                  <span
+                    style={{
+                      transform: isActive ? "translateY(-14px) scale(0.5)" : "translateY(-2px) scale(1)",
+                      opacity: isActive ? 0 : 0.65,
+                      transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)",
+                    }}
+                    className="flex items-center justify-center"
+                  >
+                    {renderFloatingNavIcon(item.id, false)}
                   </span>
-                )}
-              </React.Fragment>
-            );
-          })}
+                  <span
+                    style={{
+                      marginTop: isActive ? "16px" : "4px",
+                      transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)",
+                    }}
+                    className={`font-sans text-[11px] tracking-[0.01em] leading-none ${
+                      isActive ? "text-white font-semibold" : "text-[#64748B] font-normal"
+                    }`}
+                  >
+                    {item.label}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </nav>
-      </div>
-    </header>
+      )}
+    </>
   );
 }
