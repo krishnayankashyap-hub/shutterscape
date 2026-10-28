@@ -158,7 +158,6 @@ const FALLBACK_ACTIVITIES = [
 ];
 
 const FALLBACK_COMMITTEE = [
-  // MENTORS ("THE TEACHERS")
   {
     name: "Dr. Sangeeta Das",
     role: "Coordinator",
@@ -175,7 +174,6 @@ const FALLBACK_COMMITTEE = [
     bio: "Mentors student storytellers in visual literacy, cultural documentation, and curatorial ethics at Girijananda Chowdhury University.",
     img: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=75&w=600&auto=format&fit=crop",
   },
-  // LEADS ("BEHIND THE LENS")
   {
     name: "Uttama Purkayastha",
     role: "President",
@@ -200,7 +198,6 @@ const FALLBACK_COMMITTEE = [
     bio: "Oversees member onboarding, exhibition catalogs, and the preservation of student photographic plates.",
     img: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=75&w=600&auto=format&fit=crop",
   },
-  // CORE ("CORE MEMBERS")
   {
     name: "Sohaib Hussain",
     role: "Core Member",
@@ -249,7 +246,6 @@ const FALLBACK_COMMITTEE = [
     bio: "Explores brutalist geometry, symmetry, and natural shadow play across campus structures.",
     img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=75&w=600&auto=format&fit=crop",
   },
-  // FOUNDERS ("WHERE IT ALL STARTED")
   {
     name: "Dheemaan Deka",
     role: "2023 // Co-Founder",
@@ -266,7 +262,6 @@ const FALLBACK_COMMITTEE = [
     bio: "Established the club's signature photowalk culture, darkroom critique sessions, and annual print exhibitions.",
     img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=75&w=600&auto=format&fit=crop",
   },
-  // LEGACY ("CARRYING IT FORWARD")
   {
     name: "Gargi Medhi",
     role: "Legacy Torchbearer",
@@ -285,7 +280,6 @@ const FALLBACK_COMMITTEE = [
   },
 ];
 
-// Vibrant Studio Backdrops matching Screenshot 7 & 8 (Buffer / Lynqet reference)
 const MEMBER_CARD_BACKDROPS = [
   "#8CE99A", // Mint Studio Green
   "#FFA8A8", // Coral Peach
@@ -432,8 +426,8 @@ const SLICES_PER_CARD = 6;
 const SLICE_INDICES = Array.from({ length: SLICES_PER_CARD }, (_, i) => i);
 
 // =========================================================================
-// 1. FULL-COLOR STOP-MOTION FLIPBOOK + KINETIC COLORFUL TYPOGRAPHY MATRIX
-//    (Fixes Screenshot 1: Colored photos + Cool/Colorful Highlighted Fonts!)
+// 1. RESTORED FULL-BLEED "SHUTTER*SCAPE*" MATRIX + COLORED STOP-MOTION
+//    PHOTO + FRAMELESS/BORDERLESS EDITORIAL PARAGRAPHS WITH BREATHING SPACE
 // =========================================================================
 const StopMotionFlipbook = React.memo(function StopMotionFlipbook({
   matrixStack,
@@ -457,7 +451,7 @@ const StopMotionFlipbook = React.memo(function StopMotionFlipbook({
         isVisibleRef.current = entry.isIntersecting;
         if (entry.isIntersecting) setIsHighlighted(true);
       },
-      { threshold: 0.25 }
+      { threshold: 0.2 }
     );
     observer.observe(el);
     return () => observer.disconnect();
@@ -476,121 +470,63 @@ const StopMotionFlipbook = React.memo(function StopMotionFlipbook({
   const currentFrame = matrixStack[photoIdx % matrixStack.length];
 
   return (
-    <div className="space-y-6">
-      {/* Top Editorial Manifesto Paragraph with Scroll-Reactive Colorful Highlights & Dashed Underlines */}
-      <div className="p-4 rounded-2xl bg-white border border-black/10 shadow-[0_8px_24px_rgba(0,0,0,0.04)] space-y-3">
-        <div className="flex items-center justify-between">
-          <span className="px-2.5 py-0.5 rounded-full bg-[#111111] text-[#D4A843] font-mono text-[8.5px] font-bold tracking-[0.2em] uppercase">
-            ● VISUAL MANIFESTO
-          </span>
-          <span className="font-mono text-[8.5px] tracking-[0.18em] text-black/40 uppercase">
-            26.1445° N · ASSAM
-          </span>
-        </div>
+    <div style={{ paddingTop: "8px", paddingBottom: "8px" }}>
+      {/* Top Frameless, Borderless Paragraph with Breathing Space & Colorful Highlights */}
+      <p
+        style={{ marginBottom: "28px" }}
+        className="font-serif text-[18px] leading-[1.6] text-[#111111] font-normal"
+      >
+        Born at{" "}
+        <span
+          style={{ padding: "1px 6px" }}
+          className={`inline-block rounded font-heading font-bold text-[13.5px] uppercase tracking-tight transition-all duration-700 ${
+            isHighlighted
+              ? "bg-[#D4A843] text-[#111111]"
+              : "bg-transparent text-[#111111]"
+          }`}
+        >
+          Girijananda Chowdhury University
+        </span>{" "}
+        in Assam,{" "}
+        <span className="italic font-semibold underline decoration-[#D92B2B] decoration-wavy decoration-1 underline-offset-4">
+          ShutterScape
+        </span>{" "}
+        is our unmedicated{" "}
+        <span
+          style={{ padding: "1px 6px" }}
+          className={`inline-block rounded font-mono text-[11.5px] font-bold uppercase tracking-wider transition-all duration-700 delay-150 ${
+            isHighlighted
+              ? "bg-[#D92B2B] text-white"
+              : "bg-transparent text-[#111111]"
+          }`}
+        >
+          Visual Archive
+        </span>{" "}
+        — a pure manifesto of{" "}
+        <span className="border-b-2 border-dashed border-[#0F766E] font-semibold text-[#0F766E]">
+          analog optics
+        </span>
+        ,{" "}
+        <span className="border-b-2 border-dashed border-[#D4A843] font-semibold">
+          street documentary
+        </span>
+        , and creative excess.
+      </p>
 
-        <p className="font-serif text-[17px] leading-[1.55] text-[#111111] font-normal">
-          Born at{" "}
-          <span
-            className={`inline-block px-1.5 py-0.2 rounded font-heading font-bold text-[14px] uppercase tracking-tight transition-all duration-700 ${
-              isHighlighted
-                ? "bg-[#D4A843] text-[#111111] shadow-2xs"
-                : "bg-transparent text-[#111111]"
-            }`}
-          >
-            Girijananda Chowdhury University
-          </span>{" "}
-          in Assam,{" "}
-          <span className="italic font-semibold underline decoration-[#D92B2B] decoration-wavy decoration-1 underline-offset-4">
-            ShutterScape
-          </span>{" "}
-          is our unmedicated{" "}
-          <span
-            className={`inline-block px-1.5 py-0.2 rounded font-mono text-[12px] font-bold uppercase tracking-wider transition-all duration-700 delay-150 ${
-              isHighlighted
-                ? "bg-[#D92B2B] text-white"
-                : "bg-black/5 text-[#111111]"
-            }`}
-          >
-            Visual Archive
-          </span>{" "}
-          — a pure manifesto of{" "}
-          <span className="border-b-2 border-dashed border-[#10B981] font-semibold text-[#0F5132]">
-            analog optics
-          </span>
-          ,{" "}
-          <span className="border-b-2 border-dashed border-[#D4A843] font-semibold">
-            street documentary
-          </span>
-          , and creative excess.
-        </p>
-      </div>
-
-      {/* Kinetic Multi-Color Scrolling Typography Wall + FULL-COLOR Stop-Motion Photo Flipbook */}
+      {/* Restored Original Giant Static "SHUTTER*SCAPE*" Background Block + FULL-COLOR Stop-Motion Photo */}
       <div
         ref={containerRef}
         onClick={() => setPhotoIdx((prev) => (prev + 1) % matrixStack.length)}
-        className="relative w-full py-8 overflow-hidden flex flex-col items-center justify-center border-y-2 border-dashed border-black/20 bg-[#111113] rounded-2xl cursor-pointer shadow-inner gap-1.5"
+        style={{ paddingTop: "24px", paddingBottom: "24px" }}
+        className="relative w-full overflow-hidden flex items-center justify-center border-y border-black/15 bg-[#FAF9F5] cursor-pointer"
       >
-        {/* Row 1: Moving Left — Bold White + Gold Serif */}
-        <div className="w-full overflow-hidden">
-          <div className="osl-kinetic-marquee-left font-heading font-black text-[11vw] leading-[0.88] tracking-[-0.04em] uppercase select-none whitespace-nowrap">
-            <span className="text-white">SHUTTER</span>
-            <span className="text-[#D4A843] font-serif italic font-normal px-2">
-              *SCAPE*
-            </span>
-            <span className="text-[#D92B2B]">35MM</span>
-            <span className="text-white/25 px-2">—</span>
-            <span className="text-[#8CE99A]">OPTICS</span>
-            <span className="text-white px-2">*SHUTTER</span>
-            <span className="text-[#D4A843] font-serif italic font-normal px-2">
-              *SCAPE*
-            </span>
-          </div>
+        <div
+          aria-hidden="true"
+          className="font-heading font-black text-[13vw] leading-[0.86] tracking-[-0.04em] uppercase text-[#111111] text-center select-none break-all"
+        >
+          SHUTTER*SCAPE*GCU*35MM*RAW*OPTICS*DARKROOM*ASSAM*
         </div>
 
-        {/* Row 2: Moving Right — Hollow Stroke + Cyan/Coral Accents */}
-        <div className="w-full overflow-hidden">
-          <div className="osl-kinetic-marquee-right font-heading font-black text-[11vw] leading-[0.88] tracking-[-0.04em] uppercase select-none whitespace-nowrap">
-            <span
-              style={{
-                WebkitTextStroke: "1.5px rgba(255,255,255,0.65)",
-                color: "transparent",
-              }}
-            >
-              DARKROOM
-            </span>
-            <span className="text-[#74C0FC] px-2">// RAW 14-BIT //</span>
-            <span className="text-[#FFE066] font-serif italic font-normal">
-              ASSAM
-            </span>
-            <span
-              style={{
-                WebkitTextStroke: "1.5px rgba(255,255,255,0.65)",
-                color: "transparent",
-              }}
-              className="px-2"
-            >
-              DARKROOM
-            </span>
-            <span className="text-[#74C0FC] px-2">// RAW 14-BIT //</span>
-          </div>
-        </div>
-
-        {/* Row 3: Moving Left — Vibrant Editorial Mix */}
-        <div className="w-full overflow-hidden">
-          <div className="osl-kinetic-marquee-left font-heading font-black text-[11vw] leading-[0.88] tracking-[-0.04em] uppercase select-none whitespace-nowrap">
-            <span className="text-[#FFA8A8]">PORTRA 400</span>
-            <span className="text-white px-2">*GCU*</span>
-            <span className="text-[#D0BFFF] font-serif italic font-normal">
-              VISION
-            </span>
-            <span className="text-[#D4A843] px-2">// 2026 //</span>
-            <span className="text-[#FFA8A8]">PORTRA 400</span>
-            <span className="text-white px-2">*GCU*</span>
-          </div>
-        </div>
-
-        {/* FULL-COLOR Pre-Rendered Stop-Motion Frame Stack (NO Grayscale!) */}
         {matrixStack.map((frame, i) => {
           const isCurrent = i === photoIdx % matrixStack.length;
           const isPortrait = frame.orientation === "portrait";
@@ -599,67 +535,56 @@ const StopMotionFlipbook = React.memo(function StopMotionFlipbook({
               key={i}
               style={{
                 opacity: isCurrent ? 1 : 0,
-                transform: isCurrent
-                  ? "scale(1) rotate(-1.5deg)"
-                  : "scale(0.92) rotate(2deg)",
-                width: isPortrait ? "50%" : "66%",
+                width: isPortrait ? "48%" : "64%",
                 aspectRatio: isPortrait ? "3 / 4" : "4 / 3",
                 padding: "6px",
               }}
-              className="absolute bg-white rounded-xl shadow-[0_24px_60px_rgba(0,0,0,0.75)] border-2 border-[#D4A843] pointer-events-none transition-all duration-300"
+              className="absolute bg-white shadow-[0_22px_55px_rgba(0,0,0,0.45)] border border-black/15 pointer-events-none transition-opacity duration-200"
             >
               <img
                 src={frame.src}
                 alt={frame.title}
-                className="w-full h-full object-cover rounded-lg saturate-[1.15] contrast-[1.04]"
+                className="w-full h-full object-cover saturate-[1.15] contrast-[1.04]"
                 loading="lazy"
                 decoding="async"
               />
-              <div
-                style={{ padding: "3px 8px" }}
-                className="absolute bottom-2.5 right-2.5 rounded-full bg-black/80 backdrop-blur-xs text-[#D4A843] font-mono text-[8px] font-bold tracking-[0.16em] uppercase"
-              >
-                0{(photoIdx % matrixStack.length) + 1} / 0{matrixStack.length} ·
-                COLOR RAW
-              </div>
             </div>
           );
         })}
       </div>
 
-      {/* Bottom "DOUBLE VISION" Card with Colorful Accents & Underlines */}
-      <div
-        style={{ padding: "16px 18px" }}
-        className="rounded-2xl bg-white border-l-4 border-l-[#D92B2B] border border-black/10 shadow-xs space-y-2.5"
-      >
-        <div className="flex items-center justify-between gap-2 flex-wrap">
-          <span className="font-mono text-[9.5px] tracking-[0.18em] uppercase text-[#D92B2B] font-bold flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-[#D92B2B] animate-ping" />
-            DOUBLE VISION // {currentFrame?.title || "GCU ARCHIVE"}
-          </span>
-          <span
-            style={{ padding: "2px 8px" }}
-            className="rounded bg-[#ECEBE6] font-mono text-[8px] font-bold uppercase tracking-widest text-black/60"
-          >
-            TAP PHOTO TO CYCLE
-          </span>
-        </div>
-
-        <p className="font-serif text-[15.5px] text-black/85 leading-[1.55]">
+      {/* Bottom Frameless, Borderless Paragraph with Breathing Space & Colorful Accents */}
+      <div style={{ marginTop: "28px" }}>
+        <span
+          style={{ marginBottom: "10px" }}
+          className="font-mono text-[10px] tracking-[0.22em] uppercase text-[#D92B2B] font-bold block"
+        >
+          DOUBLE VISION // {currentFrame?.title || "GCU ARCHIVE"}
+        </span>
+        <p className="font-serif text-[17px] text-[#111111]/85 leading-[1.6]">
           ShutterScape was created for students who love to{" "}
           <span className="font-semibold text-[#111111] underline decoration-[#D4A843] decoration-2 underline-offset-4">
             observe, capture, and tell stories
           </span>{" "}
           through photographs. Whether you shoot on a{" "}
-          <span className="px-1.5 py-0.5 rounded bg-[#FFF3BF] text-[#8C6D1F] font-mono text-[10px] font-bold">
+          <span
+            style={{ padding: "1px 6px" }}
+            className="rounded bg-[#FFF3BF] text-[#8C6D1F] font-mono text-[10.5px] font-bold"
+          >
             35mm SLR
           </span>
           , a{" "}
-          <span className="px-1.5 py-0.5 rounded bg-[#E7F5FF] text-[#1864AB] font-mono text-[10px] font-bold">
+          <span
+            style={{ padding: "1px 6px" }}
+            className="rounded bg-[#E7F5FF] text-[#1864AB] font-mono text-[10.5px] font-bold"
+          >
             mirrorless rig
           </span>
           , or your{" "}
-          <span className="px-1.5 py-0.5 rounded bg-[#EBFBEE] text-[#2B8A3E] font-mono text-[10px] font-bold">
+          <span
+            style={{ padding: "1px 6px" }}
+            className="rounded bg-[#EBFBEE] text-[#2B8A3E] font-mono text-[10.5px] font-bold"
+          >
             phone
           </span>{" "}
           —{" "}
@@ -673,9 +598,8 @@ const StopMotionFlipbook = React.memo(function StopMotionFlipbook({
 });
 
 // =========================================================================
-// 2. VIDEO 6 AUTOMATIC ROTATING HALF-WHEEL COLORED FAN (Section 4)
-//    Replaces the static B&W image in Screenshot 4 with the continuously
-//    rotating semicircular fan of FULL-COLOR cards from Screen Recording 6!
+// 2. SEAMLESS AUTOMATIC ROTATING HALF-WHEEL COLORED FAN (Section 4)
+//    Blends 100% seamlessly into the #ECEBE6 page background with ZERO box!
 // =========================================================================
 const HalfWheelGalleryFan = React.memo(function HalfWheelGalleryFan({
   items,
@@ -703,28 +627,29 @@ const HalfWheelGalleryFan = React.memo(function HalfWheelGalleryFan({
       lastTime = now;
 
       if (isInViewRef.current && !isPausedRef.current) {
-        // Smooth, continuous clockwise rotation (14 degrees per second)
-        angleRef.current = (angleRef.current + dt * 14) % 360;
+        angleRef.current = (angleRef.current + dt * 13) % 360;
       }
 
       const baseAngle = angleRef.current;
-      const stepDeg = 180 / Math.max(4, count - 1); // Fan across the top 180° semicircle
+      const stepDeg = 180 / Math.max(4, count - 1);
 
       for (let i = 0; i < count; i++) {
         const el = cardRefs.current[i];
         if (!el) continue;
 
-        // Wrap angle smoothly between -110deg (left horizon) and +110deg (right horizon)
         const rawDeg = (i * stepDeg + baseAngle) % 220;
         const deg = rawDeg - 110;
         const rad = (deg * Math.PI) / 180;
 
-        // Semicircular arc math centered at bottom pivot
-        const radius = 118;
+        // Semicircular arc anchored to the bottom edge so it emerges cleanly out of the divider line
+        const radius = 122;
         const x = Math.sin(rad) * radius;
-        const y = -Math.cos(rad) * radius + 55;
-        const scale = Math.max(0.72, 1 - Math.abs(deg) / 240);
-        const opacity = Math.abs(deg) > 96 ? 0 : 1 - Math.max(0, (Math.abs(deg) - 72) / 24);
+        const y = -Math.cos(rad) * radius + 68;
+        const scale = Math.max(0.75, 1 - Math.abs(deg) / 240);
+        const opacity =
+          Math.abs(deg) > 95
+            ? 0
+            : 1 - Math.max(0, (Math.abs(deg) - 72) / 23);
         const zIdx = Math.round(50 - Math.abs(deg) * 0.4);
 
         el.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(
@@ -774,32 +699,9 @@ const HalfWheelGalleryFan = React.memo(function HalfWheelGalleryFan({
       onTouchEnd={() => {
         isPausedRef.current = false;
       }}
-      className="relative w-full h-[300px] bg-[#111113] rounded-2xl overflow-hidden border border-black/15 shadow-[0_20px_50px_rgba(0,0,0,0.22)] flex items-center justify-center select-none"
+      className="relative w-full h-[275px] bg-transparent overflow-hidden flex items-center justify-center select-none"
     >
-      {/* Subtle Radial Studio Glow */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(circle at 50% 92%, rgba(212, 168, 67, 0.24) 0%, rgba(17, 17, 19, 0.95) 72%)",
-        }}
-      />
-
-      {/* Top Telemetry Header inside the Half-Wheel Stage */}
-      <div
-        style={{ padding: "12px 16px" }}
-        className="absolute top-0 inset-x-0 z-50 flex items-center justify-between pointer-events-none"
-      >
-        <span className="flex items-center gap-1.5 font-mono text-[8.5px] tracking-[0.22em] uppercase text-[#D4A843] font-bold">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#D4A843] animate-pulse" />
-          ROTATING OPTICAL WHEEL // 35MM COLOR
-        </span>
-        <span className="font-mono text-[8px] tracking-[0.18em] uppercase text-white/50">
-          TAP ANY FRAME
-        </span>
-      </div>
-
-      {/* Rotating Half-Wheel Cards */}
+      {/* Rotating Full-Color Cards Directly on the #ECEBE6 Page Canvas */}
       <div className="relative w-full h-full flex items-center justify-center">
         {wheelCards.map((item, idx) => (
           <div
@@ -809,23 +711,23 @@ const HalfWheelGalleryFan = React.memo(function HalfWheelGalleryFan({
             }}
             onClick={() => onSelectCard(idx)}
             style={{
-              width: "128px",
-              height: "172px",
+              width: "132px",
+              height: "178px",
               padding: "5px",
               willChange: "transform, opacity",
             }}
-            className="absolute bg-white rounded-2xl shadow-[0_14px_32px_rgba(0,0,0,0.65)] border border-white/40 cursor-pointer"
+            className="absolute bg-white rounded-2xl shadow-[0_16px_36px_rgba(0,0,0,0.18)] border border-black/10 cursor-pointer"
           >
-            <div className="relative w-full h-full rounded-xl overflow-hidden bg-black">
+            <div className="relative w-full h-full rounded-xl overflow-hidden bg-[#111111]">
               <img
                 src={item.src}
                 alt={item.title}
-                className="w-full h-full object-cover saturate-[1.18]"
+                className="w-full h-full object-cover saturate-[1.16]"
                 loading="lazy"
                 decoding="async"
               />
-              <div className="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black/90 via-black/40 to-transparent">
-                <span className="block font-mono text-[7px] tracking-[0.16em] uppercase text-[#D4A843] font-bold truncate">
+              <div className="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black/85 via-black/35 to-transparent">
+                <span className="block font-mono text-[6.5px] tracking-[0.16em] uppercase text-[#D4A843] font-bold truncate">
                   {item.category}
                 </span>
                 <span className="block font-serif text-[11px] text-white leading-tight truncate">
@@ -835,14 +737,6 @@ const HalfWheelGalleryFan = React.memo(function HalfWheelGalleryFan({
             </div>
           </div>
         ))}
-      </div>
-
-      {/* Center Hub Dial at Bottom of the Half-Wheel (Matches Video 6 Hub) */}
-      <div
-        style={{ padding: "8px 18px" }}
-        className="absolute -bottom-3 left-1/2 -translate-x-1/2 z-50 rounded-t-2xl bg-[#D4A843] text-[#050505] font-mono text-[8.5px] font-bold uppercase tracking-[0.2em] shadow-lg pointer-events-none"
-      >
-        ● LIVE COLOR REEL
       </div>
     </div>
   );
@@ -858,7 +752,7 @@ export default function MobileOilstainExperience() {
   const [activeNavTab, setActiveNavTab] = useState<NavTabId>("home");
   const [isScrolledTop, setIsScrolledTop] = useState(false);
 
-  // Full-Screen Dedicated Pages (Video 5 Gallery Page & Video 9 Activities Page)
+  // Full-Screen Dedicated Pages
   const [isGalleryPageOpen, setIsGalleryPageOpen] = useState(false);
   const [galleryFilterCat, setGalleryFilterCat] = useState<string>("ALL");
   const [expandedGalleryId, setExpandedGalleryId] = useState<string | null>(
@@ -869,7 +763,7 @@ export default function MobileOilstainExperience() {
   const [activityFilterCat, setActivityFilterCat] = useState<string>("ALL");
   const [activeActivitySlideIdx, setActiveActivitySlideIdx] = useState(0);
 
-  // Section 3 "What's Hot" Live & Upcoming Spotlight State
+  // Section 3 Editorial Spotlight State
   const [hotEventIdx, setHotEventIdx] = useState(0);
 
   // Section 4 Creative Optical Lab States
@@ -1382,18 +1276,16 @@ export default function MobileOilstainExperience() {
         }));
   }, [gallery, activities]);
 
-  // Hot / Upcoming Events for Section 3 ("WHAT'S HOT // LIVE & UPCOMING")
   const hotEventsList = useMemo(() => {
     const upcomingOnly = activities.filter((ev) => ev.isUpcoming);
-    return upcomingOnly.length > 0 ? upcomingOnly : activities.slice(0, 3);
+    return upcomingOnly.length > 0 ? upcomingOnly : activities.slice(0, 4);
   }, [activities]);
 
-  // Auto-cycle the "What's Hot" spotlight every 6 seconds
   useEffect(() => {
     if (hotEventsList.length <= 1) return;
     const timer = setInterval(() => {
       setHotEventIdx((prev) => (prev + 1) % hotEventsList.length);
-    }, 6000);
+    }, 6500);
     return () => clearInterval(timer);
   }, [hotEventsList.length]);
 
@@ -1401,7 +1293,6 @@ export default function MobileOilstainExperience() {
     hotEventsList[hotEventIdx % Math.max(1, hotEventsList.length)] ||
     FALLBACK_ACTIVITIES[0];
 
-  // Filtered Lists for Dedicated Pages (Video 5 Gallery Page & Video 9 Activities Page)
   const filteredGalleryItems = useMemo(() => {
     if (galleryFilterCat === "ALL") return gallery;
     return gallery.filter(
@@ -1417,6 +1308,11 @@ export default function MobileOilstainExperience() {
         String(a.year) === activityFilterCat
     );
   }, [activities, activityFilterCat]);
+
+  const activeActivityDetail =
+    filteredActivityItems[
+      activeActivitySlideIdx % Math.max(1, filteredActivityItems.length)
+    ] || FALLBACK_ACTIVITIES[0];
 
   const scrollActivitiesPeekTo = (idx: number) => {
     const total = filteredActivityItems.length;
@@ -1435,7 +1331,7 @@ export default function MobileOilstainExperience() {
     }
   };
 
-  // Committee Member Buckets for the 6 About Chapters
+  // Committee Member Buckets
   const mentorsList = useMemo(() => {
     const m = committee.filter((c) => c.tier === "MENTOR");
     return m.length > 0
@@ -1514,12 +1410,7 @@ export default function MobileOilstainExperience() {
     }
   };
 
-  // =========================================================================
-  // REUSABLE COLORED STUDIO MEMBER CARD (Matches Screenshots 7 & 8!)
-  // - White rounded card frame with 10px inner padding
-  // - Vibrant pastel studio backdrop + Full-Color Portrait + Chamfered corner
-  // - Clean Name, Role, Dept & bottom-right `→` arrow button
-  // =========================================================================
+  // Colored Studio Member Card (Screenshots 7 & 8)
   const renderStudioMemberCard = (person: any, idx: number) => {
     const bgColor = MEMBER_CARD_BACKDROPS[idx % MEMBER_CARD_BACKDROPS.length];
     return (
@@ -1530,7 +1421,6 @@ export default function MobileOilstainExperience() {
         className="group bg-white rounded-2xl border border-black/10 shadow-[0_8px_24px_rgba(0,0,0,0.06)] hover:shadow-[0_14px_34px_rgba(0,0,0,0.12)] transition-all duration-300 flex flex-col justify-between cursor-pointer"
       >
         <div>
-          {/* Vibrant Colored Studio Backdrop + FULL-COLOR Portrait + Chamfered Bottom-Left Cut */}
           <div
             style={{
               backgroundColor: bgColor,
@@ -1539,7 +1429,6 @@ export default function MobileOilstainExperience() {
             }}
             className="relative w-full aspect-[4/4.4] rounded-xl overflow-hidden"
           >
-            {/* Subtle Studio Highlight Sheen */}
             <div
               className="absolute inset-0 pointer-events-none"
               style={{
@@ -1557,7 +1446,6 @@ export default function MobileOilstainExperience() {
             />
           </div>
 
-          {/* Clean Editorial Typography Below Photo (Matches Screenshot 8) */}
           <div style={{ padding: "10px 4px 4px" }}>
             <h4 className="font-heading font-bold text-[13.5px] text-[#111111] tracking-tight leading-snug">
               {person.name}
@@ -1579,7 +1467,6 @@ export default function MobileOilstainExperience() {
           </div>
         </div>
 
-        {/* Bottom-Right Arrow Button (`→`) Matching Screenshot 8 */}
         <div
           style={{ paddingTop: "6px", paddingRight: "4px" }}
           className="flex items-center justify-end"
@@ -1614,7 +1501,6 @@ export default function MobileOilstainExperience() {
           color: #111111;
           -webkit-overflow-scrolling: touch;
         }
-        /* Fix for Upper Navbar Left Logo Touching Corner (Immune to globals.css * { padding: 0 }) */
         #shutterscape-mobile-oilstain .osl-top-capsule {
           padding: 7px 16px 7px 20px !important;
         }
@@ -1696,24 +1582,6 @@ export default function MobileOilstainExperience() {
           font-weight: 400;
           color: #141311;
         }
-        @keyframes oslKineticLeft {
-          0% { transform: translate3d(0%, 0, 0); }
-          100% { transform: translate3d(-50%, 0, 0); }
-        }
-        @keyframes oslKineticRight {
-          0% { transform: translate3d(-50%, 0, 0); }
-          100% { transform: translate3d(0%, 0, 0); }
-        }
-        #shutterscape-mobile-oilstain .osl-kinetic-marquee-left {
-          display: flex;
-          width: max-content;
-          animation: oslKineticLeft 14s linear infinite;
-        }
-        #shutterscape-mobile-oilstain .osl-kinetic-marquee-right {
-          display: flex;
-          width: max-content;
-          animation: oslKineticRight 14s linear infinite;
-        }
         @keyframes oslLetterReveal {
           0% {
             opacity: 0;
@@ -1770,7 +1638,6 @@ export default function MobileOilstainExperience() {
 
       {/* ============================================================
           UP NAVBAR: COMPACT CENTERED GLASS CAPSULE WITH GENEROUS LEFT PADDING
-          (Fixes the ShutterScape logo touching the left corner!)
           ============================================================ */}
       <div
         style={{
@@ -1796,7 +1663,6 @@ export default function MobileOilstainExperience() {
           style={{ paddingLeft: "4px" }}
           className="flex items-center gap-2.5 cursor-pointer shrink-0"
         >
-          {/* ShutterScape Logo with Left Breathing Room */}
           <div
             style={{ width: "92px", height: "25px" }}
             className="relative shrink-0"
@@ -2377,123 +2243,137 @@ export default function MobileOilstainExperience() {
       </section>
 
       {/* ============================================================
-          3. "WHAT'S HOT // LIVE & UPCOMING DISPATCH" + "ACTIVITIES +" BUTTON
-             (Upgrades Screenshot 3: Shows live/upcoming hot events with animated
-             status, description, JOIN button, and bottom ACTIVITIES button!)
+          3. LUXURY EDITORIAL SPOTLIGHT CARD + "ACTIVITIES +" BAR
+             (Upgraded with Leica/Magnum Museum Poster Card & Editorial Serif!)
           ============================================================ */}
       <section
         id="mobile-dark-showcase"
-        className="relative z-20 w-full bg-[#111114] text-white border-t border-white/10"
+        className="relative z-20 w-full bg-[#0D0D10] text-white"
       >
-        <div className="osl-pad-lg space-y-5">
-          {/* Top Live Radar Header */}
-          <div className="flex items-center justify-between gap-2">
+        <div style={{ padding: "36px 20px 24px" }}>
+          {/* Editorial Section Header */}
+          <div
+            style={{ marginBottom: "22px" }}
+            className="flex items-end justify-between border-b border-white/10 pb-4"
+          >
             <div>
-              <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#D92B2B]/20 border border-[#D92B2B]/50 text-[#FF6B6B] font-mono text-[8.5px] font-bold tracking-[0.2em] uppercase">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#EF4444] animate-ping" />
-                  WHAT&apos;S HOT // LIVE &amp; UPCOMING
-                </span>
-              </div>
+              <span className="font-serif italic text-sm text-[#D4A843] tracking-wide block">
+                Current Exhibition &amp; Live Dispatch
+              </span>
               <h2
-                style={{ marginTop: "8px" }}
-                className="font-heading font-black text-2xl tracking-[-0.02em] uppercase leading-none text-white"
+                style={{ marginTop: "2px" }}
+                className="font-serif text-3xl text-white font-light tracking-tight leading-none"
               >
-                FIELD DISPATCH &apos;26
+                The Living Chronology.
               </h2>
             </div>
 
-            {/* Event Switcher Pills if Multiple Upcoming Events */}
+            {/* Minimal Circular Prev/Next Switchers */}
             {hotEventsList.length > 1 && (
-              <div className="flex items-center gap-1.5">
-                {hotEventsList.map((_, i) => {
-                  const isActive = i === hotEventIdx % hotEventsList.length;
-                  return (
-                    <button
-                      key={i}
-                      type="button"
-                      onClick={() => setHotEventIdx(i)}
-                      style={{ padding: "5px 9px" }}
-                      className={`rounded-lg font-mono text-[9px] font-bold transition-all cursor-pointer ${
-                        isActive
-                          ? "bg-[#D4A843] text-[#050505]"
-                          : "bg-white/10 text-white/60"
-                      }`}
-                    >
-                      0{i + 1}
-                    </button>
-                  );
-                })}
+              <div className="flex items-center gap-2 shrink-0">
+                <span className="font-mono text-[9.5px] text-white/45 mr-1">
+                  0{(hotEventIdx % hotEventsList.length) + 1} / 0
+                  {hotEventsList.length}
+                </span>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setHotEventIdx(
+                      (prev) =>
+                        (prev - 1 + hotEventsList.length) % hotEventsList.length
+                    )
+                  }
+                  className="w-8 h-8 rounded-full border border-white/20 hover:border-white text-white flex items-center justify-center text-xs cursor-pointer transition-colors"
+                  aria-label="Previous spotlight event"
+                >
+                  ←
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setHotEventIdx((prev) => (prev + 1) % hotEventsList.length)
+                  }
+                  className="w-8 h-8 rounded-full border border-white/20 hover:border-white text-white flex items-center justify-center text-xs cursor-pointer transition-colors"
+                  aria-label="Next spotlight event"
+                >
+                  →
+                </button>
               </div>
             )}
           </div>
 
-          {/* Animated Featured Hot Event Card */}
-          <div className="rounded-2xl bg-[#18181D] border border-white/15 overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.65)]">
-            <div className="relative w-full aspect-[16/10] overflow-hidden">
-              <img
-                src={currentHotEvent.img}
-                alt={currentHotEvent.title}
-                className="w-full h-full object-cover transition-transform duration-700 scale-105"
-                loading="lazy"
-                decoding="async"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#18181D] via-black/30 to-black/25" />
+          {/* Museum-Grade Full-Bleed Portrait Poster Card (4:5 Aspect) */}
+          <div className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden border border-white/15 shadow-[0_28px_70px_rgba(0,0,0,0.85)] bg-[#070709] flex flex-col justify-between">
+            <img
+              src={currentHotEvent.img}
+              alt={currentHotEvent.title}
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 scale-105"
+              loading="lazy"
+              decoding="async"
+            />
 
-              {/* Top-Left Category + Top-Right Date Pill */}
-              <div
-                style={{ padding: "12px" }}
-                className="absolute top-0 inset-x-0 flex items-center justify-between"
-              >
-                <span
-                  style={{ padding: "4px 10px" }}
-                  className="rounded-full bg-black/80 backdrop-blur-md border border-[#D4A843]/40 font-mono text-[8.5px] font-bold tracking-[0.18em] text-[#D4A843] uppercase"
-                >
-                  {currentHotEvent.category}
-                </span>
-                <span
-                  style={{ padding: "4px 10px" }}
-                  className="rounded-full bg-[#D92B2B] text-white font-mono text-[8.5px] font-bold tracking-[0.16em] uppercase shadow-md"
-                >
-                  {currentHotEvent.isUpcoming ? "● REGISTRATION OPEN" : currentHotEvent.date}
-                </span>
-              </div>
+            {/* Deep Editorial Gradient Vignette */}
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background:
+                  "linear-gradient(180deg, rgba(7,7,9,0.55) 0%, rgba(7,7,9,0.12) 38%, rgba(7,7,9,0.88) 76%, rgba(7,7,9,0.98) 100%)",
+              }}
+            />
 
-              {/* Bottom Venue & Date Telemetry inside Image */}
-              <div
-                style={{ padding: "12px 16px" }}
-                className="absolute bottom-0 inset-x-0 flex items-center justify-between font-mono text-[9px] text-white/80 uppercase tracking-[0.15em]"
+            {/* Top Floating Glass Telemetry Bar */}
+            <div
+              style={{ padding: "16px" }}
+              className="relative z-10 flex items-center justify-between"
+            >
+              <span
+                style={{ padding: "5px 12px" }}
+                className="rounded-full bg-black/55 backdrop-blur-md border border-white/20 font-mono text-[8.5px] tracking-[0.2em] uppercase text-white flex items-center gap-2"
               >
-                <span>📍 {currentHotEvent.location}</span>
-                <span className="text-[#D4A843] font-bold">
-                  {currentHotEvent.date}
-                </span>
-              </div>
+                <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse" />
+                {currentHotEvent.category}
+              </span>
+
+              <span
+                style={{ padding: "5px 12px" }}
+                className="rounded-full bg-white/10 backdrop-blur-md border border-white/15 font-mono text-[8.5px] tracking-[0.18em] uppercase text-[#D4A843] font-semibold"
+              >
+                {currentHotEvent.date}
+              </span>
             </div>
 
-            {/* Event Title, Full Description & Direct JOIN Button */}
-            <div style={{ padding: "18px 18px 20px" }} className="space-y-3.5">
+            {/* Bottom Editorial Typography & Ivory Action Pill inside Poster */}
+            <div
+              style={{ padding: "22px 20px" }}
+              className="relative z-10 space-y-4"
+            >
               <div>
-                <span className="font-mono text-[8.5px] tracking-[0.22em] text-white/45 uppercase block">
-                  {currentHotEvent.shortTitle || "FEATURED CLUB EXPEDITION"} ·{" "}
-                  {currentHotEvent.filmStock}
-                </span>
+                <div className="flex items-center gap-2 font-mono text-[9px] tracking-[0.2em] uppercase text-[#D4A843]">
+                  <span>{currentHotEvent.location}</span>
+                  <span className="text-white/30">•</span>
+                  <span className="text-white/70">
+                    {currentHotEvent.filmStock || "35MM ARCHIVE"}
+                  </span>
+                </div>
+
                 <h3
-                  style={{ marginTop: "4px" }}
-                  className="font-serif text-2xl text-white font-light leading-tight"
+                  style={{ marginTop: "6px" }}
+                  className="font-serif italic text-3xl sm:text-4xl text-white font-light leading-[1.05] tracking-tight"
                 >
                   {currentHotEvent.title}
                 </h3>
+
+                <p
+                  style={{ marginTop: "10px" }}
+                  className="font-body text-xs text-white/75 leading-relaxed line-clamp-3"
+                >
+                  {currentHotEvent.description}
+                </p>
               </div>
 
-              <p className="font-body text-xs text-white/75 leading-relaxed">
-                {currentHotEvent.description}
-              </p>
-
-              {/* Interactive JOIN / RSVP Button for this Hot Event */}
               <div
-                style={{ paddingTop: "6px" }}
-                className="flex items-center gap-2.5"
+                style={{ paddingTop: "8px" }}
+                className="border-t border-white/15 flex items-center justify-between gap-3"
               >
                 <button
                   type="button"
@@ -2502,19 +2382,19 @@ export default function MobileOilstainExperience() {
                     setRegisterSubmitted(false);
                     setIsRegisterModalOpen(true);
                   }}
-                  style={{ padding: "12px 18px" }}
-                  className="flex-1 rounded-xl bg-[#D4A843] hover:bg-[#E5B955] text-[#050505] font-mono text-[10px] font-bold uppercase tracking-[0.18em] flex items-center justify-between cursor-pointer shadow-md"
+                  style={{ padding: "11px 20px" }}
+                  className="flex-1 rounded-full bg-[#FAF9F5] hover:bg-[#D4A843] text-[#0A0A0D] font-sans text-xs font-semibold tracking-wide flex items-center justify-between cursor-pointer transition-colors shadow-lg"
                 >
-                  <span>JOIN / RSVP THIS EVENT</span>
-                  <span>→</span>
+                  <span>Reserve Your Spot</span>
+                  <span className="font-mono text-xs">↗</span>
                 </button>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Bottom Button: "ACTIVITIES +" (Opens Video 9 Full-Screen Activities Explorer Page!) */}
-        <div className="osl-pad-md pt-0">
+        {/* Bottom Hairline Bar: "ACTIVITIES +" */}
+        <div style={{ padding: "0 20px 28px" }}>
           <button
             type="button"
             onClick={() => {
@@ -2522,41 +2402,41 @@ export default function MobileOilstainExperience() {
               setActiveActivitySlideIdx(0);
               setIsActivitiesPageOpen(true);
             }}
-            className="osl-bar-btn border border-white/25 bg-white/5 hover:bg-white hover:text-black text-white rounded-xl"
+            className="osl-bar-btn border border-white/25 bg-white/[0.04] hover:bg-white hover:text-black text-white"
           >
-            <span>ACTIVITIES ({activities.length} CHRONOLOGY EVENTS)</span>
+            <span>ACTIVITIES ({activities.length} CHRONOLOGY WORKS)</span>
             <span className="text-lg leading-none font-light">+</span>
           </button>
         </div>
       </section>
 
       {/* ============================================================
-          4. VIDEO 6 ROTATING HALF-WHEEL COLORED FAN + CREATIVE OPTICAL LAB
-             + "GALLERY +" BUTTON (Opens Video 5 Full-Screen Gallery Page!)
+          4. SEAMLESS ROTATING HALF-WHEEL COLORED FAN + CREATIVE OPTICAL LAB
+             + "GALLERY +" BUTTON (Blends 100% with the #ECEBE6 Page!)
           ============================================================ */}
       <section
         id="mobile-light-bento-section"
         className="relative z-20 w-full bg-[#ECEBE6] text-[#111111]"
       >
-        <div className="osl-pad-lg pb-4">
-          <div className="flex items-center justify-between mb-3">
+        <div style={{ paddingTop: "32px" }}>
+          <div
+            style={{ paddingLeft: "20px", paddingRight: "20px" }}
+            className="flex items-end justify-between"
+          >
             <div>
-              <span className="font-mono text-[9px] tracking-[0.22em] uppercase text-black/50 block">
-                CURATED PLATES // 360° HALF-WHEEL
+              <span className="font-serif italic text-sm text-black/60 block">
+                Curated Contact Sheet
               </span>
               <h2 className="font-heading font-black text-2xl uppercase tracking-[-0.03em] text-[#111111]">
                 VISUAL ARCHIVE
               </h2>
             </div>
-            <span
-              style={{ padding: "4px 10px" }}
-              className="rounded-full bg-[#111111] text-[#D4A843] font-mono text-[8.5px] font-bold uppercase tracking-[0.16em]"
-            >
-              {gallery.length} COLOR PLATES
+            <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-black/45">
+              [ {gallery.length} COLOR PLATES ]
             </span>
           </div>
 
-          {/* Video 6 Automatic Rotating Semicircular Half-Wheel Fan (Full Color!) */}
+          {/* Seamless Rotating Half-Wheel Fan (Blends directly with #ECEBE6!) */}
           <HalfWheelGalleryFan
             items={gallery}
             onSelectCard={(idx) => {
@@ -2570,7 +2450,7 @@ export default function MobileOilstainExperience() {
           />
         </div>
 
-        {/* Creative 3-Column Interactive Optical Lab Deck (Replaces Origin | Beauty | Asylum) */}
+        {/* 3-Column Interactive Optical Lab Deck */}
         <div className="grid grid-cols-3 w-full border-l border-black/15">
           <button
             type="button"
@@ -2624,7 +2504,6 @@ export default function MobileOilstainExperience() {
           </button>
         </div>
 
-        {/* Interactive Expandable Optical Lab Drawer (When any of the 3 Creative Lab Buttons is tapped) */}
         {activeOpticalLab && (
           <div
             style={{ padding: "18px 20px" }}
@@ -2770,7 +2649,7 @@ export default function MobileOilstainExperience() {
           </div>
         )}
 
-        {/* Bottom Button: Replaced "ARCHIVE SPECS & CHRONOLOGY" with "GALLERY +" (Opens Video 5 Full Gallery Page!) */}
+        {/* Bottom Hairline Button: "GALLERY +" */}
         <div className="osl-pad-md">
           <button
             type="button"
@@ -2779,7 +2658,7 @@ export default function MobileOilstainExperience() {
               setExpandedGalleryId(null);
               setIsGalleryPageOpen(true);
             }}
-            className="osl-bar-btn bg-[#111111] hover:bg-[#D92B2B] text-white rounded-xl shadow-md"
+            className="osl-bar-btn border border-black/25 bg-transparent hover:bg-[#111111] text-[#111111] hover:text-white"
           >
             <span>GALLERY // EXPLORE ALL {gallery.length} FRAMES</span>
             <span className="text-base leading-none">+</span>
@@ -2788,8 +2667,8 @@ export default function MobileOilstainExperience() {
       </section>
 
       {/* ============================================================
-          5. "ABOUT" BANNER + 6-CHAPTER BAR + COLORED FLIPBOOK & STUDIO MEMBER CARDS
-             (Upgrades Screenshot 2: 6 Chapters + Screenshots 7 & 8 Colored Cards!)
+          5. "ABOUT" BANNER + 6-CHAPTER BAR + RESTORED FULL-BLEED MATRIX
+             + COLORED STUDIO MEMBER CARDS
           ============================================================ */}
       <section
         id="mobile-light-about-section"
@@ -2818,7 +2697,7 @@ export default function MobileOilstainExperience() {
           </div>
         </div>
 
-        {/* 6-CHAPTER HORIZONTAL SCROLLABLE TASKBAR (All 6 Requested Chapters!) */}
+        {/* 6-Chapter Horizontal Scrollable Taskbar */}
         <div className="w-full overflow-x-auto no-scrollbar bg-[#ECEBE6] border-y border-black/15 flex items-center">
           {ABOUT_CHAPTER_TABS.map((tab) => {
             const isActive = activeAboutTab === tab.id;
@@ -2846,20 +2725,15 @@ export default function MobileOilstainExperience() {
           })}
         </div>
 
-        {/* CHAPTER 01: ORIGINS (Full-Color Flipbook + Cool Colorful Fonts) */}
+        {/* CHAPTER 01: ORIGINS (Frameless, Borderless Text + Full-Bleed Matrix + Colored Photo) */}
         {activeAboutTab === "ORIGINS" && (
-          <div className="osl-pad-lg space-y-5">
-            <div className="flex items-baseline justify-between">
-              <div>
-                <span className="font-mono text-[9.5px] tracking-[0.22em] uppercase text-[#D92B2B] font-bold block">
-                  CHAPTER 01 // ORIGINS
-                </span>
-                <h3 className="font-heading font-black text-3xl uppercase tracking-[-0.03em] text-[#111111] mt-0.5">
-                  STORYTELLERS
-                </h3>
-              </div>
-              <span className="font-serif italic text-sm text-black/55">
-                Est. 2023
+          <div className="osl-pad-lg space-y-4">
+            <div>
+              <h3 className="font-heading font-black text-3xl uppercase tracking-[-0.03em] text-[#111111]">
+                STORYTELLERS
+              </h3>
+              <span className="font-mono text-[9.5px] tracking-[0.2em] uppercase text-black/45 block mt-1">
+                CHAPTER 01 // ORIGINS
               </span>
             </div>
 
@@ -2867,7 +2741,7 @@ export default function MobileOilstainExperience() {
           </div>
         )}
 
-        {/* CHAPTER 02: THE TEACHERS (Faculty Mentors — Screenshots 7 & 8 Colored Studio Cards) */}
+        {/* CHAPTER 02: THE TEACHERS */}
         {activeAboutTab === "THE TEACHERS" && (
           <div className="osl-pad-lg space-y-5">
             <div>
@@ -2891,7 +2765,7 @@ export default function MobileOilstainExperience() {
           </div>
         )}
 
-        {/* CHAPTER 03: BEHIND THE LENS (Executive Leads — Screenshots 7 & 8 Colored Studio Cards) */}
+        {/* CHAPTER 03: BEHIND THE LENS */}
         {activeAboutTab === "BEHIND THE LENS" && (
           <div className="osl-pad-lg space-y-5">
             <div>
@@ -2915,7 +2789,7 @@ export default function MobileOilstainExperience() {
           </div>
         )}
 
-        {/* CHAPTER 04: CORE MEMBERS (Core Committee — Screenshots 7 & 8 Colored Studio Cards) */}
+        {/* CHAPTER 04: CORE MEMBERS */}
         {activeAboutTab === "CORE MEMBERS" && (
           <div className="osl-pad-lg space-y-5">
             <div>
@@ -2939,7 +2813,7 @@ export default function MobileOilstainExperience() {
           </div>
         )}
 
-        {/* CHAPTER 05: WHERE IT ALL STARTED (Founders — Screenshots 7 & 8 Colored Studio Cards) */}
+        {/* CHAPTER 05: WHERE IT ALL STARTED */}
         {activeAboutTab === "WHERE IT ALL STARTED" && (
           <div className="osl-pad-lg space-y-5">
             <div>
@@ -2963,7 +2837,7 @@ export default function MobileOilstainExperience() {
           </div>
         )}
 
-        {/* CHAPTER 06: CARRYING IT FORWARD (Legacy Torchbearers — Screenshots 7 & 8 Colored Studio Cards) */}
+        {/* CHAPTER 06: CARRYING IT FORWARD */}
         {activeAboutTab === "CARRYING IT FORWARD" && (
           <div className="osl-pad-lg space-y-5">
             <div>
@@ -3174,96 +3048,101 @@ export default function MobileOilstainExperience() {
       </section>
 
       {/* ============================================================
-          PAGE OVERLAY 1: DEDICATED FULL-SCREEN ACTIVITIES EXPLORER PAGE
-          (Exact Match to Screen Recording 9 "TOUR KYRGYZSTAN" with
-          `← BACK` button, Category Taskbar, Peek Slider, Red `[ EXPLORE ]`
-          button, Full Description, and `← PREV` / Progress Line / `NEXT →`!)
+          PAGE OVERLAY 1: EXECUTIVE EDITORIAL ACTIVITIES PAGE
+          (Fixes Screenshot 2: Refined Serif + Geometric Typography, Clean
+          Header, Zero Text Collisions, and Full Editorial Story Panel!)
           ============================================================ */}
       {isActivitiesPageOpen && (
-        <div className="fixed inset-0 z-[9999] bg-[#FAF9F5] text-[#111111] flex flex-col justify-between overflow-y-auto animate-fade-in">
-          {/* Top Bar with ← BACK Button & Brand Title */}
-          <div className="sticky top-0 z-30 bg-[#FAF9F5]/95 backdrop-blur-md border-b border-black/10">
+        <div className="fixed inset-0 z-[9999] bg-[#F7F6F1] text-[#111111] flex flex-col justify-between overflow-y-auto animate-fade-in">
+          {/* Sticky Editorial Header + Clean Category Taskbar */}
+          <div className="sticky top-0 z-30 bg-[#F7F6F1]/95 backdrop-blur-md border-b border-black/10">
             <div
-              style={{ padding: "14px 18px" }}
+              style={{ padding: "14px 20px" }}
               className="flex items-center justify-between"
             >
               <button
                 type="button"
                 onClick={() => setIsActivitiesPageOpen(false)}
                 style={{ padding: "7px 14px" }}
-                className="rounded-full bg-[#111111] text-white font-mono text-[10px] font-bold uppercase tracking-[0.18em] flex items-center gap-2 cursor-pointer shadow-xs"
+                className="rounded-full bg-[#111111] text-white font-sans text-xs font-semibold tracking-wide flex items-center gap-1.5 cursor-pointer shadow-xs"
               >
                 <span>←</span>
-                <span>BACK</span>
+                <span>Back</span>
               </button>
 
-              <span className="font-heading font-black text-sm uppercase tracking-tight text-[#111111]">
-                SHUTTERSCAPE // CHRONOLOGY
-              </span>
+              <div className="text-center">
+                <span className="font-serif italic text-base text-[#111111] block leading-none">
+                  Field Works &amp; Chronology
+                </span>
+              </div>
 
               <span
-                style={{ padding: "4px 9px" }}
-                className="rounded-full bg-[#D92B2B] text-white font-mono text-[9px] font-bold uppercase"
+                style={{ padding: "4px 10px" }}
+                className="rounded-full bg-black/[0.06] text-[#111111] font-mono text-[9px] font-bold uppercase tracking-wider"
               >
-                {filteredActivityItems.length} EVENTS
+                {filteredActivityItems.length} Works
               </span>
             </div>
 
-            {/* Category Taskbar */}
+            {/* Refined Segmented Category Taskbar */}
             <div
-              style={{ padding: "8px 18px" }}
-              className="flex items-center gap-2 overflow-x-auto no-scrollbar border-t border-black/5 bg-[#ECEBE6]"
+              style={{ padding: "10px 20px" }}
+              className="flex items-center gap-2 overflow-x-auto no-scrollbar border-t border-black/8 bg-[#ECEBE6]/80"
             >
               {[
-                "ALL",
-                "PHOTOWALK",
-                "WORKSHOP",
-                "EXHIBITION",
-                "COMPETITION",
-                "2026",
-                "2025",
+                { key: "ALL", label: "All Works" },
+                { key: "PHOTOWALK", label: "Photowalks" },
+                { key: "WORKSHOP", label: "Workshops" },
+                { key: "EXHIBITION", label: "Exhibitions" },
+                { key: "COMPETITION", label: "Competitions" },
+                { key: "2026", label: "Works '26" },
+                { key: "2025", label: "Works '25" },
               ].map((cat) => {
-                const isSelected = activityFilterCat === cat;
+                const isSelected = activityFilterCat === cat.key;
                 return (
                   <button
-                    key={cat}
+                    key={cat.key}
                     type="button"
                     onClick={() => {
-                      setActivityFilterCat(cat);
+                      setActivityFilterCat(cat.key);
                       setActiveActivitySlideIdx(0);
                     }}
-                    style={{ padding: "6px 12px" }}
-                    className={`rounded-full font-mono text-[9px] font-bold uppercase tracking-[0.15em] shrink-0 cursor-pointer transition-all ${
+                    style={{ padding: "6px 14px" }}
+                    className={`rounded-full font-sans text-xs font-semibold shrink-0 cursor-pointer transition-all ${
                       isSelected
-                        ? "bg-[#D92B2B] text-white shadow-xs"
+                        ? "bg-[#111111] text-white shadow-xs"
                         : "bg-white text-black/65 border border-black/10"
                     }`}
                   >
-                    {cat === "ALL" ? "ALL EVENTS" : cat}
+                    {cat.label}
                   </button>
                 );
               })}
             </div>
           </div>
 
-          {/* Main Tour-Kyrgyzstan Style Content Area */}
-          <div style={{ padding: "22px 0 18px" }} className="flex-1 space-y-5">
+          {/* Main Content Area */}
+          <div style={{ padding: "24px 0 20px" }} className="flex-1 space-y-5">
+            {/* Editorial Heading */}
             <div style={{ padding: "0 20px" }}>
-              <h2 className="font-mono text-xl font-bold uppercase tracking-[0.06em] leading-snug text-[#111111]">
-                CONTINUE
-                <br />
-                EXPLORING
-                <br />
-                SHUTTERSCAPE
+              <span className="font-mono text-[9px] tracking-[0.22em] uppercase text-[#D92B2B] font-bold block">
+                ARCHIVE DIRECTORY // 2025–2026
+              </span>
+              <h2
+                style={{ marginTop: "4px" }}
+                className="font-serif text-3xl text-[#111111] font-light leading-[1.08] tracking-tight"
+              >
+                Continue Exploring{" "}
+                <span className="italic font-normal">ShutterScape.</span>
               </h2>
             </div>
 
-            {/* Horizontal Peek Slider (Active Card + Right Peeking Card like Video 9) */}
+            {/* Horizontal Peek Card Carousel (Self-Contained Cards — ZERO Text Overlap!) */}
             <div
               ref={activitiesPeekScrollRef}
               onScroll={(e) => {
                 const container = e.currentTarget;
-                const cardWidth = container.clientWidth * 0.82;
+                const cardWidth = container.clientWidth * 0.8;
                 const idx = Math.round(container.scrollLeft / cardWidth);
                 if (
                   idx !== activeActivitySlideIdx &&
@@ -3276,86 +3155,86 @@ export default function MobileOilstainExperience() {
               style={{ paddingLeft: "20px", paddingRight: "20px" }}
               className="flex items-stretch gap-4 overflow-x-auto snap-x snap-mandatory no-scrollbar"
             >
-              {filteredActivityItems.map((ev, idx) => (
-                <div
-                  key={ev._id || ev.id || idx}
-                  className="shrink-0 w-[82vw] max-w-[340px] snap-start flex flex-col justify-between"
-                >
-                  {/* Square/Portrait Image Card with Centered Red [ EXPLORE / JOIN ] Button */}
-                  <div className="relative w-full aspect-[4/4.3] rounded-xs overflow-hidden bg-[#111111] shadow-md">
-                    <img
-                      src={ev.img}
-                      alt={ev.title}
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/25" />
+              {filteredActivityItems.map((ev, idx) => {
+                const isSelectedCard = idx === activeActivitySlideIdx;
+                return (
+                  <div
+                    key={ev._id || ev.id || idx}
+                    onClick={() => scrollActivitiesPeekTo(idx)}
+                    className={`shrink-0 w-[78vw] max-w-[325px] snap-start flex flex-col transition-opacity duration-300 cursor-pointer ${
+                      isSelectedCard ? "opacity-100" : "opacity-75"
+                    }`}
+                  >
+                    {/* Framed Poster Card */}
+                    <div className="relative w-full aspect-[4/4.2] rounded-2xl overflow-hidden bg-[#111111] shadow-[0_14px_34px_rgba(0,0,0,0.14)] border border-black/10">
+                      <img
+                        src={ev.img}
+                        alt={ev.title}
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-black/25" />
 
-                    {/* Top Badges */}
-                    <div
-                      style={{ padding: "12px" }}
-                      className="absolute top-0 inset-x-0 flex items-center justify-between"
-                    >
-                      <span
-                        style={{ padding: "3px 8px" }}
-                        className="bg-black/75 text-[#D4A843] font-mono text-[8.5px] font-bold uppercase tracking-widest"
+                      {/* Top Glass Badges */}
+                      <div
+                        style={{ padding: "12px" }}
+                        className="absolute top-0 inset-x-0 flex items-center justify-between"
                       >
-                        {ev.category} · {ev.year}
-                      </span>
-                      {ev.isUpcoming && (
                         <span
-                          style={{ padding: "3px 8px" }}
-                          className="bg-[#10B981] text-black font-mono text-[8.5px] font-bold uppercase tracking-widest"
+                          style={{ padding: "4px 10px" }}
+                          className="rounded-full bg-black/65 backdrop-blur-md text-[#D4A843] font-mono text-[8.5px] font-bold uppercase tracking-[0.16em]"
                         >
-                          ● UPCOMING
+                          {ev.category} · &apos;{String(ev.year).slice(-2)}
                         </span>
-                      )}
+                        {ev.isUpcoming && (
+                          <span
+                            style={{ padding: "4px 10px" }}
+                            className="rounded-full bg-[#10B981] text-[#050505] font-mono text-[8.5px] font-bold uppercase tracking-[0.14em]"
+                          >
+                            ● Live RSVP
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Centered Editorial Action Pill inside Image */}
+                      <div className="absolute bottom-5 inset-x-0 flex justify-center">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setRegisterEventName(ev.title);
+                            setRegisterSubmitted(false);
+                            setIsRegisterModalOpen(true);
+                          }}
+                          style={{ padding: "9px 20px" }}
+                          className="rounded-full bg-[#D92B2B] hover:bg-[#B91C1C] text-white font-mono text-[9.5px] font-bold uppercase tracking-[0.18em] shadow-lg cursor-pointer"
+                        >
+                          [ {ev.isUpcoming ? "JOIN / RSVP" : "EXPLORE"} ]
+                        </button>
+                      </div>
                     </div>
 
-                    {/* Centered Red [ EXPLORE / RSVP ] Button Overlay (Matches Video 9!) */}
-                    <div className="absolute bottom-5 inset-x-0 flex justify-center">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setRegisterEventName(ev.title);
-                          setRegisterSubmitted(false);
-                          setIsRegisterModalOpen(true);
-                        }}
-                        style={{ padding: "10px 22px" }}
-                        className="bg-[#D92B2B] hover:bg-[#B91C1C] text-white font-mono text-[10px] font-bold uppercase tracking-[0.2em] shadow-lg cursor-pointer"
-                      >
-                        [ {ev.isUpcoming ? "JOIN / RSVP" : "EXPLORE"} ]
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Below Card: Title, Date/Duration & Full Activity Description */}
-                  <div style={{ paddingTop: "14px" }} className="space-y-2">
-                    <div className="flex items-baseline justify-between gap-2">
-                      <h3 className="font-mono text-xs font-bold uppercase tracking-[0.12em] text-[#111111]">
-                        {ev.title}
-                      </h3>
-                      <span className="font-mono text-[9.5px] text-[#D92B2B] font-bold shrink-0">
+                    {/* Clean 1-Line Caption Under Card (Never collides with adjacent card!) */}
+                    <div
+                      style={{ paddingTop: "10px", paddingRight: "8px" }}
+                      className="flex items-center justify-between gap-2"
+                    >
+                      <span className="font-heading font-bold text-xs uppercase tracking-tight text-[#111111] truncate">
+                        {ev.shortTitle || ev.title}
+                      </span>
+                      <span className="font-mono text-[9px] text-black/50 uppercase shrink-0">
                         {ev.date}
                       </span>
                     </div>
-
-                    <p className="font-mono text-[9.5px] tracking-[0.14em] uppercase text-black/50">
-                      📍 {ev.location} · {ev.filmStock || ev.exif}
-                    </p>
-
-                    <p className="font-body text-xs text-black/75 leading-relaxed pt-1">
-                      {ev.description}
-                    </p>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
-            {/* Bottom Navigation Controls: ← PREV | Animated Line | NEXT → (Exact Match to Video 9!) */}
+            {/* ← PREV | Progress Line | NEXT → Bar */}
             <div
-              style={{ padding: "16px 20px 8px" }}
+              style={{ padding: "6px 20px" }}
               className="flex items-center justify-between gap-4"
             >
               <button
@@ -3369,7 +3248,7 @@ export default function MobileOilstainExperience() {
                 <span>PREV</span>
               </button>
 
-              <div className="flex-1 h-[2px] bg-black/15 relative overflow-hidden">
+              <div className="flex-1 h-[2px] bg-black/12 relative overflow-hidden rounded-full">
                 <div
                   style={{
                     width: `${
@@ -3393,34 +3272,62 @@ export default function MobileOilstainExperience() {
                 <span>→</span>
               </button>
             </div>
+
+            {/* Dedicated Full-Width Active Event Story Panel (Zero Clipping or Overlap!) */}
+            {activeActivityDetail && (
+              <div
+                style={{ margin: "0 20px", padding: "20px" }}
+                className="rounded-2xl bg-white border border-black/10 shadow-[0_8px_28px_rgba(0,0,0,0.05)] space-y-3"
+              >
+                <div className="flex items-center justify-between gap-2 flex-wrap">
+                  <span className="font-mono text-[9px] tracking-[0.18em] uppercase text-[#D92B2B] font-bold">
+                    0{activeActivitySlideIdx + 1} //{" "}
+                    {activeActivityDetail.category} ·{" "}
+                    {activeActivityDetail.date}
+                  </span>
+                  <span className="font-mono text-[9px] tracking-[0.14em] uppercase text-black/45">
+                    {activeActivityDetail.filmStock ||
+                      activeActivityDetail.exif}
+                  </span>
+                </div>
+
+                <h3 className="font-serif text-2xl text-[#111111] font-normal leading-snug">
+                  {activeActivityDetail.title}
+                </h3>
+
+                <p className="font-mono text-[9.5px] tracking-[0.14em] uppercase text-black/55">
+                  📍 {activeActivityDetail.location}
+                </p>
+
+                <p className="font-body text-xs text-black/75 leading-relaxed pt-1">
+                  {activeActivityDetail.description}
+                </p>
+              </div>
+            )}
           </div>
 
-          {/* Dark Footer Block inside Activities Page (Matches Video 9 Dark Bottom Block) */}
+          {/* Refined Dark Editorial Footer Block */}
           <div
             style={{ padding: "24px 20px" }}
-            className="bg-[#111113] text-white space-y-3"
+            className="bg-[#111113] text-white space-y-2.5"
           >
-            <span className="font-heading font-black text-lg uppercase tracking-tight block">
-              SHUTTERSCAPE
+            <span className="font-serif italic text-lg text-[#D4A843] block">
+              ShutterScape GCU
             </span>
-            <p className="font-mono text-[9.5px] tracking-[0.14em] uppercase text-white/65 leading-relaxed">
-              WE DON&apos;T DO ORDINARY CAMPUS CLUBS. WITH EVERY PHOTOWALK,
-              XENON STROBE LAB, AND EXHIBITION AT GCU, WE CAPTURE STORIES THAT
-              OUTLIVE THE MOMENT.
+            <p className="font-body text-xs text-white/70 leading-relaxed">
+              With every photowalk, Xenon strobe clinic, and annual print
+              exhibition at Girijananda Chowdhury University, we document
+              stories that outlive the moment.
             </p>
           </div>
         </div>
       )}
 
       {/* ============================================================
-          PAGE OVERLAY 2: DEDICATED FULL-SCREEN GALLERY PAGE
-          (Exact Match to Screen Recording 5 "EAST 64 FILMS" Vertical Stack
-          with `← BACK` button, Category Taskbar, Full-Color Stacked Cards,
-          Centered Overlay Titles, and `[ + VIEW IN LOUPE ]` Details!)
+          PAGE OVERLAY 2: DEDICATED FULL-SCREEN GALLERY PAGE (Video 5)
           ============================================================ */}
       {isGalleryPageOpen && (
         <div className="fixed inset-0 z-[9999] bg-[#0B0B0E] text-white overflow-y-auto animate-fade-in">
-          {/* Sticky Top Header with ← BACK Button & Category Taskbar */}
           <div className="sticky top-0 z-40 bg-[#0B0B0E]/95 backdrop-blur-md border-b border-white/10">
             <div
               style={{ padding: "14px 18px" }}
@@ -3448,7 +3355,6 @@ export default function MobileOilstainExperience() {
               </span>
             </div>
 
-            {/* Category Taskbar */}
             <div
               style={{ padding: "8px 18px" }}
               className="flex items-center gap-2 overflow-x-auto no-scrollbar border-t border-white/10 bg-black/50"
@@ -3482,7 +3388,6 @@ export default function MobileOilstainExperience() {
             </div>
           </div>
 
-          {/* Vertical Full-Bleed Stacked Gallery Feed (Matches Video 5 "EAST 64 FILMS"!) */}
           <div
             style={{ padding: "16px 14px 48px" }}
             className="space-y-4 max-w-xl mx-auto"
@@ -3506,7 +3411,6 @@ export default function MobileOilstainExperience() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/35" />
 
-                    {/* Top Plate Number & Category */}
                     <div
                       style={{ padding: "12px 14px" }}
                       className="absolute top-0 inset-x-0 flex items-center justify-between font-mono text-[8.5px] tracking-[0.2em] uppercase"
@@ -3517,7 +3421,6 @@ export default function MobileOilstainExperience() {
                       <span className="text-white/75">{item.filmStock}</span>
                     </div>
 
-                    {/* Centered Editorial Typography Overlay (Matches Video 5!) */}
                     <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
                       <h3 className="font-serif text-2xl sm:text-3xl text-white font-light tracking-wide drop-shadow-[0_4px_16px_rgba(0,0,0,0.9)]">
                         {item.title}
@@ -3530,7 +3433,6 @@ export default function MobileOilstainExperience() {
                       </p>
                     </div>
 
-                    {/* Bottom Centered Pill Button: [ + VIEW IN LOUPE ] (Matches Video 5!) */}
                     <div className="absolute bottom-3.5 inset-x-0 flex justify-center">
                       <button
                         type="button"
@@ -3545,7 +3447,6 @@ export default function MobileOilstainExperience() {
                     </div>
                   </div>
 
-                  {/* Expandable Curatorial Loupe Details */}
                   {isExpanded && (
                     <div
                       style={{ padding: "16px 18px" }}
