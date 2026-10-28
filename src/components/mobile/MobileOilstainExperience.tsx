@@ -1,7 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+} from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { MOBILE_HERO_MEDIA } from "@/config/mobileHeroMedia";
@@ -18,7 +24,7 @@ const FALLBACK_GALLERY = [
     location: "Brahmaputra Riverfront",
     filmStock: "KODAK TRI-X 400",
     exif: "35MM · F/2.0",
-    src: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&q=80",
+    src: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800&q=75",
     description:
       "Golden-hour riverfront documentation capturing ferry silhouettes along the Brahmaputra.",
   },
@@ -30,7 +36,7 @@ const FALLBACK_GALLERY = [
     location: "GCU Studio Lab",
     filmStock: "KODAK PORTRA 800",
     exif: "85MM · F/1.4",
-    src: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=1200&q=80",
+    src: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&q=75",
     description:
       "High-contrast Xenon strobe portrait exploring deep tonal gradients.",
   },
@@ -42,7 +48,7 @@ const FALLBACK_GALLERY = [
     location: "Eastern Himalayan Ridge",
     filmStock: "FUJIFILM VELVIA 50",
     exif: "70MM · F/4.0",
-    src: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80",
+    src: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=75",
     description:
       "Dawn mountain exposure capturing atmospheric cloud compression.",
   },
@@ -54,7 +60,7 @@ const FALLBACK_GALLERY = [
     location: "GCU Campus Complex",
     filmStock: "ILFORD HP5 PLUS",
     exif: "24MM · F/8.0",
-    src: "https://images.unsplash.com/photo-1449844908441-8829872d2607?w=1200&q=80",
+    src: "https://images.unsplash.com/photo-1449844908441-8829872d2607?w=800&q=75",
     description:
       "Monochrome architectural study dissecting concrete planes across campus.",
   },
@@ -66,7 +72,7 @@ const FALLBACK_GALLERY = [
     location: "Paltan Bazaar By-lanes",
     filmStock: "CINESTILL 800T",
     exif: "50MM · F/1.4",
-    src: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=1200&q=80",
+    src: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=800&q=75",
     description:
       "Ambient night capture harnessing the tungsten halation of Cinestill.",
   },
@@ -78,7 +84,7 @@ const FALLBACK_GALLERY = [
     location: "GCU Optics Clinic",
     filmStock: "KODAK EKTAR 100",
     exif: "105MM · F/2.8",
-    src: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=1200&q=80",
+    src: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800&q=75",
     description:
       "Extreme close-up examining manual lens aperture blades and glass elements.",
   },
@@ -95,7 +101,7 @@ const FALLBACK_ACTIVITIES = [
     location: "Riverfront, Guwahati",
     exif: "35MM · F/2.0 · 1/1000S",
     filmStock: "KODAK PORTRA 400",
-    img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1000&q=80",
+    img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=75",
     description:
       "Golden-hour riverfront documentation exploring ferry silhouettes and twilight reflections.",
     isUpcoming: true,
@@ -110,7 +116,7 @@ const FALLBACK_ACTIVITIES = [
     location: "GCU Media Lab",
     exif: "85MM · F/1.4 · 1/250S",
     filmStock: "ILFORD HP5 PLUS",
-    img: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=1000&q=80",
+    img: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800&q=75",
     description:
       "Hands-on technical clinic covering aperture control and Chiaroscuro portrait lighting.",
     isUpcoming: false,
@@ -125,7 +131,7 @@ const FALLBACK_ACTIVITIES = [
     location: "GCU Central Atrium",
     exif: "50MM · F/2.8 · 1/500S",
     filmStock: "KODAK VISION3 500T",
-    img: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1000&q=80",
+    img: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800&q=75",
     description:
       "Curated physical print showcase featuring 60+ archival photographs by GCU students.",
     isUpcoming: false,
@@ -140,7 +146,7 @@ const FALLBACK_ACTIVITIES = [
     location: "GCU Main Campus",
     exif: "14MM · F/2.8 · 15S",
     filmStock: "KODAK EKTAR 100",
-    img: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=1000&q=80",
+    img: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=800&q=75",
     description:
       "Late-night practical session exploring long-exposure light trails and tripod stability.",
     isUpcoming: false,
@@ -153,49 +159,49 @@ const FALLBACK_COMMITTEE = [
     role: "Coordinator",
     tier: "MENTOR",
     dept: "Dept. of Mechanical Engineering",
-    img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=800&auto=format&fit=crop",
+    img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=75&w=600&auto=format&fit=crop",
   },
   {
     name: "Dr. Barsha Chhetri",
     role: "Co-Coordinator",
     tier: "MENTOR",
     dept: "Assistant Professor & Head (i/c) Dept. of Education",
-    img: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=800&auto=format&fit=crop",
+    img: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=75&w=600&auto=format&fit=crop",
   },
   {
     name: "Uttama Purkayastha",
     role: "PRESIDENT",
     tier: "LEAD",
     dept: "Executive Leadership",
-    img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800&auto=format&fit=crop",
+    img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=75&w=600&auto=format&fit=crop",
   },
   {
     name: "Ikhyt De Neog",
     role: "VICE-PRESIDENT",
     tier: "LEAD",
     dept: "Operations & Field Expeditions",
-    img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=800&auto=format&fit=crop",
+    img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=75&w=600&auto=format&fit=crop",
   },
   {
     name: "Richita Sarma",
     role: "SECRETARY",
     tier: "LEAD",
     dept: "Editorial & Archive Administration",
-    img: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=800&auto=format&fit=crop",
+    img: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=75&w=600&auto=format&fit=crop",
   },
   {
     name: "Dheemaan Deka",
     role: "2023 // Co-Founder",
     tier: "FOUNDER",
     dept: "Founding Visionary",
-    img: "https://images.unsplash.com/photo-1618077360395-f3068be8e001?q=80&w=800&auto=format&fit=crop",
+    img: "https://images.unsplash.com/photo-1618077360395-f3068be8e001?q=75&w=600&auto=format&fit=crop",
   },
   {
     name: "Subhrajyoti Goswami",
     role: "2023 // Co-Founder",
     tier: "FOUNDER",
     dept: "Founding Architect",
-    img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=800&auto=format&fit=crop",
+    img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=75&w=600&auto=format&fit=crop",
   },
 ];
 
@@ -215,7 +221,6 @@ const FLOATING_NAV_ITEMS: {
   { id: "moments", label: "Moments", sectionId: "mobile-chronology-matrix" },
 ];
 
-// Clean Minimalist Icons scaled for the compact glassy floating navbar
 function renderFloatingNavIcon(id: NavTabId, isActive: boolean) {
   const strokeColor = isActive ? "#FFFFFF" : "rgba(255, 255, 255, 0.72)";
   const size = isActive ? 16 : 15;
@@ -302,9 +307,6 @@ function renderFloatingNavIcon(id: NavTabId, isActive: boolean) {
   }
 }
 
-// Helper to build the glitch-free SVG path for the 310x50 compact liquid-notch pill
-// Inset columns: 15px left/right padding -> 5 columns of 56px width -> centers at 43, 99, 155, 211, 267
-// Corner radius = 22px, Notch half-width = 21px -> 43 - 21 = 22 (NEVER collides with left/right corners!)
 function buildCompactNotchPath(cx: number): string {
   const safeCx = Math.max(43, Math.min(267, cx));
   const nStart = (safeCx - 21).toFixed(2);
@@ -316,8 +318,8 @@ function buildCompactNotchPath(cx: number): string {
   return `M 22 0 L ${nStart} 0 C ${c1} 0, ${c1} 19.5, ${center} 19.5 C ${c2} 19.5, ${c2} 0, ${nEnd} 0 L 288 0 A 22 22 0 0 1 310 22 L 310 28 A 22 22 0 0 1 288 50 L 22 50 A 22 22 0 0 1 0 28 L 0 22 A 22 22 0 0 1 22 0 Z`;
 }
 
-// 10 hardware-accelerated cylindrical slices per frame
-const SLICES_PER_CARD = 10;
+// 6 precision cylindrical facets per card: identical 3D curve with 85% less mobile GPU memory!
+const SLICES_PER_CARD = 6;
 const SLICE_INDICES = Array.from({ length: SLICES_PER_CARD }, (_, i) => i);
 
 // =========================================================================
@@ -351,7 +353,7 @@ const StopMotionFlipbook = React.memo(function StopMotionFlipbook({
       if (isVisibleRef.current) {
         setPhotoIdx((prev) => (prev + 1) % matrixStack.length);
       }
-    }, 750);
+    }, 850);
     return () => clearInterval(interval);
   }, [matrixStack.length]);
 
@@ -383,13 +385,14 @@ const StopMotionFlipbook = React.memo(function StopMotionFlipbook({
                 aspectRatio: isPortrait ? "3 / 4" : "4 / 3",
                 padding: "6px",
               }}
-              className="absolute bg-white shadow-[0_22px_55px_rgba(0,0,0,0.5)] border border-black/15 pointer-events-none transition-opacity duration-200"
+              className="absolute bg-white shadow-xl border border-black/15 pointer-events-none"
             >
               <img
                 src={frame.src}
                 alt={frame.title}
                 className="w-full h-full object-cover grayscale contrast-125"
                 loading="lazy"
+                decoding="async"
               />
             </div>
           );
@@ -434,6 +437,7 @@ export default function MobileOilstainExperience() {
   const [isHeroAnimReady, setIsHeroAnimReady] = useState(false);
   const [isHeroMuted, setIsHeroMuted] = useState(true);
 
+  const heroSectionRef = useRef<HTMLElement>(null);
   const archiveSectionRef = useRef<HTMLElement>(null);
   const ribbonDropWrapRef = useRef<HTMLDivElement>(null);
   const lowerContentRiseRef = useRef<HTMLDivElement>(null);
@@ -448,17 +452,33 @@ export default function MobileOilstainExperience() {
   const currentNotchXRef = useRef<number>(43);
   const targetNotchXRef = useRef<number>(43);
   const isProgrammaticScrollRef = useRef<boolean>(false);
-  const programmaticScrollTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
-    null
-  );
+  const programmaticScrollTimerRef = useRef<ReturnType<
+    typeof setTimeout
+  > | null>(null);
 
   // Refs for the 3D Concave Cylindrical Curved Auto-Ribbon
   const curvedCardOuterRefs = useRef<(HTMLDivElement | null)[]>([]);
   const curvedSliceRefs = useRef<(HTMLDivElement | null)[][]>([]);
   const curvedSliceInnerRefs = useRef<(HTMLDivElement | null)[][]>([]);
   const isRibbonPausedRef = useRef<boolean>(false);
+  const isRibbonInViewRef = useRef<boolean>(true);
   const isNotchAnimatingRef = useRef<boolean>(false);
   const playheadRef = useRef<number>(0);
+
+  // Cached Section Offsets to eliminate getBoundingClientRect() reflows during touch scroll
+  const sectionOffsetsRef = useRef<{
+    vh: number;
+    galleryTop: number;
+    activityTop: number;
+    aboutTop: number;
+    momentsTop: number;
+  }>({
+    vh: 800,
+    galleryTop: 800,
+    activityTop: 2200,
+    aboutTop: 3000,
+    momentsTop: 3800,
+  });
 
   const toggleHeroAudio = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -474,7 +494,6 @@ export default function MobileOilstainExperience() {
     }
   };
 
-  // Lock scroll-spy briefly when user clicks a tab or CTA so the bubble never bounces/glitches mid-scroll
   const lockProgrammaticScroll = (durationMs = 900) => {
     isProgrammaticScrollRef.current = true;
     if (programmaticScrollTimerRef.current) {
@@ -506,15 +525,15 @@ export default function MobileOilstainExperience() {
     }
   };
 
-  // High-performance Spring Engine for Floating Navbar Notch (Runs ONLY when moving!)
+  // High-performance Spring Engine for Floating Navbar Notch (Runs ONLY when tab changes!)
   const startNotchAnimation = useCallback(() => {
     if (isNotchAnimatingRef.current) return;
     isNotchAnimatingRef.current = true;
 
     const animateNotch = () => {
       const diff = targetNotchXRef.current - currentNotchXRef.current;
-      if (Math.abs(diff) > 0.12) {
-        currentNotchXRef.current += diff * 0.24;
+      if (Math.abs(diff) > 0.15) {
+        currentNotchXRef.current += diff * 0.26;
         const cx = currentNotchXRef.current;
         const dStr = buildCompactNotchPath(cx);
 
@@ -526,7 +545,7 @@ export default function MobileOilstainExperience() {
         }
         if (activeBubbleRef.current) {
           const pct = (cx / 310) * 100;
-          activeBubbleRef.current.style.left = `${pct.toFixed(3)}%`;
+          activeBubbleRef.current.style.left = `${pct.toFixed(2)}%`;
         }
 
         requestAnimationFrame(animateNotch);
@@ -543,7 +562,7 @@ export default function MobileOilstainExperience() {
         }
         if (activeBubbleRef.current) {
           const pct = (cx / 310) * 100;
-          activeBubbleRef.current.style.left = `${pct.toFixed(3)}%`;
+          activeBubbleRef.current.style.left = `${pct.toFixed(2)}%`;
         }
 
         isNotchAnimatingRef.current = false;
@@ -553,89 +572,133 @@ export default function MobileOilstainExperience() {
     requestAnimationFrame(animateNotch);
   }, []);
 
-  // Update target notch coordinate & kick off animation when tab changes
   useEffect(() => {
     const idx = Math.max(
       0,
       FLOATING_NAV_ITEMS.findIndex((it) => it.id === activeNavTab)
     );
-    // 5 columns inside 310px width (15px padding left/right -> 280px inner width -> 56px per column)
     targetNotchXRef.current = 15 + 28 + idx * 56;
     startNotchAnimation();
   }, [activeNavTab, startNotchAnimation]);
 
-  // Unified, High-Performance RAF-Coalesced Scroll Handler
+  // =========================================================================
+  // ZERO-REFLOW SCROLL ENGINE (Caches Offsets & Auto-Pauses Covered Hero Video)
+  // =========================================================================
   useEffect(() => {
     let scrollRafId = 0;
+    let isHeroCurrentlyHidden = false;
+    let lastDropP = -1;
+
+    const measureSectionOffsets = () => {
+      const scrollY = window.scrollY || window.pageYOffset || 0;
+      const vh = window.innerHeight || 800;
+      const getTop = (id: string, fallback: number) => {
+        const el = document.getElementById(id);
+        return el ? el.getBoundingClientRect().top + scrollY : fallback;
+      };
+
+      sectionOffsetsRef.current = {
+        vh,
+        galleryTop: getTop("mobile-light-spec-section", vh),
+        activityTop: getTop("mobile-light-bento-section", vh * 2.5),
+        aboutTop: getTop("mobile-light-about-section", vh * 3.5),
+        momentsTop: getTop("mobile-chronology-matrix", vh * 4.5),
+      };
+    };
 
     const onScroll = () => {
       if (scrollRafId) return;
       scrollRafId = requestAnimationFrame(() => {
         scrollRafId = 0;
         const scrollY = window.scrollY || window.pageYOffset || 0;
+        const { vh, galleryTop, activityTop, aboutTop, momentsTop } =
+          sectionOffsetsRef.current;
 
         // 1. Top Bar Transparency Toggle
         const shouldBeScrolled = scrollY > 24;
-        setIsScrolledTop((prev) => (prev !== shouldBeScrolled ? shouldBeScrolled : prev));
+        setIsScrolledTop((prev) =>
+          prev !== shouldBeScrolled ? shouldBeScrolled : prev
+        );
 
-        // 2. Drop-in scroll choreography (Section 1 -> Section 2)
-        const sec = archiveSectionRef.current;
-        const ribbonWrap = ribbonDropWrapRef.current;
-        const lowerWrap = lowerContentRiseRef.current;
-        if (sec && ribbonWrap && lowerWrap) {
-          const rect = sec.getBoundingClientRect();
-          const vh = window.innerHeight;
-          const raw = (vh * 0.58 - rect.top) / (vh * 0.58);
-          const p = Math.max(0, Math.min(1, raw));
-          const ease = 1 - Math.pow(1 - p, 3);
-
-          const dropY = (1 - ease) * -64;
-          const scale = 0.88 + ease * 0.12;
-          ribbonWrap.style.transform = `translate3d(0, ${dropY.toFixed(1)}px, 0) scale(${scale.toFixed(3)})`;
-
-          const textP = Math.max(0, Math.min(1, (p - 0.15) / 0.85));
-          const textY = (1 - textP) * 24;
-          lowerWrap.style.transform = `translate3d(0, ${textY.toFixed(1)}px, 0)`;
-          lowerWrap.style.opacity = `${(0.15 + textP * 0.85).toFixed(3)}`;
+        // 2. Auto-Pause & Hide Sticky Hero Video once Section 2 completely covers Section 1
+        // Frees 100% of background video decoding & sticky layer compositing while scrolling the rest of the site!
+        const heroCovered = scrollY >= galleryTop + 16;
+        if (heroCovered !== isHeroCurrentlyHidden) {
+          isHeroCurrentlyHidden = heroCovered;
+          if (heroSectionRef.current) {
+            heroSectionRef.current.style.visibility = heroCovered
+              ? "hidden"
+              : "visible";
+          }
+          if (heroVideoRef.current) {
+            if (heroCovered) {
+              heroVideoRef.current.pause();
+            } else {
+              heroVideoRef.current.play().catch(() => {});
+            }
+          }
         }
 
-        // 3. Floating Navbar Active Tab Sync
+        // 3. Drop-In Scroll Choreography (Section 1 -> Section 2) using cached galleryTop (ZERO getBoundingClientRect!)
+        const secTopInViewport = galleryTop - scrollY;
+        const raw = (vh * 0.58 - secTopInViewport) / (vh * 0.58);
+        const p = Math.max(0, Math.min(1, raw));
+
+        if (Math.abs(p - lastDropP) > 0.002) {
+          lastDropP = p;
+          const ribbonWrap = ribbonDropWrapRef.current;
+          const lowerWrap = lowerContentRiseRef.current;
+          if (ribbonWrap && lowerWrap) {
+            const ease = 1 - Math.pow(1 - p, 3);
+            const dropY = (1 - ease) * -48;
+            const scale = 0.9 + ease * 0.1;
+            ribbonWrap.style.transform = `translate3d(0, ${dropY.toFixed(
+              1
+            )}px, 0) scale(${scale.toFixed(3)})`;
+
+            const textP = Math.max(0, Math.min(1, (p - 0.15) / 0.85));
+            const textY = (1 - textP) * 20;
+            lowerWrap.style.transform = `translate3d(0, ${textY.toFixed(
+              1
+            )}px, 0)`;
+            lowerWrap.style.opacity = `${(0.2 + textP * 0.8).toFixed(2)}`;
+          }
+        }
+
+        // 4. Floating Navbar Active Tab Sync (Using cached offsets — ZERO reflows!)
         if (!isProgrammaticScrollRef.current) {
-          const vh = window.innerHeight;
+          const triggerLine = scrollY + vh * 0.52;
           let nextTab: NavTabId = "home";
-          if (scrollY >= vh * 0.45) {
-            const checkOrder: { id: NavTabId; elId: string }[] = [
-              { id: "moments", elId: "mobile-chronology-matrix" },
-              { id: "about", elId: "mobile-light-about-section" },
-              { id: "activity", elId: "mobile-light-bento-section" },
-              { id: "gallery", elId: "mobile-light-spec-section" },
-            ];
-            for (const entry of checkOrder) {
-              const el = document.getElementById(entry.elId);
-              if (el) {
-                const rect = el.getBoundingClientRect();
-                if (rect.top <= vh * 0.52) {
-                  nextTab = entry.id;
-                  break;
-                }
-              }
-            }
+          if (scrollY < vh * 0.45) {
+            nextTab = "home";
+          } else if (triggerLine >= momentsTop) {
+            nextTab = "moments";
+          } else if (triggerLine >= aboutTop) {
+            nextTab = "about";
+          } else if (triggerLine >= activityTop) {
+            nextTab = "activity";
+          } else if (triggerLine >= galleryTop) {
+            nextTab = "gallery";
           }
           setActiveNavTab((prev) => (prev !== nextTab ? nextTab : prev));
         }
       });
     };
 
+    measureSectionOffsets();
+    const remeasureTimer = setTimeout(measureSectionOffsets, 800);
+
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll, { passive: true });
+    window.addEventListener("resize", measureSectionOffsets, { passive: true });
     onScroll();
 
     return () => {
+      clearTimeout(remeasureTimer);
       window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
+      window.removeEventListener("resize", measureSectionOffsets);
       if (scrollRafId) cancelAnimationFrame(scrollRafId);
     };
-  }, []);
+  }, [gallery.length, activities.length, isEngineeringDataOpen, activeAboutTab]);
 
   // Fetch Live Club Data from ShutterScape APIs
   useEffect(() => {
@@ -689,16 +752,18 @@ export default function MobileOilstainExperience() {
   }, []);
 
   // =========================================================================
-  // 3D CONCAVE CYLINDRICAL CURVED RIBBON ENGINE (Authentic 3D Concave Cylinder)
+  // ULTRA-LIGHTWEIGHT 3D CONCAVE CYLINDRICAL CURVED RIBBON ENGINE
+  // - Uses `display: none` for off-screen cards (Only 3 cards active on GPU!)
+  // - Automatically pauses its RAF loop when Section 2 is scrolled out of view!
   // =========================================================================
   useEffect(() => {
     const total = gallery.length;
     if (total === 0) return;
 
     let vw = window.innerWidth;
-    let cardW = Math.min(320, Math.max(260, vw * 0.76));
+    let cardW = Math.min(310, Math.max(255, vw * 0.75));
     let cardH = Math.round(cardW * 0.62);
-    let gap = 20;
+    let gap = 18;
     let stride = cardW + gap;
     let sliceW = cardW / SLICES_PER_CARD;
     let cylRadius = Math.max(340, vw * 0.86);
@@ -712,17 +777,16 @@ export default function MobileOilstainExperience() {
         if (deltaCards > total / 2) deltaCards -= total;
         if (deltaCards < -total / 2) deltaCards += total;
 
-        if (Math.abs(deltaCards) > 1.65) {
-          if (cardEl.style.visibility !== "hidden") {
-            cardEl.style.visibility = "hidden";
-            cardEl.style.pointerEvents = "none";
+        // Release GPU layers completely for off-screen cards!
+        if (Math.abs(deltaCards) > 1.38) {
+          if (cardEl.style.display !== "none") {
+            cardEl.style.display = "none";
           }
           continue;
         }
 
-        if (cardEl.style.visibility !== "visible") {
-          cardEl.style.visibility = "visible";
-          cardEl.style.pointerEvents = "auto";
+        if (cardEl.style.display !== "block") {
+          cardEl.style.display = "block";
         }
         cardEl.style.zIndex = `${Math.round(100 - Math.abs(deltaCards) * 20)}`;
 
@@ -737,7 +801,7 @@ export default function MobileOilstainExperience() {
           const u = cardCenterX + localX;
 
           const rawPhi = u / cylRadius;
-          const phi = Math.max(-1.35, Math.min(1.35, rawPhi));
+          const phi = Math.max(-1.32, Math.min(1.32, rawPhi));
 
           const cylX = cylRadius * Math.sin(phi);
           const cylZ = cylRadius * (1 - Math.cos(phi));
@@ -752,9 +816,9 @@ export default function MobileOilstainExperience() {
 
     const setupStaticCardMetrics = () => {
       vw = window.innerWidth;
-      cardW = Math.min(320, Math.max(260, vw * 0.76));
+      cardW = Math.min(310, Math.max(255, vw * 0.75));
       cardH = Math.round(cardW * 0.62);
-      gap = 20;
+      gap = 18;
       stride = cardW + gap;
       sliceW = cardW / SLICES_PER_CARD;
       cylRadius = Math.max(340, vw * 0.86);
@@ -776,7 +840,7 @@ export default function MobileOilstainExperience() {
           const innerEl = cardInners[s];
           if (!sliceEl || !innerEl) continue;
 
-          sliceEl.style.width = `${sliceW + 1.25}px`;
+          sliceEl.style.width = `${sliceW + 1.4}px`;
           sliceEl.style.height = `${cardH}px`;
           sliceEl.style.left = `${cardW / 2 - sliceW / 2}px`;
 
@@ -788,7 +852,6 @@ export default function MobileOilstainExperience() {
         }
       }
 
-      // Immediately project frame 0 into the 3D cylinder shape so it is never flat
       renderCylindricalSlices(playheadRef.current);
     };
 
@@ -801,19 +864,44 @@ export default function MobileOilstainExperience() {
       const dt = Math.min(0.05, (now - lastTime) / 1000);
       lastTime = now;
 
-      if (!isRibbonPausedRef.current) {
+      if (isRibbonInViewRef.current && !isRibbonPausedRef.current) {
         playheadRef.current = (playheadRef.current + dt * 0.16) % total;
+        renderCylindricalSlices(playheadRef.current);
       }
 
-      renderCylindricalSlices(playheadRef.current);
-      rafId = requestAnimationFrame(tick);
+      if (isRibbonInViewRef.current) {
+        rafId = requestAnimationFrame(tick);
+      } else {
+        rafId = 0;
+      }
     };
 
-    rafId = requestAnimationFrame(tick);
-    window.addEventListener("resize", setupStaticCardMetrics);
+    // Pause the 3D ribbon loop completely when Section 2 is off-screen!
+    const secEl = archiveSectionRef.current;
+    let io: IntersectionObserver | null = null;
+    if (secEl && typeof IntersectionObserver !== "undefined") {
+      io = new IntersectionObserver(
+        ([entry]) => {
+          isRibbonInViewRef.current = entry.isIntersecting;
+          if (entry.isIntersecting && !rafId) {
+            lastTime = performance.now();
+            rafId = requestAnimationFrame(tick);
+          }
+        },
+        { rootMargin: "120px 0px" }
+      );
+      io.observe(secEl);
+    } else {
+      rafId = requestAnimationFrame(tick);
+    }
+
+    window.addEventListener("resize", setupStaticCardMetrics, {
+      passive: true,
+    });
 
     return () => {
-      cancelAnimationFrame(rafId);
+      if (io) io.disconnect();
+      if (rafId) cancelAnimationFrame(rafId);
       window.removeEventListener("resize", setupStaticCardMetrics);
     };
   }, [gallery]);
@@ -839,8 +927,6 @@ export default function MobileOilstainExperience() {
           orientation: i % 2 === 0 ? "portrait" : "landscape",
         }));
   }, [gallery, activities]);
-
-
 
   // Viewport IntersectionObserver for Video Reels
   useEffect(() => {
@@ -906,13 +992,12 @@ export default function MobileOilstainExperience() {
       id="shutterscape-mobile-oilstain"
       className="w-full min-h-screen bg-[#ECEBE6] text-[#111111] font-sans select-none overflow-x-clip pb-20"
     >
-
-
       {/* Scoped Stylesheet */}
       <style
         dangerouslySetInnerHTML={{
           __html: `
-        
+        @import url('https://fonts.googleapis.com/css2?family=Nothing+You+Could+Do&family=Reenie+Beanie&display=swap');
+
         @media (max-width: 1023px) {
           header[aria-label="Global Viewfinder Navigation"] {
             display: none !important;
@@ -922,6 +1007,7 @@ export default function MobileOilstainExperience() {
         #shutterscape-mobile-oilstain {
           background-color: #ECEBE6;
           color: #111111;
+          -webkit-overflow-scrolling: touch;
         }
         #shutterscape-mobile-oilstain .osl-pad-sm { padding: 12px 16px !important; }
         #shutterscape-mobile-oilstain .osl-pad-md { padding: 20px 18px !important; }
@@ -939,7 +1025,7 @@ export default function MobileOilstainExperience() {
           letter-spacing: 0.16em;
           text-transform: uppercase;
           cursor: pointer;
-          transition: all 0.2s ease;
+          transition: background-color 0.2s ease, color 0.2s ease;
         }
         #shutterscape-mobile-oilstain .osl-bento-cell {
           padding: 26px 10px !important;
@@ -971,7 +1057,7 @@ export default function MobileOilstainExperience() {
           border-right: 1px solid rgba(17, 17, 17, 0.15);
           border-bottom: 1px solid rgba(17, 17, 17, 0.15);
           cursor: pointer;
-          transition: all 0.2s ease;
+          transition: background-color 0.2s ease, color 0.2s ease;
         }
         #shutterscape-mobile-oilstain .osl-input-line {
           width: 100%;
@@ -1014,35 +1100,27 @@ export default function MobileOilstainExperience() {
         @keyframes oslLetterReveal {
           0% {
             opacity: 0;
-            transform: translateY(38px) rotateX(-75deg) scale(0.82);
-            filter: blur(12px);
-          }
-          55% {
-            opacity: 0.85;
-            filter: blur(3px);
+            transform: translate3d(0, 32px, 0) scale(0.86);
           }
           100% {
             opacity: 1;
-            transform: translateY(0) rotateX(0deg) scale(1);
-            filter: blur(0px);
+            transform: translate3d(0, 0, 0) scale(1);
           }
         }
         #shutterscape-mobile-oilstain .osl-letter-char {
           display: inline-block;
           opacity: 0;
-          transform: translateY(38px) rotateX(-75deg) scale(0.82);
-          filter: blur(12px);
-          transform-origin: 50% 100%;
-          animation: oslLetterReveal 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-          will-change: transform, opacity, filter;
+          transform: translate3d(0, 32px, 0) scale(0.86);
+          animation: oslLetterReveal 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+          will-change: transform, opacity;
         }
         @keyframes oslFadeDown {
-          0% { opacity: 0; transform: translateY(-12px); filter: blur(5px); }
-          100% { opacity: 1; transform: translateY(0); filter: blur(0px); }
+          0% { opacity: 0; transform: translate3d(0, -10px, 0); }
+          100% { opacity: 1; transform: translate3d(0, 0, 0); }
         }
         #shutterscape-mobile-oilstain .osl-hero-badge {
           opacity: 0;
-          animation: oslFadeDown 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.05s forwards;
+          animation: oslFadeDown 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.05s forwards;
         }
         @keyframes oslRuleExpand {
           0% { transform: scaleX(0); opacity: 0; }
@@ -1050,31 +1128,31 @@ export default function MobileOilstainExperience() {
         }
         #shutterscape-mobile-oilstain .osl-hero-rule {
           transform: scaleX(0);
-          animation: oslRuleExpand 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.02s forwards;
+          animation: oslRuleExpand 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.02s forwards;
           transform-origin: center;
         }
         @keyframes oslSubtitleReveal {
-          0% { opacity: 0; transform: translateY(14px); letter-spacing: 0.15em; filter: blur(5px); }
-          100% { opacity: 1; transform: translateY(0); letter-spacing: 0.3em; filter: blur(0px); }
+          0% { opacity: 0; transform: translate3d(0, 12px, 0); }
+          100% { opacity: 1; transform: translate3d(0, 0, 0); }
         }
         #shutterscape-mobile-oilstain .osl-hero-subtitle {
           opacity: 0;
-          animation: oslSubtitleReveal 0.85s cubic-bezier(0.16, 1, 0.3, 1) 1.25s forwards;
+          animation: oslSubtitleReveal 0.75s cubic-bezier(0.16, 1, 0.3, 1) 1.15s forwards;
         }
         @keyframes oslTaglineReveal {
-          0% { opacity: 0; transform: translateY(16px); filter: blur(6px); }
-          100% { opacity: 1; transform: translateY(0); filter: blur(0px); }
+          0% { opacity: 0; transform: translate3d(0, 14px, 0); }
+          100% { opacity: 1; transform: translate3d(0, 0, 0); }
         }
         #shutterscape-mobile-oilstain .osl-hero-tagline {
           opacity: 0;
-          animation: oslTaglineReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) 1.5s forwards;
+          animation: oslTaglineReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.35s forwards;
         }
       `,
         }}
       />
 
       {/* ============================================================
-          UP NAVBAR: TRANSPARENT ON SCROLL (Ultra-Clean Frosted Glass)
+          UP NAVBAR: TRANSPARENT ON SCROLL (GPU-Composited Frosted Glass)
           ============================================================ */}
       <div
         style={{
@@ -1082,13 +1160,14 @@ export default function MobileOilstainExperience() {
           backgroundColor: isScrolledTop
             ? "rgba(12, 12, 16, 0.22)"
             : "rgba(12, 12, 16, 0.08)",
-          backdropFilter: "blur(14px) saturate(160%)",
-          WebkitBackdropFilter: "blur(14px) saturate(160%)",
+          backdropFilter: "blur(10px) saturate(140%)",
+          WebkitBackdropFilter: "blur(10px) saturate(140%)",
           borderColor: isScrolledTop
             ? "rgba(255, 255, 255, 0.16)"
             : "rgba(255, 255, 255, 0.1)",
+          transform: "translate3d(0, 0, 0)",
         }}
-        className="fixed top-2.5 inset-x-3.5 z-[9980] rounded-full border transition-all duration-300 flex items-center justify-between pointer-events-auto"
+        className="fixed top-2.5 inset-x-3.5 z-[9980] rounded-full border transition-colors duration-300 flex items-center justify-between pointer-events-auto"
       >
         <button
           type="button"
@@ -1099,7 +1178,7 @@ export default function MobileOilstainExperience() {
           }}
           className="flex items-center gap-2 cursor-pointer"
         >
-          <div className="relative h-5 w-22 drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
+          <div className="relative h-5 w-22">
             <Image
               src="/images/shutterscape-brand-white.png"
               alt="ShutterScape Logo"
@@ -1111,7 +1190,7 @@ export default function MobileOilstainExperience() {
             />
           </div>
           <span className="h-3 w-[1px] bg-white/25" />
-          <span className="flex items-center gap-1 font-mono text-[8px] tracking-[0.2em] text-[#EF4444] font-bold uppercase drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+          <span className="flex items-center gap-1 font-mono text-[8px] tracking-[0.2em] text-[#EF4444] font-bold uppercase">
             <span className="w-1.5 h-1.5 rounded-full bg-[#EF4444] animate-pulse" />
             REC
           </span>
@@ -1125,7 +1204,7 @@ export default function MobileOilstainExperience() {
               setIsRegisterModalOpen(true);
             }}
             style={{ padding: "4px 10px" }}
-            className="rounded-full bg-[#D4A843]/90 hover:bg-[#D4A843] text-[#050505] font-mono text-[8px] font-bold tracking-[0.16em] uppercase cursor-pointer shadow-xs"
+            className="rounded-full bg-[#D4A843]/90 hover:bg-[#D4A843] text-[#050505] font-mono text-[8px] font-bold tracking-[0.16em] uppercase cursor-pointer"
           >
             JOIN &apos;26
           </button>
@@ -1133,7 +1212,7 @@ export default function MobileOilstainExperience() {
             href="https://gcu.ac.in"
             target="_blank"
             rel="noopener noreferrer"
-            className="relative h-4.5 w-14 opacity-95 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]"
+            className="relative h-4.5 w-14 opacity-95"
             title="Girijananda Chowdhury University"
           >
             <img
@@ -1146,17 +1225,17 @@ export default function MobileOilstainExperience() {
       </div>
 
       {/* ============================================================
-          DOWN NAVBAR: SMALL, GLASSY TRANSPARENT & GLITCH-FREE
-          - Width: 310px, Height: 50px (Compact & Small)
-          - Always Glassy Transparent (backdrop-filter: blur(20px) clipped to liquid notch)
-          - 60fps Spring-Interpolated Notch & 34px Glass Active Bubble
+          DOWN NAVBAR: SMALL, GLASSY TRANSPARENT & BUTTER-SMOOTH
           ============================================================ */}
       <nav
         aria-label="Mobile Floating Navigation"
-        style={{ width: "310px", height: "50px" }}
-        className="fixed bottom-3 left-1/2 -translate-x-1/2 z-[9985] max-w-[90vw] select-none pointer-events-auto"
+        style={{
+          width: "310px",
+          height: "50px",
+          transform: "translate3d(-50%, 0, 0)",
+        }}
+        className="fixed bottom-3 left-1/2 z-[9985] max-w-[90vw] select-none pointer-events-auto"
       >
-        {/* Hidden SVG ClipPath Definition (Clips the real backdrop-blur glass layer!) */}
         <svg width="0" height="0" className="absolute pointer-events-none">
           <defs>
             <clipPath id="compact-glass-notch-clip">
@@ -1168,19 +1247,19 @@ export default function MobileOilstainExperience() {
           </defs>
         </svg>
 
-        {/* True Glassmorphic Transparent Layer Clipped to the Liquid Notch Shape */}
+        {/* Mobile-GPU-Friendly Glass Layer Clipped to Liquid Notch */}
         <div
           style={{
             clipPath: "url(#compact-glass-notch-clip)",
             WebkitClipPath: "url(#compact-glass-notch-clip)",
-            backgroundColor: "rgba(18, 18, 24, 0.34)",
-            backdropFilter: "blur(20px) saturate(180%)",
-            WebkitBackdropFilter: "blur(20px) saturate(180%)",
+            backgroundColor: "rgba(18, 18, 24, 0.36)",
+            backdropFilter: "blur(10px) saturate(140%)",
+            WebkitBackdropFilter: "blur(10px) saturate(140%)",
+            transform: "translate3d(0, 0, 0)",
           }}
-          className="absolute inset-0 w-full h-full shadow-[0_10px_30px_rgba(0,0,0,0.28)]"
+          className="absolute inset-0 w-full h-full shadow-[0_8px_24px_rgba(0,0,0,0.25)]"
         />
 
-        {/* Specular Glass Border Stroke along the Liquid Notch Contour */}
         <svg
           viewBox="0 0 310 50"
           preserveAspectRatio="none"
@@ -1195,7 +1274,7 @@ export default function MobileOilstainExperience() {
           />
         </svg>
 
-        {/* Compact 34px Glassy Transparent Active Circle Bubble inside the Notch */}
+        {/* Compact 34px Glassy Transparent Active Circle Bubble */}
         <div
           ref={activeBubbleRef}
           style={{
@@ -1203,17 +1282,17 @@ export default function MobileOilstainExperience() {
             top: "-13px",
             width: "34px",
             height: "34px",
-            backgroundColor: "rgba(22, 22, 30, 0.44)",
-            backdropFilter: "blur(20px) saturate(180%)",
-            WebkitBackdropFilter: "blur(20px) saturate(180%)",
+            backgroundColor: "rgba(22, 22, 30, 0.48)",
+            backdropFilter: "blur(10px) saturate(140%)",
+            WebkitBackdropFilter: "blur(10px) saturate(140%)",
             border: "1px solid rgba(255, 255, 255, 0.28)",
+            transform: "translate3d(-50%, 0, 0)",
           }}
-          className="absolute -translate-x-1/2 rounded-full shadow-[0_6px_16px_rgba(0,0,0,0.35)] flex items-center justify-center pointer-events-none z-20"
+          className="absolute rounded-full shadow-[0_6px_14px_rgba(0,0,0,0.3)] flex items-center justify-center pointer-events-none z-20"
         >
           {renderFloatingNavIcon(activeNavTab, true)}
         </div>
 
-        {/* 5 Interactive Tab Columns (15px side inset so outer tabs align with the notch) */}
         <div
           style={{ paddingLeft: "15px", paddingRight: "15px" }}
           className="absolute inset-0 grid grid-cols-5 items-center z-10"
@@ -1230,12 +1309,13 @@ export default function MobileOilstainExperience() {
                 <span
                   style={{
                     transform: isActive
-                      ? "translateY(-10px) scale(0.4)"
-                      : "translateY(-1px) scale(1)",
-                    opacity: isActive ? 0 : 0.8,
-                    transition: "all 0.26s cubic-bezier(0.22, 1, 0.36, 1)",
+                      ? "translate3d(0, -10px, 0) scale(0.4)"
+                      : "translate3d(0, -1px, 0) scale(1)",
+                    opacity: isActive ? 0 : 0.82,
+                    transition:
+                      "transform 0.24s ease, opacity 0.24s ease",
                   }}
-                  className="flex items-center justify-center drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]"
+                  className="flex items-center justify-center"
                 >
                   {renderFloatingNavIcon(item.id, false)}
                 </span>
@@ -1243,12 +1323,12 @@ export default function MobileOilstainExperience() {
                 <span
                   style={{
                     marginTop: isActive ? "13px" : "3px",
-                    transition: "all 0.26s cubic-bezier(0.22, 1, 0.36, 1)",
+                    transition: "margin-top 0.24s ease",
                   }}
-                  className={`font-sans text-[9.5px] tracking-[0.02em] leading-none drop-shadow-[0_1px_4px_rgba(0,0,0,0.75)] ${
+                  className={`font-sans text-[9.5px] tracking-[0.02em] leading-none ${
                     isActive
                       ? "text-white font-semibold"
-                      : "text-white/70 font-normal"
+                      : "text-white/75 font-normal"
                   }`}
                 >
                   {item.label}
@@ -1260,10 +1340,11 @@ export default function MobileOilstainExperience() {
       </nav>
 
       {/* ============================================================
-          1. OPENING SPLASH HERO (Sticky z-10 so Page 2 physically wipes up over it!)
+          1. OPENING SPLASH HERO (Sticky z-10, Auto-Pauses when covered by Page 2!)
           ============================================================ */}
       <section
         id="mobile-hero-top"
+        ref={heroSectionRef}
         className="sticky top-0 z-10 w-full h-[100svh] min-h-[580px] bg-[#070709] text-white flex flex-col justify-between overflow-hidden"
       >
         <div className="absolute inset-0 z-0 overflow-hidden">
@@ -1281,7 +1362,7 @@ export default function MobileOilstainExperience() {
             loop
             muted={isHeroMuted}
             playsInline
-            preload="auto"
+            preload="metadata"
             className="absolute inset-0 w-full h-full object-cover object-center brightness-[0.58] contrast-[1.08]"
           />
 
@@ -1294,7 +1375,6 @@ export default function MobileOilstainExperience() {
           />
         </div>
 
-        {/* Top Clearance for Transparent Brand Pill */}
         <div className="relative z-10 w-full pt-14 pointer-events-none" />
 
         <div
@@ -1323,10 +1403,7 @@ export default function MobileOilstainExperience() {
             />
           </div>
 
-          <h1
-            style={{ perspective: "900px" }}
-            className="font-serif text-[clamp(1.85rem,9.2vw,3.4rem)] leading-[0.92] tracking-[0.04em] uppercase text-white font-normal drop-shadow-[0_10px_30px_rgba(0,0,0,0.85)] w-full text-center"
-          >
+          <h1 className="font-serif text-[clamp(1.85rem,9.2vw,3.4rem)] leading-[0.92] tracking-[0.04em] uppercase text-white font-normal w-full text-center">
             {"SHUTTERSCAPE".split("").map((char, i) => (
               <span
                 key={i}
@@ -1336,7 +1413,7 @@ export default function MobileOilstainExperience() {
                 style={
                   isHeroAnimReady
                     ? {
-                        animationDelay: `${0.18 + i * 0.085}s`,
+                        animationDelay: `${0.16 + i * 0.075}s`,
                       }
                     : { opacity: 0 }
                 }
@@ -1365,10 +1442,9 @@ export default function MobileOilstainExperience() {
           </p>
         </div>
 
-        {/* Flush Bottom Bar with Audio Toggle & Gold CTA */}
         <div
           style={{ paddingBottom: "68px" }}
-          className="relative z-10 w-full flex flex-col bg-black/55 backdrop-blur-xs"
+          className="relative z-10 w-full flex flex-col bg-black/65"
         >
           <div className="osl-pad-sm flex items-center justify-between font-mono text-[8.5px] tracking-[0.2em] text-white/55 uppercase border-t border-white/10">
             <span className="pl-12">f/1.4 · 1/1000s · ISO 400</span>
@@ -1379,7 +1455,7 @@ export default function MobileOilstainExperience() {
             <button
               type="button"
               onClick={toggleHeroAudio}
-              className="absolute bottom-2 left-3 z-20 flex h-9 w-9 items-center justify-center rounded-full border border-[#D4A843]/60 bg-[#161513] text-[#D4A843] shadow-[0_4px_16px_rgba(0,0,0,0.6)] cursor-pointer active:scale-95 transition-transform"
+              className="absolute bottom-2 left-3 z-20 flex h-9 w-9 items-center justify-center rounded-full border border-[#D4A843]/60 bg-[#161513] text-[#D4A843] shadow-md cursor-pointer active:scale-95 transition-transform"
               title={isHeroMuted ? "Unmute video sound" : "Mute video sound"}
               aria-label={
                 isHeroMuted ? "Unmute video sound" : "Mute video sound"
@@ -1415,7 +1491,7 @@ export default function MobileOilstainExperience() {
               type="button"
               onClick={handleEnterArchiveTransition}
               style={{ padding: "13px 18px 13px 56px" }}
-              className="w-full flex items-center justify-between bg-[#D4A843] text-[#050505] font-mono text-[9.5px] font-bold tracking-[0.18em] uppercase cursor-pointer hover:bg-[#E5B955] transition-colors"
+              className="w-full flex items-center justify-between bg-[#D4A843] text-[#050505] font-mono text-[9.5px] font-bold tracking-[0.18em] uppercase cursor-pointer"
             >
               <span>ENTER THE DARKROOM ARCHIVE</span>
               <span className="text-sm leading-none">↓</span>
@@ -1431,7 +1507,7 @@ export default function MobileOilstainExperience() {
         id="mobile-light-spec-section"
         ref={archiveSectionRef}
         style={{ minHeight: "100svh", paddingBottom: "74px" }}
-        className="relative z-20 w-full bg-[#ECEBE6] text-[#111111] shadow-[0_-28px_70px_rgba(0,0,0,0.65)] flex flex-col justify-between overflow-hidden"
+        className="relative z-20 w-full bg-[#ECEBE6] text-[#111111] shadow-[0_-20px_50px_rgba(0,0,0,0.45)] flex flex-col justify-between overflow-hidden"
       >
         {/* 1. Header Row: Real Shutterscape Logo on Left, "26" on Right */}
         <div
@@ -1454,7 +1530,7 @@ export default function MobileOilstainExperience() {
           </span>
         </div>
 
-        {/* 2. 3D Concave Cylindrical Curved Auto-Ribbon */}
+        {/* 2. Ultra-Smooth 3D Concave Cylindrical Curved Auto-Ribbon */}
         <div
           ref={ribbonDropWrapRef}
           onTouchStart={() => {
@@ -1498,9 +1574,10 @@ export default function MobileOilstainExperience() {
                   setActiveGalleryIdx(cardIdx);
                   setIsGalleryDrawerOpen(true);
                 }}
-                className="absolute top-1/2 left-1/2 cursor-pointer group"
+                className="absolute top-1/2 left-1/2 cursor-pointer"
                 style={{
                   transformStyle: "preserve-3d",
+                  display: cardIdx < 3 ? "block" : "none",
                 }}
               >
                 {SLICE_INDICES.map((s) => (
@@ -1511,15 +1588,15 @@ export default function MobileOilstainExperience() {
                     }}
                     className="absolute top-0 overflow-hidden will-change-transform"
                     style={{
-                      transformStyle: "preserve-3d",
                       backfaceVisibility: "hidden",
+                      WebkitBackfaceVisibility: "hidden",
                     }}
                   >
                     <div
                       ref={(el) => {
                         curvedSliceInnerRefs.current[cardIdx][s] = el;
                       }}
-                      className="relative overflow-hidden rounded-[6px] bg-[#0B0B0E] border border-black/20 will-change-transform shadow-[0_14px_34px_rgba(0,0,0,0.24)]"
+                      className="relative overflow-hidden rounded-[6px] bg-[#0B0B0E] border border-black/20"
                       style={{
                         backgroundImage: `linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.22) 50%, rgba(0,0,0,0.3) 100%), url(${item.src})`,
                         backgroundSize: "cover",
@@ -1707,6 +1784,8 @@ export default function MobileOilstainExperience() {
               src={gallery[1]?.src || FALLBACK_GALLERY[1].src}
               alt={gallery[1]?.title || "Visual Archive"}
               className="w-full h-full object-cover"
+              loading="lazy"
+              decoding="async"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent" />
             <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between">
@@ -1750,6 +1829,8 @@ export default function MobileOilstainExperience() {
               src={gallery[2]?.src || FALLBACK_GALLERY[2].src}
               alt={gallery[2]?.title || "Landscape Study"}
               className="w-full h-full object-cover"
+              loading="lazy"
+              decoding="async"
             />
           </div>
         </div>
@@ -1815,10 +1896,12 @@ export default function MobileOilstainExperience() {
             src="/images/gcu-campus-sketch.jpg"
             onError={(e) => {
               (e.currentTarget as HTMLImageElement).src =
-                "https://images.unsplash.com/photo-1452587925148-ce544e77e70d?w=1000&q=80";
+                "https://images.unsplash.com/photo-1452587925148-ce544e77e70d?w=800&q=75";
             }}
             alt="About ShutterScape"
             className="absolute inset-0 w-full h-full object-cover grayscale contrast-125 opacity-55"
+            loading="lazy"
+            decoding="async"
           />
           <div className="absolute inset-0 bg-black/40" />
           <h2 className="relative z-10 font-heading font-black text-3xl tracking-[0.06em] uppercase text-white text-center">
@@ -1894,6 +1977,8 @@ export default function MobileOilstainExperience() {
                       src={person.img}
                       alt={person.name}
                       className="w-full h-full object-cover grayscale contrast-115"
+                      loading="lazy"
+                      decoding="async"
                     />
                     <span className="absolute top-2 left-2 px-2 py-0.5 bg-[#111111] text-[#D4A843] font-mono text-[8px] tracking-[0.18em] uppercase font-bold">
                       {person.role}
@@ -1931,6 +2016,8 @@ export default function MobileOilstainExperience() {
                 src={foundersAndLegacy[0]?.img || FALLBACK_COMMITTEE[5].img}
                 alt="Founders Archive"
                 className="w-full h-full object-cover grayscale contrast-125"
+                loading="lazy"
+                decoding="async"
               />
             </div>
 
@@ -1948,6 +2035,8 @@ export default function MobileOilstainExperience() {
                     src={member.img}
                     alt={member.name}
                     className="w-11 h-11 object-cover grayscale shrink-0"
+                    loading="lazy"
+                    decoding="async"
                   />
                   <div className="min-w-0">
                     <h5 className="font-heading font-bold text-[11px] text-[#111111] truncate uppercase">
@@ -2007,7 +2096,7 @@ export default function MobileOilstainExperience() {
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                     }}
-                    className="relative shrink-0 w-[68vw] max-w-[260px] aspect-[9/16] bg-[#111111] rounded-xs overflow-hidden border border-black/20 shadow-lg cursor-pointer"
+                    className="relative shrink-0 w-[68vw] max-w-[260px] aspect-[9/16] bg-[#111111] rounded-xs overflow-hidden border border-black/20 shadow-md cursor-pointer"
                   >
                     <video
                       ref={(el) => {
@@ -2018,7 +2107,7 @@ export default function MobileOilstainExperience() {
                       loop
                       muted
                       playsInline
-                      preload="metadata"
+                      preload="none"
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/30 pointer-events-none" />
@@ -2044,7 +2133,7 @@ export default function MobileOilstainExperience() {
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                   }}
-                  className="relative shrink-0 w-[68vw] max-w-[260px] aspect-[9/16] bg-[#111111] rounded-xs overflow-hidden border border-black/20 shadow-lg"
+                  className="relative shrink-0 w-[68vw] max-w-[260px] aspect-[9/16] bg-[#111111] rounded-xs overflow-hidden border border-black/20 shadow-md"
                 >
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/30 pointer-events-none" />
                   <div className="absolute bottom-3 left-3 right-3 pointer-events-none">
@@ -2185,6 +2274,8 @@ export default function MobileOilstainExperience() {
                   src={item.src}
                   alt={item.title}
                   className="w-full h-full object-cover"
+                  loading="lazy"
+                  decoding="async"
                 />
                 <div className="absolute top-4 left-4 px-3 py-1 bg-black/75 border border-white/15 font-mono text-[9.5px] tracking-[0.2em] uppercase text-[#D4A843]">
                   {String(idx + 1).padStart(2, "0")} /{" "}
@@ -2247,6 +2338,8 @@ export default function MobileOilstainExperience() {
                       src={item.src}
                       alt={item.title}
                       className="w-full h-full object-cover"
+                      loading="lazy"
+                      decoding="async"
                     />
                   </button>
                 );
@@ -2269,7 +2362,7 @@ export default function MobileOilstainExperience() {
           ============================================================ */}
       {activePillarSheet && (
         <div className="fixed inset-0 z-[9999] bg-[#ECEBE6] text-[#111111] overflow-y-auto animate-fade-in">
-          <div className="osl-pad-md flex items-center justify-between sticky top-0 z-20 bg-[#ECEBE6]/95 backdrop-blur-md border-b border-black/15">
+          <div className="osl-pad-md flex items-center justify-between sticky top-0 z-20 bg-[#ECEBE6]/95 border-b border-black/15">
             <span className="font-mono text-[9.5px] tracking-[0.22em] uppercase text-black/50">
               SHUTTERSCAPE // ARCHIVE PILLAR
             </span>
@@ -2322,6 +2415,8 @@ export default function MobileOilstainExperience() {
                     }
                     alt={activePillarSheet}
                     className="w-full h-full object-cover"
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
                 <div className="w-full aspect-[16/10] bg-[#111111] overflow-hidden shadow-xl">
@@ -2335,6 +2430,8 @@ export default function MobileOilstainExperience() {
                     }
                     alt={activePillarSheet}
                     className="w-full h-full object-cover"
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
               </div>
@@ -2358,7 +2455,7 @@ export default function MobileOilstainExperience() {
       {isRegisterModalOpen && (
         <div className="fixed inset-0 z-[9999] bg-[#FAF9F5] text-[#111111] overflow-y-auto animate-fade-in flex flex-col justify-between">
           <div>
-            <div className="osl-pad-md flex items-center justify-between border-b border-black/15 sticky top-0 bg-[#FAF9F5]/95 backdrop-blur-md z-20">
+            <div className="osl-pad-md flex items-center justify-between border-b border-black/15 sticky top-0 bg-[#FAF9F5]/95 z-20">
               <span className="font-mono text-[10px] tracking-[0.18em] uppercase text-[#111111] font-bold">
                 JOIN SHUTTERSCAPE &apos;26
               </span>
