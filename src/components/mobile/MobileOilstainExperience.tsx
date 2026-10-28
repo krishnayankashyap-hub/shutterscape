@@ -1152,22 +1152,22 @@ export default function MobileOilstainExperience() {
       />
 
       {/* ============================================================
-          UP NAVBAR: TRANSPARENT ON SCROLL (GPU-Composited Frosted Glass)
+          UP NAVBAR: COMPACT, CUTE CENTERED GLASS CAPSULE + LARGER LOGOS
           ============================================================ */}
       <div
         style={{
-          padding: "7px 14px",
+          padding: "6px 14px",
           backgroundColor: isScrolledTop
-            ? "rgba(12, 12, 16, 0.22)"
-            : "rgba(12, 12, 16, 0.08)",
+            ? "rgba(12, 12, 16, 0.28)"
+            : "rgba(12, 12, 16, 0.14)",
           backdropFilter: "blur(10px) saturate(140%)",
           WebkitBackdropFilter: "blur(10px) saturate(140%)",
           borderColor: isScrolledTop
-            ? "rgba(255, 255, 255, 0.16)"
-            : "rgba(255, 255, 255, 0.1)",
-          transform: "translate3d(0, 0, 0)",
+            ? "rgba(255, 255, 255, 0.2)"
+            : "rgba(255, 255, 255, 0.14)",
+          transform: "translate3d(-50%, 0, 0)",
         }}
-        className="fixed top-2.5 inset-x-3.5 z-[9980] rounded-full border transition-colors duration-300 flex items-center justify-between pointer-events-auto"
+        className="fixed top-3 left-1/2 z-[9980] w-max max-w-[92vw] rounded-full border shadow-[0_8px_24px_rgba(0,0,0,0.28)] transition-colors duration-300 flex items-center justify-center gap-2.5 pointer-events-auto"
       >
         <button
           type="button"
@@ -1176,49 +1176,60 @@ export default function MobileOilstainExperience() {
             setActiveNavTab("home");
             window.scrollTo({ top: 0, behavior: "smooth" });
           }}
-          className="flex items-center gap-2 cursor-pointer"
+          className="flex items-center gap-2 cursor-pointer shrink-0"
         >
-          <div className="relative h-5 w-22">
+          {/* Larger ShutterScape Logo */}
+          <div
+            style={{ width: "102px", height: "28px" }}
+            className="relative shrink-0"
+          >
             <Image
               src="/images/shutterscape-brand-white.png"
               alt="ShutterScape Logo"
               fill
-              sizes="88px"
               priority
+              sizes="102px"
               unoptimized
               className="object-contain object-left"
             />
           </div>
-          <span className="h-3 w-[1px] bg-white/25" />
-          <span className="flex items-center gap-1 font-mono text-[8px] tracking-[0.2em] text-[#EF4444] font-bold uppercase">
+
+          <span className="h-3.5 w-[1px] bg-white/20 shrink-0" />
+
+          <span className="flex items-center gap-1 font-mono text-[8px] tracking-[0.18em] text-[#EF4444] font-bold uppercase shrink-0">
             <span className="w-1.5 h-1.5 rounded-full bg-[#EF4444] animate-pulse" />
             REC
           </span>
         </button>
 
-        <div className="flex items-center gap-2">
+        <span className="h-3.5 w-[1px] bg-white/15 shrink-0" />
+
+        <div className="flex items-center gap-2 shrink-0">
           <button
             type="button"
             onClick={() => {
               setRegisterSubmitted(false);
               setIsRegisterModalOpen(true);
             }}
-            style={{ padding: "4px 10px" }}
-            className="rounded-full bg-[#D4A843]/90 hover:bg-[#D4A843] text-[#050505] font-mono text-[8px] font-bold tracking-[0.16em] uppercase cursor-pointer"
+            style={{ padding: "4.5px 10px" }}
+            className="rounded-full bg-[#D4A843] hover:bg-[#E5B955] text-[#050505] font-mono text-[8px] font-bold tracking-[0.14em] uppercase cursor-pointer shrink-0 shadow-2xs"
           >
             JOIN &apos;26
           </button>
+
+          {/* Larger GCU University Logo */}
           <a
             href="https://gcu.ac.in"
             target="_blank"
             rel="noopener noreferrer"
-            className="relative h-4.5 w-14 opacity-95"
+            style={{ width: "84px", height: "26px" }}
+            className="relative opacity-95 hover:opacity-100 transition-opacity shrink-0"
             title="Girijananda Chowdhury University"
           >
             <img
               src="/images/gcu-logo-white-text.png"
               alt="GCU"
-              className="w-full h-full object-contain object-right"
+              className="w-full h-full object-contain object-center"
             />
           </a>
         </div>
