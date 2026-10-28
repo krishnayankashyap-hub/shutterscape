@@ -1,3 +1,5 @@
+// src/components/cinematic/CameraShutterLoader.tsx
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useEffect, useState, useRef } from "react";
@@ -8,12 +10,10 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 const CRITICAL_IMAGE_ASSETS = [
   "/images/gcu-campus-anime.jpg",
   "/images/gcu-campus-sketch.jpg",
-  // Hero Reel Frames (pre-decoded for instant display post-flash)
   "/api/media/6ade51a83071c6a522ea6397",
   "/api/media/6ade54effadbce637226b636",
   "/api/media/6ade56029d67f6006e3db91a",
   "/api/media/6ade565e741b0c577b2f4207",
-  // PullIn Corridor Exhibits
   "/api/media/6ade5727c27b25f89317a56e",
   "/api/media/6ade5fc397369901d08048bd",
   "/api/media/6ade60493c562bf90f9b2a6c",
@@ -22,7 +22,6 @@ const CRITICAL_IMAGE_ASSETS = [
   "/api/media/6ade61c88ff4fc64ac7615e5",
   "/api/media/6ade621f3c562bf90f9b2a6d",
   "/api/media/6ade6265d43cca4cd02daa10",
-  // Activities Showcase Chapters
   "/api/media/6ade723381e180affa193019",
   "/api/media/6ade724a83870de2ac5f3cf2",
   "/api/media/6ade73037d65124fe732c4ae",
@@ -32,52 +31,44 @@ const CRITICAL_IMAGE_ASSETS = [
 
 export default function CameraShutterLoader() {
   const pathname = usePathname();
-  const [flashActive, setFlashActive] = useState(false);
+  const [percent, setPercent] = useState(0);
   const [dismissed, setDismissed] = useState(false);
 
   const loaderRef = useRef<HTMLDivElement>(null);
-  const cameraRef = useRef<HTMLDivElement>(null);
-  const flashRef = useRef<HTMLDivElement>(null);
-  const apertureRingRef = useRef<SVGSVGElement>(null);
+  const leftLabelRef = useRef<HTMLDivElement>(null);
+  const rightCounterRef = useRef<HTMLDivElement>(null);
+  const bracketsWrapRef = useRef<HTMLDivElement>(null);
+  const crosshairRef = useRef<HTMLSpanElement>(null);
+  const reelColumnRef = useRef<HTMLDivElement>(null);
+  const topReelFrameRef = useRef<HTMLDivElement>(null);
+  const bottomReelFrameRef = useRef<HTMLDivElement>(null);
+  const centerWebsitePreviewRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (pathname?.startsWith("/admin")) return;
 
-    // 0. Aggressively preload & GPU-decode all critical visuals in parallel behind the shutter screen
+    // 0. Preload critical assets in parallel
     if (typeof window !== "undefined") {
       CRITICAL_IMAGE_ASSETS.forEach((src) => {
         try {
           const img = new Image();
           img.src = src;
-          if (img.decode) {
-            img.decode().catch(() => {});
-          }
-        } catch {}
-      });
-
-      // Buffer initial Moments video reels into HTTP cache
-      const CRITICAL_VIDEOS = [
-        "/api/media/6adf475c3c63e8ae4ff0a9d4",
-        "/api/media/6ade6c0a40346d3181c85f3a",
-      ];
-      CRITICAL_VIDEOS.forEach((vSrc) => {
-        try {
-          const v = document.createElement("video");
-          v.preload = "auto";
-          v.src = vSrc;
-          v.load();
+          if (img.decode) img.decode().catch(() => {});
         } catch {}
       });
     }
 
-    // 1. Prevent browser from restoring raw scroll offsets before GSAP pins hydrate
+    // 1. Reset scroll position cleanly
     if (typeof window !== "undefined") {
       window.history.scrollRestoration = "manual";
-      const navEntries = performance.getEntriesByType("navigation") as PerformanceNavigationTiming[];
+      const navEntries = performance.getEntriesByType(
+        "navigation"
+      ) as PerformanceNavigationTiming[];
       const isReload =
         navEntries.length > 0
           ? navEntries[0].type === "reload"
-          : (performance as unknown as { navigation?: { type: number } }).navigation?.type === 1;
+          : (performance as unknown as { navigation?: { type: number } })
+              .navigation?.type === 1;
 
       if (isReload || !window.location.hash) {
         if (window.location.hash) {
@@ -87,8 +78,8 @@ export default function CameraShutterLoader() {
       }
     }
 
-    // 2. Play subtle synthesized camera shutter mechanical click
-    const playCameraShutterSound = () => {
+    // 2. Subtle mechanical shutter lock sound
+    const playShutterLockSound = () => {
       try {
         const AudioCtx =
           window.AudioContext ||
@@ -98,199 +89,281 @@ export default function CameraShutterLoader() {
         const ctx = new AudioCtx();
         if (ctx.state === "suspended") ctx.resume();
 
-        // Shutter curtain 1 click
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = "sine";
-        osc.frequency.setValueAtTime(650, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 0.035);
-        gain.gain.setValueAtTime(0.08, ctx.currentTime);
+        osc.frequency.setValueAtTime(620, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(90, ctx.currentTime + 0.035);
+        gain.gain.setValueAtTime(0.06, ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.035);
         osc.connect(gain);
         gain.connect(ctx.destination);
         osc.start();
         osc.stop(ctx.currentTime + 0.035);
-
-        // Shutter curtain 2 close click
-        setTimeout(() => {
-          try {
-            const osc2 = ctx.createOscillator();
-            const gain2 = ctx.createGain();
-            osc2.type = "sine";
-            osc2.frequency.setValueAtTime(520, ctx.currentTime);
-            osc2.frequency.exponentialRampToValueAtTime(60, ctx.currentTime + 0.04);
-            gain2.gain.setValueAtTime(0.09, ctx.currentTime);
-            gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
-            osc2.connect(gain2);
-            gain2.connect(ctx.destination);
-            osc2.start();
-            osc2.stop(ctx.currentTime + 0.04);
-          } catch {}
-        }, 50);
-      } catch {
-        // Silently ignore if browser gesture policy blocks audio
-      }
+      } catch {}
     };
 
-    // 3. Camera aperture focus & shutter flash animation timeline (Exact 2-Second Cinematic Intro)
+    // 3. VIDEO 10 PRELOADER TIMELINE:
+    //    - 000 -> 100 PERCENT counter on right, [ THE ART OF SHUTTERSCAPE ] on left
+    //    - Center [ + ] viewfinder brackets lock in
+    //    - Vertical 3-frame filmstrip glides in with Live Website Hero Preview in center
+    //    - Center Website Preview expands smoothly to 100vw x 100vh and reveals the live site!
+    const counterObj = { val: 0 };
+
     const tl = gsap.timeline({
       onComplete: () => {
         setDismissed(true);
-        // Refresh ScrollTrigger pins cleanly once screen is revealed
         if (typeof window !== "undefined") {
-          (window as unknown as { __shutterLoaderDismissed?: boolean }).__shutterLoaderDismissed = true;
+          (
+            window as unknown as { __shutterLoaderDismissed?: boolean }
+          ).__shutterLoaderDismissed = true;
           window.dispatchEvent(new CustomEvent("shutterscape:loader-complete"));
           ScrollTrigger.refresh();
         }
       },
     });
 
-    // Initial state
-    gsap.set(cameraRef.current, { scale: 0.88, opacity: 0 });
-    gsap.set(flashRef.current, { opacity: 0 });
+    gsap.set(reelColumnRef.current, { y: "38vh", opacity: 0 });
 
-    // Step 1: Camera enters and lens locks focus smoothly (0.7s)
-    tl.to(cameraRef.current, {
-      scale: 1,
-      opacity: 1,
-      duration: 0.7,
-      ease: "power2.out",
-    });
-
-    // Step 2: Lens aperture rotates & contracts - autofocus calibration (0.7s)
-    if (apertureRingRef.current) {
-      tl.to(
-        apertureRingRef.current,
-        {
-          rotate: 90,
-          scale: 0.92,
-          duration: 0.7,
-          ease: "power1.inOut",
-        },
-        "-=0.2"
-      );
-    }
-
-    // Step 3: Steady focus lock pause before shutter release (0.6s)
-    tl.to({}, { duration: 0.6 });
-
-    // Step 4: CAMERA SHUTTER CLICK + FLASH BURST! (0.1s)
-    tl.call(() => {
-      setFlashActive(true);
-      playCameraShutterSound();
-    });
-
+    // Count from 000 to 100 PERCENT over 1.75s
     tl.to(
-      flashRef.current,
+      counterObj,
       {
-        opacity: 0.98,
-        duration: 0.1,
-        ease: "power4.in",
+        val: 100,
+        duration: 1.75,
+        ease: "power2.inOut",
+        onUpdate: () => {
+          setPercent(Math.round(counterObj.val));
+        },
       },
-      "+=0.02"
+      0
     );
 
-    // Step 5: Flash dissipates with optical bloom, revealing clean website (0.7s)
-    tl.to(flashRef.current, {
-      opacity: 0,
-      duration: 0.7,
-      ease: "power2.out",
-    });
+    // At 0.35s: Fade out center "+" crosshair as the 3-frame vertical reel glides into the brackets
+    tl.to(
+      crosshairRef.current,
+      {
+        opacity: 0,
+        scale: 0.5,
+        duration: 0.25,
+        ease: "power2.out",
+      },
+      0.35
+    );
 
+    tl.to(
+      reelColumnRef.current,
+      {
+        y: "0vh",
+        opacity: 1,
+        duration: 1.15,
+        ease: "expo.out",
+        onStart: () => playShutterLockSound(),
+      },
+      0.35
+    );
+
+    // At 1.65s: Top and bottom neighbor reel frames slide away & fade out
+    tl.to(
+      topReelFrameRef.current,
+      {
+        y: -60,
+        opacity: 0,
+        duration: 0.45,
+        ease: "power3.in",
+      },
+      1.65
+    );
+
+    tl.to(
+      bottomReelFrameRef.current,
+      {
+        y: 60,
+        opacity: 0,
+        duration: 0.45,
+        ease: "power3.in",
+      },
+      1.65
+    );
+
+    tl.to(
+      [
+        leftLabelRef.current,
+        rightCounterRef.current,
+        bracketsWrapRef.current,
+      ],
+      {
+        opacity: 0,
+        duration: 0.35,
+        ease: "power2.out",
+      },
+      1.7
+    );
+
+    // At 1.8s: Expand the Center Website Preview Frame to Fullscreen (100vw x 100vh)
+    tl.to(
+      centerWebsitePreviewRef.current,
+      {
+        width: "100vw",
+        height: "100vh",
+        borderRadius: "0px",
+        duration: 0.75,
+        ease: "expo.inOut",
+      },
+      1.75
+    );
+
+    // Dissolve the preloader wrapper seamlessly into the live interactive website
     tl.to(
       loaderRef.current,
       {
         opacity: 0,
         pointerEvents: "none",
-        duration: 0.6,
-        ease: "power3.inOut",
+        duration: 0.4,
+        ease: "power2.out",
       },
-      "-=0.3"
+      2.35
     );
 
     return () => {
       tl.kill();
     };
-  }, []);
+  }, [pathname]);
 
   if (dismissed || pathname?.startsWith("/admin")) return null;
+
+  const formattedPercent = String(percent).padStart(3, "0");
 
   return (
     <div
       ref={loaderRef}
-      className="fixed inset-0 z-[99999] bg-[#030303] flex flex-col items-center justify-center select-none cursor-default"
+      className="fixed inset-0 z-[99999] bg-[#040405] text-white flex items-center justify-center overflow-hidden select-none cursor-default"
       style={{ willChange: "opacity" }}
     >
-      {/* CAMERA VIEWFINDER RETICLE & BODY */}
+      {/* Left Telemetry Label: [ THE ART OF SHUTTERSCAPE ] (Matches Video 10!) */}
       <div
-        ref={cameraRef}
-        className="relative flex flex-col items-center justify-center gap-6 opacity-0"
-        style={{ opacity: 0 }}
+        ref={leftLabelRef}
+        className="fixed left-3 sm:left-8 top-1/2 -translate-y-1/2 z-30 font-mono text-[8.5px] sm:text-[10px] tracking-[0.22em] text-white/80 uppercase pointer-events-none"
       >
-        {/* Focusing Brackets [ + ] */}
-        <div className="relative w-28 h-28 sm:w-32 sm:h-32 flex items-center justify-center">
-          {/* Top-Left Bracket */}
-          <span className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-[#D4A843] rounded-tl-sm" />
-          {/* Top-Right Bracket */}
-          <span className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-[#D4A843] rounded-tr-sm" />
-          {/* Bottom-Left Bracket */}
-          <span className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-[#D4A843] rounded-bl-sm" />
-          {/* Bottom-Right Bracket */}
-          <span className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-[#D4A843] rounded-br-sm" />
-
-          {/* Minimalist Camera Icon with Lens */}
-          <div className="relative flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-[#0d0d10] border border-white/10 rounded-2xl shadow-2xl">
-            {/* Viewfinder Flash/LED */}
-            <div className="absolute -top-2 left-3 w-5 h-2 bg-[#1b1b22] border-t border-x border-white/10 rounded-t-sm" />
-            <div
-              className={`absolute -top-1.5 right-3 w-2 h-2 rounded-full transition-colors duration-200 ${
-                flashActive
-                  ? "bg-[#EF4444] shadow-[0_0_12px_#EF4444]"
-                  : "bg-[#D4A843] shadow-[0_0_8px_#D4A843]"
-              }`}
-            />
-
-            {/* Aperture Lens SVG */}
-            <svg
-              ref={apertureRingRef}
-              className="w-10 h-10 sm:w-12 sm:h-12 text-[#D4A843]"
-              viewBox="0 0 48 48"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <circle cx="24" cy="24" r="20" stroke="rgba(255,255,255,0.2)" />
-              <circle cx="24" cy="24" r="8" fill="#D4A843" fillOpacity="0.18" />
-              <path d="M24 4 L30 18" />
-              <path d="M44 24 L30 30" />
-              <path d="M24 44 L18 30" />
-              <path d="M4 24 L18 18" />
-            </svg>
-          </div>
-        </div>
-
-        {/* ShutterScape Camera HUD Tag */}
-        <div className="flex flex-col items-center gap-1.5 text-center">
-          <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#EF4444] animate-pulse" />
-            <span className="font-mono text-[10px] tracking-[0.32em] text-[#FAFAFA] uppercase">
-              SHUTTERSCAPE // FOCUSING
-            </span>
-          </div>
-          <span className="font-mono text-[9px] tracking-[0.22em] text-white/40 uppercase">
-            CALIBRATING LENS OPTICS
-          </span>
-        </div>
+        [ THE ART OF SHUTTERSCAPE ]
       </div>
 
-      {/* FULLSCREEN CAMERA FLASH STROBE BURST (starts strictly at opacity: 0) */}
+      {/* Right Percentage Counter: [ 000 PERCENT ] -> [ 100 PERCENT ] (Matches Video 10!) */}
       <div
-        ref={flashRef}
-        className="fixed inset-0 pointer-events-none z-50 opacity-0 bg-gradient-to-b from-white via-white to-amber-50"
-        style={{ opacity: 0, willChange: "opacity" }}
-      />
+        ref={rightCounterRef}
+        className="fixed right-3 sm:right-8 top-1/2 -translate-y-1/2 z-30 font-mono text-[8.5px] sm:text-[10px] tracking-[0.22em] text-white/80 uppercase pointer-events-none"
+      >
+        [ {formattedPercent} PERCENT ]
+      </div>
+
+      {/* Center Viewfinder Reticle [ + ] Corner Brackets (Matches Video 10 00:00!) */}
+      <div
+        ref={bracketsWrapRef}
+        style={{
+          width: "min(56vw, 420px)",
+          height: "min(36vw, 255px)",
+          minWidth: "220px",
+          minHeight: "145px",
+        }}
+        className="relative z-20 flex items-center justify-center pointer-events-none"
+      >
+        {/* 4 Crisp Corner Brackets */}
+        <span className="absolute -top-2 -left-2 w-3.5 h-3.5 border-t border-l border-white/75" />
+        <span className="absolute -top-2 -right-2 w-3.5 h-3.5 border-t border-r border-white/75" />
+        <span className="absolute -bottom-2 -left-2 w-3.5 h-3.5 border-b border-l border-white/75" />
+        <span className="absolute -bottom-2 -right-2 w-3.5 h-3.5 border-b border-r border-white/75" />
+
+        {/* Center Crosshair "+" */}
+        <span
+          ref={crosshairRef}
+          className="font-mono text-sm text-white/75 font-light leading-none"
+        >
+          +
+        </span>
+      </div>
+
+      {/* Vertical 3-Frame Filmstrip Column (Glides into the center brackets and expands to the live website!) */}
+      <div
+        ref={reelColumnRef}
+        className="fixed inset-0 z-10 flex flex-col items-center justify-center gap-4 pointer-events-none"
+        style={{ opacity: 0 }}
+      >
+        {/* Top Neighbor Frame in Reel */}
+        <div
+          ref={topReelFrameRef}
+          style={{
+            width: "min(44vw, 330px)",
+            height: "min(28vw, 195px)",
+            minWidth: "175px",
+            minHeight: "110px",
+          }}
+          className="relative overflow-hidden bg-[#111115] opacity-65 shrink-0"
+        >
+          <img
+            src="/images/gcu-campus-sketch.jpg"
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).src =
+                "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800&q=75";
+            }}
+            alt="Archive Frame Top"
+            className="w-full h-full object-cover brightness-75"
+          />
+        </div>
+
+        {/* CENTER FRAME: LIVE PREVIEW OF THE SHUTTERSCAPE WEBSITE HERO!
+            Sits inside the [ ] brackets, then expands to 100vw x 100vh! */}
+        <div
+          ref={centerWebsitePreviewRef}
+          style={{
+            width: "min(54vw, 405px)",
+            height: "min(34vw, 240px)",
+            minWidth: "210px",
+            minHeight: "136px",
+          }}
+          className="relative overflow-hidden bg-[#070709] shadow-[0_25px_70px_rgba(0,0,0,0.9)] flex flex-col items-center justify-center shrink-0"
+        >
+          <img
+            src="/images/gcu-campus-anime.jpg"
+            alt="ShutterScape Website Preview"
+            className="absolute inset-0 w-full h-full object-cover object-center brightness-[0.58] contrast-[1.08]"
+          />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(5,5,7,0.72) 0%, rgba(5,5,7,0.32) 45%, rgba(5,5,7,0.88) 100%)",
+            }}
+          />
+
+          {/* Miniaturized Live Preview of the Website Hero Title */}
+          <div className="relative z-10 flex flex-col items-center text-center px-3">
+            <span className="font-mono text-[6px] sm:text-[8px] tracking-[0.24em] uppercase text-[#D4A843] font-bold mb-1">
+              EST. 2023 · GCU PHOTOGRAPHY CLUB
+            </span>
+            <span className="font-serif text-lg sm:text-3xl tracking-[0.06em] uppercase text-white font-normal leading-none">
+              SHUTTERSCAPE
+            </span>
+          </div>
+        </div>
+
+        {/* Bottom Neighbor Frame in Reel */}
+        <div
+          ref={bottomReelFrameRef}
+          style={{
+            width: "min(44vw, 330px)",
+            height: "min(28vw, 195px)",
+            minWidth: "175px",
+            minHeight: "110px",
+          }}
+          className="relative overflow-hidden bg-[#111115] opacity-65 shrink-0"
+        >
+          <img
+            src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800&q=75"
+            alt="Archive Frame Bottom"
+            className="w-full h-full object-cover brightness-75"
+          />
+        </div>
+      </div>
     </div>
   );
 }

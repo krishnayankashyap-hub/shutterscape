@@ -1,3 +1,4 @@
+// src/components/mobile/MobileOilstainExperience.tsx
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
@@ -9,7 +10,6 @@ import React, {
   useCallback,
 } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { MOBILE_HERO_MEDIA } from "@/config/mobileHeroMedia";
 
 // ==========================================
@@ -62,7 +62,7 @@ const FALLBACK_GALLERY = [
     exif: "24MM · F/8.0",
     src: "https://images.unsplash.com/photo-1449844908441-8829872d2607?w=800&q=75",
     description:
-      "Monochrome architectural study dissecting concrete planes across campus.",
+      "Architectural study dissecting concrete planes and warm afternoon shadows across campus.",
   },
   {
     id: "g-05",
@@ -98,12 +98,13 @@ const FALLBACK_ACTIVITIES = [
     title: "Brahmaputra Heritage Photowalk 4.0",
     category: "PHOTOWALK",
     date: "NOV 14, 2026",
+    duration: "1 DAY EXPEDITION",
     location: "Riverfront, Guwahati",
     exif: "35MM · F/2.0 · 1/1000S",
     filmStock: "KODAK PORTRA 400",
     img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=75",
     description:
-      "Golden-hour riverfront documentation exploring ferry silhouettes and twilight reflections.",
+      "Golden-hour riverfront documentation exploring ferry silhouettes, old ghats, and twilight reflections along the Brahmaputra with live mentor framing critiques.",
     isUpcoming: true,
   },
   {
@@ -112,14 +113,15 @@ const FALLBACK_ACTIVITIES = [
     shortTitle: "XENON STROBE LAB",
     title: "Mastering Manual Optics & Xenon Strobe",
     category: "WORKSHOP",
-    date: "OCT 04, 2026",
+    date: "NOV 28, 2026",
+    duration: "2 DAYS LAB CLINIC",
     location: "GCU Media Lab",
     exif: "85MM · F/1.4 · 1/250S",
     filmStock: "ILFORD HP5 PLUS",
     img: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800&q=75",
     description:
-      "Hands-on technical clinic covering aperture control and Chiaroscuro portrait lighting.",
-    isUpcoming: false,
+      "Hands-on technical clinic covering manual aperture control, high-speed sync Xenon flash choreography, and Chiaroscuro portrait lighting setups.",
+    isUpcoming: true,
   },
   {
     id: "ACT-26-03",
@@ -128,12 +130,13 @@ const FALLBACK_ACTIVITIES = [
     title: "Frames Beyond Time — Annual Exhibition",
     category: "EXHIBITION",
     date: "AUG 22, 2026",
+    duration: "3 DAYS SHOWCASE",
     location: "GCU Central Atrium",
     exif: "50MM · F/2.8 · 1/500S",
     filmStock: "KODAK VISION3 500T",
     img: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800&q=75",
     description:
-      "Curated physical print showcase featuring 60+ archival photographs by GCU students.",
+      "Curated physical print showcase featuring 60+ archival photographs, contact sheets, and visual essays captured by Girijananda Chowdhury University students.",
     isUpcoming: false,
   },
   {
@@ -141,24 +144,27 @@ const FALLBACK_ACTIVITIES = [
     year: "2025",
     shortTitle: "CAMPUS NOCTURNES",
     title: "Campus Nocturnes — Night Photography",
-    category: "WORKSHOP",
+    category: "COMPETITION",
     date: "DEC 12, 2025",
+    duration: "NIGHT MARATHON",
     location: "GCU Main Campus",
     exif: "14MM · F/2.8 · 15S",
     filmStock: "KODAK EKTAR 100",
     img: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=800&q=75",
     description:
-      "Late-night practical session exploring long-exposure light trails and tripod stability.",
+      "Late-night practical challenge exploring long-exposure light trails, astrophotography framing, and tungsten architectural silhouettes across campus.",
     isUpcoming: false,
   },
 ];
 
 const FALLBACK_COMMITTEE = [
+  // MENTORS ("THE TEACHERS")
   {
     name: "Dr. Sangeeta Das",
     role: "Coordinator",
     tier: "MENTOR",
     dept: "Dept. of Mechanical Engineering",
+    bio: "Guides ShutterScape's annual exhibitions, inter-university visual symposia, and archival documentation initiatives across GCU.",
     img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=75&w=600&auto=format&fit=crop",
   },
   {
@@ -166,34 +172,90 @@ const FALLBACK_COMMITTEE = [
     role: "Co-Coordinator",
     tier: "MENTOR",
     dept: "Assistant Professor & Head (i/c) Dept. of Education",
+    bio: "Mentors student storytellers in visual literacy, cultural documentation, and curatorial ethics at Girijananda Chowdhury University.",
     img: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=75&w=600&auto=format&fit=crop",
   },
+  // LEADS ("BEHIND THE LENS")
   {
     name: "Uttama Purkayastha",
-    role: "PRESIDENT",
+    role: "President",
     tier: "LEAD",
-    dept: "Executive Leadership",
+    dept: "Executive Leadership · GCU",
+    bio: "Leads creative direction, campus-wide exhibitions, and visual archive curation for ShutterScape.",
     img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=75&w=600&auto=format&fit=crop",
   },
   {
     name: "Ikhyt De Neog",
-    role: "VICE-PRESIDENT",
+    role: "Vice-President",
     tier: "LEAD",
     dept: "Operations & Field Expeditions",
+    bio: "Coordinates outdoor heritage photowalks, technical lighting workshops, and inter-collegiate challenges.",
     img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=75&w=600&auto=format&fit=crop",
   },
   {
     name: "Richita Sarma",
-    role: "SECRETARY",
+    role: "Secretary",
     tier: "LEAD",
     dept: "Editorial & Archive Administration",
+    bio: "Oversees member onboarding, exhibition catalogs, and the preservation of student photographic plates.",
     img: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=75&w=600&auto=format&fit=crop",
   },
+  // CORE ("CORE MEMBERS")
+  {
+    name: "Sohaib Hussain",
+    role: "Core Member",
+    tier: "CORE",
+    dept: "Documentary & Street Division",
+    bio: "Specializes in high-shutter action documentary and candid street narratives across Guwahati.",
+    img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=75&w=600&auto=format&fit=crop",
+  },
+  {
+    name: "Mahadananda Dutta",
+    role: "Core Member",
+    tier: "CORE",
+    dept: "Optics & Strobe Lead",
+    bio: "Focuses on studio strobe choreography, Chiaroscuro portraiture, and manual lens experimentation.",
+    img: "https://images.unsplash.com/photo-1488161628813-04466f872be2?q=75&w=600&auto=format&fit=crop",
+  },
+  {
+    name: "Manash Pratim Sarma",
+    role: "Core Member",
+    tier: "CORE",
+    dept: "Landscape & Expedition",
+    bio: "Documents alpine ridges, riverfront twilight, and ecological heritage throughout Assam.",
+    img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=75&w=600&auto=format&fit=crop",
+  },
+  {
+    name: "Mubina Ahmed",
+    role: "Core Member",
+    tier: "CORE",
+    dept: "Curation & Print Design",
+    bio: "Manages exhibition sequencing, matte framing standards, and visual storytelling critiques.",
+    img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=75&w=600&auto=format&fit=crop",
+  },
+  {
+    name: "Pratyush B. Choudhury",
+    role: "Core Member",
+    tier: "CORE",
+    dept: "Cinematography & Reels",
+    bio: "Directs vertical motion reels, color grading workflows, and behind-the-scenes event films.",
+    img: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=75&w=600&auto=format&fit=crop",
+  },
+  {
+    name: "Hiya Das",
+    role: "Core Member",
+    tier: "CORE",
+    dept: "Architectural & Spatial Study",
+    bio: "Explores brutalist geometry, symmetry, and natural shadow play across campus structures.",
+    img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=75&w=600&auto=format&fit=crop",
+  },
+  // FOUNDERS ("WHERE IT ALL STARTED")
   {
     name: "Dheemaan Deka",
     role: "2023 // Co-Founder",
     tier: "FOUNDER",
     dept: "Founding Visionary",
+    bio: "Co-founded ShutterScape in 2023 to unite GCU's visual artists under a single creative collective.",
     img: "https://images.unsplash.com/photo-1618077360395-f3068be8e001?q=75&w=600&auto=format&fit=crop",
   },
   {
@@ -201,12 +263,60 @@ const FALLBACK_COMMITTEE = [
     role: "2023 // Co-Founder",
     tier: "FOUNDER",
     dept: "Founding Architect",
+    bio: "Established the club's signature photowalk culture, darkroom critique sessions, and annual print exhibitions.",
     img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=75&w=600&auto=format&fit=crop",
+  },
+  // LEGACY ("CARRYING IT FORWARD")
+  {
+    name: "Gargi Medhi",
+    role: "Legacy Torchbearer",
+    tier: "LEGACY",
+    dept: "Alumni Mentorship Council",
+    bio: "Pioneered early portraiture symposia and continues to mentor incoming student photographers.",
+    img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=75&w=600&auto=format&fit=crop",
+  },
+  {
+    name: "Imran Farhat",
+    role: "Legacy Torchbearer",
+    tier: "LEGACY",
+    dept: "Nocturnal & Street Archive",
+    bio: "Known for low-light urban documentation and training junior members in manual exposure.",
+    img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=75&w=600&auto=format&fit=crop",
   },
 ];
 
-type AboutTabKey = "ORIGINS" | "LEADERSHIP" | "LEGACY";
-type PillarKey = "ORIGIN" | "BEAUTY" | "ASYLUM" | null;
+// Vibrant Studio Backdrops matching Screenshot 7 & 8 (Buffer / Lynqet reference)
+const MEMBER_CARD_BACKDROPS = [
+  "#8CE99A", // Mint Studio Green
+  "#FFA8A8", // Coral Peach
+  "#74C0FC", // Sky Blue
+  "#D0BFFF", // Soft Lavender
+  "#FFE066", // Warm Amber Gold
+  "#FCC2D7", // Rose Quartz
+];
+
+type AboutTabKey =
+  | "ORIGINS"
+  | "THE TEACHERS"
+  | "BEHIND THE LENS"
+  | "CORE MEMBERS"
+  | "WHERE IT ALL STARTED"
+  | "CARRYING IT FORWARD";
+
+const ABOUT_CHAPTER_TABS: {
+  id: AboutTabKey;
+  code: string;
+  shortLabel: string;
+}[] = [
+  { id: "ORIGINS", code: "01", shortLabel: "ORIGINS" },
+  { id: "THE TEACHERS", code: "02", shortLabel: "THE TEACHERS" },
+  { id: "BEHIND THE LENS", code: "03", shortLabel: "BEHIND THE LENS" },
+  { id: "CORE MEMBERS", code: "04", shortLabel: "CORE MEMBERS" },
+  { id: "WHERE IT ALL STARTED", code: "05", shortLabel: "WHERE IT ALL STARTED" },
+  { id: "CARRYING IT FORWARD", code: "06", shortLabel: "CARRYING IT FORWARD" },
+];
+
+type OpticalLabKey = "LOUPE" | "EMULSION" | "STROBE" | null;
 type NavTabId = "home" | "gallery" | "about" | "activity" | "moments";
 
 const FLOATING_NAV_ITEMS: {
@@ -217,7 +327,7 @@ const FLOATING_NAV_ITEMS: {
   { id: "home", label: "Home", sectionId: "mobile-hero-top" },
   { id: "gallery", label: "Gallery", sectionId: "mobile-light-spec-section" },
   { id: "about", label: "About", sectionId: "mobile-light-about-section" },
-  { id: "activity", label: "Activity", sectionId: "mobile-light-bento-section" },
+  { id: "activity", label: "Activity", sectionId: "mobile-dark-showcase" },
   { id: "moments", label: "Moments", sectionId: "mobile-chronology-matrix" },
 ];
 
@@ -318,12 +428,12 @@ function buildCompactNotchPath(cx: number): string {
   return `M 22 0 L ${nStart} 0 C ${c1} 0, ${c1} 19.5, ${center} 19.5 C ${c2} 19.5, ${c2} 0, ${nEnd} 0 L 288 0 A 22 22 0 0 1 310 22 L 310 28 A 22 22 0 0 1 288 50 L 22 50 A 22 22 0 0 1 0 28 L 0 22 A 22 22 0 0 1 22 0 Z`;
 }
 
-// 6 precision cylindrical facets per card: identical 3D curve with 85% less mobile GPU memory!
 const SLICES_PER_CARD = 6;
 const SLICE_INDICES = Array.from({ length: SLICES_PER_CARD }, (_, i) => i);
 
 // =========================================================================
-// ISOLATED STOP-MOTION FLIPBOOK SUB-COMPONENT (Prevents Root Re-renders!)
+// 1. FULL-COLOR STOP-MOTION FLIPBOOK + KINETIC COLORFUL TYPOGRAPHY MATRIX
+//    (Fixes Screenshot 1: Colored photos + Cool/Colorful Highlighted Fonts!)
 // =========================================================================
 const StopMotionFlipbook = React.memo(function StopMotionFlipbook({
   matrixStack,
@@ -331,6 +441,7 @@ const StopMotionFlipbook = React.memo(function StopMotionFlipbook({
   matrixStack: Array<{ src: string; title: string; orientation: string }>;
 }) {
   const [photoIdx, setPhotoIdx] = useState(0);
+  const [isHighlighted, setIsHighlighted] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const isVisibleRef = useRef(false);
 
@@ -338,11 +449,16 @@ const StopMotionFlipbook = React.memo(function StopMotionFlipbook({
     const el = containerRef.current;
     if (!el || typeof IntersectionObserver === "undefined") {
       isVisibleRef.current = true;
+      setIsHighlighted(true);
       return;
     }
-    const observer = new IntersectionObserver(([entry]) => {
-      isVisibleRef.current = entry.isIntersecting;
-    });
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisibleRef.current = entry.isIntersecting;
+        if (entry.isIntersecting) setIsHighlighted(true);
+      },
+      { threshold: 0.25 }
+    );
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
@@ -360,19 +476,121 @@ const StopMotionFlipbook = React.memo(function StopMotionFlipbook({
   const currentFrame = matrixStack[photoIdx % matrixStack.length];
 
   return (
-    <>
+    <div className="space-y-6">
+      {/* Top Editorial Manifesto Paragraph with Scroll-Reactive Colorful Highlights & Dashed Underlines */}
+      <div className="p-4 rounded-2xl bg-white border border-black/10 shadow-[0_8px_24px_rgba(0,0,0,0.04)] space-y-3">
+        <div className="flex items-center justify-between">
+          <span className="px-2.5 py-0.5 rounded-full bg-[#111111] text-[#D4A843] font-mono text-[8.5px] font-bold tracking-[0.2em] uppercase">
+            ● VISUAL MANIFESTO
+          </span>
+          <span className="font-mono text-[8.5px] tracking-[0.18em] text-black/40 uppercase">
+            26.1445° N · ASSAM
+          </span>
+        </div>
+
+        <p className="font-serif text-[17px] leading-[1.55] text-[#111111] font-normal">
+          Born at{" "}
+          <span
+            className={`inline-block px-1.5 py-0.2 rounded font-heading font-bold text-[14px] uppercase tracking-tight transition-all duration-700 ${
+              isHighlighted
+                ? "bg-[#D4A843] text-[#111111] shadow-2xs"
+                : "bg-transparent text-[#111111]"
+            }`}
+          >
+            Girijananda Chowdhury University
+          </span>{" "}
+          in Assam,{" "}
+          <span className="italic font-semibold underline decoration-[#D92B2B] decoration-wavy decoration-1 underline-offset-4">
+            ShutterScape
+          </span>{" "}
+          is our unmedicated{" "}
+          <span
+            className={`inline-block px-1.5 py-0.2 rounded font-mono text-[12px] font-bold uppercase tracking-wider transition-all duration-700 delay-150 ${
+              isHighlighted
+                ? "bg-[#D92B2B] text-white"
+                : "bg-black/5 text-[#111111]"
+            }`}
+          >
+            Visual Archive
+          </span>{" "}
+          — a pure manifesto of{" "}
+          <span className="border-b-2 border-dashed border-[#10B981] font-semibold text-[#0F5132]">
+            analog optics
+          </span>
+          ,{" "}
+          <span className="border-b-2 border-dashed border-[#D4A843] font-semibold">
+            street documentary
+          </span>
+          , and creative excess.
+        </p>
+      </div>
+
+      {/* Kinetic Multi-Color Scrolling Typography Wall + FULL-COLOR Stop-Motion Photo Flipbook */}
       <div
         ref={containerRef}
         onClick={() => setPhotoIdx((prev) => (prev + 1) % matrixStack.length)}
-        className="relative w-full py-6 overflow-hidden flex items-center justify-center border-y border-black/15 bg-[#FAF9F5] cursor-pointer"
+        className="relative w-full py-8 overflow-hidden flex flex-col items-center justify-center border-y-2 border-dashed border-black/20 bg-[#111113] rounded-2xl cursor-pointer shadow-inner gap-1.5"
       >
-        <div
-          aria-hidden="true"
-          className="font-heading font-black text-[13vw] leading-[0.86] tracking-[-0.04em] uppercase text-[#111111] text-center select-none break-all"
-        >
-          SHUTTER*SCAPE*GCU*35MM*RAW*OPTICS*DARKROOM*ASSAM*
+        {/* Row 1: Moving Left — Bold White + Gold Serif */}
+        <div className="w-full overflow-hidden">
+          <div className="osl-kinetic-marquee-left font-heading font-black text-[11vw] leading-[0.88] tracking-[-0.04em] uppercase select-none whitespace-nowrap">
+            <span className="text-white">SHUTTER</span>
+            <span className="text-[#D4A843] font-serif italic font-normal px-2">
+              *SCAPE*
+            </span>
+            <span className="text-[#D92B2B]">35MM</span>
+            <span className="text-white/25 px-2">—</span>
+            <span className="text-[#8CE99A]">OPTICS</span>
+            <span className="text-white px-2">*SHUTTER</span>
+            <span className="text-[#D4A843] font-serif italic font-normal px-2">
+              *SCAPE*
+            </span>
+          </div>
         </div>
 
+        {/* Row 2: Moving Right — Hollow Stroke + Cyan/Coral Accents */}
+        <div className="w-full overflow-hidden">
+          <div className="osl-kinetic-marquee-right font-heading font-black text-[11vw] leading-[0.88] tracking-[-0.04em] uppercase select-none whitespace-nowrap">
+            <span
+              style={{
+                WebkitTextStroke: "1.5px rgba(255,255,255,0.65)",
+                color: "transparent",
+              }}
+            >
+              DARKROOM
+            </span>
+            <span className="text-[#74C0FC] px-2">// RAW 14-BIT //</span>
+            <span className="text-[#FFE066] font-serif italic font-normal">
+              ASSAM
+            </span>
+            <span
+              style={{
+                WebkitTextStroke: "1.5px rgba(255,255,255,0.65)",
+                color: "transparent",
+              }}
+              className="px-2"
+            >
+              DARKROOM
+            </span>
+            <span className="text-[#74C0FC] px-2">// RAW 14-BIT //</span>
+          </div>
+        </div>
+
+        {/* Row 3: Moving Left — Vibrant Editorial Mix */}
+        <div className="w-full overflow-hidden">
+          <div className="osl-kinetic-marquee-left font-heading font-black text-[11vw] leading-[0.88] tracking-[-0.04em] uppercase select-none whitespace-nowrap">
+            <span className="text-[#FFA8A8]">PORTRA 400</span>
+            <span className="text-white px-2">*GCU*</span>
+            <span className="text-[#D0BFFF] font-serif italic font-normal">
+              VISION
+            </span>
+            <span className="text-[#D4A843] px-2">// 2026 //</span>
+            <span className="text-[#FFA8A8]">PORTRA 400</span>
+            <span className="text-white px-2">*GCU*</span>
+          </div>
+        </div>
+
+        {/* FULL-COLOR Pre-Rendered Stop-Motion Frame Stack (NO Grayscale!) */}
         {matrixStack.map((frame, i) => {
           const isCurrent = i === photoIdx % matrixStack.length;
           const isPortrait = frame.orientation === "portrait";
@@ -381,36 +599,252 @@ const StopMotionFlipbook = React.memo(function StopMotionFlipbook({
               key={i}
               style={{
                 opacity: isCurrent ? 1 : 0,
-                width: isPortrait ? "48%" : "64%",
+                transform: isCurrent
+                  ? "scale(1) rotate(-1.5deg)"
+                  : "scale(0.92) rotate(2deg)",
+                width: isPortrait ? "50%" : "66%",
                 aspectRatio: isPortrait ? "3 / 4" : "4 / 3",
                 padding: "6px",
               }}
-              className="absolute bg-white shadow-xl border border-black/15 pointer-events-none"
+              className="absolute bg-white rounded-xl shadow-[0_24px_60px_rgba(0,0,0,0.75)] border-2 border-[#D4A843] pointer-events-none transition-all duration-300"
             >
               <img
                 src={frame.src}
                 alt={frame.title}
-                className="w-full h-full object-cover grayscale contrast-125"
+                className="w-full h-full object-cover rounded-lg saturate-[1.15] contrast-[1.04]"
                 loading="lazy"
                 decoding="async"
               />
+              <div
+                style={{ padding: "3px 8px" }}
+                className="absolute bottom-2.5 right-2.5 rounded-full bg-black/80 backdrop-blur-xs text-[#D4A843] font-mono text-[8px] font-bold tracking-[0.16em] uppercase"
+              >
+                0{(photoIdx % matrixStack.length) + 1} / 0{matrixStack.length} ·
+                COLOR RAW
+              </div>
             </div>
           );
         })}
       </div>
 
-      <div className="space-y-2.5">
-        <span className="font-mono text-[9.5px] tracking-[0.2em] uppercase text-[#111111] font-bold block">
-          DOUBLE VISION // {currentFrame?.title || "GCU ARCHIVE"}
-        </span>
-        <p className="font-body text-xs text-black/75 leading-relaxed">
-          ShutterScape was created for students who love to observe, capture,
-          and tell stories through photographs. Whether you shoot on a
-          mechanical 35mm SLR, a mirrorless rig, or your phone—there is a place
-          for you in our darkroom.
+      {/* Bottom "DOUBLE VISION" Card with Colorful Accents & Underlines */}
+      <div
+        style={{ padding: "16px 18px" }}
+        className="rounded-2xl bg-white border-l-4 border-l-[#D92B2B] border border-black/10 shadow-xs space-y-2.5"
+      >
+        <div className="flex items-center justify-between gap-2 flex-wrap">
+          <span className="font-mono text-[9.5px] tracking-[0.18em] uppercase text-[#D92B2B] font-bold flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-[#D92B2B] animate-ping" />
+            DOUBLE VISION // {currentFrame?.title || "GCU ARCHIVE"}
+          </span>
+          <span
+            style={{ padding: "2px 8px" }}
+            className="rounded bg-[#ECEBE6] font-mono text-[8px] font-bold uppercase tracking-widest text-black/60"
+          >
+            TAP PHOTO TO CYCLE
+          </span>
+        </div>
+
+        <p className="font-serif text-[15.5px] text-black/85 leading-[1.55]">
+          ShutterScape was created for students who love to{" "}
+          <span className="font-semibold text-[#111111] underline decoration-[#D4A843] decoration-2 underline-offset-4">
+            observe, capture, and tell stories
+          </span>{" "}
+          through photographs. Whether you shoot on a{" "}
+          <span className="px-1.5 py-0.5 rounded bg-[#FFF3BF] text-[#8C6D1F] font-mono text-[10px] font-bold">
+            35mm SLR
+          </span>
+          , a{" "}
+          <span className="px-1.5 py-0.5 rounded bg-[#E7F5FF] text-[#1864AB] font-mono text-[10px] font-bold">
+            mirrorless rig
+          </span>
+          , or your{" "}
+          <span className="px-1.5 py-0.5 rounded bg-[#EBFBEE] text-[#2B8A3E] font-mono text-[10px] font-bold">
+            phone
+          </span>{" "}
+          —{" "}
+          <span className="italic font-semibold text-[#D92B2B]">
+            there is a place for you in our darkroom.
+          </span>
         </p>
       </div>
-    </>
+    </div>
+  );
+});
+
+// =========================================================================
+// 2. VIDEO 6 AUTOMATIC ROTATING HALF-WHEEL COLORED FAN (Section 4)
+//    Replaces the static B&W image in Screenshot 4 with the continuously
+//    rotating semicircular fan of FULL-COLOR cards from Screen Recording 6!
+// =========================================================================
+const HalfWheelGalleryFan = React.memo(function HalfWheelGalleryFan({
+  items,
+  onSelectCard,
+}: {
+  items: any[];
+  onSelectCard: (idx: number) => void;
+}) {
+  const wheelCards = useMemo(() => items.slice(0, 8), [items]);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const angleRef = useRef<number>(0);
+  const isPausedRef = useRef<boolean>(false);
+  const isInViewRef = useRef<boolean>(true);
+
+  useEffect(() => {
+    const count = wheelCards.length;
+    if (count === 0) return;
+
+    let rafId = 0;
+    let lastTime = performance.now();
+
+    const updateWheel = (now: number) => {
+      const dt = Math.min(0.05, (now - lastTime) / 1000);
+      lastTime = now;
+
+      if (isInViewRef.current && !isPausedRef.current) {
+        // Smooth, continuous clockwise rotation (14 degrees per second)
+        angleRef.current = (angleRef.current + dt * 14) % 360;
+      }
+
+      const baseAngle = angleRef.current;
+      const stepDeg = 180 / Math.max(4, count - 1); // Fan across the top 180° semicircle
+
+      for (let i = 0; i < count; i++) {
+        const el = cardRefs.current[i];
+        if (!el) continue;
+
+        // Wrap angle smoothly between -110deg (left horizon) and +110deg (right horizon)
+        const rawDeg = (i * stepDeg + baseAngle) % 220;
+        const deg = rawDeg - 110;
+        const rad = (deg * Math.PI) / 180;
+
+        // Semicircular arc math centered at bottom pivot
+        const radius = 118;
+        const x = Math.sin(rad) * radius;
+        const y = -Math.cos(rad) * radius + 55;
+        const scale = Math.max(0.72, 1 - Math.abs(deg) / 240);
+        const opacity = Math.abs(deg) > 96 ? 0 : 1 - Math.max(0, (Math.abs(deg) - 72) / 24);
+        const zIdx = Math.round(50 - Math.abs(deg) * 0.4);
+
+        el.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(
+          1
+        )}px, 0) rotate(${deg.toFixed(1)}deg) scale(${scale.toFixed(3)})`;
+        el.style.opacity = `${opacity.toFixed(2)}`;
+        el.style.zIndex = `${zIdx}`;
+      }
+
+      if (isInViewRef.current) {
+        rafId = requestAnimationFrame(updateWheel);
+      } else {
+        rafId = 0;
+      }
+    };
+
+    const el = stageRef.current;
+    let io: IntersectionObserver | null = null;
+    if (el && typeof IntersectionObserver !== "undefined") {
+      io = new IntersectionObserver(
+        ([entry]) => {
+          isInViewRef.current = entry.isIntersecting;
+          if (entry.isIntersecting && !rafId) {
+            lastTime = performance.now();
+            rafId = requestAnimationFrame(updateWheel);
+          }
+        },
+        { rootMargin: "100px 0px" }
+      );
+      io.observe(el);
+    } else {
+      rafId = requestAnimationFrame(updateWheel);
+    }
+
+    return () => {
+      if (io) io.disconnect();
+      if (rafId) cancelAnimationFrame(rafId);
+    };
+  }, [wheelCards]);
+
+  return (
+    <div
+      ref={stageRef}
+      onTouchStart={() => {
+        isPausedRef.current = true;
+      }}
+      onTouchEnd={() => {
+        isPausedRef.current = false;
+      }}
+      className="relative w-full h-[300px] bg-[#111113] rounded-2xl overflow-hidden border border-black/15 shadow-[0_20px_50px_rgba(0,0,0,0.22)] flex items-center justify-center select-none"
+    >
+      {/* Subtle Radial Studio Glow */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(circle at 50% 92%, rgba(212, 168, 67, 0.24) 0%, rgba(17, 17, 19, 0.95) 72%)",
+        }}
+      />
+
+      {/* Top Telemetry Header inside the Half-Wheel Stage */}
+      <div
+        style={{ padding: "12px 16px" }}
+        className="absolute top-0 inset-x-0 z-50 flex items-center justify-between pointer-events-none"
+      >
+        <span className="flex items-center gap-1.5 font-mono text-[8.5px] tracking-[0.22em] uppercase text-[#D4A843] font-bold">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#D4A843] animate-pulse" />
+          ROTATING OPTICAL WHEEL // 35MM COLOR
+        </span>
+        <span className="font-mono text-[8px] tracking-[0.18em] uppercase text-white/50">
+          TAP ANY FRAME
+        </span>
+      </div>
+
+      {/* Rotating Half-Wheel Cards */}
+      <div className="relative w-full h-full flex items-center justify-center">
+        {wheelCards.map((item, idx) => (
+          <div
+            key={item._id || item.id || idx}
+            ref={(el) => {
+              cardRefs.current[idx] = el;
+            }}
+            onClick={() => onSelectCard(idx)}
+            style={{
+              width: "128px",
+              height: "172px",
+              padding: "5px",
+              willChange: "transform, opacity",
+            }}
+            className="absolute bg-white rounded-2xl shadow-[0_14px_32px_rgba(0,0,0,0.65)] border border-white/40 cursor-pointer"
+          >
+            <div className="relative w-full h-full rounded-xl overflow-hidden bg-black">
+              <img
+                src={item.src}
+                alt={item.title}
+                className="w-full h-full object-cover saturate-[1.18]"
+                loading="lazy"
+                decoding="async"
+              />
+              <div className="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black/90 via-black/40 to-transparent">
+                <span className="block font-mono text-[7px] tracking-[0.16em] uppercase text-[#D4A843] font-bold truncate">
+                  {item.category}
+                </span>
+                <span className="block font-serif text-[11px] text-white leading-tight truncate">
+                  {item.title}
+                </span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Center Hub Dial at Bottom of the Half-Wheel (Matches Video 6 Hub) */}
+      <div
+        style={{ padding: "8px 18px" }}
+        className="absolute -bottom-3 left-1/2 -translate-x-1/2 z-50 rounded-t-2xl bg-[#D4A843] text-[#050505] font-mono text-[8.5px] font-bold uppercase tracking-[0.2em] shadow-lg pointer-events-none"
+      >
+        ● LIVE COLOR REEL
+      </div>
+    </div>
   );
 });
 
@@ -423,12 +857,40 @@ export default function MobileOilstainExperience() {
   // Interactive UI States
   const [activeNavTab, setActiveNavTab] = useState<NavTabId>("home");
   const [isScrolledTop, setIsScrolledTop] = useState(false);
-  const [isGalleryDrawerOpen, setIsGalleryDrawerOpen] = useState(false);
-  const [activeGalleryIdx, setActiveGalleryIdx] = useState(0);
-  const [activePillarSheet, setActivePillarSheet] = useState<PillarKey>(null);
-  const [activeAboutTab, setActiveAboutTab] = useState<AboutTabKey>("ORIGINS");
+
+  // Full-Screen Dedicated Pages (Video 5 Gallery Page & Video 9 Activities Page)
+  const [isGalleryPageOpen, setIsGalleryPageOpen] = useState(false);
+  const [galleryFilterCat, setGalleryFilterCat] = useState<string>("ALL");
+  const [expandedGalleryId, setExpandedGalleryId] = useState<string | null>(
+    null
+  );
+
+  const [isActivitiesPageOpen, setIsActivitiesPageOpen] = useState(false);
+  const [activityFilterCat, setActivityFilterCat] = useState<string>("ALL");
+  const [activeActivitySlideIdx, setActiveActivitySlideIdx] = useState(0);
+
+  // Section 3 "What's Hot" Live & Upcoming Spotlight State
+  const [hotEventIdx, setHotEventIdx] = useState(0);
+
+  // Section 4 Creative Optical Lab States
+  const [activeOpticalLab, setActiveOpticalLab] =
+    useState<OpticalLabKey>(null);
+  const [selectedFocalMm, setSelectedFocalMm] = useState<number>(50);
+  const [selectedEmulsion, setSelectedEmulsion] = useState<
+    "PORTRA" | "CINESTILL" | "VELVIA"
+  >("PORTRA");
+
+  // Section 5 6-Chapter About & Member Bio Modal
+  const [activeAboutTab, setActiveAboutTab] =
+    useState<AboutTabKey>("ORIGINS");
+  const [selectedMemberModal, setSelectedMemberModal] = useState<{
+    person: any;
+    bgColor: string;
+  } | null>(null);
+
   const [isEngineeringDataOpen, setIsEngineeringDataOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const [registerEventName, setRegisterEventName] = useState<string>("");
   const [registerSubmitted, setRegisterSubmitted] = useState(false);
   const [activeAudioReelIdx, setActiveAudioReelIdx] = useState<number | null>(
     null
@@ -441,7 +903,7 @@ export default function MobileOilstainExperience() {
   const archiveSectionRef = useRef<HTMLElement>(null);
   const ribbonDropWrapRef = useRef<HTMLDivElement>(null);
   const lowerContentRiseRef = useRef<HTMLDivElement>(null);
-  const galleryMainScrollRef = useRef<HTMLDivElement>(null);
+  const activitiesPeekScrollRef = useRef<HTMLDivElement>(null);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const heroVideoRef = useRef<HTMLVideoElement>(null);
 
@@ -465,7 +927,7 @@ export default function MobileOilstainExperience() {
   const isNotchAnimatingRef = useRef<boolean>(false);
   const playheadRef = useRef<number>(0);
 
-  // Cached Section Offsets to eliminate getBoundingClientRect() reflows during touch scroll
+  // Cached Section Offsets
   const sectionOffsetsRef = useRef<{
     vh: number;
     galleryTop: number;
@@ -475,9 +937,9 @@ export default function MobileOilstainExperience() {
   }>({
     vh: 800,
     galleryTop: 800,
-    activityTop: 2200,
-    aboutTop: 3000,
-    momentsTop: 3800,
+    activityTop: 1800,
+    aboutTop: 2800,
+    momentsTop: 3600,
   });
 
   const toggleHeroAudio = (e: React.MouseEvent) => {
@@ -525,7 +987,6 @@ export default function MobileOilstainExperience() {
     }
   };
 
-  // High-performance Spring Engine for Floating Navbar Notch (Runs ONLY when tab changes!)
   const startNotchAnimation = useCallback(() => {
     if (isNotchAnimatingRef.current) return;
     isNotchAnimatingRef.current = true;
@@ -581,9 +1042,7 @@ export default function MobileOilstainExperience() {
     startNotchAnimation();
   }, [activeNavTab, startNotchAnimation]);
 
-  // =========================================================================
-  // ZERO-REFLOW SCROLL ENGINE (Caches Offsets & Auto-Pauses Covered Hero Video)
-  // =========================================================================
+  // Zero-Reflow Scroll Engine
   useEffect(() => {
     let scrollRafId = 0;
     let isHeroCurrentlyHidden = false;
@@ -600,7 +1059,7 @@ export default function MobileOilstainExperience() {
       sectionOffsetsRef.current = {
         vh,
         galleryTop: getTop("mobile-light-spec-section", vh),
-        activityTop: getTop("mobile-light-bento-section", vh * 2.5),
+        activityTop: getTop("mobile-dark-showcase", vh * 2),
         aboutTop: getTop("mobile-light-about-section", vh * 3.5),
         momentsTop: getTop("mobile-chronology-matrix", vh * 4.5),
       };
@@ -614,14 +1073,11 @@ export default function MobileOilstainExperience() {
         const { vh, galleryTop, activityTop, aboutTop, momentsTop } =
           sectionOffsetsRef.current;
 
-        // 1. Top Bar Transparency Toggle
         const shouldBeScrolled = scrollY > 24;
         setIsScrolledTop((prev) =>
           prev !== shouldBeScrolled ? shouldBeScrolled : prev
         );
 
-        // 2. Auto-Pause & Hide Sticky Hero Video once Section 2 completely covers Section 1
-        // Frees 100% of background video decoding & sticky layer compositing while scrolling the rest of the site!
         const heroCovered = scrollY >= galleryTop + 16;
         if (heroCovered !== isHeroCurrentlyHidden) {
           isHeroCurrentlyHidden = heroCovered;
@@ -639,7 +1095,6 @@ export default function MobileOilstainExperience() {
           }
         }
 
-        // 3. Drop-In Scroll Choreography (Section 1 -> Section 2) using cached galleryTop (ZERO getBoundingClientRect!)
         const secTopInViewport = galleryTop - scrollY;
         const raw = (vh * 0.58 - secTopInViewport) / (vh * 0.58);
         const p = Math.max(0, Math.min(1, raw));
@@ -665,7 +1120,6 @@ export default function MobileOilstainExperience() {
           }
         }
 
-        // 4. Floating Navbar Active Tab Sync (Using cached offsets — ZERO reflows!)
         if (!isProgrammaticScrollRef.current) {
           const triggerLine = scrollY + vh * 0.52;
           let nextTab: NavTabId = "home";
@@ -698,7 +1152,13 @@ export default function MobileOilstainExperience() {
       window.removeEventListener("resize", measureSectionOffsets);
       if (scrollRafId) cancelAnimationFrame(scrollRafId);
     };
-  }, [gallery.length, activities.length, isEngineeringDataOpen, activeAboutTab]);
+  }, [
+    gallery.length,
+    activities.length,
+    isEngineeringDataOpen,
+    activeAboutTab,
+    activeOpticalLab,
+  ]);
 
   // Fetch Live Club Data from ShutterScape APIs
   useEffect(() => {
@@ -743,7 +1203,7 @@ export default function MobileOilstainExperience() {
     };
 
     window.addEventListener("shutterscape:loader-complete", triggerAnim);
-    const timer = setTimeout(triggerAnim, 2650);
+    const timer = setTimeout(triggerAnim, 2850);
 
     return () => {
       window.removeEventListener("shutterscape:loader-complete", triggerAnim);
@@ -751,11 +1211,7 @@ export default function MobileOilstainExperience() {
     };
   }, []);
 
-  // =========================================================================
-  // ULTRA-LIGHTWEIGHT 3D CONCAVE CYLINDRICAL CURVED RIBBON ENGINE
-  // - Uses `display: none` for off-screen cards (Only 3 cards active on GPU!)
-  // - Automatically pauses its RAF loop when Section 2 is scrolled out of view!
-  // =========================================================================
+  // Ultra-Lightweight 3D Concave Cylindrical Curved Ribbon Engine (Section 2)
   useEffect(() => {
     const total = gallery.length;
     if (total === 0) return;
@@ -777,7 +1233,6 @@ export default function MobileOilstainExperience() {
         if (deltaCards > total / 2) deltaCards -= total;
         if (deltaCards < -total / 2) deltaCards += total;
 
-        // Release GPU layers completely for off-screen cards!
         if (Math.abs(deltaCards) > 1.38) {
           if (cardEl.style.display !== "none") {
             cardEl.style.display = "none";
@@ -876,7 +1331,6 @@ export default function MobileOilstainExperience() {
       }
     };
 
-    // Pause the 3D ribbon loop completely when Section 2 is off-screen!
     const secEl = archiveSectionRef.current;
     let io: IntersectionObserver | null = null;
     if (secEl && typeof IntersectionObserver !== "undefined") {
@@ -928,6 +1382,97 @@ export default function MobileOilstainExperience() {
         }));
   }, [gallery, activities]);
 
+  // Hot / Upcoming Events for Section 3 ("WHAT'S HOT // LIVE & UPCOMING")
+  const hotEventsList = useMemo(() => {
+    const upcomingOnly = activities.filter((ev) => ev.isUpcoming);
+    return upcomingOnly.length > 0 ? upcomingOnly : activities.slice(0, 3);
+  }, [activities]);
+
+  // Auto-cycle the "What's Hot" spotlight every 6 seconds
+  useEffect(() => {
+    if (hotEventsList.length <= 1) return;
+    const timer = setInterval(() => {
+      setHotEventIdx((prev) => (prev + 1) % hotEventsList.length);
+    }, 6000);
+    return () => clearInterval(timer);
+  }, [hotEventsList.length]);
+
+  const currentHotEvent =
+    hotEventsList[hotEventIdx % Math.max(1, hotEventsList.length)] ||
+    FALLBACK_ACTIVITIES[0];
+
+  // Filtered Lists for Dedicated Pages (Video 5 Gallery Page & Video 9 Activities Page)
+  const filteredGalleryItems = useMemo(() => {
+    if (galleryFilterCat === "ALL") return gallery;
+    return gallery.filter(
+      (g) => (g.category || "").toUpperCase() === galleryFilterCat
+    );
+  }, [gallery, galleryFilterCat]);
+
+  const filteredActivityItems = useMemo(() => {
+    if (activityFilterCat === "ALL") return activities;
+    return activities.filter(
+      (a) =>
+        (a.category || "").toUpperCase() === activityFilterCat ||
+        String(a.year) === activityFilterCat
+    );
+  }, [activities, activityFilterCat]);
+
+  const scrollActivitiesPeekTo = (idx: number) => {
+    const total = filteredActivityItems.length;
+    if (total === 0) return;
+    const clamped = (idx + total) % total;
+    setActiveActivitySlideIdx(clamped);
+    if (activitiesPeekScrollRef.current) {
+      const container = activitiesPeekScrollRef.current;
+      const cardEl = container.children[clamped] as HTMLElement | undefined;
+      if (cardEl) {
+        container.scrollTo({
+          left: cardEl.offsetLeft - 20,
+          behavior: "smooth",
+        });
+      }
+    }
+  };
+
+  // Committee Member Buckets for the 6 About Chapters
+  const mentorsList = useMemo(() => {
+    const m = committee.filter((c) => c.tier === "MENTOR");
+    return m.length > 0
+      ? m
+      : FALLBACK_COMMITTEE.filter((c) => c.tier === "MENTOR");
+  }, [committee]);
+
+  const leadsList = useMemo(() => {
+    const l = committee.filter((c) => c.tier === "LEAD");
+    return l.length > 0
+      ? l
+      : FALLBACK_COMMITTEE.filter((c) => c.tier === "LEAD");
+  }, [committee]);
+
+  const coreList = useMemo(() => {
+    const c = committee.filter((m) => m.tier === "CORE");
+    return c.length > 0
+      ? c
+      : FALLBACK_COMMITTEE.filter((m) => m.tier === "CORE");
+  }, [committee]);
+
+  const foundersList = useMemo(() => {
+    const f = committee.filter((m) => m.tier === "FOUNDER");
+    return f.length > 0
+      ? f
+      : FALLBACK_COMMITTEE.filter((m) => m.tier === "FOUNDER");
+  }, [committee]);
+
+  const legacyList = useMemo(() => {
+    const leg = committee.filter((m) => m.tier === "LEGACY");
+    return leg.length > 0
+      ? leg
+      : FALLBACK_COMMITTEE.filter(
+          (m) => m.tier === "LEGACY" || m.tier === "FOUNDER"
+        );
+  }, [committee]);
+
   // Viewport IntersectionObserver for Video Reels
   useEffect(() => {
     if (typeof window === "undefined" || !("IntersectionObserver" in window))
@@ -954,17 +1499,6 @@ export default function MobileOilstainExperience() {
     return () => observer.disconnect();
   }, [reels]);
 
-  const selectGallerySlide = (idx: number) => {
-    setActiveGalleryIdx(idx);
-    if (galleryMainScrollRef.current) {
-      const container = galleryMainScrollRef.current;
-      container.scrollTo({
-        left: idx * container.clientWidth,
-        behavior: "smooth",
-      });
-    }
-  };
-
   const toggleReelAudio = (idx: number) => {
     if (activeAudioReelIdx === idx) {
       setActiveAudioReelIdx(null);
@@ -980,12 +1514,83 @@ export default function MobileOilstainExperience() {
     }
   };
 
-  const mentorsAndLeads = committee.filter(
-    (m) => m.tier === "MENTOR" || m.tier === "LEAD"
-  );
-  const foundersAndLegacy = committee.filter(
-    (m) => m.tier === "FOUNDER" || m.tier === "CORE" || m.tier === "LEGACY"
-  );
+  // =========================================================================
+  // REUSABLE COLORED STUDIO MEMBER CARD (Matches Screenshots 7 & 8!)
+  // - White rounded card frame with 10px inner padding
+  // - Vibrant pastel studio backdrop + Full-Color Portrait + Chamfered corner
+  // - Clean Name, Role, Dept & bottom-right `→` arrow button
+  // =========================================================================
+  const renderStudioMemberCard = (person: any, idx: number) => {
+    const bgColor = MEMBER_CARD_BACKDROPS[idx % MEMBER_CARD_BACKDROPS.length];
+    return (
+      <div
+        key={`${person.name}-${idx}`}
+        onClick={() => setSelectedMemberModal({ person, bgColor })}
+        style={{ padding: "10px" }}
+        className="group bg-white rounded-2xl border border-black/10 shadow-[0_8px_24px_rgba(0,0,0,0.06)] hover:shadow-[0_14px_34px_rgba(0,0,0,0.12)] transition-all duration-300 flex flex-col justify-between cursor-pointer"
+      >
+        <div>
+          {/* Vibrant Colored Studio Backdrop + FULL-COLOR Portrait + Chamfered Bottom-Left Cut */}
+          <div
+            style={{
+              backgroundColor: bgColor,
+              clipPath:
+                "polygon(0 0, 100% 0, 100% 100%, 18px 100%, 0 calc(100% - 18px))",
+            }}
+            className="relative w-full aspect-[4/4.4] rounded-xl overflow-hidden"
+          >
+            {/* Subtle Studio Highlight Sheen */}
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background:
+                  "radial-gradient(circle at 50% 25%, rgba(255,255,255,0.45) 0%, transparent 70%)",
+              }}
+            />
+
+            <img
+              src={person.img}
+              alt={person.name}
+              className="w-full h-full object-cover object-top saturate-[1.08] contrast-[1.03] group-hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+
+          {/* Clean Editorial Typography Below Photo (Matches Screenshot 8) */}
+          <div style={{ padding: "10px 4px 4px" }}>
+            <h4 className="font-heading font-bold text-[13.5px] text-[#111111] tracking-tight leading-snug">
+              {person.name}
+            </h4>
+            <p
+              style={{ marginTop: "2px" }}
+              className="font-sans text-[11px] font-medium text-black/65 leading-snug"
+            >
+              {person.role}
+            </p>
+            {person.dept && (
+              <p
+                style={{ marginTop: "2px" }}
+                className="font-sans text-[10px] text-black/45 line-clamp-1"
+              >
+                {person.dept}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Bottom-Right Arrow Button (`→`) Matching Screenshot 8 */}
+        <div
+          style={{ paddingTop: "6px", paddingRight: "4px" }}
+          className="flex items-center justify-end"
+        >
+          <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-black/[0.04] group-hover:bg-[#111111] text-[#111111] group-hover:text-white text-xs transition-colors">
+            →
+          </span>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div
@@ -1009,6 +1614,10 @@ export default function MobileOilstainExperience() {
           color: #111111;
           -webkit-overflow-scrolling: touch;
         }
+        /* Fix for Upper Navbar Left Logo Touching Corner (Immune to globals.css * { padding: 0 }) */
+        #shutterscape-mobile-oilstain .osl-top-capsule {
+          padding: 7px 16px 7px 20px !important;
+        }
         #shutterscape-mobile-oilstain .osl-pad-sm { padding: 12px 16px !important; }
         #shutterscape-mobile-oilstain .osl-pad-md { padding: 20px 18px !important; }
         #shutterscape-mobile-oilstain .osl-pad-lg { padding: 30px 20px !important; }
@@ -1028,7 +1637,7 @@ export default function MobileOilstainExperience() {
           transition: background-color 0.2s ease, color 0.2s ease;
         }
         #shutterscape-mobile-oilstain .osl-bento-cell {
-          padding: 26px 10px !important;
+          padding: 20px 8px !important;
           border-top: 1px solid rgba(17, 17, 17, 0.15);
           border-bottom: 1px solid rgba(17, 17, 17, 0.15);
           border-right: 1px solid rgba(17, 17, 17, 0.15);
@@ -1036,28 +1645,27 @@ export default function MobileOilstainExperience() {
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          gap: 6px;
+          gap: 5px;
           background: #ECEBE6;
           cursor: pointer;
           transition: background 0.2s ease, color 0.2s ease;
         }
-        #shutterscape-mobile-oilstain .osl-bento-cell:active,
-        #shutterscape-mobile-oilstain .osl-bento-cell:hover {
+        #shutterscape-mobile-oilstain .osl-bento-cell.active-lab,
+        #shutterscape-mobile-oilstain .osl-bento-cell:active {
           background: #111111;
           color: #ECEBE6;
         }
-        #shutterscape-mobile-oilstain .osl-tab-btn {
-          padding: 18px 8px !important;
+        #shutterscape-mobile-oilstain .osl-chapter-pill {
+          padding: 13px 14px !important;
           font-family: var(--font-space-mono), monospace;
-          font-size: 10px;
+          font-size: 9.5px;
           font-weight: 700;
-          letter-spacing: 0.15em;
+          letter-spacing: 0.14em;
           text-transform: uppercase;
-          text-align: center;
-          border-right: 1px solid rgba(17, 17, 17, 0.15);
-          border-bottom: 1px solid rgba(17, 17, 17, 0.15);
+          white-space: nowrap;
+          border-right: 1px solid rgba(17, 17, 17, 0.12);
           cursor: pointer;
-          transition: background-color 0.2s ease, color 0.2s ease;
+          transition: all 0.2s ease;
         }
         #shutterscape-mobile-oilstain .osl-input-line {
           width: 100%;
@@ -1088,14 +1696,23 @@ export default function MobileOilstainExperience() {
           font-weight: 400;
           color: #141311;
         }
-        @keyframes oslRedMarquee {
+        @keyframes oslKineticLeft {
           0% { transform: translate3d(0%, 0, 0); }
           100% { transform: translate3d(-50%, 0, 0); }
         }
-        #shutterscape-mobile-oilstain .osl-red-marquee {
+        @keyframes oslKineticRight {
+          0% { transform: translate3d(-50%, 0, 0); }
+          100% { transform: translate3d(0%, 0, 0); }
+        }
+        #shutterscape-mobile-oilstain .osl-kinetic-marquee-left {
           display: flex;
           width: max-content;
-          animation: oslRedMarquee 9s linear infinite;
+          animation: oslKineticLeft 14s linear infinite;
+        }
+        #shutterscape-mobile-oilstain .osl-kinetic-marquee-right {
+          display: flex;
+          width: max-content;
+          animation: oslKineticRight 14s linear infinite;
         }
         @keyframes oslLetterReveal {
           0% {
@@ -1152,22 +1769,22 @@ export default function MobileOilstainExperience() {
       />
 
       {/* ============================================================
-          UP NAVBAR: COMPACT, CUTE CENTERED GLASS CAPSULE + LARGER LOGOS
+          UP NAVBAR: COMPACT CENTERED GLASS CAPSULE WITH GENEROUS LEFT PADDING
+          (Fixes the ShutterScape logo touching the left corner!)
           ============================================================ */}
       <div
         style={{
-          padding: "6px 14px",
           backgroundColor: isScrolledTop
-            ? "rgba(12, 12, 16, 0.28)"
-            : "rgba(12, 12, 16, 0.14)",
+            ? "rgba(12, 12, 16, 0.32)"
+            : "rgba(12, 12, 16, 0.16)",
           backdropFilter: "blur(10px) saturate(140%)",
           WebkitBackdropFilter: "blur(10px) saturate(140%)",
           borderColor: isScrolledTop
-            ? "rgba(255, 255, 255, 0.2)"
-            : "rgba(255, 255, 255, 0.14)",
+            ? "rgba(255, 255, 255, 0.22)"
+            : "rgba(255, 255, 255, 0.15)",
           transform: "translate3d(-50%, 0, 0)",
         }}
-        className="fixed top-3 left-1/2 z-[9980] w-max max-w-[92vw] rounded-full border shadow-[0_8px_24px_rgba(0,0,0,0.28)] transition-colors duration-300 flex items-center justify-center gap-2.5 pointer-events-auto"
+        className="osl-top-capsule fixed top-3 left-1/2 z-[9980] w-max max-w-[94vw] rounded-full border shadow-[0_8px_24px_rgba(0,0,0,0.28)] transition-colors duration-300 flex items-center justify-center gap-2.5 pointer-events-auto"
       >
         <button
           type="button"
@@ -1176,21 +1793,22 @@ export default function MobileOilstainExperience() {
             setActiveNavTab("home");
             window.scrollTo({ top: 0, behavior: "smooth" });
           }}
-          className="flex items-center gap-2 cursor-pointer shrink-0"
+          style={{ paddingLeft: "4px" }}
+          className="flex items-center gap-2.5 cursor-pointer shrink-0"
         >
-          {/* Larger ShutterScape Logo */}
+          {/* ShutterScape Logo with Left Breathing Room */}
           <div
-            style={{ width: "102px", height: "28px" }}
+            style={{ width: "92px", height: "25px" }}
             className="relative shrink-0"
           >
             <Image
               src="/images/shutterscape-brand-white.png"
               alt="ShutterScape Logo"
               fill
+              sizes="92px"
               priority
-              sizes="102px"
               unoptimized
-              className="object-contain object-left"
+              className="object-contain object-center"
             />
           </div>
 
@@ -1208,6 +1826,7 @@ export default function MobileOilstainExperience() {
           <button
             type="button"
             onClick={() => {
+              setRegisterEventName("");
               setRegisterSubmitted(false);
               setIsRegisterModalOpen(true);
             }}
@@ -1217,12 +1836,11 @@ export default function MobileOilstainExperience() {
             JOIN &apos;26
           </button>
 
-          {/* Larger GCU University Logo */}
           <a
             href="https://gcu.ac.in"
             target="_blank"
             rel="noopener noreferrer"
-            style={{ width: "84px", height: "26px" }}
+            style={{ width: "78px", height: "24px" }}
             className="relative opacity-95 hover:opacity-100 transition-opacity shrink-0"
             title="Girijananda Chowdhury University"
           >
@@ -1258,7 +1876,6 @@ export default function MobileOilstainExperience() {
           </defs>
         </svg>
 
-        {/* Mobile-GPU-Friendly Glass Layer Clipped to Liquid Notch */}
         <div
           style={{
             clipPath: "url(#compact-glass-notch-clip)",
@@ -1285,7 +1902,6 @@ export default function MobileOilstainExperience() {
           />
         </svg>
 
-        {/* Compact 34px Glassy Transparent Active Circle Bubble */}
         <div
           ref={activeBubbleRef}
           style={{
@@ -1323,8 +1939,7 @@ export default function MobileOilstainExperience() {
                       ? "translate3d(0, -10px, 0) scale(0.4)"
                       : "translate3d(0, -1px, 0) scale(1)",
                     opacity: isActive ? 0 : 0.82,
-                    transition:
-                      "transform 0.24s ease, opacity 0.24s ease",
+                    transition: "transform 0.24s ease, opacity 0.24s ease",
                   }}
                   className="flex items-center justify-center"
                 >
@@ -1351,7 +1966,7 @@ export default function MobileOilstainExperience() {
       </nav>
 
       {/* ============================================================
-          1. OPENING SPLASH HERO (Sticky z-10, Auto-Pauses when covered by Page 2!)
+          1. OPENING SPLASH HERO
           ============================================================ */}
       <section
         id="mobile-hero-top"
@@ -1520,7 +2135,6 @@ export default function MobileOilstainExperience() {
         style={{ minHeight: "100svh", paddingBottom: "74px" }}
         className="relative z-20 w-full bg-[#ECEBE6] text-[#111111] shadow-[0_-20px_50px_rgba(0,0,0,0.45)] flex flex-col justify-between overflow-hidden"
       >
-        {/* 1. Header Row: Real Shutterscape Logo on Left, "26" on Right */}
         <div
           style={{ padding: "54px 20px 12px" }}
           className="relative z-10 flex items-center justify-between border-b border-black/10 shrink-0"
@@ -1541,7 +2155,6 @@ export default function MobileOilstainExperience() {
           </span>
         </div>
 
-        {/* 2. Ultra-Smooth 3D Concave Cylindrical Curved Auto-Ribbon */}
         <div
           ref={ribbonDropWrapRef}
           onTouchStart={() => {
@@ -1582,8 +2195,9 @@ export default function MobileOilstainExperience() {
                   curvedCardOuterRefs.current[cardIdx] = el;
                 }}
                 onClick={() => {
-                  setActiveGalleryIdx(cardIdx);
-                  setIsGalleryDrawerOpen(true);
+                  setGalleryFilterCat("ALL");
+                  setExpandedGalleryId(item._id || item.id || String(cardIdx));
+                  setIsGalleryPageOpen(true);
                 }}
                 className="absolute top-1/2 left-1/2 cursor-pointer"
                 style={{
@@ -1660,7 +2274,6 @@ export default function MobileOilstainExperience() {
           })}
         </div>
 
-        {/* 3 & 4. "LIGHT IS MEMORY" + HANDMADE FOUNTAIN-PEN LETTER */}
         <div
           ref={lowerContentRiseRef}
           style={{ willChange: "transform, opacity" }}
@@ -1764,145 +2377,425 @@ export default function MobileOilstainExperience() {
       </section>
 
       {/* ============================================================
-          3. DARK EDITORIAL SHOWCASE + "GALLERY +" DRAWER TRIGGER
+          3. "WHAT'S HOT // LIVE & UPCOMING DISPATCH" + "ACTIVITIES +" BUTTON
+             (Upgrades Screenshot 3: Shows live/upcoming hot events with animated
+             status, description, JOIN button, and bottom ACTIVITIES button!)
           ============================================================ */}
       <section
         id="mobile-dark-showcase"
-        className="relative z-20 w-full bg-[#141416] text-white"
+        className="relative z-20 w-full bg-[#111114] text-white border-t border-white/10"
       >
-        <div className="osl-pad-lg">
-          <h2 className="font-heading font-black text-xl tracking-[-0.02em] uppercase leading-none text-white">
-            SHUTTERSCAPE
-          </h2>
-          <p
-            style={{ marginTop: "6px" }}
-            className="font-mono text-[10.5px] tracking-[0.14em] uppercase text-white/60 leading-snug"
-          >
-            WHERE ANALOG CRAFT
-            <br />
-            OVERTAKES THE FRAME.
-          </p>
-
-          <div
-            style={{ marginTop: "24px" }}
-            onClick={() => {
-              setActiveGalleryIdx(1);
-              setIsGalleryDrawerOpen(true);
-            }}
-            className="relative w-full aspect-[4/3] rounded-xs overflow-hidden border border-white/15 cursor-pointer"
-          >
-            <img
-              src={gallery[1]?.src || FALLBACK_GALLERY[1].src}
-              alt={gallery[1]?.title || "Visual Archive"}
-              className="w-full h-full object-cover"
-              loading="lazy"
-              decoding="async"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent" />
-            <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between">
-              <div>
-                <span className="font-mono text-[8.5px] tracking-[0.2em] uppercase text-[#D4A843] block">
-                  {gallery[1]?.category || "PORTRAITURE"}
-                </span>
-                <span className="font-serif text-lg text-white">
-                  {gallery[1]?.title || "Chiaroscuro Gaze"}
+        <div className="osl-pad-lg space-y-5">
+          {/* Top Live Radar Header */}
+          <div className="flex items-center justify-between gap-2">
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#D92B2B]/20 border border-[#D92B2B]/50 text-[#FF6B6B] font-mono text-[8.5px] font-bold tracking-[0.2em] uppercase">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#EF4444] animate-ping" />
+                  WHAT&apos;S HOT // LIVE &amp; UPCOMING
                 </span>
               </div>
-              <span className="font-mono text-[9px] tracking-[0.18em] uppercase text-white/70">
-                {gallery[1]?.exif || "85MM · F/1.4"}
-              </span>
+              <h2
+                style={{ marginTop: "8px" }}
+                className="font-heading font-black text-2xl tracking-[-0.02em] uppercase leading-none text-white"
+              >
+                FIELD DISPATCH &apos;26
+              </h2>
+            </div>
+
+            {/* Event Switcher Pills if Multiple Upcoming Events */}
+            {hotEventsList.length > 1 && (
+              <div className="flex items-center gap-1.5">
+                {hotEventsList.map((_, i) => {
+                  const isActive = i === hotEventIdx % hotEventsList.length;
+                  return (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => setHotEventIdx(i)}
+                      style={{ padding: "5px 9px" }}
+                      className={`rounded-lg font-mono text-[9px] font-bold transition-all cursor-pointer ${
+                        isActive
+                          ? "bg-[#D4A843] text-[#050505]"
+                          : "bg-white/10 text-white/60"
+                      }`}
+                    >
+                      0{i + 1}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          {/* Animated Featured Hot Event Card */}
+          <div className="rounded-2xl bg-[#18181D] border border-white/15 overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.65)]">
+            <div className="relative w-full aspect-[16/10] overflow-hidden">
+              <img
+                src={currentHotEvent.img}
+                alt={currentHotEvent.title}
+                className="w-full h-full object-cover transition-transform duration-700 scale-105"
+                loading="lazy"
+                decoding="async"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#18181D] via-black/30 to-black/25" />
+
+              {/* Top-Left Category + Top-Right Date Pill */}
+              <div
+                style={{ padding: "12px" }}
+                className="absolute top-0 inset-x-0 flex items-center justify-between"
+              >
+                <span
+                  style={{ padding: "4px 10px" }}
+                  className="rounded-full bg-black/80 backdrop-blur-md border border-[#D4A843]/40 font-mono text-[8.5px] font-bold tracking-[0.18em] text-[#D4A843] uppercase"
+                >
+                  {currentHotEvent.category}
+                </span>
+                <span
+                  style={{ padding: "4px 10px" }}
+                  className="rounded-full bg-[#D92B2B] text-white font-mono text-[8.5px] font-bold tracking-[0.16em] uppercase shadow-md"
+                >
+                  {currentHotEvent.isUpcoming ? "● REGISTRATION OPEN" : currentHotEvent.date}
+                </span>
+              </div>
+
+              {/* Bottom Venue & Date Telemetry inside Image */}
+              <div
+                style={{ padding: "12px 16px" }}
+                className="absolute bottom-0 inset-x-0 flex items-center justify-between font-mono text-[9px] text-white/80 uppercase tracking-[0.15em]"
+              >
+                <span>📍 {currentHotEvent.location}</span>
+                <span className="text-[#D4A843] font-bold">
+                  {currentHotEvent.date}
+                </span>
+              </div>
+            </div>
+
+            {/* Event Title, Full Description & Direct JOIN Button */}
+            <div style={{ padding: "18px 18px 20px" }} className="space-y-3.5">
+              <div>
+                <span className="font-mono text-[8.5px] tracking-[0.22em] text-white/45 uppercase block">
+                  {currentHotEvent.shortTitle || "FEATURED CLUB EXPEDITION"} ·{" "}
+                  {currentHotEvent.filmStock}
+                </span>
+                <h3
+                  style={{ marginTop: "4px" }}
+                  className="font-serif text-2xl text-white font-light leading-tight"
+                >
+                  {currentHotEvent.title}
+                </h3>
+              </div>
+
+              <p className="font-body text-xs text-white/75 leading-relaxed">
+                {currentHotEvent.description}
+              </p>
+
+              {/* Interactive JOIN / RSVP Button for this Hot Event */}
+              <div
+                style={{ paddingTop: "6px" }}
+                className="flex items-center gap-2.5"
+              >
+                <button
+                  type="button"
+                  onClick={() => {
+                    setRegisterEventName(currentHotEvent.title);
+                    setRegisterSubmitted(false);
+                    setIsRegisterModalOpen(true);
+                  }}
+                  style={{ padding: "12px 18px" }}
+                  className="flex-1 rounded-xl bg-[#D4A843] hover:bg-[#E5B955] text-[#050505] font-mono text-[10px] font-bold uppercase tracking-[0.18em] flex items-center justify-between cursor-pointer shadow-md"
+                >
+                  <span>JOIN / RSVP THIS EVENT</span>
+                  <span>→</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
 
+        {/* Bottom Button: "ACTIVITIES +" (Opens Video 9 Full-Screen Activities Explorer Page!) */}
         <div className="osl-pad-md pt-0">
           <button
             type="button"
-            onClick={() => setIsGalleryDrawerOpen(true)}
-            className="osl-bar-btn border border-white/25 bg-white/5 hover:bg-white hover:text-black text-white"
+            onClick={() => {
+              setActivityFilterCat("ALL");
+              setActiveActivitySlideIdx(0);
+              setIsActivitiesPageOpen(true);
+            }}
+            className="osl-bar-btn border border-white/25 bg-white/5 hover:bg-white hover:text-black text-white rounded-xl"
           >
-            <span>GALLERY</span>
+            <span>ACTIVITIES ({activities.length} CHRONOLOGY EVENTS)</span>
             <span className="text-lg leading-none font-light">+</span>
           </button>
         </div>
       </section>
 
       {/* ============================================================
-          4. LIGHT SHOWCASE + 3-COLUMN BENTO GRID (ORIGIN | BEAUTY | ASYLUM)
+          4. VIDEO 6 ROTATING HALF-WHEEL COLORED FAN + CREATIVE OPTICAL LAB
+             + "GALLERY +" BUTTON (Opens Video 5 Full-Screen Gallery Page!)
           ============================================================ */}
       <section
         id="mobile-light-bento-section"
         className="relative z-20 w-full bg-[#ECEBE6] text-[#111111]"
       >
-        <div className="osl-pad-lg flex flex-col items-center">
-          <div className="relative w-full aspect-[16/10] rounded-xs overflow-hidden border border-black/15 shadow-md">
-            <img
-              src={gallery[2]?.src || FALLBACK_GALLERY[2].src}
-              alt={gallery[2]?.title || "Landscape Study"}
-              className="w-full h-full object-cover"
-              loading="lazy"
-              decoding="async"
-            />
+        <div className="osl-pad-lg pb-4">
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <span className="font-mono text-[9px] tracking-[0.22em] uppercase text-black/50 block">
+                CURATED PLATES // 360° HALF-WHEEL
+              </span>
+              <h2 className="font-heading font-black text-2xl uppercase tracking-[-0.03em] text-[#111111]">
+                VISUAL ARCHIVE
+              </h2>
+            </div>
+            <span
+              style={{ padding: "4px 10px" }}
+              className="rounded-full bg-[#111111] text-[#D4A843] font-mono text-[8.5px] font-bold uppercase tracking-[0.16em]"
+            >
+              {gallery.length} COLOR PLATES
+            </span>
           </div>
+
+          {/* Video 6 Automatic Rotating Semicircular Half-Wheel Fan (Full Color!) */}
+          <HalfWheelGalleryFan
+            items={gallery}
+            onSelectCard={(idx) => {
+              setGalleryFilterCat("ALL");
+              const chosen = gallery[idx];
+              setExpandedGalleryId(
+                chosen?._id || chosen?.id || String(idx)
+              );
+              setIsGalleryPageOpen(true);
+            }}
+          />
         </div>
 
+        {/* Creative 3-Column Interactive Optical Lab Deck (Replaces Origin | Beauty | Asylum) */}
         <div className="grid grid-cols-3 w-full border-l border-black/15">
           <button
             type="button"
-            onClick={() => setActivePillarSheet("ORIGIN")}
-            className="osl-bento-cell"
+            onClick={() =>
+              setActiveOpticalLab((prev) =>
+                prev === "LOUPE" ? null : "LOUPE"
+              )
+            }
+            className={`osl-bento-cell ${
+              activeOpticalLab === "LOUPE" ? "active-lab" : ""
+            }`}
           >
-            <span className="font-mono text-[10px] font-bold tracking-[0.16em] uppercase">
-              ORIGIN
+            <span className="font-mono text-[8px] opacity-55">01 // LAB</span>
+            <span className="font-mono text-[9.5px] font-bold tracking-[0.14em] uppercase">
+              35MM LOUPE
             </span>
           </button>
 
           <button
             type="button"
-            onClick={() => setActivePillarSheet("BEAUTY")}
-            className="osl-bento-cell"
+            onClick={() =>
+              setActiveOpticalLab((prev) =>
+                prev === "EMULSION" ? null : "EMULSION"
+              )
+            }
+            className={`osl-bento-cell ${
+              activeOpticalLab === "EMULSION" ? "active-lab" : ""
+            }`}
           >
-            <span className="font-mono text-[10px] font-bold tracking-[0.16em] uppercase">
-              BEAUTY
+            <span className="font-mono text-[8px] opacity-55">02 // FILM</span>
+            <span className="font-mono text-[9.5px] font-bold tracking-[0.14em] uppercase">
+              EMULSION
             </span>
           </button>
 
           <button
             type="button"
-            onClick={() => setActivePillarSheet("ASYLUM")}
-            className="osl-bento-cell"
+            onClick={() =>
+              setActiveOpticalLab((prev) =>
+                prev === "STROBE" ? null : "STROBE"
+              )
+            }
+            className={`osl-bento-cell ${
+              activeOpticalLab === "STROBE" ? "active-lab" : ""
+            }`}
           >
-            <span className="font-mono text-[10px] font-bold tracking-[0.16em] uppercase">
-              ASYLUM
+            <span className="font-mono text-[8px] opacity-55">03 // SPEC</span>
+            <span className="font-mono text-[9.5px] font-bold tracking-[0.14em] uppercase">
+              OPTICS RIG
             </span>
           </button>
         </div>
 
+        {/* Interactive Expandable Optical Lab Drawer (When any of the 3 Creative Lab Buttons is tapped) */}
+        {activeOpticalLab && (
+          <div
+            style={{ padding: "18px 20px" }}
+            className="w-full bg-[#141417] text-white border-b border-black/15 space-y-4 animate-fade-in"
+          >
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-[#D4A843] font-bold">
+                ● INTERACTIVE OPTICAL LAB // {activeOpticalLab}
+              </span>
+              <button
+                type="button"
+                onClick={() => setActiveOpticalLab(null)}
+                className="font-mono text-[9px] uppercase tracking-widest text-white/60"
+              >
+                CLOSE ✕
+              </button>
+            </div>
+
+            {activeOpticalLab === "LOUPE" && (
+              <div className="space-y-3">
+                <p className="font-body text-xs text-white/80">
+                  Tap a focal length below to preview how GCU photographers
+                  frame subjects across prime lenses:
+                </p>
+                <div className="grid grid-cols-4 gap-2">
+                  {[24, 35, 50, 85].map((mm) => (
+                    <button
+                      key={mm}
+                      type="button"
+                      onClick={() => setSelectedFocalMm(mm)}
+                      style={{ padding: "8px" }}
+                      className={`rounded-lg font-mono text-[10px] font-bold uppercase cursor-pointer ${
+                        selectedFocalMm === mm
+                          ? "bg-[#D4A843] text-black"
+                          : "bg-white/10 text-white"
+                      }`}
+                    >
+                      {mm}MM
+                    </button>
+                  ))}
+                </div>
+                <div className="relative w-full aspect-[16/9] rounded-xl overflow-hidden border border-white/15">
+                  <img
+                    src={gallery[0]?.src || FALLBACK_GALLERY[0].src}
+                    alt="Focal Preview"
+                    style={{
+                      transform: `scale(${
+                        selectedFocalMm === 24
+                          ? 1
+                          : selectedFocalMm === 35
+                          ? 1.15
+                          : selectedFocalMm === 50
+                          ? 1.32
+                          : 1.55
+                      })`,
+                    }}
+                    className="w-full h-full object-cover transition-transform duration-500"
+                  />
+                  <div className="absolute bottom-2 left-2 px-2.5 py-1 rounded bg-black/75 font-mono text-[9px] text-[#D4A843]">
+                    {selectedFocalMm}MM PRIME ·{" "}
+                    {selectedFocalMm === 85
+                      ? "PORTRAIT COMPRESSION"
+                      : selectedFocalMm === 50
+                      ? "HUMAN EYE PERSPECTIVE"
+                      : selectedFocalMm === 35
+                      ? "STREET REPORTAGE"
+                      : "ARCHITECTURAL WIDE"}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeOpticalLab === "EMULSION" && (
+              <div className="space-y-3">
+                <p className="font-body text-xs text-white/80">
+                  Switch between our club&apos;s 3 signature analog film
+                  emulsions:
+                </p>
+                <div className="grid grid-cols-3 gap-2">
+                  {(["PORTRA", "CINESTILL", "VELVIA"] as const).map((stock) => (
+                    <button
+                      key={stock}
+                      type="button"
+                      onClick={() => setSelectedEmulsion(stock)}
+                      style={{ padding: "8px" }}
+                      className={`rounded-lg font-mono text-[9.5px] font-bold uppercase cursor-pointer ${
+                        selectedEmulsion === stock
+                          ? "bg-[#D92B2B] text-white"
+                          : "bg-white/10 text-white"
+                      }`}
+                    >
+                      {stock}
+                    </button>
+                  ))}
+                </div>
+                <div className="relative w-full aspect-[16/9] rounded-xl overflow-hidden border border-white/15">
+                  <img
+                    src={gallery[2]?.src || FALLBACK_GALLERY[2].src}
+                    alt="Emulsion Grade"
+                    style={{
+                      filter:
+                        selectedEmulsion === "PORTRA"
+                          ? "sepia(0.18) saturate(1.25) contrast(1.05)"
+                          : selectedEmulsion === "CINESTILL"
+                          ? "hue-rotate(-14deg) saturate(1.4) contrast(1.15)"
+                          : "saturate(1.65) contrast(1.12)",
+                    }}
+                    className="w-full h-full object-cover transition-all duration-500"
+                  />
+                  <div className="absolute bottom-2 left-2 px-2.5 py-1 rounded bg-black/75 font-mono text-[9px] text-white">
+                    {selectedEmulsion === "PORTRA"
+                      ? "KODAK PORTRA 400 // WARM SKIN TONES"
+                      : selectedEmulsion === "CINESTILL"
+                      ? "CINESTILL 800T // TUNGSTEN HALATION"
+                      : "FUJIFILM VELVIA 50 // VIVID CHROME"}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeOpticalLab === "STROBE" && (
+              <div className="space-y-2.5 font-mono text-[10px] text-white/80">
+                <div className="flex justify-between py-1.5 border-b border-white/10">
+                  <span className="text-white/45">OPTICAL FORMAT</span>
+                  <span className="text-[#D4A843] font-bold">
+                    35MM FULL-FRAME &amp; 120 MEDIUM
+                  </span>
+                </div>
+                <div className="flex justify-between py-1.5 border-b border-white/10">
+                  <span className="text-white/45">STUDIO LIGHTING</span>
+                  <span className="text-white font-bold">
+                    GODEX AD600 PRO XENON STROBES
+                  </span>
+                </div>
+                <div className="flex justify-between py-1.5">
+                  <span className="text-white/45">DARKROOM LOCATION</span>
+                  <span className="text-[#8CE99A] font-bold">
+                    GCU MEDIA LAB · AZARA
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Bottom Button: Replaced "ARCHIVE SPECS & CHRONOLOGY" with "GALLERY +" (Opens Video 5 Full Gallery Page!) */}
         <div className="osl-pad-md">
           <button
             type="button"
             onClick={() => {
-              setIsEngineeringDataOpen(true);
-              document
-                .getElementById("mobile-chronology-matrix")
-                ?.scrollIntoView({ behavior: "smooth" });
+              setGalleryFilterCat("ALL");
+              setExpandedGalleryId(null);
+              setIsGalleryPageOpen(true);
             }}
-            className="osl-bar-btn border border-black/25 bg-transparent text-[#111111]"
+            className="osl-bar-btn bg-[#111111] hover:bg-[#D92B2B] text-white rounded-xl shadow-md"
           >
-            <span>ARCHIVE SPECS &amp; CHRONOLOGY</span>
+            <span>GALLERY // EXPLORE ALL {gallery.length} FRAMES</span>
             <span className="text-base leading-none">+</span>
           </button>
         </div>
       </section>
 
       {/* ============================================================
-          5. "ABOUT" BANNER + 3-TAB SWITCHER + AUTOMATIC STOP-MOTION PHOTO MATRIX
+          5. "ABOUT" BANNER + 6-CHAPTER BAR + COLORED FLIPBOOK & STUDIO MEMBER CARDS
+             (Upgrades Screenshot 2: 6 Chapters + Screenshots 7 & 8 Colored Cards!)
           ============================================================ */}
       <section
         id="mobile-light-about-section"
         className="relative z-20 w-full bg-[#FAF9F5] text-[#111111] border-t border-black/15"
       >
-        <div className="relative w-full aspect-[16/10] bg-[#111111] flex items-center justify-center overflow-hidden">
+        <div className="relative w-full aspect-[16/9] bg-[#111111] flex items-center justify-center overflow-hidden">
           <img
             src="/images/gcu-campus-sketch.jpg"
             onError={(e) => {
@@ -1910,164 +2803,187 @@ export default function MobileOilstainExperience() {
                 "https://images.unsplash.com/photo-1452587925148-ce544e77e70d?w=800&q=75";
             }}
             alt="About ShutterScape"
-            className="absolute inset-0 w-full h-full object-cover grayscale contrast-125 opacity-55"
+            className="absolute inset-0 w-full h-full object-cover opacity-65"
             loading="lazy"
             decoding="async"
           />
-          <div className="absolute inset-0 bg-black/40" />
-          <h2 className="relative z-10 font-heading font-black text-3xl tracking-[0.06em] uppercase text-white text-center">
-            ABOUT
-          </h2>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/35 to-black/40" />
+          <div className="relative z-10 text-center px-4">
+            <span className="font-mono text-[8.5px] tracking-[0.28em] uppercase text-[#D4A843] font-bold block mb-1">
+              GIRIJANANDA CHOWDHURY UNIVERSITY
+            </span>
+            <h2 className="font-heading font-black text-3xl tracking-[0.06em] uppercase text-white">
+              ABOUT US
+            </h2>
+          </div>
         </div>
 
-        <div className="grid grid-cols-3 w-full border-l border-black/15 bg-[#ECEBE6]">
-          {(["ORIGINS", "LEADERSHIP", "LEGACY"] as AboutTabKey[]).map((tab) => {
-            const isActive = activeAboutTab === tab;
+        {/* 6-CHAPTER HORIZONTAL SCROLLABLE TASKBAR (All 6 Requested Chapters!) */}
+        <div className="w-full overflow-x-auto no-scrollbar bg-[#ECEBE6] border-y border-black/15 flex items-center">
+          {ABOUT_CHAPTER_TABS.map((tab) => {
+            const isActive = activeAboutTab === tab.id;
             return (
               <button
-                key={tab}
+                key={tab.id}
                 type="button"
-                onClick={() => setActiveAboutTab(tab)}
-                className={`osl-tab-btn ${
+                onClick={() => setActiveAboutTab(tab.id)}
+                className={`osl-chapter-pill shrink-0 flex items-center gap-1.5 ${
                   isActive
                     ? "bg-[#111111] text-white"
                     : "bg-[#ECEBE6] text-[#111111]/70"
                 }`}
               >
-                {tab}
+                <span
+                  className={
+                    isActive ? "text-[#D4A843] font-bold" : "opacity-45"
+                  }
+                >
+                  {tab.code}
+                </span>
+                <span>{tab.shortLabel}</span>
               </button>
             );
           })}
         </div>
 
+        {/* CHAPTER 01: ORIGINS (Full-Color Flipbook + Cool Colorful Fonts) */}
         {activeAboutTab === "ORIGINS" && (
-          <div className="osl-pad-lg space-y-6">
-            <div>
-              <h3 className="font-heading font-black text-3xl uppercase tracking-[-0.03em] text-[#111111]">
-                STORYTELLERS
-              </h3>
-              <span className="font-mono text-[9.5px] tracking-[0.2em] uppercase text-black/45 block mt-1">
-                CHAPTER 01 // ORIGINS
+          <div className="osl-pad-lg space-y-5">
+            <div className="flex items-baseline justify-between">
+              <div>
+                <span className="font-mono text-[9.5px] tracking-[0.22em] uppercase text-[#D92B2B] font-bold block">
+                  CHAPTER 01 // ORIGINS
+                </span>
+                <h3 className="font-heading font-black text-3xl uppercase tracking-[-0.03em] text-[#111111] mt-0.5">
+                  STORYTELLERS
+                </h3>
+              </div>
+              <span className="font-serif italic text-sm text-black/55">
+                Est. 2023
               </span>
             </div>
-
-            <p className="font-mono text-xs uppercase tracking-[0.06em] leading-relaxed font-bold text-[#111111]">
-              BORN AT GIRIJANANDA CHOWDHURY UNIVERSITY IN ASSAM, SHUTTERSCAPE IS
-              OUR UNMEDICATED VISUAL ARCHIVE. A PURE MANIFESTO OF ANALOG OPTICS,
-              STREET DOCUMENTARY, AND CREATIVE EXCESS.
-            </p>
 
             <StopMotionFlipbook matrixStack={matrixStack} />
           </div>
         )}
 
-        {activeAboutTab === "LEADERSHIP" && (
-          <div className="osl-pad-lg space-y-6">
+        {/* CHAPTER 02: THE TEACHERS (Faculty Mentors — Screenshots 7 & 8 Colored Studio Cards) */}
+        {activeAboutTab === "THE TEACHERS" && (
+          <div className="osl-pad-lg space-y-5">
             <div>
-              <h3 className="font-heading font-black text-3xl uppercase tracking-[-0.03em] text-[#111111]">
-                BEHIND THE LENS
-              </h3>
-              <span className="font-mono text-[9.5px] tracking-[0.2em] uppercase text-black/45 block mt-1">
-                FACULTY MENTORS &amp; EXECUTIVE LEADS
+              <span className="font-mono text-[9.5px] tracking-[0.22em] uppercase text-[#0F766E] font-bold block">
+                CHAPTER 02 // THE TEACHERS
               </span>
+              <h3 className="font-heading font-black text-2xl uppercase tracking-[-0.03em] text-[#111111] mt-1">
+                THE TEACHERS WHO GUIDE US
+              </h3>
+              <p className="font-body text-xs text-black/65 mt-1 leading-relaxed">
+                Our faculty coordinators who mentor our visual archive,
+                symposia, and campus-wide exhibitions at GCU.
+              </p>
             </div>
 
-            <p className="font-mono text-xs uppercase tracking-[0.06em] leading-relaxed font-bold text-[#111111]">
-              GUIDED BY FACULTY MENTORS AND STUDENT DIRECTORS WHO CURATE ANNUAL
-              EXHIBITIONS, FIELD PHOTOWALKS, AND OPTICAL CLINICS ACROSS ASSAM.
-            </p>
-
-            <div className="grid grid-cols-2 gap-4 pt-2">
-              {mentorsAndLeads.map((person, idx) => (
-                <div
-                  key={idx}
-                  className="flex flex-col border border-black/15 bg-white overflow-hidden"
-                >
-                  <div className="relative w-full aspect-[3/4] bg-[#111111]">
-                    <img
-                      src={person.img}
-                      alt={person.name}
-                      className="w-full h-full object-cover grayscale contrast-115"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                    <span className="absolute top-2 left-2 px-2 py-0.5 bg-[#111111] text-[#D4A843] font-mono text-[8px] tracking-[0.18em] uppercase font-bold">
-                      {person.role}
-                    </span>
-                  </div>
-                  <div className="p-3">
-                    <h4 className="font-heading font-bold text-xs text-[#111111] uppercase">
-                      {person.name}
-                    </h4>
-                    {person.dept && (
-                      <p className="font-mono text-[9px] text-black/55 mt-1 line-clamp-2">
-                        {person.dept}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              ))}
+            <div className="grid grid-cols-2 gap-3.5">
+              {mentorsList.map((person, idx) =>
+                renderStudioMemberCard(person, idx)
+              )}
             </div>
           </div>
         )}
 
-        {activeAboutTab === "LEGACY" && (
-          <div className="osl-pad-lg space-y-6">
+        {/* CHAPTER 03: BEHIND THE LENS (Executive Leads — Screenshots 7 & 8 Colored Studio Cards) */}
+        {activeAboutTab === "BEHIND THE LENS" && (
+          <div className="osl-pad-lg space-y-5">
             <div>
-              <h3 className="font-heading font-black text-3xl uppercase tracking-[-0.03em] text-[#111111]">
-                TIME MACHINE
-              </h3>
-              <span className="font-mono text-[9.5px] tracking-[0.2em] uppercase text-black/45 block mt-1">
-                FOUNDERS, CORE COMMITTEE &amp; TORCHBEARERS
+              <span className="font-mono text-[9.5px] tracking-[0.22em] uppercase text-[#D92B2B] font-bold block">
+                CHAPTER 03 // LEADERSHIP
               </span>
+              <h3 className="font-heading font-black text-2xl uppercase tracking-[-0.03em] text-[#111111] mt-1">
+                BEHIND THE LENS
+              </h3>
+              <p className="font-body text-xs text-black/65 mt-1 leading-relaxed">
+                Student executive directors leading expeditions, darkroom
+                critiques, and curation across Assam.
+              </p>
             </div>
 
-            <div className="relative w-full aspect-[16/10] bg-[#111111] overflow-hidden border border-black/15">
-              <img
-                src={foundersAndLegacy[0]?.img || FALLBACK_COMMITTEE[5].img}
-                alt="Founders Archive"
-                className="w-full h-full object-cover grayscale contrast-125"
-                loading="lazy"
-                decoding="async"
-              />
+            <div className="grid grid-cols-2 gap-3.5">
+              {leadsList.map((person, idx) =>
+                renderStudioMemberCard(person, idx + 2)
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* CHAPTER 04: CORE MEMBERS (Core Committee — Screenshots 7 & 8 Colored Studio Cards) */}
+        {activeAboutTab === "CORE MEMBERS" && (
+          <div className="osl-pad-lg space-y-5">
+            <div>
+              <span className="font-mono text-[9.5px] tracking-[0.22em] uppercase text-[#1864AB] font-bold block">
+                CHAPTER 04 // THE FOUNDATION
+              </span>
+              <h3 className="font-heading font-black text-2xl uppercase tracking-[-0.03em] text-[#111111] mt-1">
+                CORE MEMBERS
+              </h3>
+              <p className="font-body text-xs text-black/65 mt-1 leading-relaxed">
+                The creative backbone driving street reportage, strobe
+                portraiture, landscape expeditions, and motion reels.
+              </p>
             </div>
 
-            <h4 className="font-heading font-black text-lg uppercase tracking-[-0.02em] leading-snug text-[#111111]">
-              WHERE IT ALL STARTED IN 2023 — CARRYING THE TORCH FORWARD.
-            </h4>
+            <div className="grid grid-cols-2 gap-3.5">
+              {coreList.map((person, idx) =>
+                renderStudioMemberCard(person, idx + 1)
+              )}
+            </div>
+          </div>
+        )}
 
-            <div className="grid grid-cols-2 gap-3 pt-1">
-              {foundersAndLegacy.map((member, idx) => (
-                <div
-                  key={idx}
-                  className="flex items-center gap-2.5 p-2.5 border border-black/15 bg-white"
-                >
-                  <img
-                    src={member.img}
-                    alt={member.name}
-                    className="w-11 h-11 object-cover grayscale shrink-0"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                  <div className="min-w-0">
-                    <h5 className="font-heading font-bold text-[11px] text-[#111111] truncate uppercase">
-                      {member.name}
-                    </h5>
-                    <span className="font-mono text-[8.5px] tracking-[0.14em] uppercase text-[#B8860B] font-bold block truncate">
-                      {member.role || member.tier}
-                    </span>
-                  </div>
-                </div>
-              ))}
+        {/* CHAPTER 05: WHERE IT ALL STARTED (Founders — Screenshots 7 & 8 Colored Studio Cards) */}
+        {activeAboutTab === "WHERE IT ALL STARTED" && (
+          <div className="osl-pad-lg space-y-5">
+            <div>
+              <span className="font-mono text-[9.5px] tracking-[0.22em] uppercase text-[#B45309] font-bold block">
+                CHAPTER 05 // GENESIS
+              </span>
+              <h3 className="font-heading font-black text-2xl uppercase tracking-[-0.03em] text-[#111111] mt-1">
+                WHERE IT ALL STARTED
+              </h3>
+              <p className="font-body text-xs text-black/65 mt-1 leading-relaxed">
+                Founded in 2023 to unite Girijananda Chowdhury University&apos;s
+                visual storytellers under one banner.
+              </p>
             </div>
 
-            <Link
-              href="/about"
-              className="osl-bar-btn border border-black/25 bg-[#111111] text-white"
-            >
-              <span>OPEN FULL ROSTER &amp; CHAPTERS</span>
-              <span>→</span>
-            </Link>
+            <div className="grid grid-cols-2 gap-3.5">
+              {foundersList.map((person, idx) =>
+                renderStudioMemberCard(person, idx + 4)
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* CHAPTER 06: CARRYING IT FORWARD (Legacy Torchbearers — Screenshots 7 & 8 Colored Studio Cards) */}
+        {activeAboutTab === "CARRYING IT FORWARD" && (
+          <div className="osl-pad-lg space-y-5">
+            <div>
+              <span className="font-mono text-[9.5px] tracking-[0.22em] uppercase text-[#6B21A8] font-bold block">
+                CHAPTER 06 // LEGACY
+              </span>
+              <h3 className="font-heading font-black text-2xl uppercase tracking-[-0.03em] text-[#111111] mt-1">
+                CARRYING IT FORWARD
+              </h3>
+              <p className="font-body text-xs text-black/65 mt-1 leading-relaxed">
+                Alumni torchbearers whose early exhibitions and mentorship built
+                the creative culture of ShutterScape.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3.5">
+              {legacyList.map((person, idx) =>
+                renderStudioMemberCard(person, idx + 3)
+              )}
+            </div>
           </div>
         )}
       </section>
@@ -2107,7 +3023,7 @@ export default function MobileOilstainExperience() {
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                     }}
-                    className="relative shrink-0 w-[68vw] max-w-[260px] aspect-[9/16] bg-[#111111] rounded-xs overflow-hidden border border-black/20 shadow-md cursor-pointer"
+                    className="relative shrink-0 w-[68vw] max-w-[260px] aspect-[9/16] bg-[#111111] rounded-xl overflow-hidden border border-black/20 shadow-md cursor-pointer"
                   >
                     <video
                       ref={(el) => {
@@ -2144,7 +3060,7 @@ export default function MobileOilstainExperience() {
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                   }}
-                  className="relative shrink-0 w-[68vw] max-w-[260px] aspect-[9/16] bg-[#111111] rounded-xs overflow-hidden border border-black/20 shadow-md"
+                  className="relative shrink-0 w-[68vw] max-w-[260px] aspect-[9/16] bg-[#111111] rounded-xl overflow-hidden border border-black/20 shadow-md"
                 >
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/30 pointer-events-none" />
                   <div className="absolute bottom-3 left-3 right-3 pointer-events-none">
@@ -2163,6 +3079,7 @@ export default function MobileOilstainExperience() {
           <button
             type="button"
             onClick={() => {
+              setRegisterEventName("");
               setRegisterSubmitted(false);
               setIsRegisterModalOpen(true);
             }}
@@ -2257,236 +3174,503 @@ export default function MobileOilstainExperience() {
       </section>
 
       {/* ============================================================
-          MODAL 1: FULLSCREEN SWIPEABLE "GALLERY +" SCRUBBER
+          PAGE OVERLAY 1: DEDICATED FULL-SCREEN ACTIVITIES EXPLORER PAGE
+          (Exact Match to Screen Recording 9 "TOUR KYRGYZSTAN" with
+          `← BACK` button, Category Taskbar, Peek Slider, Red `[ EXPLORE ]`
+          button, Full Description, and `← PREV` / Progress Line / `NEXT →`!)
           ============================================================ */}
-      {isGalleryDrawerOpen && (
-        <div className="fixed inset-0 z-[9999] bg-[#ECEBE6] text-[#111111] flex flex-col justify-between overflow-hidden animate-fade-in">
-          <div
-            ref={galleryMainScrollRef}
-            onScroll={(e) => {
-              const el = e.currentTarget;
-              const newIdx = Math.round(el.scrollLeft / el.clientWidth);
-              if (
-                newIdx !== activeGalleryIdx &&
-                newIdx >= 0 &&
-                newIdx < gallery.length
-              ) {
-                setActiveGalleryIdx(newIdx);
-              }
-            }}
-            className="w-full h-[65svh] bg-[#111111] flex overflow-x-auto snap-x snap-mandatory no-scrollbar"
-          >
-            {gallery.map((item, idx) => (
-              <div
-                key={item._id || item.id || idx}
-                className="relative w-full h-full shrink-0 snap-center flex items-center justify-center bg-[#0A0A0C]"
-              >
-                <img
-                  src={item.src}
-                  alt={item.title}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                  decoding="async"
-                />
-                <div className="absolute top-4 left-4 px-3 py-1 bg-black/75 border border-white/15 font-mono text-[9.5px] tracking-[0.2em] uppercase text-[#D4A843]">
-                  {String(idx + 1).padStart(2, "0")} /{" "}
-                  {String(gallery.length).padStart(2, "0")} · {item.category}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="osl-pad-md flex items-center justify-between border-b border-black/15 bg-[#ECEBE6]">
-            <div className="min-w-0 pr-3">
-              <h3 className="font-heading font-black text-base uppercase text-[#111111] truncate">
-                {gallery[activeGalleryIdx]?.title}
-              </h3>
-              <p className="font-mono text-[9.5px] tracking-[0.18em] uppercase text-black/55 truncate mt-0.5">
-                BY {gallery[activeGalleryIdx]?.photographer} ·{" "}
-                {gallery[activeGalleryIdx]?.filmStock}
-              </p>
-            </div>
-            <div className="flex items-center gap-2 shrink-0">
+      {isActivitiesPageOpen && (
+        <div className="fixed inset-0 z-[9999] bg-[#FAF9F5] text-[#111111] flex flex-col justify-between overflow-y-auto animate-fade-in">
+          {/* Top Bar with ← BACK Button & Brand Title */}
+          <div className="sticky top-0 z-30 bg-[#FAF9F5]/95 backdrop-blur-md border-b border-black/10">
+            <div
+              style={{ padding: "14px 18px" }}
+              className="flex items-center justify-between"
+            >
               <button
                 type="button"
-                onClick={() =>
-                  selectGallerySlide(
-                    (activeGalleryIdx - 1 + gallery.length) % gallery.length
-                  )
-                }
-                className="w-9 h-9 border border-black/25 font-mono text-xs flex items-center justify-center cursor-pointer"
+                onClick={() => setIsActivitiesPageOpen(false)}
+                style={{ padding: "7px 14px" }}
+                className="rounded-full bg-[#111111] text-white font-mono text-[10px] font-bold uppercase tracking-[0.18em] flex items-center gap-2 cursor-pointer shadow-xs"
               >
-                ←
+                <span>←</span>
+                <span>BACK</span>
               </button>
-              <button
-                type="button"
-                onClick={() =>
-                  selectGallerySlide((activeGalleryIdx + 1) % gallery.length)
-                }
-                className="w-9 h-9 border border-black/25 font-mono text-xs flex items-center justify-center cursor-pointer"
-              >
-                →
-              </button>
-            </div>
-          </div>
 
-          <div className="relative w-full osl-pad-md bg-[#E2E0D8] flex items-center">
-            <div className="flex items-center gap-2.5 overflow-x-auto no-scrollbar pr-24 py-1">
-              {gallery.map((item, idx) => {
-                const isSelected = idx === activeGalleryIdx;
+              <span className="font-heading font-black text-sm uppercase tracking-tight text-[#111111]">
+                SHUTTERSCAPE // CHRONOLOGY
+              </span>
+
+              <span
+                style={{ padding: "4px 9px" }}
+                className="rounded-full bg-[#D92B2B] text-white font-mono text-[9px] font-bold uppercase"
+              >
+                {filteredActivityItems.length} EVENTS
+              </span>
+            </div>
+
+            {/* Category Taskbar */}
+            <div
+              style={{ padding: "8px 18px" }}
+              className="flex items-center gap-2 overflow-x-auto no-scrollbar border-t border-black/5 bg-[#ECEBE6]"
+            >
+              {[
+                "ALL",
+                "PHOTOWALK",
+                "WORKSHOP",
+                "EXHIBITION",
+                "COMPETITION",
+                "2026",
+                "2025",
+              ].map((cat) => {
+                const isSelected = activityFilterCat === cat;
                 return (
                   <button
-                    key={item._id || item.id || idx}
+                    key={cat}
                     type="button"
-                    onClick={() => selectGallerySlide(idx)}
-                    className={`relative shrink-0 w-24 aspect-[16/10] overflow-hidden border-2 transition-all cursor-pointer ${
+                    onClick={() => {
+                      setActivityFilterCat(cat);
+                      setActiveActivitySlideIdx(0);
+                    }}
+                    style={{ padding: "6px 12px" }}
+                    className={`rounded-full font-mono text-[9px] font-bold uppercase tracking-[0.15em] shrink-0 cursor-pointer transition-all ${
                       isSelected
-                        ? "border-[#D92B2B] scale-105 opacity-100"
-                        : "border-transparent opacity-55"
+                        ? "bg-[#D92B2B] text-white shadow-xs"
+                        : "bg-white text-black/65 border border-black/10"
                     }`}
                   >
-                    <img
-                      src={item.src}
-                      alt={item.title}
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                      decoding="async"
-                    />
+                    {cat === "ALL" ? "ALL EVENTS" : cat}
                   </button>
                 );
               })}
             </div>
-
-            <button
-              type="button"
-              onClick={() => setIsGalleryDrawerOpen(false)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 px-4 py-3 bg-[#D92B2B] text-white font-mono text-[10px] font-bold uppercase tracking-[0.2em] shadow-lg cursor-pointer"
-            >
-              CLOSE
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* ============================================================
-          MODAL 2: SLIDE-OVER BENTO PILLAR SHEET
-          ============================================================ */}
-      {activePillarSheet && (
-        <div className="fixed inset-0 z-[9999] bg-[#ECEBE6] text-[#111111] overflow-y-auto animate-fade-in">
-          <div className="osl-pad-md flex items-center justify-between sticky top-0 z-20 bg-[#ECEBE6]/95 border-b border-black/15">
-            <span className="font-mono text-[9.5px] tracking-[0.22em] uppercase text-black/50">
-              SHUTTERSCAPE // ARCHIVE PILLAR
-            </span>
-            <button
-              type="button"
-              onClick={() => setActivePillarSheet(null)}
-              className="px-4 py-2 bg-[#D92B2B] text-white font-mono text-[10px] font-bold uppercase tracking-[0.2em] cursor-pointer"
-            >
-              BACK
-            </button>
           </div>
 
-          <div className="osl-pad-lg space-y-6">
-            <h2 className="font-heading font-black text-4xl uppercase tracking-[-0.04em] text-[#111111]">
-              {activePillarSheet}
-            </h2>
-
-            <div className="relative w-full py-6 overflow-hidden border-y border-black/15">
-              <div className="overflow-hidden w-full">
-                <div
-                  aria-hidden="true"
-                  className="osl-red-marquee font-heading font-black text-[24vw] leading-[0.82] tracking-[-0.05em] uppercase text-[#D92B2B] select-none"
-                >
-                  <span className="pr-8">
-                    {activePillarSheet === "ORIGIN"
-                      ? "TIME MACHINE // GCU ARCHIVE //"
-                      : activePillarSheet === "BEAUTY"
-                      ? "35MM RAW // OPTICAL CRAFT //"
-                      : "DARKROOM // PURE VISION //"}
-                  </span>
-                  <span className="pr-8">
-                    {activePillarSheet === "ORIGIN"
-                      ? "TIME MACHINE // GCU ARCHIVE //"
-                      : activePillarSheet === "BEAUTY"
-                      ? "35MM RAW // OPTICAL CRAFT //"
-                      : "DARKROOM // PURE VISION //"}
-                  </span>
-                </div>
-              </div>
-
-              <div className="relative z-10 mt-3 space-y-3">
-                <div className="w-full aspect-[16/10] bg-[#111111] overflow-hidden shadow-xl">
-                  <img
-                    src={
-                      activePillarSheet === "ORIGIN"
-                        ? gallery[0]?.src || FALLBACK_GALLERY[0].src
-                        : activePillarSheet === "BEAUTY"
-                        ? activities[0]?.img || FALLBACK_ACTIVITIES[0].img
-                        : gallery[4]?.src || FALLBACK_GALLERY[4].src
-                    }
-                    alt={activePillarSheet}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-                <div className="w-full aspect-[16/10] bg-[#111111] overflow-hidden shadow-xl">
-                  <img
-                    src={
-                      activePillarSheet === "ORIGIN"
-                        ? gallery[2]?.src || FALLBACK_GALLERY[2].src
-                        : activePillarSheet === "BEAUTY"
-                        ? activities[1]?.img || FALLBACK_ACTIVITIES[1].img
-                        : gallery[5]?.src || FALLBACK_GALLERY[5].src
-                    }
-                    alt={activePillarSheet}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-              </div>
+          {/* Main Tour-Kyrgyzstan Style Content Area */}
+          <div style={{ padding: "22px 0 18px" }} className="flex-1 space-y-5">
+            <div style={{ padding: "0 20px" }}>
+              <h2 className="font-mono text-xl font-bold uppercase tracking-[0.06em] leading-snug text-[#111111]">
+                CONTINUE
+                <br />
+                EXPLORING
+                <br />
+                SHUTTERSCAPE
+              </h2>
             </div>
 
-            <p className="font-body text-xs text-black/75 leading-relaxed">
-              {activePillarSheet === "ORIGIN" &&
-                "How do you freeze a fleeting moment across time and space? Start by building a visual archive. Every photograph in the ShutterScape collection is cataloged with full focal length, aperture stop, and film emulsion telemetry."}
-              {activePillarSheet === "BEAUTY" &&
-                "Across Works '26 and Works '25, ShutterScape hosts heritage photowalks along the Brahmaputra, studio Xenon strobe clinics at the GCU Media Lab, and statewide inter-university exhibitions."}
-              {activePillarSheet === "ASYLUM" &&
-                "Our darkroom is a sanctuary for visual storytellers—bridging technical optical mastery with raw human emotion so every student at Girijananda Chowdhury University has a creative home."}
+            {/* Horizontal Peek Slider (Active Card + Right Peeking Card like Video 9) */}
+            <div
+              ref={activitiesPeekScrollRef}
+              onScroll={(e) => {
+                const container = e.currentTarget;
+                const cardWidth = container.clientWidth * 0.82;
+                const idx = Math.round(container.scrollLeft / cardWidth);
+                if (
+                  idx !== activeActivitySlideIdx &&
+                  idx >= 0 &&
+                  idx < filteredActivityItems.length
+                ) {
+                  setActiveActivitySlideIdx(idx);
+                }
+              }}
+              style={{ paddingLeft: "20px", paddingRight: "20px" }}
+              className="flex items-stretch gap-4 overflow-x-auto snap-x snap-mandatory no-scrollbar"
+            >
+              {filteredActivityItems.map((ev, idx) => (
+                <div
+                  key={ev._id || ev.id || idx}
+                  className="shrink-0 w-[82vw] max-w-[340px] snap-start flex flex-col justify-between"
+                >
+                  {/* Square/Portrait Image Card with Centered Red [ EXPLORE / JOIN ] Button */}
+                  <div className="relative w-full aspect-[4/4.3] rounded-xs overflow-hidden bg-[#111111] shadow-md">
+                    <img
+                      src={ev.img}
+                      alt={ev.title}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/25" />
+
+                    {/* Top Badges */}
+                    <div
+                      style={{ padding: "12px" }}
+                      className="absolute top-0 inset-x-0 flex items-center justify-between"
+                    >
+                      <span
+                        style={{ padding: "3px 8px" }}
+                        className="bg-black/75 text-[#D4A843] font-mono text-[8.5px] font-bold uppercase tracking-widest"
+                      >
+                        {ev.category} · {ev.year}
+                      </span>
+                      {ev.isUpcoming && (
+                        <span
+                          style={{ padding: "3px 8px" }}
+                          className="bg-[#10B981] text-black font-mono text-[8.5px] font-bold uppercase tracking-widest"
+                        >
+                          ● UPCOMING
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Centered Red [ EXPLORE / RSVP ] Button Overlay (Matches Video 9!) */}
+                    <div className="absolute bottom-5 inset-x-0 flex justify-center">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setRegisterEventName(ev.title);
+                          setRegisterSubmitted(false);
+                          setIsRegisterModalOpen(true);
+                        }}
+                        style={{ padding: "10px 22px" }}
+                        className="bg-[#D92B2B] hover:bg-[#B91C1C] text-white font-mono text-[10px] font-bold uppercase tracking-[0.2em] shadow-lg cursor-pointer"
+                      >
+                        [ {ev.isUpcoming ? "JOIN / RSVP" : "EXPLORE"} ]
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Below Card: Title, Date/Duration & Full Activity Description */}
+                  <div style={{ paddingTop: "14px" }} className="space-y-2">
+                    <div className="flex items-baseline justify-between gap-2">
+                      <h3 className="font-mono text-xs font-bold uppercase tracking-[0.12em] text-[#111111]">
+                        {ev.title}
+                      </h3>
+                      <span className="font-mono text-[9.5px] text-[#D92B2B] font-bold shrink-0">
+                        {ev.date}
+                      </span>
+                    </div>
+
+                    <p className="font-mono text-[9.5px] tracking-[0.14em] uppercase text-black/50">
+                      📍 {ev.location} · {ev.filmStock || ev.exif}
+                    </p>
+
+                    <p className="font-body text-xs text-black/75 leading-relaxed pt-1">
+                      {ev.description}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Bottom Navigation Controls: ← PREV | Animated Line | NEXT → (Exact Match to Video 9!) */}
+            <div
+              style={{ padding: "16px 20px 8px" }}
+              className="flex items-center justify-between gap-4"
+            >
+              <button
+                type="button"
+                onClick={() =>
+                  scrollActivitiesPeekTo(activeActivitySlideIdx - 1)
+                }
+                className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-[#111111] flex items-center gap-1.5 cursor-pointer"
+              >
+                <span>←</span>
+                <span>PREV</span>
+              </button>
+
+              <div className="flex-1 h-[2px] bg-black/15 relative overflow-hidden">
+                <div
+                  style={{
+                    width: `${
+                      ((activeActivitySlideIdx + 1) /
+                        Math.max(1, filteredActivityItems.length)) *
+                      100
+                    }%`,
+                  }}
+                  className="h-full bg-[#111111] transition-all duration-300"
+                />
+              </div>
+
+              <button
+                type="button"
+                onClick={() =>
+                  scrollActivitiesPeekTo(activeActivitySlideIdx + 1)
+                }
+                className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-[#111111] flex items-center gap-1.5 cursor-pointer"
+              >
+                <span>NEXT</span>
+                <span>→</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Dark Footer Block inside Activities Page (Matches Video 9 Dark Bottom Block) */}
+          <div
+            style={{ padding: "24px 20px" }}
+            className="bg-[#111113] text-white space-y-3"
+          >
+            <span className="font-heading font-black text-lg uppercase tracking-tight block">
+              SHUTTERSCAPE
+            </span>
+            <p className="font-mono text-[9.5px] tracking-[0.14em] uppercase text-white/65 leading-relaxed">
+              WE DON&apos;T DO ORDINARY CAMPUS CLUBS. WITH EVERY PHOTOWALK,
+              XENON STROBE LAB, AND EXHIBITION AT GCU, WE CAPTURE STORIES THAT
+              OUTLIVE THE MOMENT.
             </p>
           </div>
         </div>
       )}
 
       {/* ============================================================
-          MODAL 3: "REGISTER YOUR INTEREST" SWISS FORM MODAL
+          PAGE OVERLAY 2: DEDICATED FULL-SCREEN GALLERY PAGE
+          (Exact Match to Screen Recording 5 "EAST 64 FILMS" Vertical Stack
+          with `← BACK` button, Category Taskbar, Full-Color Stacked Cards,
+          Centered Overlay Titles, and `[ + VIEW IN LOUPE ]` Details!)
+          ============================================================ */}
+      {isGalleryPageOpen && (
+        <div className="fixed inset-0 z-[9999] bg-[#0B0B0E] text-white overflow-y-auto animate-fade-in">
+          {/* Sticky Top Header with ← BACK Button & Category Taskbar */}
+          <div className="sticky top-0 z-40 bg-[#0B0B0E]/95 backdrop-blur-md border-b border-white/10">
+            <div
+              style={{ padding: "14px 18px" }}
+              className="flex items-center justify-between"
+            >
+              <button
+                type="button"
+                onClick={() => setIsGalleryPageOpen(false)}
+                style={{ padding: "7px 14px" }}
+                className="rounded-full bg-white text-[#0B0B0E] font-mono text-[10px] font-bold uppercase tracking-[0.18em] flex items-center gap-2 cursor-pointer shadow-md"
+              >
+                <span>←</span>
+                <span>BACK</span>
+              </button>
+
+              <span className="font-serif italic text-lg tracking-wide text-white">
+                ShutterScape{" "}
+                <span className="font-mono not-italic text-[10px] text-[#D4A843] uppercase tracking-widest">
+                  Archive
+                </span>
+              </span>
+
+              <span className="font-mono text-[9.5px] tracking-[0.18em] text-white/60 uppercase">
+                {filteredGalleryItems.length} PLATES
+              </span>
+            </div>
+
+            {/* Category Taskbar */}
+            <div
+              style={{ padding: "8px 18px" }}
+              className="flex items-center gap-2 overflow-x-auto no-scrollbar border-t border-white/10 bg-black/50"
+            >
+              {[
+                "ALL",
+                "DOCUMENTARY",
+                "PORTRAITURE",
+                "LANDSCAPE",
+                "ARCHITECTURE",
+                "STREET",
+                "EXPERIMENTAL",
+              ].map((cat) => {
+                const isSelected = galleryFilterCat === cat;
+                return (
+                  <button
+                    key={cat}
+                    type="button"
+                    onClick={() => setGalleryFilterCat(cat)}
+                    style={{ padding: "6px 12px" }}
+                    className={`rounded-full font-mono text-[9px] font-bold uppercase tracking-[0.16em] shrink-0 cursor-pointer transition-all ${
+                      isSelected
+                        ? "bg-[#D4A843] text-[#050505]"
+                        : "bg-white/10 text-white/70"
+                    }`}
+                  >
+                    {cat === "ALL" ? "ALL PLATES" : cat}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Vertical Full-Bleed Stacked Gallery Feed (Matches Video 5 "EAST 64 FILMS"!) */}
+          <div
+            style={{ padding: "16px 14px 48px" }}
+            className="space-y-4 max-w-xl mx-auto"
+          >
+            {filteredGalleryItems.map((item, idx) => {
+              const cardKey = item._id || item.id || String(idx);
+              const isExpanded = expandedGalleryId === cardKey;
+
+              return (
+                <div
+                  key={cardKey}
+                  className="relative w-full rounded-2xl overflow-hidden bg-[#141418] border border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.75)]"
+                >
+                  <div className="relative w-full aspect-[4/3] overflow-hidden">
+                    <img
+                      src={item.src}
+                      alt={item.title}
+                      className="w-full h-full object-cover saturate-[1.12]"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/35" />
+
+                    {/* Top Plate Number & Category */}
+                    <div
+                      style={{ padding: "12px 14px" }}
+                      className="absolute top-0 inset-x-0 flex items-center justify-between font-mono text-[8.5px] tracking-[0.2em] uppercase"
+                    >
+                      <span className="px-2.5 py-1 rounded bg-black/70 text-[#D4A843] font-bold">
+                        {item.category}
+                      </span>
+                      <span className="text-white/75">{item.filmStock}</span>
+                    </div>
+
+                    {/* Centered Editorial Typography Overlay (Matches Video 5!) */}
+                    <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
+                      <h3 className="font-serif text-2xl sm:text-3xl text-white font-light tracking-wide drop-shadow-[0_4px_16px_rgba(0,0,0,0.9)]">
+                        {item.title}
+                      </h3>
+                      <p
+                        style={{ marginTop: "4px" }}
+                        className="font-mono text-[9.5px] tracking-[0.22em] uppercase text-white/85"
+                      >
+                        BY {item.photographer}
+                      </p>
+                    </div>
+
+                    {/* Bottom Centered Pill Button: [ + VIEW IN LOUPE ] (Matches Video 5!) */}
+                    <div className="absolute bottom-3.5 inset-x-0 flex justify-center">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setExpandedGalleryId(isExpanded ? null : cardKey)
+                        }
+                        style={{ padding: "7px 16px" }}
+                        className="rounded-md bg-white/95 hover:bg-[#D4A843] text-[#050505] font-mono text-[9px] font-bold uppercase tracking-[0.18em] shadow-lg cursor-pointer transition-colors"
+                      >
+                        {isExpanded ? "− HIDE DETAILS" : "+ VIEW IN LOUPE"}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Expandable Curatorial Loupe Details */}
+                  {isExpanded && (
+                    <div
+                      style={{ padding: "16px 18px" }}
+                      className="bg-[#18181F] border-t border-white/10 space-y-2.5 animate-fade-in"
+                    >
+                      <div className="flex items-center justify-between font-mono text-[9px] text-[#D4A843] uppercase tracking-[0.18em]">
+                        <span>EXIF // {item.exif || "35MM · F/2.0"}</span>
+                        <span>📍 {item.location || "GCU ARCHIVE"}</span>
+                      </div>
+                      <p className="font-body text-xs text-white/80 leading-relaxed">
+                        {item.description}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* ============================================================
+          MODAL 3: STUDIO MEMBER BIO SHEET (With ← BACK Button)
+          ============================================================ */}
+      {selectedMemberModal && (
+        <div
+          onClick={() => setSelectedMemberModal(null)}
+          style={{ padding: "20px" }}
+          className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-md flex items-center justify-center animate-fade-in"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{ padding: "22px" }}
+            className="w-full max-w-sm bg-white text-[#111111] rounded-3xl shadow-2xl space-y-4"
+          >
+            <div className="flex items-center justify-between">
+              <button
+                type="button"
+                onClick={() => setSelectedMemberModal(null)}
+                style={{ padding: "6px 12px" }}
+                className="rounded-full bg-[#111111] text-white font-mono text-[9.5px] font-bold uppercase tracking-widest flex items-center gap-1.5 cursor-pointer"
+              >
+                <span>←</span>
+                <span>BACK</span>
+              </button>
+              <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-black/45 font-bold">
+                SHUTTERSCAPE ROSTER
+              </span>
+            </div>
+
+            <div
+              style={{
+                backgroundColor: selectedMemberModal.bgColor,
+                clipPath:
+                  "polygon(0 0, 100% 0, 100% 100%, 24px 100%, 0 calc(100% - 24px))",
+              }}
+              className="relative w-full aspect-[4/4.2] rounded-2xl overflow-hidden"
+            >
+              <img
+                src={selectedMemberModal.person.img}
+                alt={selectedMemberModal.person.name}
+                className="w-full h-full object-cover object-top"
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <span className="font-mono text-[9.5px] tracking-[0.2em] uppercase text-[#D92B2B] font-bold block">
+                {selectedMemberModal.person.role}
+              </span>
+              <h3 className="font-heading font-black text-2xl text-[#111111]">
+                {selectedMemberModal.person.name}
+              </h3>
+              {selectedMemberModal.person.dept && (
+                <p className="font-mono text-[10px] text-black/55">
+                  {selectedMemberModal.person.dept}
+                </p>
+              )}
+              <p className="font-body text-xs text-black/75 leading-relaxed pt-2">
+                {selectedMemberModal.person.bio ||
+                  `${selectedMemberModal.person.name} is a key member of ShutterScape at Girijananda Chowdhury University, contributing to exhibitions, photowalks, and archival documentation.`}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ============================================================
+          MODAL 4: "REGISTER YOUR INTEREST" SWISS FORM MODAL (With ← BACK Button)
           ============================================================ */}
       {isRegisterModalOpen && (
         <div className="fixed inset-0 z-[9999] bg-[#FAF9F5] text-[#111111] overflow-y-auto animate-fade-in flex flex-col justify-between">
           <div>
             <div className="osl-pad-md flex items-center justify-between border-b border-black/15 sticky top-0 bg-[#FAF9F5]/95 z-20">
-              <span className="font-mono text-[10px] tracking-[0.18em] uppercase text-[#111111] font-bold">
-                JOIN SHUTTERSCAPE &apos;26
-              </span>
               <button
                 type="button"
                 onClick={() => setIsRegisterModalOpen(false)}
-                className="font-mono text-[10px] tracking-[0.18em] uppercase text-[#111111] font-bold cursor-pointer"
+                style={{ padding: "6px 12px" }}
+                className="rounded-full bg-[#111111] text-white font-mono text-[9.5px] tracking-[0.18em] uppercase font-bold cursor-pointer flex items-center gap-1.5"
               >
-                CLOSE
+                <span>←</span>
+                <span>BACK</span>
               </button>
+              <span className="font-mono text-[10px] tracking-[0.18em] uppercase text-[#111111] font-bold">
+                JOIN SHUTTERSCAPE &apos;26
+              </span>
             </div>
 
             <div className="osl-pad-lg space-y-6">
-              <h2 className="font-heading font-black text-3xl uppercase tracking-[-0.03em] leading-[0.95] text-[#111111]">
-                REGISTER
-                <br />
-                YOUR INTEREST
-                <br />
-                IN SHUTTERSCAPE:
-              </h2>
+              <div>
+                <h2 className="font-heading font-black text-3xl uppercase tracking-[-0.03em] leading-[0.95] text-[#111111]">
+                  REGISTER
+                  <br />
+                  YOUR INTEREST
+                  <br />
+                  IN SHUTTERSCAPE:
+                </h2>
+                {registerEventName && (
+                  <span
+                    style={{ marginTop: "8px", padding: "4px 10px" }}
+                    className="inline-block rounded bg-[#D4A843] text-[#050505] font-mono text-[9.5px] font-bold uppercase tracking-wider"
+                  >
+                    EVENT RSVP // {registerEventName}
+                  </span>
+                )}
+              </div>
 
               {registerSubmitted ? (
                 <div className="p-6 border border-black/20 bg-[#ECEBE6] space-y-3">
@@ -2544,6 +3728,11 @@ export default function MobileOilstainExperience() {
                   <textarea
                     rows={3}
                     required
+                    defaultValue={
+                      registerEventName
+                        ? `RSVP for ${registerEventName} — `
+                        : ""
+                    }
                     placeholder="YOUR MESSAGE / CAMERA GEAR*"
                     className="osl-input-line resize-none"
                   />
