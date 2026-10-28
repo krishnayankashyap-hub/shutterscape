@@ -199,33 +199,6 @@ const FALLBACK_COMMITTEE = [
   },
 ];
 
-const FALLBACK_REELS = [
-  {
-    id: "01",
-    photographer: "World Photography Day",
-    videoSrc:
-      "https://videos.pexels.com/video-files/853889/853889-hd_1080_1920_25fps.mp4",
-    posterSrc:
-      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800&q=80",
-  },
-  {
-    id: "02",
-    photographer: "Glimpse of Grooming Club's Ramp Walk",
-    videoSrc:
-      "https://videos.pexels.com/video-files/2871932/2871932-uhd_2160_3840_25fps.mp4",
-    posterSrc:
-      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80",
-  },
-  {
-    id: "03",
-    photographer: "Wall Painting & Street Walk",
-    videoSrc:
-      "https://videos.pexels.com/video-files/5377684/5377684-hd_1080_1920_25fps.mp4",
-    posterSrc:
-      "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&q=80",
-  },
-];
-
 type AboutTabKey = "ORIGINS" | "LEADERSHIP" | "LEGACY";
 type PillarKey = "ORIGIN" | "BEAUTY" | "ASYLUM" | null;
 type NavTabId = "home" | "gallery" | "about" | "activity" | "moments";
@@ -242,45 +215,105 @@ const FLOATING_NAV_ITEMS: {
   { id: "moments", label: "Moments", sectionId: "mobile-chronology-matrix" },
 ];
 
-// Clean Minimalist Icons matching the "Modern Floating Navbar - UI Kit" screenshot
+// Clean Minimalist Icons scaled for the compact glassy floating navbar
 function renderFloatingNavIcon(id: NavTabId, isActive: boolean) {
-  const strokeColor = isActive ? "#FFFFFF" : "#64748B";
+  const strokeColor = isActive ? "#FFFFFF" : "rgba(255, 255, 255, 0.72)";
+  const size = isActive ? 16 : 15;
   switch (id) {
     case "home":
       return (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={strokeColor} strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+        <svg
+          width={size}
+          height={size}
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke={strokeColor}
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           <path d="M3 10.5L12 3l9 7.5v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-9z" />
           <circle cx="12" cy="14" r="2.5" />
         </svg>
       );
     case "gallery":
       return (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={strokeColor} strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+        <svg
+          width={size}
+          height={size}
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke={strokeColor}
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           <circle cx="11" cy="11" r="7" />
           <line x1="21" y1="21" x2="16.65" y2="16.65" />
         </svg>
       );
     case "about":
       return (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={strokeColor} strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+        <svg
+          width={size}
+          height={size}
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke={strokeColor}
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           <path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2L12 3z" />
           <path d="M18 4l.8 2.2L21 7l-2.2.8L18 10l-.8-2.2L15 7l2.2-.8L18 4z" />
         </svg>
       );
     case "activity":
       return (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={strokeColor} strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+        <svg
+          width={size}
+          height={size}
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke={strokeColor}
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           <polygon points="22 3 2 11 11 14 14 22 22 3" />
         </svg>
       );
     case "moments":
       return (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={strokeColor} strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+        <svg
+          width={size}
+          height={size}
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke={strokeColor}
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           <circle cx="12" cy="8" r="4" />
           <path d="M5 20a7 7 0 0 1 14 0" />
         </svg>
       );
   }
+}
+
+// Helper to build the glitch-free SVG path for the 310x50 compact liquid-notch pill
+// Inset columns: 15px left/right padding -> 5 columns of 56px width -> centers at 43, 99, 155, 211, 267
+// Corner radius = 22px, Notch half-width = 21px -> 43 - 21 = 22 (NEVER collides with left/right corners!)
+function buildCompactNotchPath(cx: number): string {
+  const safeCx = Math.max(43, Math.min(267, cx));
+  const nStart = (safeCx - 21).toFixed(2);
+  const c1 = (safeCx - 12.5).toFixed(2);
+  const center = safeCx.toFixed(2);
+  const c2 = (safeCx + 12.5).toFixed(2);
+  const nEnd = (safeCx + 21).toFixed(2);
+
+  return `M 22 0 L ${nStart} 0 C ${c1} 0, ${c1} 19.5, ${center} 19.5 C ${c2} 19.5, ${c2} 0, ${nEnd} 0 L 288 0 A 22 22 0 0 1 310 22 L 310 28 A 22 22 0 0 1 288 50 L 22 50 A 22 22 0 0 1 0 28 L 0 22 A 22 22 0 0 1 22 0 Z`;
 }
 
 // 10 hardware-accelerated cylindrical slices per frame
@@ -291,10 +324,11 @@ export default function MobileOilstainExperience() {
   const [gallery, setGallery] = useState<any[]>(FALLBACK_GALLERY);
   const [activities, setActivities] = useState<any[]>(FALLBACK_ACTIVITIES);
   const [committee, setCommittee] = useState<any[]>(FALLBACK_COMMITTEE);
-  const [reels, setReels] = useState<any[]>(FALLBACK_REELS);
+  const [reels, setReels] = useState<any[]>([]);
 
   // Interactive UI States
   const [activeNavTab, setActiveNavTab] = useState<NavTabId>("home");
+  const [isScrolledTop, setIsScrolledTop] = useState(false);
   const [isGalleryDrawerOpen, setIsGalleryDrawerOpen] = useState(false);
   const [activeGalleryIdx, setActiveGalleryIdx] = useState(0);
   const [activePillarSheet, setActivePillarSheet] = useState<PillarKey>(null);
@@ -317,6 +351,17 @@ export default function MobileOilstainExperience() {
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const heroVideoRef = useRef<HTMLVideoElement>(null);
 
+  // Refs for glitch-free 60fps Notch & Bubble Spring Interpolation
+  const clipPathElementRef = useRef<SVGPathElement>(null);
+  const borderPathElementRef = useRef<SVGPathElement>(null);
+  const activeBubbleRef = useRef<HTMLDivElement>(null);
+  const currentNotchXRef = useRef<number>(43);
+  const targetNotchXRef = useRef<number>(43);
+  const isProgrammaticScrollRef = useRef<boolean>(false);
+  const programmaticScrollTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  );
+
   // Refs for the 3D Concave Cylindrical Curved Auto-Ribbon
   const curvedCardOuterRefs = useRef<(HTMLDivElement | null)[]>([]);
   const curvedSliceRefs = useRef<(HTMLDivElement | null)[][]>([]);
@@ -338,14 +383,27 @@ export default function MobileOilstainExperience() {
     }
   };
 
-  // Smoothly scroll to Page 2 when tapping the gold CTA bar
+  // Lock scroll-spy briefly when user clicks a tab or CTA so the bubble never bounces/glitches mid-scroll
+  const lockProgrammaticScroll = (durationMs = 900) => {
+    isProgrammaticScrollRef.current = true;
+    if (programmaticScrollTimerRef.current) {
+      clearTimeout(programmaticScrollTimerRef.current);
+    }
+    programmaticScrollTimerRef.current = setTimeout(() => {
+      isProgrammaticScrollRef.current = false;
+    }, durationMs);
+  };
+
   const handleEnterArchiveTransition = () => {
+    lockProgrammaticScroll(950);
     setActiveNavTab("gallery");
     archiveSectionRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // Handle Floating Bottom Navbar Tab Click
-  const handleFloatingNavClick = (item: (typeof FLOATING_NAV_ITEMS)[number]) => {
+  const handleFloatingNavClick = (
+    item: (typeof FLOATING_NAV_ITEMS)[number]
+  ) => {
+    lockProgrammaticScroll(950);
     setActiveNavTab(item.id);
     if (item.id === "home") {
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -357,16 +415,64 @@ export default function MobileOilstainExperience() {
     }
   };
 
-  // Automatically sync Active Floating Navbar Tab as user scrolls through sections
+  // Update target notch coordinate whenever activeNavTab changes
+  useEffect(() => {
+    const idx = Math.max(
+      0,
+      FLOATING_NAV_ITEMS.findIndex((it) => it.id === activeNavTab)
+    );
+    // 5 columns inside 310px width (15px padding left/right -> 280px inner width -> 56px per column)
+    targetNotchXRef.current = 15 + 28 + idx * 56;
+  }, [activeNavTab]);
+
+  // 60FPS Hardware-Accelerated Notch & Active Bubble Spring Engine (Zero CSS `d` Transition Glitches!)
+  useEffect(() => {
+    let rafId = 0;
+
+    const animateNotch = () => {
+      const diff = targetNotchXRef.current - currentNotchXRef.current;
+      if (Math.abs(diff) > 0.08) {
+        currentNotchXRef.current += diff * 0.22;
+      } else {
+        currentNotchXRef.current = targetNotchXRef.current;
+      }
+
+      const cx = currentNotchXRef.current;
+      const dStr = buildCompactNotchPath(cx);
+
+      if (clipPathElementRef.current) {
+        clipPathElementRef.current.setAttribute("d", dStr);
+      }
+      if (borderPathElementRef.current) {
+        borderPathElementRef.current.setAttribute("d", dStr);
+      }
+      if (activeBubbleRef.current) {
+        const pct = (cx / 310) * 100;
+        activeBubbleRef.current.style.left = `${pct.toFixed(3)}%`;
+      }
+
+      rafId = requestAnimationFrame(animateNotch);
+    };
+
+    rafId = requestAnimationFrame(animateNotch);
+    return () => cancelAnimationFrame(rafId);
+  }, []);
+
+  // Automatically sync Active Floating Navbar Tab & Top Bar Transparency on scroll
   useEffect(() => {
     const onScrollSyncNav = () => {
-      const vh = window.innerHeight;
       const scrollY = window.scrollY;
+      setIsScrolledTop(scrollY > 24);
+
+      if (isProgrammaticScrollRef.current) return;
+
+      const vh = window.innerHeight;
       if (scrollY < vh * 0.45) {
         setActiveNavTab("home");
         return;
       }
 
+      //Ordered from bottom-most section to top-most section in the DOM
       const checkOrder: { id: NavTabId; elId: string }[] = [
         { id: "moments", elId: "mobile-chronology-matrix" },
         { id: "about", elId: "mobile-light-about-section" },
@@ -698,35 +804,12 @@ export default function MobileOilstainExperience() {
     (m) => m.tier === "FOUNDER" || m.tier === "CORE" || m.tier === "LEGACY"
   );
 
-  // Calculate SVG Concave Liquid Notch coordinate for the Modern Floating Navbar
-  const activeNavIndex = Math.max(
-    0,
-    FLOATING_NAV_ITEMS.findIndex((it) => it.id === activeNavTab)
-  );
-  // SVG coordinate system width = 360, height = 66, 5 columns => centers at 36, 108, 180, 252, 324
-  const notchCenterX = 36 + activeNavIndex * 72;
-  const floatingNavSvgPath = `
-    M 30 0
-    L ${notchCenterX - 36} 0
-    C ${notchCenterX - 24} 0, ${notchCenterX - 23} 28, ${notchCenterX} 28
-    C ${notchCenterX + 23} 28, ${notchCenterX + 24} 0, ${notchCenterX + 36} 0
-    L 330 0
-    A 30 30 0 0 1 360 30
-    L 360 36
-    A 30 30 0 0 1 330 66
-    L 30 66
-    A 30 30 0 0 1 0 36
-    L 0 30
-    A 30 30 0 0 1 30 0
-    Z
-  `;
-
   return (
     <div
       id="shutterscape-mobile-oilstain"
-      className="w-full min-h-screen bg-[#ECEBE6] text-[#111111] font-sans select-none overflow-x-clip pb-24"
+      className="w-full min-h-screen bg-[#ECEBE6] text-[#111111] font-sans select-none overflow-x-clip pb-20"
     >
-      {/* Inline SVG Ink-Bleed Filter so the Handmade Writing looks like real fountain pen ink on cotton paper */}
+      {/* Inline SVG Ink-Bleed Filter */}
       <svg
         width="0"
         height="0"
@@ -758,13 +841,12 @@ export default function MobileOilstainExperience() {
         </defs>
       </svg>
 
-      {/* Scoped Stylesheet + Authentic Handmade Fountain-Pen Google Fonts */}
+      {/* Scoped Stylesheet */}
       <style
         dangerouslySetInnerHTML={{
           __html: `
         @import url('https://fonts.googleapis.com/css2?family=Nothing+You+Could+Do&family=Reenie+Beanie&display=swap');
 
-        /* Hide the old GlobalBranding top text links on mobile (< 1024px) so only our Modern Floating Navbar & Logo show! */
         @media (max-width: 1023px) {
           header[aria-label="Global Viewfinder Navigation"] {
             display: none !important;
@@ -844,7 +926,6 @@ export default function MobileOilstainExperience() {
           color: rgba(17, 17, 17, 0.55);
           text-transform: uppercase;
         }
-        /* Authentic Handmade Fountain-Pen Script (Velaa Reference Style) */
         #shutterscape-mobile-oilstain .handmade-fountain-pen {
           font-family: 'Nothing You Could Do', cursive !important;
           font-weight: 400;
@@ -929,34 +1010,44 @@ export default function MobileOilstainExperience() {
       />
 
       {/* ============================================================
-          MODERN FLOATING TOP SHUTTERSCAPE BRAND PILL (Mobile Only)
-          Displays the ShutterScape Logo + GCU / Join button cleanly at top
+          UP NAVBAR: TRANSPARENT ON SCROLL (Ultra-Clean Frosted Glass)
           ============================================================ */}
       <div
-        style={{ padding: "8px 14px" }}
-        className="fixed top-3 inset-x-3.5 z-[9980] rounded-full bg-[#0A0A0D]/90 backdrop-blur-xl border border-white/15 shadow-[0_10px_30px_rgba(0,0,0,0.35)] flex items-center justify-between pointer-events-auto"
+        style={{
+          padding: "7px 14px",
+          backgroundColor: isScrolledTop
+            ? "rgba(12, 12, 16, 0.22)"
+            : "rgba(12, 12, 16, 0.08)",
+          backdropFilter: "blur(14px) saturate(160%)",
+          WebkitBackdropFilter: "blur(14px) saturate(160%)",
+          borderColor: isScrolledTop
+            ? "rgba(255, 255, 255, 0.16)"
+            : "rgba(255, 255, 255, 0.1)",
+        }}
+        className="fixed top-2.5 inset-x-3.5 z-[9980] rounded-full border transition-all duration-300 flex items-center justify-between pointer-events-auto"
       >
         <button
           type="button"
           onClick={() => {
+            lockProgrammaticScroll(950);
             setActiveNavTab("home");
             window.scrollTo({ top: 0, behavior: "smooth" });
           }}
-          className="flex items-center gap-2.5 cursor-pointer"
+          className="flex items-center gap-2 cursor-pointer"
         >
-          <div className="relative h-6 w-24">
+          <div className="relative h-5 w-22 drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
             <Image
               src="/images/shutterscape-brand-white.png"
               alt="ShutterScape Logo"
               fill
-              sizes="96px"
+              sizes="88px"
               priority
               unoptimized
               className="object-contain object-left"
             />
           </div>
-          <span className="h-3.5 w-[1px] bg-white/20" />
-          <span className="flex items-center gap-1 font-mono text-[8.5px] tracking-[0.2em] text-[#EF4444] font-bold uppercase">
+          <span className="h-3 w-[1px] bg-white/25" />
+          <span className="flex items-center gap-1 font-mono text-[8px] tracking-[0.2em] text-[#EF4444] font-bold uppercase drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
             <span className="w-1.5 h-1.5 rounded-full bg-[#EF4444] animate-pulse" />
             REC
           </span>
@@ -969,8 +1060,8 @@ export default function MobileOilstainExperience() {
               setRegisterSubmitted(false);
               setIsRegisterModalOpen(true);
             }}
-            style={{ padding: "5px 11px" }}
-            className="rounded-full bg-[#D4A843] text-[#050505] font-mono text-[8.5px] font-bold tracking-[0.16em] uppercase cursor-pointer"
+            style={{ padding: "4px 10px" }}
+            className="rounded-full bg-[#D4A843]/90 hover:bg-[#D4A843] text-[#050505] font-mono text-[8px] font-bold tracking-[0.16em] uppercase cursor-pointer shadow-xs"
           >
             JOIN &apos;26
           </button>
@@ -978,7 +1069,7 @@ export default function MobileOilstainExperience() {
             href="https://gcu.ac.in"
             target="_blank"
             rel="noopener noreferrer"
-            className="relative h-5 w-16 opacity-90"
+            className="relative h-4.5 w-14 opacity-95 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]"
             title="Girijananda Chowdhury University"
           >
             <img
@@ -991,45 +1082,78 @@ export default function MobileOilstainExperience() {
       </div>
 
       {/* ============================================================
-          MODERN FLOATING LIQUID-NOTCH NAVBAR (Exact Match to Screenshot!)
-          Features the carved SVG concave notch cradle + elevated circular
-          active button + bold active label underneath
+          DOWN NAVBAR: SMALL, GLASSY TRANSPARENT & GLITCH-FREE
+          - Width: 310px, Height: 50px (Compact & Small)
+          - Always Glassy Transparent (backdrop-filter: blur(20px) clipped to liquid notch)
+          - 60fps Spring-Interpolated Notch & 34px Glass Active Bubble
           ============================================================ */}
       <nav
         aria-label="Mobile Floating Navigation"
-        className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[9985] w-[92vw] max-w-[375px] h-[66px] select-none pointer-events-auto"
+        style={{ width: "310px", height: "50px" }}
+        className="fixed bottom-3 left-1/2 -translate-x-1/2 z-[9985] max-w-[90vw] select-none pointer-events-auto"
       >
-        {/* Carved SVG Pill with Smooth Concave Liquid Notch */}
+        {/* Hidden SVG ClipPath Definition (Clips the real backdrop-blur glass layer!) */}
+        <svg width="0" height="0" className="absolute pointer-events-none">
+          <defs>
+            <clipPath id="compact-glass-notch-clip">
+              <path
+                ref={clipPathElementRef}
+                d={buildCompactNotchPath(43)}
+              />
+            </clipPath>
+          </defs>
+        </svg>
+
+        {/* True Glassmorphic Transparent Layer Clipped to the Liquid Notch Shape */}
+        <div
+          style={{
+            clipPath: "url(#compact-glass-notch-clip)",
+            WebkitClipPath: "url(#compact-glass-notch-clip)",
+            backgroundColor: "rgba(18, 18, 24, 0.34)",
+            backdropFilter: "blur(20px) saturate(180%)",
+            WebkitBackdropFilter: "blur(20px) saturate(180%)",
+          }}
+          className="absolute inset-0 w-full h-full shadow-[0_10px_30px_rgba(0,0,0,0.28)]"
+        />
+
+        {/* Specular Glass Border Stroke along the Liquid Notch Contour */}
         <svg
-          viewBox="0 0 360 66"
+          viewBox="0 0 310 50"
           preserveAspectRatio="none"
-          className="w-full h-full drop-shadow-[0_18px_38px_rgba(0,0,0,0.45)] overflow-visible"
+          className="absolute inset-0 w-full h-full pointer-events-none overflow-visible"
         >
           <path
-            d={floatingNavSvgPath}
-            fill="#0A0A0D"
-            stroke="rgba(255,255,255,0.12)"
+            ref={borderPathElementRef}
+            d={buildCompactNotchPath(43)}
+            fill="rgba(255, 255, 255, 0.04)"
+            stroke="rgba(255, 255, 255, 0.24)"
             strokeWidth="1"
-            style={{ transition: "d 0.38s cubic-bezier(0.22, 1, 0.36, 1)" }}
           />
         </svg>
 
-        {/* Elevated Circular Active Icon Button sitting inside the Concave Notch */}
+        {/* Compact 34px Glassy Transparent Active Circle Bubble inside the Notch */}
         <div
+          ref={activeBubbleRef}
           style={{
-            left: `${(activeNavIndex + 0.5) * 20}%`,
-            top: "-18px",
-            width: "44px",
-            height: "44px",
-            transition: "left 0.38s cubic-bezier(0.22, 1, 0.36, 1)",
+            left: `${(43 / 310) * 100}%`,
+            top: "-13px",
+            width: "34px",
+            height: "34px",
+            backgroundColor: "rgba(22, 22, 30, 0.44)",
+            backdropFilter: "blur(20px) saturate(180%)",
+            WebkitBackdropFilter: "blur(20px) saturate(180%)",
+            border: "1px solid rgba(255, 255, 255, 0.28)",
           }}
-          className="absolute -translate-x-1/2 rounded-full bg-[#0A0A0D] border border-white/20 shadow-[0_8px_20px_rgba(0,0,0,0.55)] flex items-center justify-center pointer-events-none z-20"
+          className="absolute -translate-x-1/2 rounded-full shadow-[0_6px_16px_rgba(0,0,0,0.35)] flex items-center justify-center pointer-events-none z-20"
         >
           {renderFloatingNavIcon(activeNavTab, true)}
         </div>
 
-        {/* 5 Interactive Tab Columns */}
-        <div className="absolute inset-0 grid grid-cols-5 items-center z-10">
+        {/* 5 Interactive Tab Columns (15px side inset so outer tabs align with the notch) */}
+        <div
+          style={{ paddingLeft: "15px", paddingRight: "15px" }}
+          className="absolute inset-0 grid grid-cols-5 items-center z-10"
+        >
           {FLOATING_NAV_ITEMS.map((item) => {
             const isActive = item.id === activeNavTab;
             return (
@@ -1039,28 +1163,28 @@ export default function MobileOilstainExperience() {
                 onClick={() => handleFloatingNavClick(item)}
                 className="relative h-full w-full flex flex-col items-center justify-center cursor-pointer bg-transparent border-0 outline-none"
               >
-                {/* Inactive Icon (fades out when elevated into the top notch circle) */}
                 <span
                   style={{
-                    transform: isActive ? "translateY(-14px) scale(0.5)" : "translateY(-2px) scale(1)",
-                    opacity: isActive ? 0 : 0.65,
-                    transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)",
+                    transform: isActive
+                      ? "translateY(-10px) scale(0.4)"
+                      : "translateY(-1px) scale(1)",
+                    opacity: isActive ? 0 : 0.8,
+                    transition: "all 0.26s cubic-bezier(0.22, 1, 0.36, 1)",
                   }}
-                  className="flex items-center justify-center"
+                  className="flex items-center justify-center drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]"
                 >
                   {renderFloatingNavIcon(item.id, false)}
                 </span>
 
-                {/* Tab Label (Bold white when active under the notch, muted grey when inactive) */}
                 <span
                   style={{
-                    marginTop: isActive ? "16px" : "4px",
-                    transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)",
+                    marginTop: isActive ? "13px" : "3px",
+                    transition: "all 0.26s cubic-bezier(0.22, 1, 0.36, 1)",
                   }}
-                  className={`font-sans text-[11px] tracking-[0.01em] leading-none ${
+                  className={`font-sans text-[9.5px] tracking-[0.02em] leading-none drop-shadow-[0_1px_4px_rgba(0,0,0,0.75)] ${
                     isActive
                       ? "text-white font-semibold"
-                      : "text-[#64748B] font-normal"
+                      : "text-white/70 font-normal"
                   }`}
                 >
                   {item.label}
@@ -1072,7 +1196,7 @@ export default function MobileOilstainExperience() {
       </nav>
 
       {/* ============================================================
-          1. OPENING SPLASH HERO (Sticky z-10 so Page 2 physically wipes up over it on swipe!)
+          1. OPENING SPLASH HERO (Sticky z-10 so Page 2 physically wipes up over it!)
           ============================================================ */}
       <section
         id="mobile-hero-top"
@@ -1106,8 +1230,8 @@ export default function MobileOilstainExperience() {
           />
         </div>
 
-        {/* Top Clearance for Floating Brand Pill */}
-        <div className="relative z-10 w-full pt-16 pointer-events-none" />
+        {/* Top Clearance for Transparent Brand Pill */}
+        <div className="relative z-10 w-full pt-14 pointer-events-none" />
 
         <div
           key={heroAnimKey}
@@ -1177,12 +1301,13 @@ export default function MobileOilstainExperience() {
           </p>
         </div>
 
+        {/* Flush Bottom Bar with Audio Toggle & Gold CTA */}
         <div
-          style={{ paddingBottom: "88px" }}
-          className="relative z-10 w-full flex flex-col"
+          style={{ paddingBottom: "68px" }}
+          className="relative z-10 w-full flex flex-col bg-black/55 backdrop-blur-xs"
         >
-          <div className="osl-pad-sm flex items-center justify-between font-mono text-[8.5px] tracking-[0.2em] text-white/55 uppercase border-t border-white/10 bg-black/45 backdrop-blur-xs">
-            <span className="pl-14">f/1.4 · 1/1000s · ISO 400</span>
+          <div className="osl-pad-sm flex items-center justify-between font-mono text-[8.5px] tracking-[0.2em] text-white/55 uppercase border-t border-white/10">
+            <span className="pl-12">f/1.4 · 1/1000s · ISO 400</span>
             <span>GCU · ASSAM</span>
           </div>
 
@@ -1190,7 +1315,7 @@ export default function MobileOilstainExperience() {
             <button
               type="button"
               onClick={toggleHeroAudio}
-              className="absolute bottom-2.5 left-3.5 z-20 flex h-10 w-10 items-center justify-center rounded-full border border-[#D4A843]/60 bg-[#161513] text-[#D4A843] shadow-[0_4px_16px_rgba(0,0,0,0.6)] cursor-pointer active:scale-95 transition-transform"
+              className="absolute bottom-2 left-3 z-20 flex h-9 w-9 items-center justify-center rounded-full border border-[#D4A843]/60 bg-[#161513] text-[#D4A843] shadow-[0_4px_16px_rgba(0,0,0,0.6)] cursor-pointer active:scale-95 transition-transform"
               title={isHeroMuted ? "Unmute video sound" : "Mute video sound"}
               aria-label={
                 isHeroMuted ? "Unmute video sound" : "Mute video sound"
@@ -1198,8 +1323,8 @@ export default function MobileOilstainExperience() {
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
+                width="15"
+                height="15"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -1225,11 +1350,11 @@ export default function MobileOilstainExperience() {
             <button
               type="button"
               onClick={handleEnterArchiveTransition}
-              style={{ padding: "14px 20px 14px 64px" }}
-              className="w-full flex items-center justify-between bg-[#D4A843] text-[#050505] font-mono text-[10px] font-bold tracking-[0.18em] uppercase cursor-pointer hover:bg-[#E5B955] transition-colors"
+              style={{ padding: "13px 18px 13px 56px" }}
+              className="w-full flex items-center justify-between bg-[#D4A843] text-[#050505] font-mono text-[9.5px] font-bold tracking-[0.18em] uppercase cursor-pointer hover:bg-[#E5B955] transition-colors"
             >
               <span>ENTER THE DARKROOM ARCHIVE</span>
-              <span className="text-base leading-none">↓</span>
+              <span className="text-sm leading-none">↓</span>
             </button>
           </div>
         </div>
@@ -1237,21 +1362,16 @@ export default function MobileOilstainExperience() {
 
       {/* ============================================================
           2. PAGE 2: COMPACT SINGLE-SCREEN ARCHIVE STAGE
-             All 4 elements fit on ONE screen at once:
-             1. "shutterscape | 26" Header
-             2. 3D Moving Curved Ribbon
-             3. "LIGHT IS MEMORY. MEMORY IS LIGHT."
-             4. Handmade Fountain-Pen Note ("The Shutterscape Family")
           ============================================================ */}
       <section
         id="mobile-light-spec-section"
         ref={archiveSectionRef}
-        style={{ minHeight: "100svh", paddingBottom: "88px" }}
+        style={{ minHeight: "100svh", paddingBottom: "74px" }}
         className="relative z-20 w-full bg-[#ECEBE6] text-[#111111] shadow-[0_-28px_70px_rgba(0,0,0,0.65)] flex flex-col justify-between overflow-hidden"
       >
         {/* 1. Header Row: Real Shutterscape Logo on Left, "26" on Right */}
         <div
-          style={{ padding: "58px 20px 12px" }}
+          style={{ padding: "54px 20px 12px" }}
           className="relative z-10 flex items-center justify-between border-b border-black/10 shrink-0"
         >
           <div className="relative h-10 w-[125px] sm:h-12 sm:w-[150px] shrink-0">
@@ -1394,7 +1514,6 @@ export default function MobileOilstainExperience() {
           style={{ willChange: "transform, opacity" }}
           className="relative z-10 flex-1 flex flex-col justify-evenly items-center w-full"
         >
-          {/* 3. LIGHT IS MEMORY. MEMORY IS LIGHT. */}
           <div
             style={{
               paddingTop: "4px",
@@ -1417,7 +1536,6 @@ export default function MobileOilstainExperience() {
             </p>
           </div>
 
-          {/* 4. AUTHENTIC HANDMADE FOUNTAIN-PEN LETTER */}
           <div
             style={{
               paddingTop: "10px",
@@ -1857,51 +1975,73 @@ export default function MobileOilstainExperience() {
         </div>
 
         <div className="osl-pad-md pt-0 overflow-x-auto no-scrollbar flex items-center gap-4">
-          {reels.map((reel, idx) => {
-            const isUnmuted = activeAudioReelIdx === idx;
-            const fallbackPoster =
-              reel.posterSrc ||
-              gallery[idx % gallery.length]?.src ||
-              FALLBACK_GALLERY[idx % FALLBACK_GALLERY.length].src;
+          {reels.length > 0
+            ? reels.map((reel, idx) => {
+                const isUnmuted = activeAudioReelIdx === idx;
+                const fallbackPoster =
+                  reel.posterSrc ||
+                  gallery[idx % gallery.length]?.src ||
+                  FALLBACK_GALLERY[idx % FALLBACK_GALLERY.length].src;
 
-            return (
-              <div
-                key={reel._id || reel.id || idx}
-                onClick={() => toggleReelAudio(idx)}
-                style={{
-                  backgroundImage: `url(${fallbackPoster})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }}
-                className="relative shrink-0 w-[68vw] max-w-[260px] aspect-[9/16] bg-[#111111] rounded-xs overflow-hidden border border-black/20 shadow-lg cursor-pointer"
-              >
-                <video
-                  ref={(el) => {
-                    videoRefs.current[idx] = el;
+                return (
+                  <div
+                    key={reel._id || reel.id || idx}
+                    onClick={() => toggleReelAudio(idx)}
+                    style={{
+                      backgroundImage: `url(${fallbackPoster})`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                    }}
+                    className="relative shrink-0 w-[68vw] max-w-[260px] aspect-[9/16] bg-[#111111] rounded-xs overflow-hidden border border-black/20 shadow-lg cursor-pointer"
+                  >
+                    <video
+                      ref={(el) => {
+                        videoRefs.current[idx] = el;
+                      }}
+                      src={reel.videoSrc}
+                      poster={fallbackPoster}
+                      loop
+                      muted
+                      playsInline
+                      preload="metadata"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/30 pointer-events-none" />
+                    <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-black/70 border border-white/20 font-mono text-[8.5px] uppercase tracking-[0.18em] text-white">
+                      {isUnmuted ? "● SOUND ON" : "TAP FOR SOUND"}
+                    </div>
+                    <div className="absolute bottom-3 left-3 right-3 pointer-events-none">
+                      <span className="font-mono text-[8px] tracking-[0.2em] uppercase text-[#D4A843] block">
+                        REEL // 0{idx + 1}
+                      </span>
+                      <span className="font-sans text-sm font-bold text-white line-clamp-1">
+                        {reel.photographer}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })
+            : gallery.slice(0, 3).map((item, idx) => (
+                <div
+                  key={item.id || idx}
+                  style={{
+                    backgroundImage: `url(${item.src})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
                   }}
-                  src={reel.videoSrc}
-                  poster={fallbackPoster}
-                  loop
-                  muted
-                  playsInline
-                  preload="metadata"
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/30 pointer-events-none" />
-                <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-black/70 border border-white/20 font-mono text-[8.5px] uppercase tracking-[0.18em] text-white">
-                  {isUnmuted ? "● SOUND ON" : "TAP FOR SOUND"}
+                  className="relative shrink-0 w-[68vw] max-w-[260px] aspect-[9/16] bg-[#111111] rounded-xs overflow-hidden border border-black/20 shadow-lg"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/30 pointer-events-none" />
+                  <div className="absolute bottom-3 left-3 right-3 pointer-events-none">
+                    <span className="font-mono text-[8px] tracking-[0.2em] uppercase text-[#D4A843] block">
+                      REEL // 0{idx + 1}
+                    </span>
+                    <span className="font-sans text-sm font-bold text-white line-clamp-1">
+                      {item.title}
+                    </span>
+                  </div>
                 </div>
-                <div className="absolute bottom-3 left-3 right-3 pointer-events-none">
-                  <span className="font-mono text-[8px] tracking-[0.2em] uppercase text-[#D4A843] block">
-                    REEL // 0{idx + 1}
-                  </span>
-                  <span className="font-sans text-sm font-bold text-white line-clamp-1">
-                    {reel.photographer}
-                  </span>
-                </div>
-              </div>
-            );
-          })}
+              ))}
         </div>
 
         <div className="w-full mt-2">
