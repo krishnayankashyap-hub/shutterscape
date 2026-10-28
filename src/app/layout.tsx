@@ -110,6 +110,12 @@ export default function RootLayout({
       className={`${cormorant.variable} ${sora.variable} ${inter.variable} ${spaceMono.variable} bg-[#030303] text-[#FAFAFA]`}
     >
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Nothing+You+Could+Do&family=Reenie+Beanie&display=swap"
+          rel="stylesheet"
+        />
         <link
           rel="preload"
           as="image"

@@ -15,6 +15,15 @@ export default function SmoothScroller({
   const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
+    // On mobile devices (< 1024px or touch), let the browser use native 120Hz/60Hz hardware momentum scrolling!
+    // Running Lenis on mobile touch hijacks the touch event stream and causes heavy input lag and stuttering.
+    if (typeof window !== "undefined" && window.innerWidth < 1024) {
+      if ("scrollRestoration" in window.history) {
+        window.history.scrollRestoration = "manual";
+      }
+      return;
+    }
+
     const lenis = new Lenis({
       duration: 1.15,
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),

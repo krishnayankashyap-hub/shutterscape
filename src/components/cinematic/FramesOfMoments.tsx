@@ -98,6 +98,7 @@ export default function FramesOfMoments({ initialReels }: FramesOfMomentsProps =
   // FORCE ALL VIDEOS TO AUTOPLAY SIMULTANEOUSLY & REACTIVELY
   // ============================================================
   useEffect(() => {
+    if (typeof window !== "undefined" && window.innerWidth < 1024) return;
     const playAll = () => {
       videoRefs.current.forEach((video, i) => {
         if (video) {

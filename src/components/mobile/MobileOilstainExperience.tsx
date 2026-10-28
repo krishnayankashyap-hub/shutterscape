@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { MOBILE_HERO_MEDIA } from "@/config/mobileHeroMedia";
@@ -320,6 +320,97 @@ function buildCompactNotchPath(cx: number): string {
 const SLICES_PER_CARD = 10;
 const SLICE_INDICES = Array.from({ length: SLICES_PER_CARD }, (_, i) => i);
 
+// =========================================================================
+// ISOLATED STOP-MOTION FLIPBOOK SUB-COMPONENT (Prevents Root Re-renders!)
+// =========================================================================
+const StopMotionFlipbook = React.memo(function StopMotionFlipbook({
+  matrixStack,
+}: {
+  matrixStack: Array<{ src: string; title: string; orientation: string }>;
+}) {
+  const [photoIdx, setPhotoIdx] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isVisibleRef = useRef(false);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") {
+      isVisibleRef.current = true;
+      return;
+    }
+    const observer = new IntersectionObserver(([entry]) => {
+      isVisibleRef.current = entry.isIntersecting;
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (matrixStack.length <= 1) return;
+    const interval = setInterval(() => {
+      if (isVisibleRef.current) {
+        setPhotoIdx((prev) => (prev + 1) % matrixStack.length);
+      }
+    }, 750);
+    return () => clearInterval(interval);
+  }, [matrixStack.length]);
+
+  const currentFrame = matrixStack[photoIdx % matrixStack.length];
+
+  return (
+    <>
+      <div
+        ref={containerRef}
+        onClick={() => setPhotoIdx((prev) => (prev + 1) % matrixStack.length)}
+        className="relative w-full py-6 overflow-hidden flex items-center justify-center border-y border-black/15 bg-[#FAF9F5] cursor-pointer"
+      >
+        <div
+          aria-hidden="true"
+          className="font-heading font-black text-[13vw] leading-[0.86] tracking-[-0.04em] uppercase text-[#111111] text-center select-none break-all"
+        >
+          SHUTTER*SCAPE*GCU*35MM*RAW*OPTICS*DARKROOM*ASSAM*
+        </div>
+
+        {matrixStack.map((frame, i) => {
+          const isCurrent = i === photoIdx % matrixStack.length;
+          const isPortrait = frame.orientation === "portrait";
+          return (
+            <div
+              key={i}
+              style={{
+                opacity: isCurrent ? 1 : 0,
+                width: isPortrait ? "48%" : "64%",
+                aspectRatio: isPortrait ? "3 / 4" : "4 / 3",
+                padding: "6px",
+              }}
+              className="absolute bg-white shadow-[0_22px_55px_rgba(0,0,0,0.5)] border border-black/15 pointer-events-none transition-opacity duration-200"
+            >
+              <img
+                src={frame.src}
+                alt={frame.title}
+                className="w-full h-full object-cover grayscale contrast-125"
+                loading="lazy"
+              />
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="space-y-2.5">
+        <span className="font-mono text-[9.5px] tracking-[0.2em] uppercase text-[#111111] font-bold block">
+          DOUBLE VISION // {currentFrame?.title || "GCU ARCHIVE"}
+        </span>
+        <p className="font-body text-xs text-black/75 leading-relaxed">
+          ShutterScape was created for students who love to observe, capture,
+          and tell stories through photographs. Whether you shoot on a
+          mechanical 35mm SLR, a mirrorless rig, or your phone—there is a place
+          for you in our darkroom.
+        </p>
+      </div>
+    </>
+  );
+});
+
 export default function MobileOilstainExperience() {
   const [gallery, setGallery] = useState<any[]>(FALLBACK_GALLERY);
   const [activities, setActivities] = useState<any[]>(FALLBACK_ACTIVITIES);
@@ -333,7 +424,6 @@ export default function MobileOilstainExperience() {
   const [activeGalleryIdx, setActiveGalleryIdx] = useState(0);
   const [activePillarSheet, setActivePillarSheet] = useState<PillarKey>(null);
   const [activeAboutTab, setActiveAboutTab] = useState<AboutTabKey>("ORIGINS");
-  const [matrixPhotoIdx, setMatrixPhotoIdx] = useState(0);
   const [isEngineeringDataOpen, setIsEngineeringDataOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [registerSubmitted, setRegisterSubmitted] = useState(false);
@@ -367,6 +457,8 @@ export default function MobileOilstainExperience() {
   const curvedSliceRefs = useRef<(HTMLDivElement | null)[][]>([]);
   const curvedSliceInnerRefs = useRef<(HTMLDivElement | null)[][]>([]);
   const isRibbonPausedRef = useRef<boolean>(false);
+  const isRibbonSectionVisibleRef = useRef<boolean>(true);
+  const isNotchAnimatingRef = useRef<boolean>(false);
   const playheadRef = useRef<number>(0);
 
   const toggleHeroAudio = (e: React.MouseEvent) => {
@@ -415,7 +507,54 @@ export default function MobileOilstainExperience() {
     }
   };
 
-  // Update target notch coordinate whenever activeNavTab changes
+  // High-performance Spring Engine for Floating Navbar Notch (Runs ONLY when moving!)
+  const startNotchAnimation = useCallback(() => {
+    if (isNotchAnimatingRef.current) return;
+    isNotchAnimatingRef.current = true;
+
+    const animateNotch = () => {
+      const diff = targetNotchXRef.current - currentNotchXRef.current;
+      if (Math.abs(diff) > 0.12) {
+        currentNotchXRef.current += diff * 0.24;
+        const cx = currentNotchXRef.current;
+        const dStr = buildCompactNotchPath(cx);
+
+        if (clipPathElementRef.current) {
+          clipPathElementRef.current.setAttribute("d", dStr);
+        }
+        if (borderPathElementRef.current) {
+          borderPathElementRef.current.setAttribute("d", dStr);
+        }
+        if (activeBubbleRef.current) {
+          const pct = (cx / 310) * 100;
+          activeBubbleRef.current.style.left = `${pct.toFixed(3)}%`;
+        }
+
+        requestAnimationFrame(animateNotch);
+      } else {
+        currentNotchXRef.current = targetNotchXRef.current;
+        const cx = currentNotchXRef.current;
+        const dStr = buildCompactNotchPath(cx);
+
+        if (clipPathElementRef.current) {
+          clipPathElementRef.current.setAttribute("d", dStr);
+        }
+        if (borderPathElementRef.current) {
+          borderPathElementRef.current.setAttribute("d", dStr);
+        }
+        if (activeBubbleRef.current) {
+          const pct = (cx / 310) * 100;
+          activeBubbleRef.current.style.left = `${pct.toFixed(3)}%`;
+        }
+
+        isNotchAnimatingRef.current = false;
+      }
+    };
+
+    requestAnimationFrame(animateNotch);
+  }, []);
+
+  // Update target notch coordinate & kick off animation when tab changes
   useEffect(() => {
     const idx = Math.max(
       0,
@@ -423,117 +562,79 @@ export default function MobileOilstainExperience() {
     );
     // 5 columns inside 310px width (15px padding left/right -> 280px inner width -> 56px per column)
     targetNotchXRef.current = 15 + 28 + idx * 56;
-  }, [activeNavTab]);
+    startNotchAnimation();
+  }, [activeNavTab, startNotchAnimation]);
 
-  // 60FPS Hardware-Accelerated Notch & Active Bubble Spring Engine (Zero CSS `d` Transition Glitches!)
+  // Unified, High-Performance RAF-Coalesced Scroll Handler
   useEffect(() => {
-    let rafId = 0;
+    let scrollRafId = 0;
 
-    const animateNotch = () => {
-      const diff = targetNotchXRef.current - currentNotchXRef.current;
-      if (Math.abs(diff) > 0.08) {
-        currentNotchXRef.current += diff * 0.22;
-      } else {
-        currentNotchXRef.current = targetNotchXRef.current;
-      }
+    const onScroll = () => {
+      if (scrollRafId) return;
+      scrollRafId = requestAnimationFrame(() => {
+        scrollRafId = 0;
+        const scrollY = window.scrollY || window.pageYOffset || 0;
 
-      const cx = currentNotchXRef.current;
-      const dStr = buildCompactNotchPath(cx);
+        // 1. Top Bar Transparency Toggle
+        const shouldBeScrolled = scrollY > 24;
+        setIsScrolledTop((prev) => (prev !== shouldBeScrolled ? shouldBeScrolled : prev));
 
-      if (clipPathElementRef.current) {
-        clipPathElementRef.current.setAttribute("d", dStr);
-      }
-      if (borderPathElementRef.current) {
-        borderPathElementRef.current.setAttribute("d", dStr);
-      }
-      if (activeBubbleRef.current) {
-        const pct = (cx / 310) * 100;
-        activeBubbleRef.current.style.left = `${pct.toFixed(3)}%`;
-      }
+        // 2. Drop-in scroll choreography (Section 1 -> Section 2)
+        const sec = archiveSectionRef.current;
+        const ribbonWrap = ribbonDropWrapRef.current;
+        const lowerWrap = lowerContentRiseRef.current;
+        if (sec && ribbonWrap && lowerWrap) {
+          const rect = sec.getBoundingClientRect();
+          const vh = window.innerHeight;
+          const raw = (vh * 0.58 - rect.top) / (vh * 0.58);
+          const p = Math.max(0, Math.min(1, raw));
+          const ease = 1 - Math.pow(1 - p, 3);
 
-      rafId = requestAnimationFrame(animateNotch);
-    };
+          const dropY = (1 - ease) * -64;
+          const scale = 0.88 + ease * 0.12;
+          ribbonWrap.style.transform = `translate3d(0, ${dropY.toFixed(1)}px, 0) scale(${scale.toFixed(3)})`;
 
-    rafId = requestAnimationFrame(animateNotch);
-    return () => cancelAnimationFrame(rafId);
-  }, []);
-
-  // Automatically sync Active Floating Navbar Tab & Top Bar Transparency on scroll
-  useEffect(() => {
-    const onScrollSyncNav = () => {
-      const scrollY = window.scrollY;
-      setIsScrolledTop(scrollY > 24);
-
-      if (isProgrammaticScrollRef.current) return;
-
-      const vh = window.innerHeight;
-      if (scrollY < vh * 0.45) {
-        setActiveNavTab("home");
-        return;
-      }
-
-      //Ordered from bottom-most section to top-most section in the DOM
-      const checkOrder: { id: NavTabId; elId: string }[] = [
-        { id: "moments", elId: "mobile-chronology-matrix" },
-        { id: "about", elId: "mobile-light-about-section" },
-        { id: "activity", elId: "mobile-light-bento-section" },
-        { id: "gallery", elId: "mobile-light-spec-section" },
-      ];
-
-      for (const entry of checkOrder) {
-        const el = document.getElementById(entry.elId);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.top <= vh * 0.52) {
-            setActiveNavTab(entry.id);
-            break;
-          }
+          const textP = Math.max(0, Math.min(1, (p - 0.15) / 0.85));
+          const textY = (1 - textP) * 24;
+          lowerWrap.style.transform = `translate3d(0, ${textY.toFixed(1)}px, 0)`;
+          lowerWrap.style.opacity = `${(0.15 + textP * 0.85).toFixed(3)}`;
         }
-      }
+
+        // 3. Floating Navbar Active Tab Sync
+        if (!isProgrammaticScrollRef.current) {
+          const vh = window.innerHeight;
+          let nextTab: NavTabId = "home";
+          if (scrollY >= vh * 0.45) {
+            const checkOrder: { id: NavTabId; elId: string }[] = [
+              { id: "moments", elId: "mobile-chronology-matrix" },
+              { id: "about", elId: "mobile-light-about-section" },
+              { id: "activity", elId: "mobile-light-bento-section" },
+              { id: "gallery", elId: "mobile-light-spec-section" },
+            ];
+            for (const entry of checkOrder) {
+              const el = document.getElementById(entry.elId);
+              if (el) {
+                const rect = el.getBoundingClientRect();
+                if (rect.top <= vh * 0.52) {
+                  nextTab = entry.id;
+                  break;
+                }
+              }
+            }
+          }
+          setActiveNavTab((prev) => (prev !== nextTab ? nextTab : prev));
+        }
+      });
     };
 
-    window.addEventListener("scroll", onScrollSyncNav, { passive: true });
-    return () => window.removeEventListener("scroll", onScrollSyncNav);
-  }, []);
-
-  // =========================================================================
-  // COMPACT SINGLE-SCREEN SCROLL-SCRUBBED SWIPE CHOREOGRAPHY (Page 1 -> Page 2)
-  // =========================================================================
-  useEffect(() => {
-    const updateScrollChoreography = () => {
-      const sec = archiveSectionRef.current;
-      const ribbonWrap = ribbonDropWrapRef.current;
-      const lowerWrap = lowerContentRiseRef.current;
-      if (!sec || !ribbonWrap || !lowerWrap) return;
-
-      const rect = sec.getBoundingClientRect();
-      const vh = window.innerHeight;
-
-      const raw = (vh * 0.58 - rect.top) / (vh * 0.58);
-      const p = Math.max(0, Math.min(1, raw));
-      const ease = 1 - Math.pow(1 - p, 3);
-
-      const dropY = (1 - ease) * -64;
-      const scale = 0.88 + ease * 0.12;
-      ribbonWrap.style.transform = `translate3d(0, ${dropY.toFixed(
-        1
-      )}px, 0) scale(${scale.toFixed(3)})`;
-
-      const textP = Math.max(0, Math.min(1, (p - 0.15) / 0.85));
-      const textY = (1 - textP) * 24;
-      lowerWrap.style.transform = `translate3d(0, ${textY.toFixed(1)}px, 0)`;
-      lowerWrap.style.opacity = `${(0.15 + textP * 0.85).toFixed(3)}`;
-    };
-
-    updateScrollChoreography();
-    window.addEventListener("scroll", updateScrollChoreography, {
-      passive: true,
-    });
-    window.addEventListener("resize", updateScrollChoreography);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    onScroll();
 
     return () => {
-      window.removeEventListener("scroll", updateScrollChoreography);
-      window.removeEventListener("resize", updateScrollChoreography);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (scrollRafId) cancelAnimationFrame(scrollRafId);
     };
   }, []);
 
@@ -586,6 +687,23 @@ export default function MobileOilstainExperience() {
       window.removeEventListener("shutterscape:loader-complete", triggerAnim);
       clearTimeout(timer);
     };
+  }, []);
+
+  // Viewport observer for Section 2 (pauses the 3D ribbon ticker when offscreen!)
+  useEffect(() => {
+    const sec = archiveSectionRef.current;
+    if (!sec || typeof IntersectionObserver === "undefined") {
+      isRibbonSectionVisibleRef.current = true;
+      return;
+    }
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isRibbonSectionVisibleRef.current = entry.isIntersecting;
+      },
+      { rootMargin: "120px 0px" }
+    );
+    observer.observe(sec);
+    return () => observer.disconnect();
   }, []);
 
   // =========================================================================
@@ -648,6 +766,12 @@ export default function MobileOilstainExperience() {
     let lastTime = performance.now();
 
     const tick = (now: number) => {
+      if (!isRibbonSectionVisibleRef.current) {
+        lastTime = now;
+        rafId = requestAnimationFrame(tick);
+        return;
+      }
+
       const dt = Math.min(0.05, (now - lastTime) / 1000);
       lastTime = now;
 
@@ -736,14 +860,7 @@ export default function MobileOilstainExperience() {
         }));
   }, [gallery, activities]);
 
-  // AUTOMATIC 750MS STOP-MOTION FLIPBOOK LOOP
-  useEffect(() => {
-    if (activeAboutTab !== "ORIGINS" || matrixStack.length <= 1) return;
-    const interval = setInterval(() => {
-      setMatrixPhotoIdx((prev) => (prev + 1) % matrixStack.length);
-    }, 750);
-    return () => clearInterval(interval);
-  }, [activeAboutTab, matrixStack.length]);
+
 
   // Viewport IntersectionObserver for Video Reels
   useEffect(() => {
@@ -809,44 +926,13 @@ export default function MobileOilstainExperience() {
       id="shutterscape-mobile-oilstain"
       className="w-full min-h-screen bg-[#ECEBE6] text-[#111111] font-sans select-none overflow-x-clip pb-20"
     >
-      {/* Inline SVG Ink-Bleed Filter */}
-      <svg
-        width="0"
-        height="0"
-        className="absolute pointer-events-none opacity-0"
-        aria-hidden="true"
-      >
-        <defs>
-          <filter
-            id="handmade-ink-bleed"
-            x="-5%"
-            y="-5%"
-            width="110%"
-            height="110%"
-          >
-            <feTurbulence
-              type="fractalNoise"
-              baseFrequency="0.04"
-              numOctaves="3"
-              result="noise"
-            />
-            <feDisplacementMap
-              in="SourceGraphic"
-              in2="noise"
-              scale="0.7"
-              xChannelSelector="R"
-              yChannelSelector="G"
-            />
-          </filter>
-        </defs>
-      </svg>
+
 
       {/* Scoped Stylesheet */}
       <style
         dangerouslySetInnerHTML={{
           __html: `
-        @import url('https://fonts.googleapis.com/css2?family=Nothing+You+Could+Do&family=Reenie+Beanie&display=swap');
-
+        
         @media (max-width: 1023px) {
           header[aria-label="Global Viewfinder Navigation"] {
             display: none !important;
@@ -930,13 +1016,11 @@ export default function MobileOilstainExperience() {
           font-family: 'Nothing You Could Do', cursive !important;
           font-weight: 400;
           color: #1D1C1A;
-          filter: url(#handmade-ink-bleed);
         }
         #shutterscape-mobile-oilstain .handmade-signature-pen {
           font-family: 'Reenie Beanie', cursive !important;
           font-weight: 400;
           color: #141311;
-          filter: url(#handmade-ink-bleed);
         }
         @keyframes oslRedMarquee {
           0% { transform: translate3d(0%, 0, 0); }
@@ -1434,7 +1518,7 @@ export default function MobileOilstainExperience() {
                   setActiveGalleryIdx(cardIdx);
                   setIsGalleryDrawerOpen(true);
                 }}
-                className="absolute top-1/2 left-1/2 cursor-pointer group"
+                className="absolute top-1/2 left-1/2 cursor-pointer group drop-shadow-[0_14px_28px_rgba(0,0,0,0.32)]"
                 style={{
                   transformStyle: "preserve-3d",
                 }}
@@ -1455,7 +1539,7 @@ export default function MobileOilstainExperience() {
                       ref={(el) => {
                         curvedSliceInnerRefs.current[cardIdx][s] = el;
                       }}
-                      className="relative overflow-hidden rounded-[6px] bg-[#0B0B0E] border border-black/20 will-change-transform shadow-[0_14px_34px_rgba(0,0,0,0.24)]"
+                      className="relative overflow-hidden rounded-[6px] bg-[#0B0B0E] border border-black/20 will-change-transform"
                       style={{
                         backgroundImage: `linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.22) 50%, rgba(0,0,0,0.3) 100%), url(${item.src})`,
                         backgroundSize: "cover",
@@ -1799,56 +1883,7 @@ export default function MobileOilstainExperience() {
               STREET DOCUMENTARY, AND CREATIVE EXCESS.
             </p>
 
-            <div
-              onClick={() =>
-                setMatrixPhotoIdx((prev) => (prev + 1) % matrixStack.length)
-              }
-              className="relative w-full py-6 overflow-hidden flex items-center justify-center border-y border-black/15 bg-[#FAF9F5] cursor-pointer"
-            >
-              <div
-                aria-hidden="true"
-                className="font-heading font-black text-[13vw] leading-[0.86] tracking-[-0.04em] uppercase text-[#111111] text-center select-none break-all"
-              >
-                SHUTTER*SCAPE*GCU*35MM*RAW*OPTICS*DARKROOM*ASSAM*
-              </div>
-
-              {matrixStack.map((frame, i) => {
-                const isCurrent = i === matrixPhotoIdx % matrixStack.length;
-                const isPortrait = frame.orientation === "portrait";
-                return (
-                  <div
-                    key={i}
-                    style={{
-                      opacity: isCurrent ? 1 : 0,
-                      width: isPortrait ? "48%" : "64%",
-                      aspectRatio: isPortrait ? "3 / 4" : "4 / 3",
-                      padding: "6px",
-                    }}
-                    className="absolute bg-white shadow-[0_22px_55px_rgba(0,0,0,0.5)] border border-black/15 pointer-events-none transition-opacity duration-200"
-                  >
-                    <img
-                      src={frame.src}
-                      alt={frame.title}
-                      className="w-full h-full object-cover grayscale contrast-125"
-                    />
-                  </div>
-                );
-              })}
-            </div>
-
-            <div className="space-y-2.5">
-              <span className="font-mono text-[9.5px] tracking-[0.2em] uppercase text-[#111111] font-bold block">
-                DOUBLE VISION //{" "}
-                {matrixStack[matrixPhotoIdx % matrixStack.length]?.title ||
-                  "GCU ARCHIVE"}
-              </span>
-              <p className="font-body text-xs text-black/75 leading-relaxed">
-                ShutterScape was created for students who love to observe,
-                capture, and tell stories through photographs. Whether you shoot
-                on a mechanical 35mm SLR, a mirrorless rig, or your phone—there
-                is a place for you in our darkroom.
-              </p>
-            </div>
+            <StopMotionFlipbook matrixStack={matrixStack} />
           </div>
         )}
 
