@@ -90,6 +90,46 @@ const FALLBACK_GALLERY = [
   },
 ];
 
+const FALLBACK_REELS = [
+  {
+    id: "01",
+    photographer: "World Photography Day",
+    videoSrc: "/api/media/6adf475c3c63e8ae4ff0a9d4",
+  },
+  {
+    id: "02",
+    photographer: "Glimpse of Grooming Club’s Ramp Walk",
+    videoSrc: "/api/media/6ade6c0a40346d3181c85f3a",
+  },
+  {
+    id: "03",
+    photographer: "Wall Painting",
+    videoSrc: "/api/media/6adf48963c63e8ae4ff0a9d7",
+  },
+  {
+    id: "04",
+    photographer: "Photography Workshop",
+    videoSrc: "/api/media/6adf48cd3c63e8ae4ff0a9d8",
+  },
+  {
+    id: "05",
+    photographer: "A New Beginning",
+    videoSrc: "/api/media/6adf48403c63e8ae4ff0a9d6",
+  },
+  {
+    id: "06",
+    photographer: "Magic of Filmmaking",
+    videoSrc: "/api/media/6adf47e63c63e8ae4ff0a9d5",
+  },
+];
+
+function getReelInitials(name: string) {
+  if (!name) return "SS";
+  const parts = name.trim().split(" ");
+  if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
+
 const FALLBACK_ACTIVITIES = [
   {
     id: "ACT-26-01",
@@ -746,7 +786,11 @@ export default function MobileOilstainExperience() {
   const [gallery, setGallery] = useState<any[]>(FALLBACK_GALLERY);
   const [activities, setActivities] = useState<any[]>(FALLBACK_ACTIVITIES);
   const [committee, setCommittee] = useState<any[]>(FALLBACK_COMMITTEE);
-  const [reels, setReels] = useState<any[]>([]);
+  const [reels, setReels] = useState<any[]>(FALLBACK_REELS);
+  const [activeReelIdx, setActiveReelIdx] = useState<number>(0);
+  const [activeAudioReelIdx, setActiveAudioReelIdx] = useState<number | null>(null);
+  const [reelProgressMap, setReelProgressMap] = useState<Record<string, number>>({});
+  const reelTouchStartXRef = useRef<number>(0);
 
   // Interactive UI States
   const [activeNavTab, setActiveNavTab] = useState<NavTabId>("home");
@@ -786,9 +830,6 @@ export default function MobileOilstainExperience() {
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [registerEventName, setRegisterEventName] = useState<string>("");
   const [registerSubmitted, setRegisterSubmitted] = useState(false);
-  const [activeAudioReelIdx, setActiveAudioReelIdx] = useState<number | null>(
-    null
-  );
   const [heroAnimKey, setHeroAnimKey] = useState(0);
   const [isHeroAnimReady, setIsHeroAnimReady] = useState(false);
   const [isHeroMuted, setIsHeroMuted] = useState(true);
@@ -1072,7 +1113,20 @@ export default function MobileOilstainExperience() {
         setCommittee(comRes.value.data);
       }
       if (reelRes.status === "fulfilled" && reelRes.value?.data?.length > 0) {
-        setReels(reelRes.value.data);
+        setReels(
+          reelRes.value.data.map((d: any, idx: number) => {
+            const def = FALLBACK_REELS[idx % FALLBACK_REELS.length];
+            const validSrc =
+              d.videoSrc && !d.videoSrc.startsWith("blob:")
+                ? d.videoSrc
+                : def.videoSrc;
+            return {
+              id: d._id || String(idx + 1).padStart(2, "0"),
+              photographer: d.photographer || def.photographer,
+              videoSrc: validSrc,
+            };
+          })
+        );
       }
     });
   }, []);
@@ -1395,6 +1449,102 @@ export default function MobileOilstainExperience() {
     return () => observer.disconnect();
   }, [reels]);
 
+  const getReelCardStyle = (index: number) => {
+    const total = reels.length;
+    let relativeIndex = index - activeReelIdx;
+
+    if (relativeIndex > total / 2) relativeIndex -= total;
+    if (relativeIndex < -total / 2) relativeIndex += total;
+
+    let translateX = 0;
+    let scale = 1;
+    let zIndex = 40;
+    let opacity = 1;
+    let rotateY = 0;
+    let filter = "none";
+
+    if (relativeIndex === 0) {
+      translateX = 0;
+      scale = 1;
+      zIndex = 50;
+      opacity = 1;
+      rotateY = 0;
+      filter = "none";
+    } else if (relativeIndex === 1) {
+      translateX = 82;
+      scale = 0.88;
+      zIndex = 35;
+      opacity = 0.85;
+      rotateY = -6;
+      filter = "brightness(0.85)";
+    } else if (relativeIndex === -1) {
+      translateX = -82;
+      scale = 0.88;
+      zIndex = 35;
+      opacity = 0.85;
+      rotateY = 6;
+      filter = "brightness(0.85)";
+    } else if (relativeIndex === 2) {
+      translateX = 150;
+      scale = 0.75;
+      zIndex = 20;
+      opacity = 0;
+      rotateY = -12;
+      filter = "brightness(0.5)";
+    } else if (relativeIndex === -2) {
+      translateX = -150;
+      scale = 0.75;
+      zIndex = 20;
+      opacity = 0;
+      rotateY = 12;
+      filter = "brightness(0.5)";
+    } else {
+      translateX = 0;
+      scale = 0.6;
+      zIndex = 10;
+      opacity = 0;
+      rotateY = 0;
+      filter = "none";
+    }
+
+    return {
+      transform: `translate3d(calc(-50% + ${translateX}px), -50%, 0) scale(${scale}) rotateY(${rotateY}deg)`,
+      zIndex,
+      opacity,
+      filter,
+      transition: "all 0.65s cubic-bezier(0.22, 1, 0.36, 1)",
+    };
+  };
+
+  const handleReelTouchStart = (e: React.TouchEvent) => {
+    reelTouchStartXRef.current = e.touches[0].clientX;
+  };
+
+  const handleReelTouchEnd = (e: React.TouchEvent) => {
+    const deltaX = e.changedTouches[0].clientX - reelTouchStartXRef.current;
+    if (Math.abs(deltaX) > 35) {
+      if (deltaX < 0) {
+        setActiveReelIdx((prev) => (prev + 1) % reels.length);
+      } else {
+        setActiveReelIdx((prev) => (prev - 1 + reels.length) % reels.length);
+      }
+    }
+  };
+
+  const handleReelCardClick = (index: number) => {
+    if (index !== activeReelIdx) {
+      setActiveReelIdx(index);
+    } else {
+      setActiveAudioReelIdx((prev) => (prev === index ? null : index));
+    }
+  };
+
+  const handleReelVideoEnded = (index: number) => {
+    if (index === activeReelIdx) {
+      setActiveReelIdx((prev) => (prev + 1) % reels.length);
+    }
+  };
+
   const toggleReelAudio = (idx: number) => {
     if (activeAudioReelIdx === idx) {
       setActiveAudioReelIdx(null);
@@ -1488,7 +1638,29 @@ export default function MobileOilstainExperience() {
       <style
         dangerouslySetInnerHTML={{
           __html: `
-        @import url('https://fonts.googleapis.com/css2?family=Nothing+You+Could+Do&family=Reenie+Beanie&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Nothing+You+Could+Do&family=Reenie+Beanie&display=swap');
+
+        #shutterscape-mobile-oilstain .font-script {
+          font-family: 'Dancing Script', cursive !important;
+        }
+
+        #shutterscape-mobile-oilstain .sound-wave {
+          display: flex;
+          align-items: center;
+          gap: 2.5px;
+          height: 12px;
+        }
+        #shutterscape-mobile-oilstain .sound-wave span {
+          display: block;
+          width: 2px;
+          background: #EF4444;
+          border-radius: 2px;
+          animation: wave 1s ease-in-out infinite;
+        }
+        #shutterscape-mobile-oilstain .sound-wave span:nth-child(1) { animation-delay: 0.1s; height: 40%; }
+        #shutterscape-mobile-oilstain .sound-wave span:nth-child(2) { animation-delay: 0.25s; height: 100%; }
+        #shutterscape-mobile-oilstain .sound-wave span:nth-child(3) { animation-delay: 0.4s; height: 60%; }
+        @keyframes wave { 50% { height: 20%; } }
 
         @media (max-width: 1023px) {
           header[aria-label="Global Viewfinder Navigation"] {
@@ -2863,93 +3035,177 @@ export default function MobileOilstainExperience() {
       </section>
 
       {/* ============================================================
-          6. VERTICAL VIDEO REELS + REGISTRATION & ARCHIVE DATA MATRIX
+          6. FRAMES IN MOTION — 3D CENTERED VIDEO REEL CAROUSEL
+             (Exact Match to Second Screenshot & FramesOfMoments.tsx)
           ============================================================ */}
       <section
         id="mobile-chronology-matrix"
-        className="relative z-20 w-full bg-[#ECEBE6] text-[#111111] border-t border-black/15"
+        className="relative z-20 w-full bg-[#070709] text-white border-t border-white/10 overflow-hidden"
       >
-        <div className="osl-pad-lg pb-4">
-          <span className="font-mono text-[9.5px] tracking-[0.22em] uppercase text-black/50 block mb-2">
-            MOTION ARCHIVE &amp; CHRONOLOGY
-          </span>
-          <h2 className="font-heading font-black text-3xl uppercase tracking-[-0.03em] leading-[0.94] text-[#111111]">
-            STEP INTO THE DARKROOM WITH{" "}
-            <span className="text-[#D92B2B]">SHUTTERSCAPE &apos;26</span>
+        {/* Subtle Ambient Radial Red Glow */}
+        <div
+          className="pointer-events-none absolute inset-0 z-0 opacity-25"
+          style={{
+            background:
+              "radial-gradient(ellipse 65% 45% at 50% 25%, rgba(239, 68, 68, 0.22) 0%, transparent 75%)",
+          }}
+        />
+
+        {/* HEADER: Red Script Title & Subtitle & SEE MORE link */}
+        <div
+          style={{ padding: "36px 20px 14px" }}
+          className="relative z-10 flex flex-col items-center justify-center text-center gap-2 w-full max-w-md mx-auto"
+        >
+          <h2 className="font-script text-5xl sm:text-6xl font-bold tracking-normal leading-[0.9]">
+            <span className="text-white drop-shadow-sm">Frames in </span>
+            <span className="text-[#EF4444] drop-shadow-[0_0_35px_rgba(239,68,68,0.45)]">
+              Motion
+            </span>
           </h2>
+          <p className="font-sans text-xs sm:text-[13px] text-gray-400 font-medium tracking-wide">
+            Moments in motion — from the club and its members.
+          </p>
+          <div className="pt-1">
+            <button
+              type="button"
+              onClick={() => {
+                setGalleryFilterCat("ALL");
+                setExpandedGalleryId(null);
+                setIsGalleryPageOpen(true);
+              }}
+              className="group inline-flex items-center justify-center gap-2 font-mono text-[9.5px] font-bold uppercase tracking-[0.22em] text-white/70 hover:text-white cursor-pointer transition-colors"
+            >
+              <span>SEE MORE</span>
+              <span className="text-[#EF4444] group-hover:translate-x-1 transition-transform">
+                →
+              </span>
+            </button>
+          </div>
         </div>
 
-        <div className="osl-pad-md pt-0 overflow-x-auto no-scrollbar flex items-center gap-4">
-          {reels.length > 0
-            ? reels.map((reel, idx) => {
-                const isUnmuted = activeAudioReelIdx === idx;
-                const fallbackPoster =
-                  reel.posterSrc ||
-                  gallery[idx % gallery.length]?.src ||
-                  FALLBACK_GALLERY[idx % FALLBACK_GALLERY.length].src;
+        {/* 3D CENTERED CAROUSEL OF VIDEO CARDS (Exact Match to Second Screenshot!) */}
+        <div
+          className="relative w-full h-[54vh] min-h-[400px] max-h-[520px] flex items-center justify-center overflow-hidden my-2"
+          onTouchStart={handleReelTouchStart}
+          onTouchEnd={handleReelTouchEnd}
+        >
+          {reels.map((reel, index) => {
+            const isActive = index === activeReelIdx;
+            const isActiveAudio = activeAudioReelIdx === index;
 
-                return (
-                  <div
-                    key={reel._id || reel.id || idx}
-                    onClick={() => toggleReelAudio(idx)}
-                    style={{
-                      backgroundImage: `url(${fallbackPoster})`,
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                    }}
-                    className="relative shrink-0 w-[68vw] max-w-[260px] aspect-[9/16] bg-[#111111] rounded-xl overflow-hidden border border-black/20 shadow-md cursor-pointer"
-                  >
-                    <video
-                      ref={(el) => {
-                        videoRefs.current[idx] = el;
-                      }}
-                      src={reel.videoSrc}
-                      poster={fallbackPoster}
-                      loop
-                      muted
-                      playsInline
-                      preload="none"
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/30 pointer-events-none" />
-                    <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-black/70 border border-white/20 font-mono text-[8.5px] uppercase tracking-[0.18em] text-white">
-                      {isUnmuted ? "● SOUND ON" : "TAP FOR SOUND"}
-                    </div>
-                    <div className="absolute bottom-3 left-3 right-3 pointer-events-none">
-                      <span className="font-mono text-[8px] tracking-[0.2em] uppercase text-[#D4A843] block">
-                        REEL // 0{idx + 1}
-                      </span>
-                      <span className="font-sans text-sm font-bold text-white line-clamp-1">
-                        {reel.photographer}
-                      </span>
-                    </div>
-                  </div>
-                );
-              })
-            : gallery.slice(0, 3).map((item, idx) => (
-                <div
-                  key={item.id || idx}
-                  style={{
-                    backgroundImage: `url(${item.src})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
+            return (
+              <div
+                key={reel._id || reel.id || index}
+                onClick={() => handleReelCardClick(index)}
+                className="absolute top-1/2 left-1/2 w-[74vw] max-w-[280px] aspect-[9/16] max-h-[52vh] rounded-[24px] overflow-hidden group bg-[#0A0A0D] border border-white/10 shadow-[0_24px_60px_rgba(0,0,0,0.8)] cursor-pointer select-none"
+                style={getReelCardStyle(index)}
+              >
+                {/* REAL AUTOPLAYING LOCAL MP4 VIDEO */}
+                <video
+                  ref={(el) => {
+                    videoRefs.current[index] = el;
+                    if (el) {
+                      el.defaultMuted = true;
+                      el.muted = activeAudioReelIdx !== index;
+                    }
                   }}
-                  className="relative shrink-0 w-[68vw] max-w-[260px] aspect-[9/16] bg-[#111111] rounded-xl overflow-hidden border border-black/20 shadow-md"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/30 pointer-events-none" />
-                  <div className="absolute bottom-3 left-3 right-3 pointer-events-none">
-                    <span className="font-mono text-[8px] tracking-[0.2em] uppercase text-[#D4A843] block">
-                      REEL // 0{idx + 1}
-                    </span>
-                    <span className="font-sans text-sm font-bold text-white line-clamp-1">
-                      {item.title}
-                    </span>
+                  src={reel.videoSrc}
+                  autoPlay
+                  loop={!isActive}
+                  muted={activeAudioReelIdx !== index}
+                  playsInline
+                  preload="auto"
+                  onLoadedData={(e) => {
+                    const video = e.currentTarget;
+                    video.defaultMuted = true;
+                    video.muted = activeAudioReelIdx !== index;
+                    video.play().catch(() => {});
+                  }}
+                  onTimeUpdate={(e) => {
+                    const video = e.currentTarget;
+                    if (video.duration && !isNaN(video.duration)) {
+                      const pct = (video.currentTime / video.duration) * 100;
+                      setReelProgressMap((prev) => ({
+                        ...prev,
+                        [reel.id || String(index)]: pct,
+                      }));
+                      if (isActive && video.currentTime >= video.duration - 0.08) {
+                        handleReelVideoEnded(index);
+                      }
+                    }
+                  }}
+                  onEnded={() => handleReelVideoEnded(index)}
+                  className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                />
+
+                {/* Dark Gradients for Text Legibility */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-black/30 opacity-85 pointer-events-none" />
+
+                {/* Active Card Subtle Glowing Border */}
+                <div
+                  className={`absolute inset-0 border-2 rounded-[24px] pointer-events-none transition-all duration-500 ${
+                    isActive ? "border-white/35" : "border-transparent"
+                  }`}
+                />
+
+                {/* Top Audio Indicator on Active Card */}
+                {isActive && (
+                  <div className="absolute top-4 right-4 z-10 pointer-events-none">
+                    {isActiveAudio ? (
+                      <div className="bg-black/65 backdrop-blur-md px-2.5 py-1.5 rounded-full border border-white/20 flex items-center gap-1.5 shadow-lg">
+                        <div className="sound-wave">
+                          <span />
+                          <span />
+                          <span />
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="w-7 h-7 rounded-full bg-black/45 backdrop-blur-md border border-white/15 flex items-center justify-center opacity-80">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="white">
+                          <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z" />
+                        </svg>
+                      </div>
+                    )}
                   </div>
+                )}
+
+                {/* Bottom Author Badge & Name (Always Visible on Cards) */}
+                <div
+                  style={{ padding: "14px 16px" }}
+                  className="absolute bottom-0 inset-x-0 flex items-center gap-2.5 pointer-events-none"
+                >
+                  <div className="w-7 h-7 rounded-full bg-white text-[#050505] font-sans font-bold text-[9px] flex items-center justify-center shadow-md shrink-0">
+                    {getReelInitials(reel.photographer)}
+                  </div>
+                  <span className="font-sans font-semibold text-xs text-white drop-shadow-md truncate">
+                    {reel.photographer}
+                  </span>
                 </div>
-              ))}
+
+                {/* PROGRESSIVE TIMELINE BAR FOR EACH VIDEO */}
+                <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-white/20 z-20 pointer-events-none overflow-hidden">
+                  <div
+                    className="h-full bg-[#EF4444] shadow-[0_0_8px_rgba(239,68,68,0.85)]"
+                    style={{
+                      width: `${reelProgressMap[reel.id || String(index)] || 0}%`,
+                      transition: "width 0.12s linear",
+                    }}
+                  />
+                </div>
+              </div>
+            );
+          })}
         </div>
 
-        <div className="w-full mt-2">
+        {/* FOOTER HINT */}
+        <div className="text-center pb-5 pt-1">
+          <p className="font-sans text-[10.5px] text-white/45 font-medium tracking-wide">
+            Tap a reel to watch it with sound · Swipe to navigate
+          </p>
+        </div>
+
+        {/* REGISTER & ARCHIVE CHRONOLOGY LEDGER BUTTONS */}
+        <div className="w-full">
           <button
             type="button"
             onClick={() => {
@@ -2957,7 +3213,7 @@ export default function MobileOilstainExperience() {
               setRegisterSubmitted(false);
               setIsRegisterModalOpen(true);
             }}
-            className="osl-bar-btn bg-[#D92B2B] text-white border-b border-white/15"
+            className="osl-bar-btn bg-[#D92B2B] text-white border-y border-white/15"
           >
             <span>REGISTER YOUR INTEREST // JOIN SHUTTERSCAPE</span>
             <span className="text-lg leading-none">+</span>
@@ -2966,7 +3222,7 @@ export default function MobileOilstainExperience() {
           <button
             type="button"
             onClick={() => setIsEngineeringDataOpen((prev) => !prev)}
-            className="osl-bar-btn bg-[#1A1A1E] text-white border-b border-white/10"
+            className="osl-bar-btn bg-[#141418] text-white border-b border-white/10"
           >
             <span>
               {isEngineeringDataOpen
@@ -2979,73 +3235,291 @@ export default function MobileOilstainExperience() {
           </button>
         </div>
 
-        <div className="w-full bg-[#111113] text-white">
-          {isEngineeringDataOpen && (
-            <div className="osl-pad-lg border-b border-white/10 space-y-6 animate-fade-in">
-              <div className="flex items-start justify-between border-b border-white/15 pb-4">
-                <div>
-                  <h3 className="font-heading font-black text-lg uppercase tracking-[0.02em] text-white">
-                    SHUTTERSCAPE GCU:
-                    <br />
-                    FULL CHRONOLOGY &amp; ARCHIVE DATA
-                  </h3>
-                  <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-[#D4A843] block mt-1">
-                    WORKS &apos;26 &amp; WORKS &apos;25 OFFICIAL LEDGER
-                  </span>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setIsEngineeringDataOpen(false)}
-                  className="px-2.5 py-1 bg-white/10 text-white font-mono text-[9px] uppercase tracking-[0.18em]"
+        {/* Full Chronology Ledger Table */}
+        {isEngineeringDataOpen && (
+          <div className="osl-pad-lg border-b border-white/10 space-y-6 bg-[#111113] animate-fade-in">
+            <div className="flex items-start justify-between border-b border-white/15 pb-4">
+              <div>
+                <h3 className="font-heading font-black text-lg uppercase tracking-[0.02em] text-white">
+                  SHUTTERSCAPE GCU:
+                  <br />
+                  FULL CHRONOLOGY &amp; ARCHIVE DATA
+                </h3>
+                <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-[#D4A843] block mt-1">
+                  WORKS &apos;26 &amp; WORKS &apos;25 OFFICIAL LEDGER
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsEngineeringDataOpen(false)}
+                className="px-2.5 py-1 bg-white/10 text-white font-mono text-[9px] uppercase tracking-[0.18em]"
+              >
+                CLOSE ✕
+              </button>
+            </div>
+
+            <div className="divide-y divide-white/10">
+              {activities.map((ev, idx) => (
+                <div
+                  key={ev._id || ev.id || idx}
+                  className="py-3.5 grid grid-cols-12 gap-2 items-baseline font-mono text-[10px]"
                 >
-                  CLOSE ✕
-                </button>
-              </div>
-
-              <div className="divide-y divide-white/10">
-                {activities.map((ev, idx) => (
-                  <div
-                    key={ev._id || ev.id || idx}
-                    className="py-3.5 grid grid-cols-12 gap-2 items-baseline font-mono text-[10px]"
-                  >
-                    <div className="col-span-4 text-white/45 uppercase tracking-[0.14em]">
-                      {ev.category}
-                      <span className="block text-[8.5px] text-[#D4A843]">
-                        {ev.date}
-                      </span>
-                    </div>
-                    <div className="col-span-5 text-white font-sans font-semibold text-xs">
-                      {ev.title}
-                      <span className="block font-mono text-[9px] text-white/50 font-normal mt-0.5">
-                        📍 {ev.location}
-                      </span>
-                    </div>
-                    <div className="col-span-3 text-right text-[9px] text-white/65">
-                      {ev.isUpcoming ? (
-                        <span className="inline-block px-1.5 py-0.5 bg-[#D92B2B] text-white font-bold uppercase">
-                          UPCOMING
-                        </span>
-                      ) : (
-                        <span>{ev.filmStock}</span>
-                      )}
-                    </div>
+                  <div className="col-span-4 text-white/45 uppercase tracking-[0.14em]">
+                    {ev.category}
+                    <span className="block text-[8.5px] text-[#D4A843]">
+                      {ev.date}
+                    </span>
                   </div>
-                ))}
-              </div>
+                  <div className="col-span-5 text-white font-sans font-semibold text-xs">
+                    {ev.title}
+                    <span className="block font-mono text-[9px] text-white/50 font-normal mt-0.5">
+                      📍 {ev.location}
+                    </span>
+                  </div>
+                  <div className="col-span-3 text-right text-[9px] text-white/65">
+                    {ev.isUpcoming ? (
+                      <span className="inline-block px-1.5 py-0.5 bg-[#D92B2B] text-white font-bold uppercase">
+                        UPCOMING
+                      </span>
+                    ) : (
+                      <span>{ev.filmStock}</span>
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
-          )}
+          </div>
+        )}
+      </section>
 
-          <div className="osl-pad-lg flex flex-col items-center text-center">
-            <div className="w-full flex items-center justify-between font-heading font-black text-[22vw] leading-[0.8] tracking-[-0.06em] text-white/[0.07] select-none py-4">
-              <span>SS</span>
-              <span>26</span>
+      {/* ============================================================
+          7. RESIZED COMPACT MOBILE GLOBAL FOOTER
+          (Authentic ShutterScape + GCU Universal Footer adapted for Mobile)
+          ============================================================ */}
+      <footer
+        id="mobile-global-footer"
+        style={{
+          paddingTop: "28px",
+          paddingBottom: "24px",
+          paddingLeft: "18px",
+          paddingRight: "18px",
+          backgroundColor: "#FFFFFF",
+          color: "#0A0A0A",
+        }}
+        className="relative z-20 w-full border-t border-black/10 overflow-hidden select-none"
+      >
+        {/* Subtle Atmospheric Mountain Landscape Blur Background */}
+        <div
+          className="pointer-events-none absolute inset-0 z-0 overflow-hidden select-none opacity-[0.14] mix-blend-multiply filter blur-[2px] scale-105"
+          style={{
+            backgroundImage:
+              "url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1600&q=80')",
+            backgroundSize: "cover",
+            backgroundPosition: "center 65%",
+          }}
+        />
+
+        {/* Ambient Subtle Warm Gold Gradient */}
+        <div
+          className="pointer-events-none absolute inset-0 z-0"
+          style={{
+            background:
+              "radial-gradient(ellipse 70% 50% at 50% 100%, rgba(212, 168, 67, 0.08) 0%, transparent 70%)",
+          }}
+        />
+
+        <div className="relative z-10 max-w-md mx-auto flex flex-col gap-5">
+          {/* TOP ROW: DUAL BRAND LOGOS */}
+          <div className="flex items-center justify-between pb-3 border-b border-black/10">
+            <div className="flex items-center gap-2.5">
+              <div className="relative h-6 w-[70px]">
+                <Image
+                  src="/images/shutterscape-logo.png"
+                  alt="ShutterScape Logo"
+                  fill
+                  sizes="70px"
+                  unoptimized
+                  className="object-contain object-left"
+                />
+              </div>
+
+              <span className="h-4 w-[1px] bg-black/20" />
+
+              <a
+                href="https://gcu.ac.in"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Girijananda Chowdhury University"
+                className="relative h-6 w-[88px]"
+              >
+                <Image
+                  src="/images/gcu-logo.png"
+                  alt="GCU Logo"
+                  fill
+                  sizes="88px"
+                  unoptimized
+                  className="object-contain object-left"
+                />
+              </a>
             </div>
-            <p className="font-mono text-[9.5px] tracking-[0.22em] uppercase text-white/40 max-w-xs leading-relaxed">
-              GIRIJANANDA CHOWDHURY UNIVERSITY · AZARA, GUWAHATI, ASSAM
+
+            <span className="font-mono text-[8px] tracking-[0.2em] uppercase text-[#B8860B] font-bold">
+              EST. 2023 · GCU
+            </span>
+          </div>
+
+          {/* MISSION / SUMMARY & EMAIL */}
+          <div className="space-y-2">
+            <p className="font-body text-[11px] text-black/75 leading-relaxed">
+              The official visual arts and photography collective of Girijananda Chowdhury University, Assam. Observing, capturing, and telling stories through light.
+            </p>
+
+            <a
+              href="mailto:shutterscape@gcuniversity.ac.in"
+              className="inline-flex items-center gap-1.5 font-mono text-[10px] text-black/85 hover:text-[#D92B2B] font-semibold"
+            >
+              <span>✉</span>
+              <span>shutterscape@gcuniversity.ac.in</span>
+            </a>
+          </div>
+
+          {/* FAST ACTION COMMUNITY & SOCIAL PILLS */}
+          <div className="grid grid-cols-2 gap-2 pt-1">
+            <a
+              href="https://chat.whatsapp.com/Hs71BicR1Xj3PmOyPJ5wdc?s=sw&p=a&mlu=4&ilr=4"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ padding: "8px 12px" }}
+              className="rounded-xl bg-[#25D366]/10 border border-[#25D366]/30 flex items-center justify-between font-mono text-[9.5px] font-bold text-[#1E7E34] uppercase tracking-wider hover:bg-[#25D366]/20 transition-colors"
+            >
+              <span>● WHATSAPP</span>
+              <span>↗</span>
+            </a>
+
+            <a
+              href="https://www.instagram.com/shutterscape_gcu"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ padding: "8px 12px" }}
+              className="rounded-xl bg-[#E1306C]/10 border border-[#E1306C]/30 flex items-center justify-between font-mono text-[9.5px] font-bold text-[#C13584] uppercase tracking-wider hover:bg-[#E1306C]/20 transition-colors"
+            >
+              <span>● INSTAGRAM</span>
+              <span>↗</span>
+            </a>
+          </div>
+
+          {/* COMPACT CAMPUS LOCATION & GOOGLE MAPS CARD */}
+          <div className="p-3 rounded-xl bg-black/[0.03] border border-black/10 space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-[8px] tracking-[0.2em] uppercase text-[#B8860B] font-bold">
+                📍 CAMPUS LOCATION
+              </span>
+              <a
+                href="https://maps.app.goo.gl/NhdHs1u76Bjxo2J87"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-mono text-[9px] tracking-[0.14em] uppercase text-black/70 hover:text-[#B8860B] font-bold inline-flex items-center gap-0.5"
+              >
+                <span>Open Maps</span>
+                <span>↗</span>
+              </a>
+            </div>
+            <p className="font-body text-[10.5px] text-black/80 font-medium leading-snug">
+              Girijananda Chowdhury University · Hathkhowapara, Azara, Guwahati, Assam 781017
             </p>
           </div>
+
+          {/* QUICK DIRECT NAVIGATION LINKS */}
+          <div className="flex items-center justify-center gap-4 py-2 border-y border-black/10 font-mono text-[9px] font-bold uppercase tracking-[0.16em] text-black/70 flex-wrap">
+            <button
+              type="button"
+              onClick={() => {
+                lockProgrammaticScroll(950);
+                setActiveNavTab("home");
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+              className="hover:text-black cursor-pointer"
+            >
+              Home
+            </button>
+            <span>•</span>
+            <button
+              type="button"
+              onClick={() => {
+                setGalleryFilterCat("ALL");
+                setIsGalleryPageOpen(true);
+              }}
+              className="hover:text-black cursor-pointer"
+            >
+              Gallery
+            </button>
+            <span>•</span>
+            <button
+              type="button"
+              onClick={() => {
+                setActiveAboutTab("ORIGINS");
+                const target = document.getElementById("mobile-light-about-section");
+                target?.scrollIntoView({ behavior: "smooth" });
+              }}
+              className="hover:text-black cursor-pointer"
+            >
+              About
+            </button>
+            <span>•</span>
+            <button
+              type="button"
+              onClick={() => {
+                setActivityFilterCat("ALL");
+                setIsActivitiesPageOpen(true);
+              }}
+              className="hover:text-black cursor-pointer"
+            >
+              Activities
+            </button>
+            <span>•</span>
+            <button
+              type="button"
+              onClick={() => {
+                const target = document.getElementById("mobile-chronology-matrix");
+                target?.scrollIntoView({ behavior: "smooth" });
+              }}
+              className="hover:text-black cursor-pointer"
+            >
+              Moments
+            </button>
+          </div>
+
+          {/* BOTTOM LEGAL & CREDITS STRIP */}
+          <div className="flex flex-col items-center text-center gap-2 pt-1 font-mono text-[9px] tracking-[0.14em] text-black/55 uppercase">
+            <span>© 2026 SHUTTERSCAPE · GIRIJANANDA CHOWDHURY UNIVERSITY</span>
+
+            <span className="text-black/80 font-medium inline-flex items-center gap-1.5 normal-case tracking-normal font-sans text-xs">
+              <span>Designed and made with</span>
+              <span className="text-[#EF4444] text-xs animate-pulse inline-block" title="love">❤</span>
+              <span>by <strong className="font-bold text-black">Krishnayan</strong></span>
+            </span>
+
+            <a
+              href="https://codingclub.gcuniversity.ac.in"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-black/65 hover:text-[#B8860B] transition-colors inline-flex items-center gap-1.5 font-semibold text-[8.5px]"
+            >
+              <div className="relative w-3.5 h-3.5 rounded-full overflow-hidden shrink-0 bg-black/5 border border-black/15">
+                <Image
+                  src="/images/codenix-logo.png"
+                  alt="Codénix Logo"
+                  fill
+                  className="object-contain"
+                  unoptimized
+                />
+              </div>
+              <span>Maintained by Codénix (GCU Coding Club) ↗</span>
+            </a>
+          </div>
         </div>
-      </section>
+      </footer>
+
 
       {/* ============================================================
           PAGE OVERLAY 1: EXECUTIVE EDITORIAL ACTIVITIES PAGE
