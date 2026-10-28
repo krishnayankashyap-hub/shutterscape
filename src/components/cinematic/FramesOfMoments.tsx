@@ -382,7 +382,7 @@ export default function FramesOfMoments({ initialReels }: FramesOfMomentsProps =
                   loop={!isActive}
                   muted={activeAudioId !== reel.id}
                   playsInline
-                  preload="auto"
+                  preload={isActive ? "auto" : "metadata"}
                   onLoadedData={(e) => {
                     const video = e.currentTarget;
                     video.defaultMuted = true;

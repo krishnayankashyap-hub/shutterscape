@@ -3114,7 +3114,7 @@ export default function MobileOilstainExperience() {
                   loop={!isActive}
                   muted={activeAudioReelIdx !== index}
                   playsInline
-                  preload="auto"
+                  preload={isActive ? "auto" : "metadata"}
                   onLoadedData={(e) => {
                     const video = e.currentTarget;
                     video.defaultMuted = true;
