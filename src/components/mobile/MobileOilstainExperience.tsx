@@ -457,7 +457,6 @@ export default function MobileOilstainExperience() {
   const curvedSliceRefs = useRef<(HTMLDivElement | null)[][]>([]);
   const curvedSliceInnerRefs = useRef<(HTMLDivElement | null)[][]>([]);
   const isRibbonPausedRef = useRef<boolean>(false);
-  const isRibbonSectionVisibleRef = useRef<boolean>(true);
   const isNotchAnimatingRef = useRef<boolean>(false);
   const playheadRef = useRef<number>(0);
 
@@ -689,98 +688,22 @@ export default function MobileOilstainExperience() {
     };
   }, []);
 
-  // Viewport observer for Section 2 (pauses the 3D ribbon ticker when offscreen!)
-  useEffect(() => {
-    const sec = archiveSectionRef.current;
-    if (!sec || typeof IntersectionObserver === "undefined") {
-      isRibbonSectionVisibleRef.current = true;
-      return;
-    }
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        isRibbonSectionVisibleRef.current = entry.isIntersecting;
-      },
-      { rootMargin: "120px 0px" }
-    );
-    observer.observe(sec);
-    return () => observer.disconnect();
-  }, []);
-
   // =========================================================================
-  // 3D CONCAVE CYLINDRICAL CURVED RIBBON ENGINE (Slow, Luxury Standard Speed)
+  // 3D CONCAVE CYLINDRICAL CURVED RIBBON ENGINE (Authentic 3D Concave Cylinder)
   // =========================================================================
   useEffect(() => {
     const total = gallery.length;
     if (total === 0) return;
 
     let vw = window.innerWidth;
-    let cardW = Math.min(300, Math.max(248, vw * 0.72));
-    let cardH = Math.round(cardW * 0.61);
-    let gap = 18;
+    let cardW = Math.min(320, Math.max(260, vw * 0.76));
+    let cardH = Math.round(cardW * 0.62);
+    let gap = 20;
     let stride = cardW + gap;
     let sliceW = cardW / SLICES_PER_CARD;
-    let cylRadius = Math.max(330, vw * 0.85);
+    let cylRadius = Math.max(340, vw * 0.86);
 
-    const setupStaticCardMetrics = () => {
-      vw = window.innerWidth;
-      cardW = Math.min(300, Math.max(248, vw * 0.72));
-      cardH = Math.round(cardW * 0.61);
-      gap = 18;
-      stride = cardW + gap;
-      sliceW = cardW / SLICES_PER_CARD;
-      cylRadius = Math.max(330, vw * 0.85);
-
-      for (let i = 0; i < total; i++) {
-        const cardEl = curvedCardOuterRefs.current[i];
-        if (!cardEl) continue;
-
-        cardEl.style.width = `${cardW}px`;
-        cardEl.style.height = `${cardH}px`;
-        cardEl.style.marginLeft = `${-cardW / 2}px`;
-        cardEl.style.marginTop = `${-cardH / 2}px`;
-
-        const cardSlices = curvedSliceRefs.current[i] || [];
-        const cardInners = curvedSliceInnerRefs.current[i] || [];
-
-        for (let s = 0; s < SLICES_PER_CARD; s++) {
-          const sliceEl = cardSlices[s];
-          const innerEl = cardInners[s];
-          if (!sliceEl || !innerEl) continue;
-
-          sliceEl.style.width = `${sliceW + 1.25}px`;
-          sliceEl.style.height = `${cardH}px`;
-          sliceEl.style.left = `${cardW / 2 - sliceW / 2}px`;
-
-          innerEl.style.width = `${cardW}px`;
-          innerEl.style.height = `${cardH}px`;
-          innerEl.style.transform = `translate3d(${(-s * sliceW).toFixed(
-            2
-          )}px, 0, 0)`;
-        }
-      }
-    };
-
-    setupStaticCardMetrics();
-
-    let rafId = 0;
-    let lastTime = performance.now();
-
-    const tick = (now: number) => {
-      if (!isRibbonSectionVisibleRef.current) {
-        lastTime = now;
-        rafId = requestAnimationFrame(tick);
-        return;
-      }
-
-      const dt = Math.min(0.05, (now - lastTime) / 1000);
-      lastTime = now;
-
-      if (!isRibbonPausedRef.current) {
-        playheadRef.current = (playheadRef.current + dt * 0.16) % total;
-      }
-
-      const currentFloatIdx = playheadRef.current;
-
+    const renderCylindricalSlices = (currentFloatIdx: number) => {
       for (let i = 0; i < total; i++) {
         const cardEl = curvedCardOuterRefs.current[i];
         if (!cardEl) continue;
@@ -825,7 +748,64 @@ export default function MobileOilstainExperience() {
           )}px, 0px, ${cylZ.toFixed(1)}px) rotateY(${rotYDeg.toFixed(1)}deg)`;
         }
       }
+    };
 
+    const setupStaticCardMetrics = () => {
+      vw = window.innerWidth;
+      cardW = Math.min(320, Math.max(260, vw * 0.76));
+      cardH = Math.round(cardW * 0.62);
+      gap = 20;
+      stride = cardW + gap;
+      sliceW = cardW / SLICES_PER_CARD;
+      cylRadius = Math.max(340, vw * 0.86);
+
+      for (let i = 0; i < total; i++) {
+        const cardEl = curvedCardOuterRefs.current[i];
+        if (!cardEl) continue;
+
+        cardEl.style.width = `${cardW}px`;
+        cardEl.style.height = `${cardH}px`;
+        cardEl.style.marginLeft = `${-cardW / 2}px`;
+        cardEl.style.marginTop = `${-cardH / 2}px`;
+
+        const cardSlices = curvedSliceRefs.current[i] || [];
+        const cardInners = curvedSliceInnerRefs.current[i] || [];
+
+        for (let s = 0; s < SLICES_PER_CARD; s++) {
+          const sliceEl = cardSlices[s];
+          const innerEl = cardInners[s];
+          if (!sliceEl || !innerEl) continue;
+
+          sliceEl.style.width = `${sliceW + 1.25}px`;
+          sliceEl.style.height = `${cardH}px`;
+          sliceEl.style.left = `${cardW / 2 - sliceW / 2}px`;
+
+          innerEl.style.width = `${cardW}px`;
+          innerEl.style.height = `${cardH}px`;
+          innerEl.style.transform = `translate3d(${(-s * sliceW).toFixed(
+            2
+          )}px, 0, 0)`;
+        }
+      }
+
+      // Immediately project frame 0 into the 3D cylinder shape so it is never flat
+      renderCylindricalSlices(playheadRef.current);
+    };
+
+    setupStaticCardMetrics();
+
+    let rafId = 0;
+    let lastTime = performance.now();
+
+    const tick = (now: number) => {
+      const dt = Math.min(0.05, (now - lastTime) / 1000);
+      lastTime = now;
+
+      if (!isRibbonPausedRef.current) {
+        playheadRef.current = (playheadRef.current + dt * 0.16) % total;
+      }
+
+      renderCylindricalSlices(playheadRef.current);
       rafId = requestAnimationFrame(tick);
     };
 
@@ -1518,7 +1498,7 @@ export default function MobileOilstainExperience() {
                   setActiveGalleryIdx(cardIdx);
                   setIsGalleryDrawerOpen(true);
                 }}
-                className="absolute top-1/2 left-1/2 cursor-pointer group drop-shadow-[0_14px_28px_rgba(0,0,0,0.32)]"
+                className="absolute top-1/2 left-1/2 cursor-pointer group"
                 style={{
                   transformStyle: "preserve-3d",
                 }}
@@ -1539,7 +1519,7 @@ export default function MobileOilstainExperience() {
                       ref={(el) => {
                         curvedSliceInnerRefs.current[cardIdx][s] = el;
                       }}
-                      className="relative overflow-hidden rounded-[6px] bg-[#0B0B0E] border border-black/20 will-change-transform"
+                      className="relative overflow-hidden rounded-[6px] bg-[#0B0B0E] border border-black/20 will-change-transform shadow-[0_14px_34px_rgba(0,0,0,0.24)]"
                       style={{
                         backgroundImage: `linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.22) 50%, rgba(0,0,0,0.3) 100%), url(${item.src})`,
                         backgroundSize: "cover",
