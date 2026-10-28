@@ -93,33 +93,33 @@ const FALLBACK_GALLERY = [
 const FALLBACK_REELS = [
   {
     id: "01",
-    photographer: "World Photography Day",
-    videoSrc: "/api/media/6adf475c3c63e8ae4ff0a9d4",
+    photographer: "Parambrata Sarkar",
+    videoSrc: "/videos/reel-1.mp4",
   },
   {
     id: "02",
-    photographer: "Glimpse of Grooming Club’s Ramp Walk",
-    videoSrc: "/api/media/6ade6c0a40346d3181c85f3a",
+    photographer: "Sayan Saha",
+    videoSrc: "/videos/reel-2.mp4",
   },
   {
     id: "03",
-    photographer: "Wall Painting",
-    videoSrc: "/api/media/6adf48963c63e8ae4ff0a9d7",
+    photographer: "Aman Baha",
+    videoSrc: "/videos/reel-3.mp4",
   },
   {
     id: "04",
-    photographer: "Photography Workshop",
-    videoSrc: "/api/media/6adf48cd3c63e8ae4ff0a9d8",
+    photographer: "Sampad Dutta",
+    videoSrc: "/videos/reel-4.mp4",
   },
   {
     id: "05",
-    photographer: "A New Beginning",
-    videoSrc: "/api/media/6adf48403c63e8ae4ff0a9d6",
+    photographer: "Bituparna",
+    videoSrc: "/videos/reel-5.mp4",
   },
   {
     id: "06",
-    photographer: "Magic of Filmmaking",
-    videoSrc: "/api/media/6adf47e63c63e8ae4ff0a9d5",
+    photographer: "Sohan Chandra",
+    videoSrc: "/videos/reel-6.mp4",
   },
 ];
 
@@ -1116,8 +1116,9 @@ export default function MobileOilstainExperience() {
         setReels(
           reelRes.value.data.map((d: any, idx: number) => {
             const def = FALLBACK_REELS[idx % FALLBACK_REELS.length];
+            const isSlowGridFS = d.videoSrc && d.videoSrc.startsWith("/api/media/");
             const validSrc =
-              d.videoSrc && !d.videoSrc.startsWith("blob:")
+              d.videoSrc && !d.videoSrc.startsWith("blob:") && !isSlowGridFS
                 ? d.videoSrc
                 : def.videoSrc;
             return {
@@ -1448,6 +1449,18 @@ export default function MobileOilstainExperience() {
 
     return () => observer.disconnect();
   }, [reels]);
+
+  // Silky smooth mobile performance: only play the active center reel video; pause all others
+  useEffect(() => {
+    videoRefs.current.forEach((vid, idx) => {
+      if (!vid) return;
+      if (idx === activeReelIdx) {
+        vid.play().catch(() => {});
+      } else {
+        vid.pause();
+      }
+    });
+  }, [activeReelIdx]);
 
   const getReelCardStyle = (index: number) => {
     const total = reels.length;
@@ -3092,6 +3105,11 @@ export default function MobileOilstainExperience() {
           {reels.map((reel, index) => {
             const isActive = index === activeReelIdx;
             const isActiveAudio = activeAudioReelIdx === index;
+            const isAdjacent =
+              Math.abs(index - activeReelIdx) === 1 ||
+              (index === 0 && activeReelIdx === reels.length - 1) ||
+              (index === reels.length - 1 && activeReelIdx === 0);
+            const isVisibleCard = isActive || isAdjacent;
 
             return (
               <div
@@ -3100,43 +3118,47 @@ export default function MobileOilstainExperience() {
                 className="absolute top-1/2 left-1/2 w-[74vw] max-w-[280px] aspect-[9/16] max-h-[52vh] rounded-[24px] overflow-hidden group bg-[#0A0A0D] border border-white/10 shadow-[0_24px_60px_rgba(0,0,0,0.8)] cursor-pointer select-none"
                 style={getReelCardStyle(index)}
               >
-                {/* REAL AUTOPLAYING LOCAL MP4 VIDEO */}
-                <video
-                  ref={(el) => {
-                    videoRefs.current[index] = el;
-                    if (el) {
-                      el.defaultMuted = true;
-                      el.muted = activeAudioReelIdx !== index;
-                    }
-                  }}
-                  src={reel.videoSrc}
-                  autoPlay
-                  loop={!isActive}
-                  muted={activeAudioReelIdx !== index}
-                  playsInline
-                  preload={isActive ? "auto" : "metadata"}
-                  onLoadedData={(e) => {
-                    const video = e.currentTarget;
-                    video.defaultMuted = true;
-                    video.muted = activeAudioReelIdx !== index;
-                    video.play().catch(() => {});
-                  }}
-                  onTimeUpdate={(e) => {
-                    const video = e.currentTarget;
-                    if (video.duration && !isNaN(video.duration)) {
-                      const pct = (video.currentTime / video.duration) * 100;
-                      setReelProgressMap((prev) => ({
-                        ...prev,
-                        [reel.id || String(index)]: pct,
-                      }));
-                      if (isActive && video.currentTime >= video.duration - 0.08) {
-                        handleReelVideoEnded(index);
+                {/* Silky Smooth: Only render video on visible cards (active + adjacent) */}
+                {isVisibleCard ? (
+                  <video
+                    ref={(el) => {
+                      videoRefs.current[index] = el;
+                      if (el) {
+                        el.defaultMuted = true;
+                        el.muted = activeAudioReelIdx !== index;
                       }
-                    }
-                  }}
-                  onEnded={() => handleReelVideoEnded(index)}
-                  className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-                />
+                    }}
+                    src={reel.videoSrc}
+                    autoPlay={isActive}
+                    loop={!isActive}
+                    muted={activeAudioReelIdx !== index}
+                    playsInline
+                    preload={isActive ? "auto" : "metadata"}
+                    onLoadedData={(e) => {
+                      const video = e.currentTarget;
+                      video.defaultMuted = true;
+                      video.muted = activeAudioReelIdx !== index;
+                      if (isActive) video.play().catch(() => {});
+                    }}
+                    onTimeUpdate={(e) => {
+                      const video = e.currentTarget;
+                      if (video.duration && !isNaN(video.duration)) {
+                        const pct = (video.currentTime / video.duration) * 100;
+                        setReelProgressMap((prev) => ({
+                          ...prev,
+                          [reel.id || String(index)]: pct,
+                        }));
+                        if (isActive && video.currentTime >= video.duration - 0.08) {
+                          handleReelVideoEnded(index);
+                        }
+                      }
+                    }}
+                    onEnded={() => handleReelVideoEnded(index)}
+                    className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                  />
+                ) : (
+                  <div className="absolute inset-0 bg-[#0A0A0D]" />
+                )}
 
                 {/* Dark Gradients for Text Legibility */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-black/30 opacity-85 pointer-events-none" />
@@ -3293,24 +3315,25 @@ export default function MobileOilstainExperience() {
       </section>
 
       {/* ============================================================
-          7. RESIZED COMPACT MOBILE GLOBAL FOOTER
-          (Authentic ShutterScape + GCU Universal Footer adapted for Mobile)
+          7. RESIZED COMPACT LUXURY EDITORIAL MOBILE GLOBAL FOOTER
+          (Ultra-Sleek, Official WhatsApp & Instagram SVG Logos, 
+           Crisp GCU & ShutterScape Branding, Zero Navbar Overlap)
           ============================================================ */}
       <footer
         id="mobile-global-footer"
         style={{
-          paddingTop: "28px",
-          paddingBottom: "24px",
-          paddingLeft: "18px",
-          paddingRight: "18px",
-          backgroundColor: "#FFFFFF",
+          paddingTop: "24px",
+          paddingBottom: "115px", // Generous clearance so floating navbar never covers text!
+          paddingLeft: "16px",
+          paddingRight: "16px",
+          backgroundColor: "#FAF9F5",
           color: "#0A0A0A",
         }}
-        className="relative z-20 w-full border-t border-black/10 overflow-hidden select-none"
+        className="relative z-20 w-full border-t border-black/10 select-none overflow-hidden"
       >
         {/* Subtle Atmospheric Mountain Landscape Blur Background */}
         <div
-          className="pointer-events-none absolute inset-0 z-0 overflow-hidden select-none opacity-[0.14] mix-blend-multiply filter blur-[2px] scale-105"
+          className="pointer-events-none absolute inset-0 z-0 overflow-hidden select-none opacity-[0.08] mix-blend-multiply filter blur-[2px] scale-105"
           style={{
             backgroundImage:
               "url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1600&q=80')",
@@ -3319,118 +3342,125 @@ export default function MobileOilstainExperience() {
           }}
         />
 
-        {/* Ambient Subtle Warm Gold Gradient */}
+        {/* Ambient Warm Vignette */}
         <div
           className="pointer-events-none absolute inset-0 z-0"
           style={{
             background:
-              "radial-gradient(ellipse 70% 50% at 50% 100%, rgba(212, 168, 67, 0.08) 0%, transparent 70%)",
+              "radial-gradient(ellipse 70% 50% at 50% 100%, rgba(212, 168, 67, 0.06) 0%, transparent 70%)",
           }}
         />
 
-        <div className="relative z-10 max-w-md mx-auto flex flex-col gap-5">
-          {/* TOP ROW: DUAL BRAND LOGOS */}
-          <div className="flex items-center justify-between pb-3 border-b border-black/10">
-            <div className="flex items-center gap-2.5">
-              <div className="relative h-6 w-[70px]">
+        <div className="relative z-10 max-w-sm mx-auto flex flex-col gap-3.5">
+          {/* 1. TOP ROW: DUAL BRAND LOGOS + EST BADGE */}
+          <div className="flex items-center justify-between pb-2.5 border-b border-black/10">
+            <div className="flex items-center gap-2">
+              {/* ShutterScape Logo */}
+              <div className="relative h-6 w-[86px]">
                 <Image
-                  src="/images/shutterscape-logo.png"
+                  src="/images/shutterscape-logo-cropped.png"
                   alt="ShutterScape Logo"
                   fill
-                  sizes="70px"
+                  sizes="86px"
                   unoptimized
                   className="object-contain object-left"
                 />
               </div>
 
-              <span className="h-4 w-[1px] bg-black/20" />
+              <span className="h-3.5 w-[1px] bg-black/25" />
 
+              {/* GCU University Logo */}
               <a
                 href="https://gcu.ac.in"
                 target="_blank"
                 rel="noopener noreferrer"
                 title="Girijananda Chowdhury University"
-                className="relative h-6 w-[88px]"
+                className="relative h-5 w-[92px]"
               >
                 <Image
-                  src="/images/gcu-logo.png"
+                  src="/images/gcu-logo-black-text.png"
                   alt="GCU Logo"
                   fill
-                  sizes="88px"
+                  sizes="92px"
                   unoptimized
                   className="object-contain object-left"
                 />
               </a>
             </div>
 
-            <span className="font-mono text-[8px] tracking-[0.2em] uppercase text-[#B8860B] font-bold">
+            <span className="font-mono text-[7.5px] tracking-[0.2em] uppercase text-[#B8860B] font-bold">
               EST. 2023 · GCU
             </span>
           </div>
 
-          {/* MISSION / SUMMARY & EMAIL */}
-          <div className="space-y-2">
-            <p className="font-body text-[11px] text-black/75 leading-relaxed">
-              The official visual arts and photography collective of Girijananda Chowdhury University, Assam. Observing, capturing, and telling stories through light.
+          {/* 2. TAGLINE & CONTACT STRIP (Single Line Compact) */}
+          <div className="flex flex-col gap-1 text-center">
+            <p className="font-serif text-[11px] text-black/75 italic leading-snug">
+              Visual Arts &amp; Photography Collective of Girijananda Chowdhury University
             </p>
-
             <a
               href="mailto:shutterscape@gcuniversity.ac.in"
-              className="inline-flex items-center gap-1.5 font-mono text-[10px] text-black/85 hover:text-[#D92B2B] font-semibold"
+              className="font-mono text-[9.5px] text-black/70 hover:text-[#D92B2B] font-medium tracking-wide"
             >
-              <span>✉</span>
-              <span>shutterscape@gcuniversity.ac.in</span>
+              ✉ shutterscape@gcuniversity.ac.in
             </a>
           </div>
 
-          {/* FAST ACTION COMMUNITY & SOCIAL PILLS */}
-          <div className="grid grid-cols-2 gap-2 pt-1">
+          {/* 3. OFFICIAL SOCIAL & COMMUNITY PILLS (With Real WhatsApp & Instagram SVG Logos!) */}
+          <div className="grid grid-cols-2 gap-2">
             <a
               href="https://chat.whatsapp.com/Hs71BicR1Xj3PmOyPJ5wdc?s=sw&p=a&mlu=4&ilr=4"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ padding: "8px 12px" }}
-              className="rounded-xl bg-[#25D366]/10 border border-[#25D366]/30 flex items-center justify-between font-mono text-[9.5px] font-bold text-[#1E7E34] uppercase tracking-wider hover:bg-[#25D366]/20 transition-colors"
+              style={{ padding: "7px 10px" }}
+              className="rounded-lg bg-[#25D366]/10 border border-[#25D366]/30 flex items-center justify-between font-mono text-[9px] font-bold text-[#1E7E34] uppercase tracking-wider hover:bg-[#25D366]/20 transition-colors shadow-xs"
             >
-              <span>● WHATSAPP</span>
-              <span>↗</span>
+              <div className="flex items-center gap-1.5">
+                {/* Official WhatsApp SVG Icon */}
+                <svg className="w-3.5 h-3.5 fill-[#25D366] shrink-0" viewBox="0 0 24 24">
+                  <path d="M12.031 2C6.5 2 2.016 6.484 2.016 12.015c0 1.93.547 3.734 1.484 5.281L2 22l4.844-1.453a9.96 9.96 0 0 0 5.187 1.468c5.531 0 10.016-4.484 10.016-10.015S17.562 2 12.031 2zm0 18.281a8.23 8.23 0 0 1-4.203-1.156l-.3-.172-3.125.938.953-3.047-.187-.313a8.216 8.216 0 0 1-1.344-4.515c0-4.563 3.719-8.281 8.281-8.281 4.563 0 8.281 3.719 8.281 8.281 0 4.563-3.719 8.266-8.562 8.266zm4.531-6.203c-.25-.125-1.469-.719-1.688-.812-.234-.094-.406-.125-.578.125-.172.25-.672.828-.828 1-.156.172-.313.187-.562.062a7.127 7.127 0 0 1-2.109-1.312 7.79 7.79 0 0 1-1.453-1.812c-.156-.25-.016-.39.109-.516.109-.109.25-.281.375-.422.125-.141.172-.25.25-.406.078-.172.047-.313-.016-.438-.078-.125-.578-1.406-.812-1.922-.219-.516-.453-.438-.625-.453h-.531c-.187 0-.484.062-.734.344-.25.266-.969.938-.969 2.297 0 1.359.984 2.672 1.125 2.859.141.187 1.953 3.016 4.75 4.203.672.281 1.188.453 1.594.578.672.219 1.281.187 1.766.109.547-.078 1.672-.687 1.906-1.359.234-.672.234-1.25.172-1.359-.062-.125-.234-.203-.484-.328z"/>
+                </svg>
+                <span>WHATSAPP</span>
+              </div>
+              <span className="text-[10px] opacity-70">↗</span>
             </a>
 
             <a
               href="https://www.instagram.com/shutterscape_gcu"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ padding: "8px 12px" }}
-              className="rounded-xl bg-[#E1306C]/10 border border-[#E1306C]/30 flex items-center justify-between font-mono text-[9.5px] font-bold text-[#C13584] uppercase tracking-wider hover:bg-[#E1306C]/20 transition-colors"
+              style={{ padding: "7px 10px" }}
+              className="rounded-lg bg-[#E1306C]/10 border border-[#E1306C]/30 flex items-center justify-between font-mono text-[9px] font-bold text-[#C13584] uppercase tracking-wider hover:bg-[#E1306C]/20 transition-colors shadow-xs"
             >
-              <span>● INSTAGRAM</span>
-              <span>↗</span>
+              <div className="flex items-center gap-1.5">
+                {/* Official Instagram SVG Icon */}
+                <svg className="w-3.5 h-3.5 fill-[#C13584] shrink-0" viewBox="0 0 24 24">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
+                <span>INSTAGRAM</span>
+              </div>
+              <span className="text-[10px] opacity-70">↗</span>
             </a>
           </div>
 
-          {/* COMPACT CAMPUS LOCATION & GOOGLE MAPS CARD */}
-          <div className="p-3 rounded-xl bg-black/[0.03] border border-black/10 space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="font-mono text-[8px] tracking-[0.2em] uppercase text-[#B8860B] font-bold">
-                📍 CAMPUS LOCATION
-              </span>
-              <a
-                href="https://maps.app.goo.gl/NhdHs1u76Bjxo2J87"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-mono text-[9px] tracking-[0.14em] uppercase text-black/70 hover:text-[#B8860B] font-bold inline-flex items-center gap-0.5"
-              >
-                <span>Open Maps</span>
-                <span>↗</span>
-              </a>
+          {/* 4. COMPACT CAMPUS LOCATION (Single Sleek Bar) */}
+          <a
+            href="https://maps.app.goo.gl/NhdHs1u76Bjxo2J87"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ padding: "6px 10px" }}
+            className="rounded-lg bg-black/[0.03] border border-black/10 flex items-center justify-between font-mono text-[8.5px] text-black/75 hover:border-black/25 transition-colors"
+          >
+            <div className="flex items-center gap-1.5 truncate">
+              <span className="text-[#B8860B]">📍</span>
+              <span className="font-bold text-[#B8860B] uppercase tracking-wider shrink-0">CAMPUS:</span>
+              <span className="truncate text-black/70">GCU · Hathkhowapara, Azara, Guwahati</span>
             </div>
-            <p className="font-body text-[10.5px] text-black/80 font-medium leading-snug">
-              Girijananda Chowdhury University · Hathkhowapara, Azara, Guwahati, Assam 781017
-            </p>
-          </div>
+            <span className="font-bold text-[#B8860B] shrink-0 ml-1">MAPS ↗</span>
+          </a>
 
-          {/* QUICK DIRECT NAVIGATION LINKS */}
-          <div className="flex items-center justify-center gap-4 py-2 border-y border-black/10 font-mono text-[9px] font-bold uppercase tracking-[0.16em] text-black/70 flex-wrap">
+          {/* 5. DIRECT NAV LINKS */}
+          <div className="flex items-center justify-center gap-3 py-1.5 border-y border-black/10 font-mono text-[8.5px] font-bold uppercase tracking-[0.14em] text-black/65">
             <button
               type="button"
               onClick={() => {
@@ -3442,7 +3472,7 @@ export default function MobileOilstainExperience() {
             >
               Home
             </button>
-            <span>•</span>
+            <span className="opacity-40">•</span>
             <button
               type="button"
               onClick={() => {
@@ -3453,7 +3483,7 @@ export default function MobileOilstainExperience() {
             >
               Gallery
             </button>
-            <span>•</span>
+            <span className="opacity-40">•</span>
             <button
               type="button"
               onClick={() => {
@@ -3465,7 +3495,7 @@ export default function MobileOilstainExperience() {
             >
               About
             </button>
-            <span>•</span>
+            <span className="opacity-40">•</span>
             <button
               type="button"
               onClick={() => {
@@ -3476,7 +3506,7 @@ export default function MobileOilstainExperience() {
             >
               Activities
             </button>
-            <span>•</span>
+            <span className="opacity-40">•</span>
             <button
               type="button"
               onClick={() => {
@@ -3489,13 +3519,13 @@ export default function MobileOilstainExperience() {
             </button>
           </div>
 
-          {/* BOTTOM LEGAL & CREDITS STRIP */}
-          <div className="flex flex-col items-center text-center gap-2 pt-1 font-mono text-[9px] tracking-[0.14em] text-black/55 uppercase">
+          {/* 6. BOTTOM LEGAL & CREDITS STRIP */}
+          <div className="flex flex-col items-center text-center gap-1 pt-0.5 font-mono text-[8px] tracking-[0.12em] text-black/55 uppercase">
             <span>© 2026 SHUTTERSCAPE · GIRIJANANDA CHOWDHURY UNIVERSITY</span>
 
-            <span className="text-black/80 font-medium inline-flex items-center gap-1.5 normal-case tracking-normal font-sans text-xs">
-              <span>Designed and made with</span>
-              <span className="text-[#EF4444] text-xs animate-pulse inline-block" title="love">❤</span>
+            <span className="text-black/80 font-medium inline-flex items-center gap-1 normal-case tracking-normal font-sans text-[11px]">
+              <span>Designed &amp; crafted with</span>
+              <span className="text-[#EF4444] text-[10px] animate-pulse inline-block" title="love">❤</span>
               <span>by <strong className="font-bold text-black">Krishnayan</strong></span>
             </span>
 
@@ -3503,9 +3533,9 @@ export default function MobileOilstainExperience() {
               href="https://codingclub.gcuniversity.ac.in"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-black/65 hover:text-[#B8860B] transition-colors inline-flex items-center gap-1.5 font-semibold text-[8.5px]"
+              className="text-black/60 hover:text-[#B8860B] transition-colors inline-flex items-center gap-1 font-semibold text-[8px]"
             >
-              <div className="relative w-3.5 h-3.5 rounded-full overflow-hidden shrink-0 bg-black/5 border border-black/15">
+              <div className="relative w-3 h-3 rounded-full overflow-hidden shrink-0 bg-black/5 border border-black/15">
                 <Image
                   src="/images/codenix-logo.png"
                   alt="Codénix Logo"

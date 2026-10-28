@@ -13,33 +13,33 @@ export interface ReelItem {
 const REELS: ReelItem[] = [
   {
     id: "01",
-    photographer: "World Photography Day",
-    videoSrc: "/api/media/6adf475c3c63e8ae4ff0a9d4",
+    photographer: "Parambrata Sarkar",
+    videoSrc: "/videos/reel-1.mp4",
   },
   {
     id: "02",
-    photographer: "Glimpse of Grooming Club’s Ramp Walk",
-    videoSrc: "/api/media/6ade6c0a40346d3181c85f3a",
+    photographer: "Sayan Saha",
+    videoSrc: "/videos/reel-2.mp4",
   },
   {
     id: "03",
-    photographer: "Wall Painting",
-    videoSrc: "/api/media/6adf48963c63e8ae4ff0a9d7",
+    photographer: "Aman Baha",
+    videoSrc: "/videos/reel-3.mp4",
   },
   {
     id: "04",
-    photographer: "Photography Workshop ",
-    videoSrc: "/api/media/6adf48cd3c63e8ae4ff0a9d8",
+    photographer: "Sampad Dutta",
+    videoSrc: "/videos/reel-4.mp4",
   },
   {
     id: "05",
-    photographer: "A New Beginning",
-    videoSrc: "/api/media/6adf48403c63e8ae4ff0a9d6",
+    photographer: "Bituparna",
+    videoSrc: "/videos/reel-5.mp4",
   },
   {
     id: "06",
-    photographer: "Magic of Filmmaking",
-    videoSrc: "/api/media/6adf47e63c63e8ae4ff0a9d5",
+    photographer: "Sohan Chandra",
+    videoSrc: "/videos/reel-6.mp4",
   },
 ];
 
@@ -60,8 +60,9 @@ export default function FramesOfMoments({ initialReels }: FramesOfMomentsProps =
           setReels(
             res.data.map((d: any, idx: number) => {
               const defaultReel = REELS[idx % REELS.length];
+              const isSlowGridFS = d.videoSrc && d.videoSrc.startsWith("/api/media/");
               const validVideoSrc =
-                d.videoSrc && !d.videoSrc.startsWith("blob:")
+                d.videoSrc && !d.videoSrc.startsWith("blob:") && !isSlowGridFS
                   ? d.videoSrc
                   : defaultReel.videoSrc;
               return {

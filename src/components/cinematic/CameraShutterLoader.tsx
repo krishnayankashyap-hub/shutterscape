@@ -10,23 +10,18 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 const CRITICAL_IMAGE_ASSETS = [
   "/images/gcu-campus-anime.jpg",
   "/images/gcu-campus-sketch.jpg",
-  "/api/media/6ade51a83071c6a522ea6397",
-  "/api/media/6ade54effadbce637226b636",
-  "/api/media/6ade56029d67f6006e3db91a",
-  "/api/media/6ade565e741b0c577b2f4207",
-  "/api/media/6ade5727c27b25f89317a56e",
-  "/api/media/6ade5fc397369901d08048bd",
-  "/api/media/6ade60493c562bf90f9b2a6c",
-  "/api/media/6ade60e5d43cca4cd02daa0f",
-  "/api/media/6ade61178ff4fc64ac7615e4",
-  "/api/media/6ade61c88ff4fc64ac7615e5",
-  "/api/media/6ade621f3c562bf90f9b2a6d",
-  "/api/media/6ade6265d43cca4cd02daa10",
-  "/api/media/6ade723381e180affa193019",
-  "/api/media/6ade724a83870de2ac5f3cf2",
-  "/api/media/6ade73037d65124fe732c4ae",
-  "/api/media/6ade734e7d65124fe732c4af",
-  "/api/media/6ade73c583870de2ac5f3cf3",
+  "/images/shutterscape-logo-cropped.png",
+  "/images/gcu-logo-black-text.png",
+  "/images/codenix-logo.png",
+  "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800&q=75",
+  "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800&q=75",
+  "https://images.unsplash.com/photo-1452587925148-ce544e77e70d?w=800&q=75",
+];
+
+const CRITICAL_VIDEO_ASSETS = [
+  "/videos/mobile-hero-background.mp4",
+  "/videos/reel-1.mp4",
+  "/videos/reel-2.mp4",
 ];
 
 export default function CameraShutterLoader() {
@@ -47,8 +42,19 @@ export default function CameraShutterLoader() {
   useEffect(() => {
     if (pathname?.startsWith("/admin")) return;
 
-    // 0. Preload critical assets in parallel
+    // 0. Preload critical video & image assets in background while shutter is closed
     if (typeof window !== "undefined") {
+      CRITICAL_VIDEO_ASSETS.forEach((vSrc) => {
+        try {
+          const v = document.createElement("video");
+          v.src = vSrc;
+          v.preload = "auto";
+          v.muted = true;
+          v.playsInline = true;
+          v.load();
+        } catch {}
+      });
+
       CRITICAL_IMAGE_ASSETS.forEach((src) => {
         try {
           const img = new Image();
