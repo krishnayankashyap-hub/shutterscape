@@ -20,8 +20,8 @@ const CRITICAL_IMAGE_ASSETS = [
 
 const CRITICAL_VIDEO_ASSETS = [
   "/videos/mobile-hero-background.mp4",
-  "/videos/reel-1.mp4",
-  "/videos/reel-2.mp4",
+  "/api/media/6adf9397d782e64ad5ebca9a",
+  "/api/media/6ade6c0a40346d3181c85f3a",
 ];
 
 export default function CameraShutterLoader() {

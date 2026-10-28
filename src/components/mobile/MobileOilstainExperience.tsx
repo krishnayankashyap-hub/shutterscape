@@ -93,33 +93,33 @@ const FALLBACK_GALLERY = [
 const FALLBACK_REELS = [
   {
     id: "01",
-    photographer: "Parambrata Sarkar",
-    videoSrc: "/videos/reel-1.mp4",
+    photographer: "World Photography Day",
+    videoSrc: "/api/media/6adf9397d782e64ad5ebca9a",
   },
   {
     id: "02",
-    photographer: "Sayan Saha",
-    videoSrc: "/videos/reel-2.mp4",
+    photographer: "Glimpse of Grooming Club’s Ramp Walk",
+    videoSrc: "/api/media/6ade6c0a40346d3181c85f3a",
   },
   {
     id: "03",
-    photographer: "Aman Baha",
-    videoSrc: "/videos/reel-3.mp4",
+    photographer: "Wall Painting",
+    videoSrc: "/api/media/6adf48963c63e8ae4ff0a9d7",
   },
   {
     id: "04",
-    photographer: "Sampad Dutta",
-    videoSrc: "/videos/reel-4.mp4",
+    photographer: "Photography Workshop ",
+    videoSrc: "/api/media/6adf48cd3c63e8ae4ff0a9d8",
   },
   {
     id: "05",
-    photographer: "Bituparna",
-    videoSrc: "/videos/reel-5.mp4",
+    photographer: "A New Beginning",
+    videoSrc: "/api/media/6adf8b6180149ddb913bffa9",
   },
   {
     id: "06",
-    photographer: "Sohan Chandra",
-    videoSrc: "/videos/reel-6.mp4",
+    photographer: "Magic of Filmmaking",
+    videoSrc: "/api/media/6adf8b8e3b59d4ea46c821f6",
   },
 ];
 
@@ -1116,9 +1116,8 @@ export default function MobileOilstainExperience() {
         setReels(
           reelRes.value.data.map((d: any, idx: number) => {
             const def = FALLBACK_REELS[idx % FALLBACK_REELS.length];
-            const isSlowGridFS = d.videoSrc && d.videoSrc.startsWith("/api/media/");
             const validSrc =
-              d.videoSrc && !d.videoSrc.startsWith("blob:") && !isSlowGridFS
+              d.videoSrc && !d.videoSrc.startsWith("blob:")
                 ? d.videoSrc
                 : def.videoSrc;
             return {

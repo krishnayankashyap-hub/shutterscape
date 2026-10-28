@@ -14,34 +14,39 @@ function buildMediaStreamResponse(
 ) {
   const totalSize = rawBuffer.length;
 
-  // 1. Video streaming with proper HTTP 206 Range support
+  // 1. Video streaming: allow full status 200 caching on initial load (start === 0)
   if (mimeType.startsWith("video/")) {
     if (rangeHeader) {
       const parts = rangeHeader.replace(/bytes=/, "").split("-");
       const start = parseInt(parts[0], 10);
-      const maxChunk = 2 * 1024 * 1024;
-      const end = parts[1]
-        ? parseInt(parts[1], 10)
-        : Math.min(start + maxChunk - 1, totalSize - 1);
 
-      const chunk = rawBuffer.subarray(start, end + 1);
+      // Only return 206 slice if client is explicitly seeking past byte 0
+      if (!isNaN(start) && start > 0) {
+        const maxChunk = 2 * 1024 * 1024;
+        const end = parts[1]
+          ? parseInt(parts[1], 10)
+          : Math.min(start + maxChunk - 1, totalSize - 1);
 
-      return new NextResponse(new Uint8Array(chunk), {
-        status: 206,
-        headers: {
-          "Content-Range": `bytes ${start}-${end}/${totalSize}`,
-          "Accept-Ranges": "bytes",
-          "Content-Length": chunk.length.toString(),
-          "Content-Type": mimeType,
-          "Cache-Control":
-            "public, max-age=31536000, s-maxage=31536000, stale-while-revalidate=86400, immutable",
-          "CDN-Cache-Control": "public, max-age=31536000, immutable",
-          "Vercel-CDN-Cache-Control": "public, max-age=31536000, immutable",
-          "Access-Control-Allow-Origin": "*",
-        },
-      });
+        const chunk = rawBuffer.subarray(start, end + 1);
+
+        return new NextResponse(new Uint8Array(chunk), {
+          status: 206,
+          headers: {
+            "Content-Range": `bytes ${start}-${end}/${totalSize}`,
+            "Accept-Ranges": "bytes",
+            "Content-Length": chunk.length.toString(),
+            "Content-Type": mimeType,
+            "Cache-Control":
+              "public, max-age=31536000, s-maxage=31536000, stale-while-revalidate=86400, immutable",
+            "CDN-Cache-Control": "public, max-age=31536000, immutable",
+            "Vercel-CDN-Cache-Control": "public, max-age=31536000, immutable",
+            "Access-Control-Allow-Origin": "*",
+          },
+        });
+      }
     }
 
+    // Full video 200 response (Cached permanently on Vercel Edge CDN for instant 10ms playback!)
     return new NextResponse(new Uint8Array(rawBuffer), {
       status: 200,
       headers: {
