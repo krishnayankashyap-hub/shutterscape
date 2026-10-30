@@ -86,7 +86,8 @@ type TabType =
   | "committee"
   | "hero"
   | "pullin"
-  | "reels";
+  | "reels"
+  | "spotlight";
 
 const TABS: {
   id: TabType;
@@ -135,6 +136,13 @@ const TABS: {
     group: "SCENES",
     description:
       "Vertical phone video reels featured in the 'Frames of Moments' cinema section.",
+  },
+  {
+    id: "spotlight",
+    label: "Spotlight & Countdown",
+    group: "SCENES",
+    description:
+      "Configure the Featured Upcoming and Live Going events, countdown timers, and join actions.",
   },
 ];
 
@@ -239,6 +247,35 @@ function getTabIcon(id: TabType, className = "w-4 h-4") {
           <rect x="1" y="5" width="15" height="14" rx="2.5" />
         </svg>
       );
+    case "spotlight":
+      return (
+        <svg
+          className={className}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={1.8}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M13 10V3L4 14h7v7l9-11h-7z"
+          />
+        </svg>
+      );
+  }
+}
+
+function toLocalDatetimeString(isoStr?: string): string {
+  if (!isoStr) return "";
+  try {
+    const d = new Date(isoStr);
+    if (isNaN(d.getTime())) return "";
+    const offset = d.getTimezoneOffset() * 60000;
+    const local = new Date(d.getTime() - offset);
+    return local.toISOString().slice(0, 16);
+  } catch {
+    return "";
   }
 }
 
@@ -260,6 +297,47 @@ export default function AdminDashboardPage() {
   const [heroReelList, setHeroReelList] = useState<HeroReelItem[]>([]);
   const [pullInList, setPullInList] = useState<PullInExhibitItem[]>([]);
   const [reelsList, setReelsList] = useState<MomentsReelItem[]>([]);
+
+  // Spotlight Admin State
+  const [spotlightAdminData, setSpotlightAdminData] = useState<{
+    upcoming: any;
+    live: any;
+  }>({
+    upcoming: {
+      id: "SPOT-UPCOMING-01",
+      title: "Brahmaputra Heritage Photowalk 4.0",
+      category: "PHOTOWALK",
+      date: "NOV 14, 2026",
+      targetDate: new Date(
+        Date.now() + (14 * 86400 + 6 * 3600 + 45 * 60) * 1000
+      ).toISOString(),
+      location: "Riverfront, Guwahati",
+      filmStock: "KODAK PORTRA 400",
+      img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=75",
+      description:
+        "Golden-hour riverfront expedition capturing ferry silhouettes, heritage ghats, and twilight reflections with live framing critiques.",
+      ctaText: "JOIN UPCOMING EVENT",
+    },
+    live: {
+      id: "SPOT-LIVE-01",
+      title: "Campus Nocturnes & Strobe Light Lab",
+      category: "LIVE WORKSHOP",
+      date: "HAPPENING NOW",
+      targetDate: new Date(
+        Date.now() + (4 * 3600 + 38 * 60 + 25) * 1000
+      ).toISOString(),
+      location: "GCU Media Lab, Azara",
+      filmStock: "GODEX AD600 PRO · 35MM",
+      img: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800&q=75",
+      description:
+        "Live hands-on studio session exploring high-speed Xenon flash choreography, Chiaroscuro portrait lighting, and manual optics.",
+      ctaText: "JOIN LIVE SESSION NOW",
+    },
+  });
+  const [activeSpotlightSubTab, setActiveSpotlightSubTab] = useState<
+    "upcoming" | "live"
+  >("upcoming");
+  const [savingSpotlight, setSavingSpotlight] = useState(false);
 
   // Filtering & Search
   const [searchQuery, setSearchQuery] = useState("");
@@ -294,9 +372,11 @@ export default function AdminDashboardPage() {
         fetch("/api/hero-reel"),
         fetch("/api/pullin-exhibits"),
         fetch("/api/moments-reels"),
+        fetch("/api/spotlight"),
       ]);
 
-      const [resGal, resAct, resCom, resHero, resPull, resReels] = responses;
+      const [resGal, resAct, resCom, resHero, resPull, resReels, resSpot] =
+        responses;
 
       if (resGal.status === "fulfilled" && resGal.value.ok) {
         const d = await resGal.value.json();
@@ -328,6 +408,18 @@ export default function AdminDashboardPage() {
       if (resReels.status === "fulfilled" && resReels.value.ok) {
         const d = await resReels.value.json();
         if (d.success && d.data) setReelsList(d.data);
+      }
+
+      if (resSpot && resSpot.status === "fulfilled" && resSpot.value.ok) {
+        const d = await resSpot.value.json();
+        if (d.success && d.data) {
+          setSpotlightAdminData((prev) => ({
+            upcoming: d.data.upcoming
+              ? { ...prev.upcoming, ...d.data.upcoming }
+              : prev.upcoming,
+            live: d.data.live ? { ...prev.live, ...d.data.live } : prev.live,
+          }));
+        }
       }
     } catch (err) {
       console.error("Dashboard fetch error:", err);
@@ -446,6 +538,46 @@ export default function AdminDashboardPage() {
     }
   };
 
+  const handleSaveSpotlight = async () => {
+    try {
+      setSavingSpotlight(true);
+      const res = await fetch("/api/spotlight", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(spotlightAdminData),
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        throw new Error(json.error || "Failed to update Spotlight");
+      }
+      showToast("Spotlight and Countdown saved successfully!", "success");
+    } catch (err: any) {
+      showToast(err.message || "Failed to save spotlight", "error");
+    } finally {
+      setSavingSpotlight(false);
+    }
+  };
+
+  const updateSpotlightField = (field: string, val: any) => {
+    setSpotlightAdminData((prev) => ({
+      ...prev,
+      [activeSpotlightSubTab]: {
+        ...prev[activeSpotlightSubTab],
+        [field]: val,
+      },
+    }));
+  };
+
+  const applyQuickPreset = (hoursToAdd: number) => {
+    const targetIso = new Date(
+      Date.now() + hoursToAdd * 3600 * 1000
+    ).toISOString();
+    updateSpotlightField("targetDate", targetIso);
+    const label =
+      hoursToAdd >= 24 ? `${hoursToAdd / 24} Days` : `${hoursToAdd} Hours`;
+    showToast(`Countdown timer set to +${label} from now`, "success");
+  };
+
   const activeTabMeta = useMemo(() => {
     return TABS.find((t) => t.id === activeTab) || TABS[0];
   }, [activeTab]);
@@ -457,6 +589,7 @@ export default function AdminDashboardPage() {
     if (id === "committee") return committeeList.length;
     if (id === "activities") return activityList.length;
     if (id === "reels") return reelsList.length;
+    if (id === "spotlight") return 2;
     return 0;
   };
 
@@ -914,6 +1047,32 @@ export default function AdminDashboardPage() {
               <span>Sync</span>
             </button>
 
+            {activeTab === "spotlight" && (
+              <button
+                type="button"
+                onClick={handleSaveSpotlight}
+                disabled={savingSpotlight}
+                className="cms-primary-btn"
+              >
+                <svg
+                  className={`w-3.5 h-3.5 ${
+                    savingSpotlight ? "animate-spin" : ""
+                  }`}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2.4}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
+                  />
+                </svg>
+                <span>{savingSpotlight ? "Saving..." : "Save Spotlight"}</span>
+              </button>
+            )}
+
             {["gallery", "activities", "committee", "reels"].includes(
               activeTab
             ) && (
@@ -1068,91 +1227,93 @@ export default function AdminDashboardPage() {
           {/* ============================================================
               ELEVATED SEARCH & SEGMENTED FILTER BAR CARD
               ============================================================ */}
-          <div
-            style={{ padding: "10px 16px" }}
-            className="bg-white rounded-xl border border-[#EAEFF4] shadow-[0_2px_12px_rgba(145,158,171,0.05)] flex flex-col lg:flex-row lg:items-center justify-between gap-3"
-          >
-            {/* Search Box with non-overlapping icon */}
-            <div className="relative w-full lg:w-80">
-              <svg
-                style={{ left: "12px" }}
-                className="w-3.5 h-3.5 text-[#7C8FAC] absolute top-1/2 -translate-y-1/2 pointer-events-none"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <circle cx="11" cy="11" r="8" />
-                <path strokeLinecap="round" d="M21 21l-4.35-4.35" />
-              </svg>
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") e.preventDefault();
-                }}
-                placeholder={`Search ${activeTabMeta.label.toLowerCase()}...`}
-                className="cms-search-input"
-              />
+          {activeTab !== "spotlight" && (
+            <div
+              style={{ padding: "10px 16px" }}
+              className="bg-white rounded-xl border border-[#EAEFF4] shadow-[0_2px_12px_rgba(145,158,171,0.05)] flex flex-col lg:flex-row lg:items-center justify-between gap-3"
+            >
+              {/* Search Box with non-overlapping icon */}
+              <div className="relative w-full lg:w-80">
+                <svg
+                  style={{ left: "12px" }}
+                  className="w-3.5 h-3.5 text-[#7C8FAC] absolute top-1/2 -translate-y-1/2 pointer-events-none"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <path strokeLinecap="round" d="M21 21l-4.35-4.35" />
+                </svg>
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") e.preventDefault();
+                  }}
+                  placeholder={`Search ${activeTabMeta.label.toLowerCase()}...`}
+                  className="cms-search-input"
+                />
+              </div>
+
+              {/* Category Filter Pills for Gallery */}
+              {activeTab === "gallery" && (
+                <div
+                  style={{ padding: "5px" }}
+                  className="flex items-center gap-1.5 bg-[#F4F7FE] rounded-xl border border-[#EAEFF4] overflow-x-auto"
+                >
+                  {[
+                    "ALL",
+                    "DOCUMENTARY",
+                    "PORTRAITURE",
+                    "LANDSCAPE",
+                    "ARCHITECTURE",
+                    "STREET",
+                    "EXPERIMENTAL",
+                  ].map((cat) => {
+                    const isSelected = filterCategory === cat;
+                    return (
+                      <button
+                        key={cat}
+                        type="button"
+                        onClick={() => setFilterCategory(cat)}
+                        className={`cms-filter-pill ${
+                          isSelected ? "active" : "inactive"
+                        }`}
+                      >
+                        {cat === "ALL" ? "All Categories" : cat}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* Year Filter Pills for Activities */}
+              {activeTab === "activities" && (
+                <div
+                  style={{ padding: "5px" }}
+                  className="flex items-center gap-1.5 bg-[#F4F7FE] rounded-xl border border-[#EAEFF4]"
+                >
+                  {["ALL", "2026", "2025"].map((yr) => {
+                    const isSelected = filterCategory === yr;
+                    return (
+                      <button
+                        key={yr}
+                        type="button"
+                        onClick={() => setFilterCategory(yr)}
+                        className={`cms-filter-pill ${
+                          isSelected ? "active" : "inactive"
+                        }`}
+                      >
+                        {yr === "ALL" ? "All Years" : `Works '${yr.slice(-2)}`}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
-
-            {/* Category Filter Pills for Gallery */}
-            {activeTab === "gallery" && (
-              <div
-                style={{ padding: "5px" }}
-                className="flex items-center gap-1.5 bg-[#F4F7FE] rounded-xl border border-[#EAEFF4] overflow-x-auto"
-              >
-                {[
-                  "ALL",
-                  "DOCUMENTARY",
-                  "PORTRAITURE",
-                  "LANDSCAPE",
-                  "ARCHITECTURE",
-                  "STREET",
-                  "EXPERIMENTAL",
-                ].map((cat) => {
-                  const isSelected = filterCategory === cat;
-                  return (
-                    <button
-                      key={cat}
-                      type="button"
-                      onClick={() => setFilterCategory(cat)}
-                      className={`cms-filter-pill ${
-                        isSelected ? "active" : "inactive"
-                      }`}
-                    >
-                      {cat === "ALL" ? "All Categories" : cat}
-                    </button>
-                  );
-                })}
-              </div>
-            )}
-
-            {/* Year Filter Pills for Activities */}
-            {activeTab === "activities" && (
-              <div
-                style={{ padding: "5px" }}
-                className="flex items-center gap-1.5 bg-[#F4F7FE] rounded-xl border border-[#EAEFF4]"
-              >
-                {["ALL", "2026", "2025"].map((yr) => {
-                  const isSelected = filterCategory === yr;
-                  return (
-                    <button
-                      key={yr}
-                      type="button"
-                      onClick={() => setFilterCategory(yr)}
-                      className={`cms-filter-pill ${
-                        isSelected ? "active" : "inactive"
-                      }`}
-                    >
-                      {yr === "ALL" ? "All Years" : `Works '${yr.slice(-2)}`}
-                    </button>
-                  );
-                })}
-              </div>
-            )}
-          </div>
+          )}
 
           {/* ============================================================
               TAB 1: VISUAL ARCHIVE GALLERY GRID
@@ -1700,6 +1861,511 @@ export default function AdminDashboardPage() {
                     </div>
                   </div>
                 ))}
+              </div>
+            </div>
+          )}
+
+          {/* ============================================================
+              TAB 7: EXECUTIVE SPOTLIGHT & COUNTDOWN MODULE
+              ============================================================ */}
+          {activeTab === "spotlight" && (
+            <div className="flex flex-col gap-5">
+              {/* Info Header Banner */}
+              <div
+                style={{ padding: "16px 20px" }}
+                className="rounded-2xl bg-white border border-[#EAEFF4] shadow-xs flex flex-wrap items-center justify-between gap-4"
+              >
+                <div className="flex items-center gap-3">
+                  <div
+                    style={{ width: "42px", height: "42px" }}
+                    className="rounded-xl bg-[#FFF9E6] text-[#FFAE1F] flex items-center justify-center shrink-0 border border-[#FFE7A8]"
+                  >
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M13 10V3L4 14h7v7l9-11h-7z"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-[#2A3547]">
+                      Spotlight Dispatch &amp; Live Countdown Manager
+                    </h3>
+                    <p
+                      style={{ marginTop: "2px" }}
+                      className="text-xs text-[#7C8FAC]"
+                    >
+                      Controls Section 3 on mobile. Manage the Upcoming event,
+                      the Live Going session, and their real-time DAYS : HRS :
+                      MIN : SEC countdown timers.
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleSaveSpotlight}
+                  disabled={savingSpotlight}
+                  style={{ padding: "9px 20px" }}
+                  className="rounded-xl bg-[#5D87FF] hover:bg-[#4F75E0] text-white text-xs font-bold flex items-center gap-2 cursor-pointer shadow-sm transition-all disabled:opacity-60"
+                >
+                  <svg
+                    className={`w-3.5 h-3.5 ${
+                      savingSpotlight ? "animate-spin" : ""
+                    }`}
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2.2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
+                    />
+                  </svg>
+                  <span>
+                    {savingSpotlight ? "Saving Changes..." : "Save Spotlight"}
+                  </span>
+                </button>
+              </div>
+
+              {/* Sub-Tab Switcher: UPCOMING vs LIVE GOING */}
+              <div
+                style={{ padding: "6px" }}
+                className="grid grid-cols-2 gap-2 bg-[#EAEFF4]/70 rounded-2xl border border-[#DFE5EF] max-w-md"
+              >
+                <button
+                  type="button"
+                  onClick={() => setActiveSpotlightSubTab("upcoming")}
+                  style={{ padding: "10px 16px" }}
+                  className={`rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition-all ${
+                    activeSpotlightSubTab === "upcoming"
+                      ? "bg-white text-[#2A3547] shadow-sm"
+                      : "bg-transparent text-[#7C8FAC] hover:text-[#2A3547]"
+                  }`}
+                >
+                  <span className="w-2 h-2 rounded-full bg-[#FFAE1F]" />
+                  <span>1. UPCOMING EVENT</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveSpotlightSubTab("live")}
+                  style={{ padding: "10px 16px" }}
+                  className={`rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition-all ${
+                    activeSpotlightSubTab === "live"
+                      ? "bg-[#FA896B] text-white shadow-sm"
+                      : "bg-transparent text-[#7C8FAC] hover:text-[#FA896B]"
+                  }`}
+                >
+                  <span
+                    className={`w-2 h-2 rounded-full ${
+                      activeSpotlightSubTab === "live"
+                        ? "bg-white animate-ping"
+                        : "bg-[#FA896B]"
+                    }`}
+                  />
+                  <span>2. LIVE GOING SESSION</span>
+                </button>
+              </div>
+
+              {/* Form & Live Mobile Simulation Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+                {/* Left Form: 7 Columns */}
+                <div className="lg:col-span-7 bg-white rounded-2xl border border-[#EAEFF4] shadow-xs flex flex-col justify-between overflow-hidden">
+                  <div style={{ padding: "24px" }} className="space-y-4">
+                    <div className="flex items-center justify-between border-b border-[#EAEFF4] pb-3">
+                      <span className="text-xs font-bold uppercase tracking-wider text-[#5D87FF]">
+                        {activeSpotlightSubTab === "upcoming"
+                          ? "Upcoming Event Settings (Default Schedule)"
+                          : "Live Going Session Settings (Happening Now)"}
+                      </span>
+                      <span
+                        style={{ padding: "3px 8px" }}
+                        className={`rounded-md text-[10px] font-bold uppercase tracking-wider ${
+                          activeSpotlightSubTab === "upcoming"
+                            ? "bg-[#FFF9E6] text-[#FFAE1F]"
+                            : "bg-[#FDEDE8] text-[#FA896B]"
+                        }`}
+                      >
+                        {activeSpotlightSubTab === "upcoming"
+                          ? "STARTS IN TIMER"
+                          : "LIVE SESSION TIMER"}
+                      </span>
+                    </div>
+
+                    <div className="space-y-3.5">
+                      {/* Title */}
+                      <div>
+                        <label className="text-[11px] font-bold text-[#2A3547] uppercase block mb-1">
+                          Event Title *
+                        </label>
+                        <input
+                          type="text"
+                          value={
+                            spotlightAdminData[activeSpotlightSubTab]?.title ||
+                            ""
+                          }
+                          onChange={(e) =>
+                            updateSpotlightField("title", e.target.value)
+                          }
+                          placeholder="e.g. Brahmaputra Heritage Photowalk 4.0"
+                          className="cms-form-input w-full"
+                        />
+                      </div>
+
+                      {/* Category & Date Label */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label className="text-[11px] font-bold text-[#2A3547] uppercase block mb-1">
+                            Category Badge
+                          </label>
+                          <input
+                            type="text"
+                            value={
+                              spotlightAdminData[activeSpotlightSubTab]
+                                ?.category || ""
+                            }
+                            onChange={(e) =>
+                              updateSpotlightField("category", e.target.value)
+                            }
+                            placeholder="e.g. PHOTOWALK, WORKSHOP, EXHIBITION"
+                            className="cms-form-input w-full"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="text-[11px] font-bold text-[#2A3547] uppercase block mb-1">
+                            Display Date Label
+                          </label>
+                          <input
+                            type="text"
+                            value={
+                              spotlightAdminData[activeSpotlightSubTab]?.date ||
+                              ""
+                            }
+                            onChange={(e) =>
+                              updateSpotlightField("date", e.target.value)
+                            }
+                            placeholder="e.g. NOV 14, 2026 or HAPPENING NOW"
+                            className="cms-form-input w-full"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Countdown Timer Target Date & Presets */}
+                      <div
+                        style={{ padding: "14px", marginTop: "4px" }}
+                        className="rounded-xl bg-[#F8FAFC] border border-[#EAEFF4] space-y-2.5"
+                      >
+                        <div className="flex items-center justify-between">
+                          <label className="text-[11px] font-bold text-[#2A3547] uppercase block">
+                            ⏱ Countdown Target Date &amp; Time (ISO) *
+                          </label>
+                          <span className="text-[10px] text-[#7C8FAC] font-medium">
+                            Controls DAYS : HRS : MIN : SEC
+                          </span>
+                        </div>
+
+                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                          <input
+                            type="datetime-local"
+                            value={toLocalDatetimeString(
+                              spotlightAdminData[activeSpotlightSubTab]
+                                ?.targetDate
+                            )}
+                            onChange={(e) => {
+                              if (!e.target.value) return;
+                              const iso = new Date(
+                                e.target.value
+                              ).toISOString();
+                              updateSpotlightField("targetDate", iso);
+                            }}
+                            className="cms-form-input flex-1 bg-white font-mono text-xs"
+                          />
+
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const iso = new Date(
+                                Date.now() + 24 * 3600 * 1000
+                              ).toISOString();
+                              updateSpotlightField("targetDate", iso);
+                            }}
+                            style={{ padding: "8px 12px" }}
+                            className="rounded-lg bg-white border border-[#DFE5EF] text-[#5A6A85] text-[11px] font-semibold hover:bg-slate-50 cursor-pointer"
+                          >
+                            Reset
+                          </button>
+                        </div>
+
+                        {/* Quick Presets */}
+                        <div>
+                          <span className="text-[10px] font-bold text-[#7C8FAC] uppercase block mb-1">
+                            Quick Presets (From Now):
+                          </span>
+                          <div className="flex flex-wrap gap-1.5">
+                            {[
+                              { label: "+2 Hours", hrs: 2 },
+                              { label: "+24 Hours", hrs: 24 },
+                              { label: "+3 Days", hrs: 72 },
+                              { label: "+7 Days", hrs: 168 },
+                              { label: "+14 Days", hrs: 336 },
+                            ].map((preset) => (
+                              <button
+                                key={preset.label}
+                                type="button"
+                                onClick={() => applyQuickPreset(preset.hrs)}
+                                style={{ padding: "4px 9px" }}
+                                className="rounded-md bg-white border border-[#DFE5EF] hover:border-[#5D87FF] hover:text-[#5D87FF] text-[#2A3547] text-[10.5px] font-medium cursor-pointer transition-colors"
+                              >
+                                {preset.label}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Location & Film Stock */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label className="text-[11px] font-bold text-[#2A3547] uppercase block mb-1">
+                            Location
+                          </label>
+                          <input
+                            type="text"
+                            value={
+                              spotlightAdminData[activeSpotlightSubTab]
+                                ?.location || ""
+                            }
+                            onChange={(e) =>
+                              updateSpotlightField("location", e.target.value)
+                            }
+                            placeholder="e.g. Riverfront, Guwahati"
+                            className="cms-form-input w-full"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="text-[11px] font-bold text-[#2A3547] uppercase block mb-1">
+                            Film Stock / Gear Badge
+                          </label>
+                          <input
+                            type="text"
+                            value={
+                              spotlightAdminData[activeSpotlightSubTab]
+                                ?.filmStock || ""
+                            }
+                            onChange={(e) =>
+                              updateSpotlightField("filmStock", e.target.value)
+                            }
+                            placeholder="e.g. KODAK PORTRA 400"
+                            className="cms-form-input w-full"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Description */}
+                      <div>
+                        <label className="text-[11px] font-bold text-[#2A3547] uppercase block mb-1">
+                          Description Overview
+                        </label>
+                        <textarea
+                          rows={3}
+                          value={
+                            spotlightAdminData[activeSpotlightSubTab]
+                              ?.description || ""
+                          }
+                          onChange={(e) =>
+                            updateSpotlightField("description", e.target.value)
+                          }
+                          placeholder="Event synopsis or live workshop instructions..."
+                          className="cms-form-input w-full resize-none text-xs"
+                        />
+                      </div>
+
+                      {/* Join Button CTA */}
+                      <div>
+                        <label className="text-[11px] font-bold text-[#2A3547] uppercase block mb-1">
+                          Action Button Label (CTA)
+                        </label>
+                        <input
+                          type="text"
+                          value={
+                            spotlightAdminData[activeSpotlightSubTab]?.ctaText ||
+                            ""
+                          }
+                          onChange={(e) =>
+                            updateSpotlightField("ctaText", e.target.value)
+                          }
+                          placeholder="e.g. JOIN UPCOMING EVENT or JOIN LIVE SESSION NOW"
+                          className="cms-form-input w-full"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div
+                    style={{ padding: "16px 24px" }}
+                    className="border-t border-[#EAEFF4] bg-[#F8FAFC] flex items-center justify-between"
+                  >
+                    <span className="text-[11px] text-[#7C8FAC]">
+                      Clicking Save will update both Mobile and Desktop
+                      dispatches.
+                    </span>
+                    <button
+                      type="button"
+                      onClick={handleSaveSpotlight}
+                      disabled={savingSpotlight}
+                      style={{ padding: "8px 20px" }}
+                      className="rounded-xl bg-[#5D87FF] hover:bg-[#4F75E0] text-white text-xs font-bold cursor-pointer transition-all disabled:opacity-60"
+                    >
+                      {savingSpotlight ? "Saving..." : "Save Spotlight"}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Right Form: 5 Columns (Media Upload & Mobile Preview Simulation) */}
+                <div className="lg:col-span-5 flex flex-col gap-4">
+                  {/* Image Upload Zone */}
+                  <div
+                    style={{ padding: "20px" }}
+                    className="bg-white rounded-2xl border border-[#EAEFF4] shadow-xs space-y-3"
+                  >
+                    <label className="text-[11px] font-bold text-[#2A3547] uppercase block">
+                      Spotlight Cover Photograph *
+                    </label>
+
+                    <FileUploadZone
+                      value={
+                        spotlightAdminData[activeSpotlightSubTab]?.img || ""
+                      }
+                      onChange={(url) => updateSpotlightField("img", url)}
+                      accept="image"
+                      label="Upload Cover Photo (JPG / PNG / WEBP)"
+                      helperText="High-resolution landscape/wide photograph for the upper 16:10 frame."
+                    />
+
+                    <div>
+                      <span className="text-[10px] font-bold text-[#7C8FAC] uppercase block mb-1">
+                        Or Paste Direct Image URL:
+                      </span>
+                      <input
+                        type="url"
+                        value={
+                          spotlightAdminData[activeSpotlightSubTab]?.img || ""
+                        }
+                        onChange={(e) =>
+                          updateSpotlightField("img", e.target.value)
+                        }
+                        placeholder="https://images.unsplash.com/..."
+                        className="cms-form-input w-full text-xs"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Live Mobile Spotlight Preview */}
+                  <div
+                    style={{ padding: "20px" }}
+                    className="bg-[#0A0A0D] text-white rounded-2xl border border-black/20 shadow-lg space-y-3"
+                  >
+                    <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                      <span className="font-mono text-[9px] tracking-widest uppercase text-[#D4A843] font-bold">
+                        📱 LIVE MOBILE SIMULATION
+                      </span>
+                      <span className="font-mono text-[9px] text-white/50 uppercase">
+                        {activeSpotlightSubTab === "upcoming"
+                          ? "UPCOMING TAB"
+                          : "LIVE TAB"}
+                      </span>
+                    </div>
+
+                    {/* Architectural Mobile Card Preview */}
+                    <div className="rounded-xl bg-[#131319] border border-white/15 overflow-hidden shadow-md">
+                      <div className="relative w-full aspect-[16/10] bg-[#070709] overflow-hidden">
+                        {spotlightAdminData[activeSpotlightSubTab]?.img ? (
+                          <img
+                            src={spotlightAdminData[activeSpotlightSubTab]?.img}
+                            alt="Preview"
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-white/40 text-xs">
+                            No Cover Image Uploaded
+                          </div>
+                        )}
+                        <div
+                          style={{ padding: "8px 10px" }}
+                          className="absolute top-0 inset-x-0 flex items-center justify-between"
+                        >
+                          <span className="px-2 py-0.5 rounded bg-black/80 font-mono text-[7.5px] uppercase font-bold text-[#D4A843]">
+                            {spotlightAdminData[activeSpotlightSubTab]
+                              ?.category || "CATEGORY"}
+                          </span>
+                          <span
+                            className={`px-2 py-0.5 rounded font-mono text-[7.5px] uppercase font-bold ${
+                              activeSpotlightSubTab === "live"
+                                ? "bg-[#D92B2B] text-white"
+                                : "bg-black/80 text-white/90"
+                            }`}
+                          >
+                            {spotlightAdminData[activeSpotlightSubTab]?.date ||
+                              "DATE"}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* 4-Unit Counter preview */}
+                      <div
+                        style={{ padding: "8px 10px" }}
+                        className="bg-[#0D0D12] border-y border-white/10 flex items-center justify-between"
+                      >
+                        <span className="font-mono text-[8px] uppercase tracking-wider text-[#D4A843] font-bold">
+                          {activeSpotlightSubTab === "upcoming"
+                            ? "STARTS IN :"
+                            : "ENDS IN :"}
+                        </span>
+                        <span className="font-mono text-[10px] font-bold text-white tracking-widest">
+                          DAYS : HRS : MIN : SEC
+                        </span>
+                      </div>
+
+                      <div
+                        style={{ padding: "12px 14px" }}
+                        className="space-y-2 bg-[#131319]"
+                      >
+                        <h4 className="font-heading font-extrabold text-sm text-white line-clamp-1">
+                          {spotlightAdminData[activeSpotlightSubTab]?.title ||
+                            "Event Title"}
+                        </h4>
+                        <p className="font-sans text-[10.5px] text-white/60 line-clamp-2">
+                          {spotlightAdminData[activeSpotlightSubTab]
+                            ?.description || "Description preview..."}
+                        </p>
+                        <div
+                          style={{ padding: "8px 12px" }}
+                          className={`rounded-lg text-center font-mono text-[8.5px] font-bold uppercase tracking-widest ${
+                            activeSpotlightSubTab === "live"
+                              ? "bg-[#D92B2B] text-white"
+                              : "bg-[#D4A843] text-black"
+                          }`}
+                        >
+                          {spotlightAdminData[activeSpotlightSubTab]?.ctaText ||
+                            "JOIN EVENT"}{" "}
+                          →
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           )}
