@@ -1644,7 +1644,7 @@ export default function MobileOilstainExperience() {
   return (
     <div
       id="shutterscape-mobile-oilstain"
-      className="w-full min-h-screen bg-[#ECEBE6] text-[#111111] font-sans select-none overflow-x-clip pb-20"
+      className="w-full min-h-screen bg-[#ECEBE6] text-[#111111] font-sans select-none overflow-x-clip"
     >
       {/* Scoped Stylesheet */}
       <style
@@ -3306,144 +3306,164 @@ export default function MobileOilstainExperience() {
       </section>
 
       {/* ============================================================
-          7. MINIMALIST CORPORATE LUXURY EDITORIAL MOBILE FOOTER
-          (Clean, Architectural, Timeless with Faint Typographic Watermark)
+          7. COMPACT CORPORATE-GRADE MINIMALIST FOOTER + FULL WATERMARK
           ============================================================ */}
       <footer
         id="mobile-global-footer"
         style={{
-          paddingTop: "32px",
-          paddingBottom: "110px", // Generous clearance so floating navbar never covers text
-          paddingLeft: "20px",
-          paddingRight: "20px",
+          padding: "20px 18px 68px 18px",
           backgroundColor: "#FAF9F5",
-          color: "#0A0A0A",
+          color: "#0A0A0C",
         }}
-        className="relative z-20 w-full border-t border-black/[0.08] select-none overflow-hidden"
+        className="relative z-20 w-full border-t border-black/10 select-none overflow-hidden"
       >
-        {/* Subtle Luxury Typographic Backdrop Watermark */}
+        {/* Full-Width Edge-to-Edge SHUTTERSCAPE Backdrop Watermark (All 12 Letters Visible!) */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 bottom-4 select-none flex items-center justify-center overflow-hidden"
+          className="pointer-events-none absolute inset-x-0 bottom-10 flex items-center justify-center overflow-hidden select-none"
         >
-          <span className="font-serif text-[72px] sm:text-[90px] font-bold tracking-[0.24em] uppercase text-black/[0.035] leading-none whitespace-nowrap">
+          <span className="font-heading font-black text-[11.2vw] tracking-[-0.04em] uppercase text-black/[0.045] leading-none whitespace-nowrap">
             SHUTTERSCAPE
           </span>
         </div>
 
-        {/* Ambient Warm Gradient */}
-        <div
-          className="pointer-events-none absolute inset-0 z-0"
-          style={{
-            background:
-              "radial-gradient(ellipse 80% 60% at 50% 100%, rgba(212, 168, 67, 0.04) 0%, transparent 70%)",
-          }}
-        />
-
-        <div className="relative z-10 max-w-sm mx-auto flex flex-col gap-4">
-          {/* 1. TOP ROW: DUAL BRAND CREST */}
-          <div className="flex items-center justify-between pb-3 border-b border-black/[0.08]">
-            <div className="flex items-center gap-2.5">
-              {/* ShutterScape Wordmark */}
-              <div className="relative h-5 w-[82px]">
+        <div className="relative z-10 max-w-md mx-auto flex flex-col gap-3">
+          {/* ROW 1: Dual Brand Crest (Left) + Direct Social Pills (Right) */}
+          <div
+            style={{ paddingBottom: "11px" }}
+            className="flex items-center justify-between gap-2 border-b border-black/[0.08]"
+          >
+            <div className="flex items-center gap-2.5 shrink-0">
+              <div className="relative h-5 w-[76px]">
                 <Image
                   src="/images/shutterscape-logo-cropped.png"
-                  alt="ShutterScape Logo"
+                  alt="ShutterScape"
                   fill
-                  sizes="82px"
+                  sizes="76px"
                   unoptimized
                   className="object-contain object-left"
                 />
               </div>
 
-              <span className="h-3.5 w-[1px] bg-black/20" />
+              <span className="h-3.5 w-[1px] bg-black/15" />
 
-              {/* GCU University Logo */}
               <a
                 href="https://gcu.ac.in"
                 target="_blank"
                 rel="noopener noreferrer"
                 title="Girijananda Chowdhury University"
-                className="relative h-5 w-[88px]"
+                className="relative h-5 w-[82px] opacity-90 hover:opacity-100 transition-opacity"
               >
                 <Image
                   src="/images/gcu-logo-black-text.png"
-                  alt="GCU Logo"
+                  alt="GCU"
                   fill
-                  sizes="88px"
+                  sizes="82px"
                   unoptimized
                   className="object-contain object-left"
                 />
               </a>
             </div>
 
-            <span className="font-mono text-[7.5px] tracking-[0.2em] uppercase text-black/45 font-bold">
-              EST. 2023 · GCU
-            </span>
+            {/* Minimalist Corporate Social Pills */}
+            <div className="flex items-center gap-1.5 shrink-0">
+              <a
+                href="https://www.instagram.com/shutterscape_gcu"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ padding: "5px 10px" }}
+                className="rounded-full bg-black/[0.04] hover:bg-[#111111] text-[#111111] hover:text-white font-sans text-[10px] font-semibold tracking-tight flex items-center gap-1 transition-colors"
+              >
+                <span>Instagram</span>
+                <span className="text-[9px] opacity-60">↗</span>
+              </a>
+              <a
+                href="https://chat.whatsapp.com/Hs71BicR1Xj3PmOyPJ5wdc?s=sw&p=a&mlu=4&ilr=4"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ padding: "5px 10px" }}
+                className="rounded-full bg-[#111111] text-white font-sans text-[10px] font-semibold tracking-tight flex items-center gap-1 transition-opacity hover:opacity-85"
+              >
+                <span>WhatsApp</span>
+                <span className="text-[9px] text-[#D4A843]">↗</span>
+              </a>
+            </div>
           </div>
 
-          {/* 2. INSTITUTIONAL MISSION STATEMENT */}
-          <div>
-            <p className="font-serif text-[11px] text-black/70 leading-relaxed italic">
-              Official visual arts &amp; photography collective of Girijananda Chowdhury University, Assam. Documenting time, culture, and stories through light.
-            </p>
-          </div>
-
-          {/* 3. MINIMALIST CORPORATE CHANNELS (Clean Hairline Grid) */}
-          <div className="grid grid-cols-2 gap-2 font-mono text-[8.5px] uppercase tracking-[0.14em]">
+          {/* ROW 2: Sleek Single-Line Contact & Campus Map Strip (Zero Emojis) */}
+          <div
+            style={{ paddingBottom: "11px" }}
+            className="flex items-center justify-between gap-3 border-b border-black/[0.08] font-sans text-[11px] text-black/75"
+          >
             <a
               href="mailto:shutterscape@gcuniversity.ac.in"
-              className="col-span-2 py-2 px-3 rounded-md border border-black/[0.08] bg-white/70 hover:bg-white text-black/80 hover:text-black flex items-center justify-between transition-colors shadow-2xs"
+              className="flex items-center gap-1.5 hover:text-black transition-colors truncate"
             >
-              <span className="truncate">✉ shutterscape@gcuniversity.ac.in</span>
-              <span className="text-[10px] text-black/40">↗</span>
-            </a>
-
-            <a
-              href="https://www.instagram.com/shutterscape_gcu"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="py-2 px-3 rounded-md border border-black/[0.08] bg-white/70 hover:bg-white text-black/80 hover:text-black flex items-center justify-between transition-colors shadow-2xs"
-            >
-              <span>Instagram</span>
-              <span className="text-[10px] text-black/40">↗</span>
-            </a>
-
-            <a
-              href="https://chat.whatsapp.com/Hs71BicR1Xj3PmOyPJ5wdc?s=sw&p=a&mlu=4&ilr=4"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="py-2 px-3 rounded-md border border-black/[0.08] bg-white/70 hover:bg-white text-black/80 hover:text-black flex items-center justify-between transition-colors shadow-2xs"
-            >
-              <span>WhatsApp</span>
-              <span className="text-[10px] text-black/40">↗</span>
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="text-black/45 shrink-0"
+              >
+                <rect x="2" y="4" width="20" height="16" rx="2" />
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+              </svg>
+              <span className="truncate font-medium">
+                shutterscape@gcuniversity.ac.in
+              </span>
             </a>
 
             <a
               href="https://maps.app.goo.gl/NhdHs1u76Bjxo2J87"
               target="_blank"
               rel="noopener noreferrer"
-              className="col-span-2 py-2 px-3 rounded-md border border-black/[0.08] bg-white/70 hover:bg-white text-black/80 hover:text-black flex items-center justify-between transition-colors shadow-2xs"
+              className="flex items-center gap-1 text-black/65 hover:text-black font-medium shrink-0 transition-colors"
             >
-              <span className="truncate">📍 Campus: Azara, Guwahati</span>
-              <span className="text-[10px] text-black/40">Maps ↗</span>
+              <svg
+                width="11"
+                height="11"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="text-[#D92B2B] shrink-0"
+              >
+                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              <span>Azara, Guwahati</span>
+              <span className="text-[9px] opacity-50">↗</span>
             </a>
           </div>
 
-          {/* 4. REFINED LEGAL & CREDITS STRIP */}
-          <div className="flex flex-col items-center text-center gap-1.5 pt-2 border-t border-black/[0.06] font-mono text-[8px] tracking-[0.14em] text-black/45 uppercase">
-            <span>© 2026 SHUTTERSCAPE · GIRIJANANDA CHOWDHURY UNIVERSITY</span>
+          {/* ROW 3: Compact Legal & Attribution Bar */}
+          <div className="flex items-center justify-between gap-2 pt-0.5 font-sans text-[10px] text-black/50">
+            <span className="font-mono text-[8.5px] tracking-[0.12em] uppercase">
+              © 2026 SHUTTERSCAPE GCU
+            </span>
 
-            <div className="flex items-center gap-2 normal-case tracking-normal font-sans text-[11px] text-black/70">
-              <span>Crafted by <strong className="font-semibold text-black">Krishnayan</strong></span>
-              <span className="text-black/30">•</span>
+            <div className="flex items-center gap-1.5 text-[10.5px] text-black/65">
+              <span>
+                Crafted by{" "}
+                <strong className="font-semibold text-[#111111]">
+                  Krishnayan
+                </strong>
+              </span>
+              <span className="text-black/25">·</span>
               <a
                 href="https://codingclub.gcuniversity.ac.in"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-black transition-colors"
+                className="font-medium text-[#111111] hover:underline"
               >
-                Codénix (GCU)
+                Codénix
               </a>
             </div>
           </div>
