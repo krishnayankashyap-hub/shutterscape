@@ -2263,10 +2263,7 @@ export default function MobileOilstainExperience() {
           </p>
         </div>
 
-        <div
-          style={{ paddingBottom: "68px" }}
-          className="relative z-10 w-full flex flex-col bg-black/65"
-        >
+        <div className="relative z-10 w-full flex flex-col bg-black/65">
           <div className="osl-pad-sm flex items-center justify-between font-mono text-[8.5px] tracking-[0.2em] text-white/55 uppercase border-t border-white/10">
             <span className="pl-12">f/1.4 · 1/1000s · ISO 400</span>
             <span>GCU · ASSAM</span>

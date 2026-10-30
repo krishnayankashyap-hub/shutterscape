@@ -757,20 +757,25 @@ const HalfWheelGalleryFan = React.memo(function HalfWheelGalleryFan({
         const deg = rawDeg - 110;
         const rad = (deg * Math.PI) / 180;
 
-        const radius = 230;
+        const radius = 240;
         const x = Math.sin(rad) * radius;
-        const y = -Math.cos(rad) * radius + 115;
-        const scale = Math.max(0.76, 1 - Math.abs(deg) / 240);
-        const opacity =
-          Math.abs(deg) > 95
-            ? 0
-            : 1 - Math.max(0, (Math.abs(deg) - 72) / 23);
+        const y = -Math.cos(rad) * radius + 110;
+        const scale = Math.max(0.78, 1 - Math.abs(deg) / 240);
+
+        // Smooth cosine opacity falloff: fully visible at center, fades gracefully to 0 before reaching boundary
+        let opacity = 0;
+        if (Math.abs(deg) < 66) {
+          const progress = Math.abs(deg) / 66;
+          opacity = Math.cos(progress * (Math.PI / 2));
+        }
+
         const zIdx = Math.round(50 - Math.abs(deg) * 0.4);
 
         el.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(
           1
         )}px, 0) rotate(${deg.toFixed(1)}deg) scale(${scale.toFixed(3)})`;
-        el.style.opacity = `${opacity.toFixed(2)}`;
+        el.style.opacity = `${opacity.toFixed(3)}`;
+        el.style.pointerEvents = opacity > 0.1 ? "auto" : "none";
         el.style.zIndex = `${zIdx}`;
       }
 
@@ -820,7 +825,7 @@ const HalfWheelGalleryFan = React.memo(function HalfWheelGalleryFan({
       onTouchEnd={() => {
         isPausedRef.current = false;
       }}
-      className="relative w-full h-[360px] bg-transparent overflow-hidden flex items-center justify-center select-none"
+      className="relative w-full h-[440px] bg-transparent overflow-visible flex items-center justify-center select-none"
     >
       <div className="relative w-full h-full flex items-center justify-center">
         {wheelCards.map((item, idx) => (
@@ -2288,10 +2293,7 @@ export default function DesktopOilstainExperience() {
           </p>
         </div>
 
-        <div
-          style={{ paddingBottom: "74px" }}
-          className="relative z-10 w-full flex flex-col bg-black/65"
-        >
+        <div className="relative z-10 w-full flex flex-col bg-black/65">
           <div className="osl-pad-sm flex items-center justify-between font-mono text-[9.5px] tracking-[0.22em] text-white/55 uppercase border-t border-white/10">
             <span style={{ paddingLeft: "48px" }}>
               f/1.4 · 1/1000s · ISO 400
@@ -2626,291 +2628,303 @@ export default function DesktopOilstainExperience() {
 
         <div
           style={{
-            padding: "56px 32px 48px",
-            maxWidth: "1140px",
+            padding: "54px 32px 50px",
+            maxWidth: "1240px",
             margin: "0 auto",
           }}
-          className="relative z-10 w-full space-y-6"
+          className="relative z-10 w-full"
         >
-          {/* TOP HEADER + PILL SWITCHER ON ONE CLEAN DESKTOP ROW */}
-          <div className="flex flex-wrap items-end justify-between gap-4 border-b border-white/10 pb-5">
-            <div>
-              <div className="flex items-center gap-2.5">
-                <span
-                  style={{ padding: "3px 10px" }}
-                  className="rounded-full bg-[#FFE066] text-[#111111] font-mono text-[9px] font-bold uppercase tracking-[0.18em]"
-                >
-                  ★ GCU DISPATCH
-                </span>
-                <span className="font-serif italic text-sm text-white/65">
-                  Collector&apos;s Pass
-                </span>
-                <span
-                  style={{ padding: "3px 10px" }}
-                  className={`rounded-full font-mono text-[8.5px] font-bold uppercase tracking-[0.16em] flex items-center gap-1.5 border ${
-                    spotlightTab === "LIVE"
-                      ? "bg-[#FF6B6B]/20 border-[#FF6B6B]/50 text-[#FFA8A8]"
-                      : "bg-white/10 border-white/20 text-[#FFE066]"
-                  }`}
-                >
+          <div className="grid grid-cols-12 gap-8 lg:gap-10 items-stretch">
+            {/* LEFT COLUMN: Section Header, Switcher, Editorial Note & ACTIVITIES Button */}
+            <div className="col-span-12 lg:col-span-5 flex flex-col justify-between space-y-6">
+              <div className="space-y-4">
+                <div className="flex flex-wrap items-center gap-2.5">
                   <span
-                    className={`w-1.5 h-1.5 rounded-full ${
-                      spotlightTab === "LIVE"
-                        ? "bg-[#FF6B6B] animate-ping"
-                        : "bg-[#8CE99A] animate-pulse"
-                    }`}
-                  />
-                  {spotlightTab === "LIVE" ? "LIVE ON CAMPUS" : "OPEN FOR RSVP"}
-                </span>
-              </div>
-              <h2
-                style={{ marginTop: "8px" }}
-                className="font-heading font-black text-4xl tracking-[-0.03em] uppercase text-white leading-none"
-              >
-                SPOTLIGHT{" "}
-                <span className="font-serif italic font-normal text-[#FFE066]">
-                  &apos;26
-                </span>
-              </h2>
-            </div>
-
-            {/* 2-Part Pill Switcher (Right-Aligned on Desktop Header) */}
-            <div
-              style={{ padding: "4px", width: "320px" }}
-              className="grid grid-cols-2 gap-1.5 rounded-full bg-white/[0.07] border border-white/15 backdrop-blur-md shrink-0"
-            >
-              <button
-                type="button"
-                onClick={() => setSpotlightTab("UPCOMING")}
-                style={{ padding: "9px 14px" }}
-                className={`rounded-full font-sans text-xs font-bold tracking-wide flex items-center justify-center gap-1.5 cursor-pointer transition-all ${
-                  spotlightTab === "UPCOMING"
-                    ? "bg-[#FFE066] text-[#111111] shadow-[0_4px_14px_rgba(255,224,102,0.35)]"
-                    : "bg-transparent text-white/65 hover:text-white"
-                }`}
-              >
-                <span>✦</span>
-                <span>Upcoming</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setSpotlightTab("LIVE")}
-                style={{ padding: "9px 14px" }}
-                className={`rounded-full font-sans text-xs font-bold tracking-wide flex items-center justify-center gap-1.5 cursor-pointer transition-all ${
-                  spotlightTab === "LIVE"
-                    ? "bg-[#FF5A5F] text-white shadow-[0_4px_14px_rgba(255,90,95,0.4)]"
-                    : "bg-transparent text-white/65 hover:text-white"
-                }`}
-              >
-                <span
-                  className={`w-2 h-2 rounded-full ${
-                    spotlightTab === "LIVE"
-                      ? "bg-white animate-ping"
-                      : "bg-[#FF5A5F]"
-                  }`}
-                />
-                <span>Live Going</span>
-              </button>
-            </div>
-          </div>
-
-          {/* DESKTOP 2-COLUMN SPLIT COLLECTOR PASS CARD */}
-          <div
-            style={{
-              boxShadow:
-                spotlightTab === "LIVE"
-                  ? "0 24px 60px rgba(0,0,0,0.75), 6px 6px 0px #FF5A5F"
-                  : "0 24px 60px rgba(0,0,0,0.75), 6px 6px 0px #D4A843",
-            }}
-            className="relative rounded-3xl bg-[#FAF8F5] text-[#111111] border-2 border-white overflow-hidden grid grid-cols-12 items-stretch"
-          >
-            {/* Left Column (7 cols): Framed 16:10 Visual Stage */}
-            <div
-              style={{ padding: "14px" }}
-              className="col-span-7 flex flex-col justify-center"
-            >
-              <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden bg-[#111111] shadow-md">
-                <img
-                  src={activeSpotlightEvent.img}
-                  alt={activeSpotlightEvent.title}
-                  className="w-full h-full object-cover saturate-[1.14] transition-transform duration-700 hover:scale-105"
-                  loading="lazy"
-                  decoding="async"
-                />
-                <div
-                  className="absolute inset-0 pointer-events-none"
-                  style={{
-                    background:
-                      "linear-gradient(180deg, rgba(0,0,0,0.35) 0%, transparent 45%, rgba(0,0,0,0.78) 100%)",
-                  }}
-                />
-
-                {/* Top-Left Playful Tilted Pastel Sticker Badge */}
-                <div
-                  style={{
-                    padding: "5px 12px",
-                    transform: "rotate(-2.5deg)",
-                    backgroundColor:
-                      spotlightTab === "LIVE" ? "#FFA8A8" : "#8CE99A",
-                  }}
-                  className="absolute top-3.5 left-3.5 rounded-lg text-[#111111] font-mono text-[9px] font-bold uppercase tracking-[0.15em] shadow-md border border-black/15"
-                >
-                  ★ {activeSpotlightEvent.category}
-                </div>
-
-                {/* Top-Right Date / Live Pill */}
-                <div
-                  style={{ padding: "5px 12px" }}
-                  className={`absolute top-3.5 right-3.5 rounded-full font-mono text-[9px] font-bold uppercase tracking-[0.14em] shadow-md ${
-                    spotlightTab === "LIVE"
-                      ? "bg-[#FF5A5F] text-white"
-                      : "bg-white/95 text-[#111111]"
-                  }`}
-                >
-                  {spotlightTab === "LIVE"
-                    ? "● HAPPENING NOW"
-                    : activeSpotlightEvent.date}
-                </div>
-
-                {/* Bottom Location & Film Stock Strip inside Photo */}
-                <div
-                  style={{ padding: "12px 14px" }}
-                  className="absolute bottom-0 inset-x-0 flex items-center justify-between gap-2 text-white"
-                >
-                  <span className="font-sans text-xs font-semibold truncate drop-shadow">
-                    📍 {activeSpotlightEvent.location}
-                  </span>
-                  <span
-                    style={{ padding: "3px 9px" }}
-                    className="rounded-full bg-black/65 backdrop-blur-md text-[#FFE066] font-mono text-[8px] font-bold uppercase tracking-wider shrink-0"
+                    style={{ padding: "3px 10px" }}
+                    className="rounded-full bg-[#FFE066] text-[#111111] font-mono text-[9px] font-bold uppercase tracking-[0.18em]"
                   >
-                    {activeSpotlightEvent.filmStock || "35MM ARCHIVE"}
+                    ★ GCU DISPATCH
+                  </span>
+                  <span className="font-serif italic text-sm text-white/65">
+                    Collector&apos;s Pass
+                  </span>
+                  <span
+                    style={{ padding: "3px 10px" }}
+                    className={`rounded-full font-mono text-[8.5px] font-bold uppercase tracking-[0.16em] flex items-center gap-1.5 border ${
+                      spotlightTab === "LIVE"
+                        ? "bg-[#FF6B6B]/20 border-[#FF6B6B]/50 text-[#FFA8A8]"
+                        : "bg-white/10 border-white/20 text-[#FFE066]"
+                    }`}
+                  >
+                    <span
+                      className={`w-1.5 h-1.5 rounded-full ${
+                        spotlightTab === "LIVE"
+                          ? "bg-[#FF6B6B] animate-ping"
+                          : "bg-[#8CE99A] animate-pulse"
+                      }`}
+                    />
+                    {spotlightTab === "LIVE" ? "LIVE ON CAMPUS" : "OPEN FOR RSVP"}
                   </span>
                 </div>
+
+                <h2 className="font-heading font-black text-4xl lg:text-5xl tracking-[-0.03em] uppercase text-white leading-none">
+                  SPOTLIGHT{" "}
+                  <span className="font-serif italic font-normal text-[#FFE066]">
+                    &apos;26
+                  </span>
+                </h2>
+
+                <p className="font-sans text-xs text-white/70 leading-relaxed max-w-md">
+                  Curated student showcases, golden-hour photo expeditions, and live
+                  darkroom labs hosted by Girijananda Chowdhury University Photography Club.
+                </p>
+
+                {/* 2-Part Pill Switcher */}
+                <div
+                  style={{ padding: "4px" }}
+                  className="grid grid-cols-2 gap-1.5 rounded-full bg-white/[0.07] border border-white/15 backdrop-blur-md max-w-xs mt-3"
+                >
+                  <button
+                    type="button"
+                    onClick={() => setSpotlightTab("UPCOMING")}
+                    style={{ padding: "9px 14px" }}
+                    className={`rounded-full font-sans text-xs font-bold tracking-wide flex items-center justify-center gap-1.5 cursor-pointer transition-all ${
+                      spotlightTab === "UPCOMING"
+                        ? "bg-[#FFE066] text-[#111111] shadow-[0_4px_14px_rgba(255,224,102,0.35)]"
+                        : "bg-transparent text-white/65 hover:text-white"
+                    }`}
+                  >
+                    <span>✦</span>
+                    <span>Upcoming</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setSpotlightTab("LIVE")}
+                    style={{ padding: "9px 14px" }}
+                    className={`rounded-full font-sans text-xs font-bold tracking-wide flex items-center justify-center gap-1.5 cursor-pointer transition-all ${
+                      spotlightTab === "LIVE"
+                        ? "bg-[#FF5A5F] text-white shadow-[0_4px_14px_rgba(255,90,95,0.4)]"
+                        : "bg-transparent text-white/65 hover:text-white"
+                    }`}
+                  >
+                    <span
+                      className={`w-2 h-2 rounded-full ${
+                        spotlightTab === "LIVE"
+                          ? "bg-white animate-ping"
+                          : "bg-[#FF5A5F]"
+                      }`}
+                    />
+                    <span>Live Going</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Breathing space + SOLID WHITE "ACTIVITIES +" BAR BUTTON on Left Column */}
+              <div className="pt-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActivityFilterCat("ALL");
+                    setActiveActivitySlideIdx(0);
+                    setIsActivitiesPageOpen(true);
+                  }}
+                  className="osl-bar-btn w-full bg-white hover:bg-[#FFE066] text-[#0A0A0D] rounded-xl shadow-[0_12px_30px_rgba(255,255,255,0.14)] active:scale-[0.99] transition-all"
+                >
+                  <span className="font-bold">
+                    ACTIVITIES ({activities.length} CHRONOLOGY WORKS)
+                  </span>
+                  <span className="w-6 h-6 rounded-full bg-[#0A0A0D] text-white flex items-center justify-center text-sm leading-none">
+                    +
+                  </span>
+                </button>
               </div>
             </div>
 
-            {/* Right Column (5 cols): Flip-Clock Countdown + Story + Join Button */}
-            <div
-              style={{ padding: "24px 26px 24px 12px" }}
-              className="col-span-5 flex flex-col justify-between border-l-2 border-dashed border-black/10"
-            >
-              {/* Top Countdown Strip */}
-              <div className="space-y-2.5">
-                <div className="flex items-center justify-between">
-                  <span className="handmade-fountain-pen text-[16px] text-[#D92B2B] leading-none">
-                    {spotlightTab === "UPCOMING"
-                      ? "Don't miss the golden hour!"
-                      : "Doors are open right now!"}
-                  </span>
-                  <span className="font-mono text-[8.5px] font-bold uppercase tracking-[0.16em] text-black/45">
-                    {spotlightTab === "UPCOMING" ? "STARTS IN" : "ENDS IN"}
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-4 gap-2">
-                  {[
-                    { val: countdown.days, label: "DAYS", bg: "#FFE066" },
-                    { val: countdown.hours, label: "HRS", bg: "#8CE99A" },
-                    { val: countdown.minutes, label: "MIN", bg: "#74C0FC" },
-                    { val: countdown.seconds, label: "SEC", bg: "#FFA8A8" },
-                  ].map((unit) => (
+            {/* RIGHT COLUMN: Collector's Pass Card */}
+            <div className="col-span-12 lg:col-span-7 flex flex-col justify-center">
+              <div
+                style={{
+                  boxShadow:
+                    spotlightTab === "LIVE"
+                      ? "0 24px 60px rgba(0,0,0,0.75), 6px 6px 0px #FF5A5F"
+                      : "0 24px 60px rgba(0,0,0,0.75), 6px 6px 0px #D4A843",
+                }}
+                className="relative rounded-3xl bg-[#FAF8F5] text-[#111111] border-2 border-white overflow-hidden shadow-2xl"
+              >
+                {/* Visual Stage (Top) */}
+                <div style={{ padding: "12px" }}>
+                  <div className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden bg-[#111111] shadow-md">
+                    <img
+                      src={activeSpotlightEvent.img}
+                      alt={activeSpotlightEvent.title}
+                      className="w-full h-full object-cover saturate-[1.14] transition-transform duration-700 hover:scale-105"
+                      loading="lazy"
+                      decoding="async"
+                    />
                     <div
-                      key={unit.label}
+                      className="absolute inset-0 pointer-events-none"
                       style={{
-                        padding: "7px 8px",
-                        backgroundColor: unit.bg,
+                        background:
+                          "linear-gradient(180deg, rgba(0,0,0,0.35) 0%, transparent 45%, rgba(0,0,0,0.78) 100%)",
                       }}
-                      className="rounded-xl border border-black/15 shadow-[2px_2px_0px_#111111] flex flex-col items-center justify-center text-center"
+                    />
+
+                    {/* Top-Left Playful Tilted Pastel Sticker Badge */}
+                    <div
+                      style={{
+                        padding: "5px 12px",
+                        transform: "rotate(-2.5deg)",
+                        backgroundColor:
+                          spotlightTab === "LIVE" ? "#FFA8A8" : "#8CE99A",
+                      }}
+                      className="absolute top-3.5 left-3.5 rounded-lg text-[#111111] font-mono text-[9px] font-bold uppercase tracking-[0.15em] shadow-md border border-black/15"
                     >
-                      <span className="font-heading font-black text-sm text-[#111111] leading-none">
-                        {unit.val}
+                      ★ {activeSpotlightEvent.category}
+                    </div>
+
+                    {/* Top-Right Date / Live Pill */}
+                    <div
+                      style={{ padding: "5px 12px" }}
+                      className={`absolute top-3.5 right-3.5 rounded-full font-mono text-[9px] font-bold uppercase tracking-[0.14em] shadow-md ${
+                        spotlightTab === "LIVE"
+                          ? "bg-[#FF5A5F] text-white"
+                          : "bg-white/95 text-[#111111]"
+                      }`}
+                    >
+                      {spotlightTab === "LIVE"
+                        ? "● HAPPENING NOW"
+                        : activeSpotlightEvent.date}
+                    </div>
+
+                    {/* Bottom Location & Film Stock Strip */}
+                    <div
+                      style={{ padding: "10px 14px" }}
+                      className="absolute bottom-0 inset-x-0 flex items-center justify-between gap-2 text-white"
+                    >
+                      <span className="font-sans text-xs font-semibold truncate drop-shadow">
+                        📍 {activeSpotlightEvent.location}
                       </span>
                       <span
-                        style={{ marginTop: "3px" }}
-                        className="font-mono text-[7px] font-bold tracking-[0.12em] text-black/65 uppercase leading-none"
+                        style={{ padding: "3px 9px" }}
+                        className="rounded-full bg-black/65 backdrop-blur-md text-[#FFE066] font-mono text-[8px] font-bold uppercase tracking-wider shrink-0"
                       >
-                        {unit.label}
+                        {activeSpotlightEvent.filmStock || "35MM ARCHIVE"}
                       </span>
                     </div>
-                  ))}
+                  </div>
+                </div>
+
+                {/* Perforated Ticket Notches & Divider */}
+                <div className="relative w-full border-t-2 border-dashed border-black/15 my-0.5">
+                  <div
+                    style={{ width: "20px", height: "20px", marginTop: "-10px" }}
+                    className="absolute -left-[10px] rounded-full bg-[#0A0A0E] border-r-2 border-white shadow-inner"
+                  />
+                  <div
+                    style={{ width: "20px", height: "20px", marginTop: "-10px" }}
+                    className="absolute -right-[10px] rounded-full bg-[#0A0A0E] border-l-2 border-white shadow-inner"
+                  />
+                </div>
+
+                {/* Ticket Deck (Bottom) */}
+                <div style={{ padding: "18px 24px 22px" }} className="space-y-3.5">
+                  {/* Top Countdown Strip */}
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="handmade-fountain-pen text-[16px] text-[#D92B2B] leading-none">
+                        {spotlightTab === "UPCOMING"
+                          ? "Don't miss the golden hour!"
+                          : "Doors are open right now!"}
+                      </span>
+                      <span className="font-mono text-[8.5px] font-bold uppercase tracking-[0.16em] text-black/45">
+                        {spotlightTab === "UPCOMING" ? "STARTS IN" : "ENDS IN"}
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-4 gap-2">
+                      {[
+                        { val: countdown.days, label: "DAYS", bg: "#FFE066" },
+                        { val: countdown.hours, label: "HRS", bg: "#8CE99A" },
+                        { val: countdown.minutes, label: "MIN", bg: "#74C0FC" },
+                        { val: countdown.seconds, label: "SEC", bg: "#FFA8A8" },
+                      ].map((unit) => (
+                        <div
+                          key={unit.label}
+                          style={{
+                            padding: "6px 8px",
+                            backgroundColor: unit.bg,
+                          }}
+                          className="rounded-xl border border-black/15 shadow-[2px_2px_0px_#111111] flex flex-col items-center justify-center text-center"
+                        >
+                          <span className="font-heading font-black text-sm text-[#111111] leading-none">
+                            {unit.val}
+                          </span>
+                          <span
+                            style={{ marginTop: "2px" }}
+                            className="font-mono text-[7px] font-bold tracking-[0.12em] text-black/65 uppercase leading-none"
+                          >
+                            {unit.label}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Middle Title & Story */}
+                  <div className="border-t border-black/10 pt-2.5 space-y-1">
+                    <h3 className="font-serif text-2xl text-[#111111] font-normal leading-[1.15] tracking-tight truncate">
+                      {activeSpotlightEvent.title}
+                    </h3>
+                    <p className="font-sans text-xs text-black/70 leading-relaxed line-clamp-2">
+                      {activeSpotlightEvent.description}
+                    </p>
+                  </div>
+
+                  {/* Bottom Pill JOIN Button */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setRegisterEventName(
+                        `${
+                          spotlightTab === "LIVE" ? "[LIVE] " : "[UPCOMING] "
+                        }${activeSpotlightEvent.title}`
+                      );
+                      setRegisterSubmitted(false);
+                      setIsRegisterModalOpen(true);
+                    }}
+                    style={{ padding: "12px 14px 12px 22px" }}
+                    className={`w-full rounded-full font-sans text-xs font-bold tracking-wide flex items-center justify-between cursor-pointer transition-all shadow-[0_8px_20px_rgba(0,0,0,0.15)] active:scale-[0.98] ${
+                      spotlightTab === "LIVE"
+                        ? "bg-[#D92B2B] hover:bg-[#B91C1C] text-white"
+                        : "bg-[#111111] hover:bg-[#D92B2B] text-white"
+                    }`}
+                  >
+                    <span className="flex items-center gap-2">
+                      {spotlightTab === "LIVE" && (
+                        <span className="w-2 h-2 rounded-full bg-white animate-ping" />
+                      )}
+                      <span>
+                        {activeSpotlightEvent.ctaText ||
+                          (spotlightTab === "LIVE"
+                            ? "Join Live Session Now"
+                            : "Join Upcoming Event")}
+                      </span>
+                    </span>
+                    <span
+                      style={{
+                        backgroundColor:
+                          spotlightTab === "LIVE" ? "#FFFFFF" : "#FFE066",
+                      }}
+                      className="w-7 h-7 rounded-full text-[#111111] flex items-center justify-center font-mono text-xs font-bold leading-none"
+                    >
+                      ↗
+                    </span>
+                  </button>
                 </div>
               </div>
-
-              {/* Middle Title & Story */}
-              <div
-                style={{ padding: "14px 0" }}
-                className="border-y border-black/10 my-3 space-y-2"
-              >
-                <h3 className="font-serif text-2xl lg:text-3xl text-[#111111] font-normal leading-[1.1] tracking-tight">
-                  {activeSpotlightEvent.title}
-                </h3>
-                <p className="font-sans text-xs text-black/70 leading-relaxed">
-                  {activeSpotlightEvent.description}
-                </p>
-              </div>
-
-              {/* Bottom Pill JOIN Button */}
-              <button
-                type="button"
-                onClick={() => {
-                  setRegisterEventName(
-                    `${
-                      spotlightTab === "LIVE" ? "[LIVE] " : "[UPCOMING] "
-                    }${activeSpotlightEvent.title}`
-                  );
-                  setRegisterSubmitted(false);
-                  setIsRegisterModalOpen(true);
-                }}
-                style={{ padding: "12px 14px 12px 22px" }}
-                className={`w-full rounded-full font-sans text-xs font-bold tracking-wide flex items-center justify-between cursor-pointer transition-all shadow-[0_8px_20px_rgba(0,0,0,0.15)] active:scale-[0.98] ${
-                  spotlightTab === "LIVE"
-                    ? "bg-[#D92B2B] hover:bg-[#B91C1C] text-white"
-                    : "bg-[#111111] hover:bg-[#D92B2B] text-white"
-                }`}
-              >
-                <span className="flex items-center gap-2">
-                  {spotlightTab === "LIVE" && (
-                    <span className="w-2 h-2 rounded-full bg-white animate-ping" />
-                  )}
-                  <span>
-                    {activeSpotlightEvent.ctaText ||
-                      (spotlightTab === "LIVE"
-                        ? "Join Live Session Now"
-                        : "Join Upcoming Event")}
-                  </span>
-                </span>
-                <span
-                  style={{
-                    backgroundColor:
-                      spotlightTab === "LIVE" ? "#FFFFFF" : "#FFE066",
-                  }}
-                  className="w-7 h-7 rounded-full text-[#111111] flex items-center justify-center font-mono text-xs font-bold leading-none"
-                >
-                  ↗
-                </span>
-              </button>
             </div>
           </div>
-
-          {/* SOLID WHITE "ACTIVITIES +" BAR BUTTON */}
-          <button
-            type="button"
-            onClick={() => {
-              setActivityFilterCat("ALL");
-              setActiveActivitySlideIdx(0);
-              setIsActivitiesPageOpen(true);
-            }}
-            className="osl-bar-btn bg-white hover:bg-[#FFE066] text-[#0A0A0D] rounded-xl shadow-[0_12px_30px_rgba(255,255,255,0.14)] active:scale-[0.99]"
-          >
-            <span className="font-bold">
-              ACTIVITIES ({activities.length} CHRONOLOGY WORKS)
-            </span>
-            <span className="w-6 h-6 rounded-full bg-[#0A0A0D] text-white flex items-center justify-center text-sm leading-none">
-              +
-            </span>
-          </button>
         </div>
       </section>
 
@@ -2924,105 +2938,137 @@ export default function DesktopOilstainExperience() {
       >
         <div
           style={{
-            paddingTop: "48px",
-            maxWidth: "1140px",
+            paddingTop: "52px",
+            paddingBottom: "52px",
+            paddingLeft: "24px",
+            paddingRight: "24px",
+            maxWidth: "1240px",
             margin: "0 auto",
           }}
         >
-          <div
-            style={{ paddingLeft: "24px", paddingRight: "24px" }}
-            className="flex items-end justify-between"
-          >
-            <div>
-              <span className="font-serif italic text-base text-black/60 block">
-                Curated Contact Sheet
-              </span>
-              <h2 className="font-heading font-black text-3xl uppercase tracking-[-0.03em] text-[#111111]">
-                VISUAL ARCHIVE
-              </h2>
+          <div className="grid grid-cols-12 gap-8 lg:gap-12 items-center">
+            {/* LEFT COLUMN: Title, Subtext, Creative Optical Lab Selectors & Black GALLERY Button */}
+            <div className="col-span-12 lg:col-span-5 flex flex-col justify-between space-y-6">
+              <div className="space-y-3">
+                <div>
+                  <span className="font-serif italic text-base text-black/60 block">
+                    Curated Contact Sheet
+                  </span>
+                  <h2 className="font-heading font-black text-4xl uppercase tracking-[-0.03em] text-[#111111]">
+                    VISUAL ARCHIVE
+                  </h2>
+                  <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-black/45 block mt-1">
+                    [ {gallery.length} COLOR PLATES ]
+                  </span>
+                </div>
+
+                <p className="font-sans text-xs text-black/70 leading-relaxed">
+                  Archival negatives, 35mm loupe magnifications, and analog film stock
+                  emulsions developed by GCU photographers across Assam and beyond.
+                </p>
+
+                {/* Creative Optical Lab 3-Item Selector */}
+                <div className="grid grid-cols-3 border border-black/15 rounded-xl overflow-hidden bg-white/40 mt-4">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setActiveOpticalLab((prev) =>
+                        prev === "LOUPE" ? null : "LOUPE"
+                      )
+                    }
+                    className={`osl-bento-cell ${
+                      activeOpticalLab === "LOUPE" ? "active-lab" : ""
+                    }`}
+                  >
+                    <span className="font-mono text-[8px] opacity-55">
+                      01 // LAB
+                    </span>
+                    <span className="font-mono text-[10px] font-bold tracking-[0.12em] uppercase">
+                      35MM LOUPE
+                    </span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setActiveOpticalLab((prev) =>
+                        prev === "EMULSION" ? null : "EMULSION"
+                      )
+                    }
+                    className={`osl-bento-cell ${
+                      activeOpticalLab === "EMULSION" ? "active-lab" : ""
+                    }`}
+                  >
+                    <span className="font-mono text-[8px] opacity-55">
+                      02 // FILM
+                    </span>
+                    <span className="font-mono text-[10px] font-bold tracking-[0.12em] uppercase">
+                      EMULSION
+                    </span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setActiveOpticalLab((prev) =>
+                        prev === "STROBE" ? null : "STROBE"
+                      )
+                    }
+                    className={`osl-bento-cell ${
+                      activeOpticalLab === "STROBE" ? "active-lab" : ""
+                    }`}
+                  >
+                    <span className="font-mono text-[8px] opacity-55">
+                      03 // SPEC
+                    </span>
+                    <span className="font-mono text-[10px] font-bold tracking-[0.12em] uppercase">
+                      OPTICS RIG
+                    </span>
+                  </button>
+                </div>
+              </div>
+
+              {/* SOLID JET BLACK "GALLERY +" BUTTON on Left Column */}
+              <div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setGalleryFilterCat("ALL");
+                    setExpandedGalleryId(null);
+                    setIsGalleryPageOpen(true);
+                  }}
+                  className="osl-bar-btn w-full bg-[#111111] hover:bg-[#D92B2B] text-white rounded-xl shadow-[0_12px_30px_rgba(0,0,0,0.16)] active:scale-[0.99] transition-all"
+                >
+                  <span className="font-bold">
+                    GALLERY // EXPLORE ALL {gallery.length} FRAMES
+                  </span>
+                  <span className="w-6 h-6 rounded-full bg-[#D4A843] text-[#050505] flex items-center justify-center text-sm font-bold leading-none">
+                    +
+                  </span>
+                </button>
+              </div>
             </div>
-            <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-black/45">
-              [ {gallery.length} COLOR PLATES ]
-            </span>
+
+            {/* RIGHT COLUMN: The Seamless Rolling Rotating Fan */}
+            <div className="col-span-12 lg:col-span-7 flex items-center justify-center relative min-h-[440px]">
+              <HalfWheelGalleryFan
+                items={gallery}
+                onSelectCard={(idx) => {
+                  setGalleryFilterCat("ALL");
+                  const chosen = gallery[idx];
+                  setExpandedGalleryId(
+                    chosen?._id || chosen?.id || String(idx)
+                  );
+                  setIsGalleryPageOpen(true);
+                }}
+              />
+            </div>
           </div>
 
-          <HalfWheelGalleryFan
-            items={gallery}
-            onSelectCard={(idx) => {
-              setGalleryFilterCat("ALL");
-              const chosen = gallery[idx];
-              setExpandedGalleryId(
-                chosen?._id || chosen?.id || String(idx)
-              );
-              setIsGalleryPageOpen(true);
-            }}
-          />
-
-          <div
-            style={{ margin: "0 24px" }}
-            className="grid grid-cols-3 border-l border-black/15 rounded-xl overflow-hidden"
-          >
-            <button
-              type="button"
-              onClick={() =>
-                setActiveOpticalLab((prev) =>
-                  prev === "LOUPE" ? null : "LOUPE"
-                )
-              }
-              className={`osl-bento-cell ${
-                activeOpticalLab === "LOUPE" ? "active-lab" : ""
-              }`}
-            >
-              <span className="font-mono text-[8.5px] opacity-55">
-                01 // LAB
-              </span>
-              <span className="font-mono text-[10.5px] font-bold tracking-[0.14em] uppercase">
-                35MM LOUPE
-              </span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() =>
-                setActiveOpticalLab((prev) =>
-                  prev === "EMULSION" ? null : "EMULSION"
-                )
-              }
-              className={`osl-bento-cell ${
-                activeOpticalLab === "EMULSION" ? "active-lab" : ""
-              }`}
-            >
-              <span className="font-mono text-[8.5px] opacity-55">
-                02 // FILM
-              </span>
-              <span className="font-mono text-[10.5px] font-bold tracking-[0.14em] uppercase">
-                EMULSION
-              </span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() =>
-                setActiveOpticalLab((prev) =>
-                  prev === "STROBE" ? null : "STROBE"
-                )
-              }
-              className={`osl-bento-cell ${
-                activeOpticalLab === "STROBE" ? "active-lab" : ""
-              }`}
-            >
-              <span className="font-mono text-[8.5px] opacity-55">
-                03 // SPEC
-              </span>
-              <span className="font-mono text-[10.5px] font-bold tracking-[0.14em] uppercase">
-                OPTICS RIG
-              </span>
-            </button>
-          </div>
-
+          {/* Optical Lab Detail Drawer (Opens Smoothly Full-Width Below Grid) */}
           {activeOpticalLab && (
             <div
-              style={{ margin: "12px 24px 0", padding: "22px 24px" }}
+              style={{ marginTop: "28px", padding: "22px 24px" }}
               className="rounded-2xl bg-[#141417] text-white border border-black/15 space-y-4 animate-fade-in"
             >
               <div className="flex items-center justify-between">
@@ -3167,25 +3213,6 @@ export default function DesktopOilstainExperience() {
             </div>
           )}
 
-          {/* SOLID JET BLACK "GALLERY +" BUTTON */}
-          <div style={{ padding: "20px 24px 44px" }}>
-            <button
-              type="button"
-              onClick={() => {
-                setGalleryFilterCat("ALL");
-                setExpandedGalleryId(null);
-                setIsGalleryPageOpen(true);
-              }}
-              className="osl-bar-btn bg-[#111111] hover:bg-[#D92B2B] text-white rounded-xl shadow-[0_12px_30px_rgba(0,0,0,0.16)] active:scale-[0.99]"
-            >
-              <span className="font-bold">
-                GALLERY // EXPLORE ALL {gallery.length} FRAMES
-              </span>
-              <span className="w-6 h-6 rounded-full bg-[#D4A843] text-[#050505] flex items-center justify-center text-sm font-bold leading-none">
-                +
-              </span>
-            </button>
-          </div>
         </div>
       </section>
 
