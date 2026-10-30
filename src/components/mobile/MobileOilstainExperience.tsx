@@ -1686,7 +1686,7 @@ export default function MobileOilstainExperience() {
           -webkit-overflow-scrolling: touch;
         }
         #shutterscape-mobile-oilstain .osl-top-capsule {
-          padding: 7px 16px 7px 20px !important;
+          padding: 6px 14px !important;
         }
         #shutterscape-mobile-oilstain .osl-pad-sm { padding: 12px 16px !important; }
         #shutterscape-mobile-oilstain .osl-pad-md { padding: 20px 18px !important; }
@@ -1821,21 +1821,21 @@ export default function MobileOilstainExperience() {
       />
 
       {/* ============================================================
-          UP NAVBAR: COMPACT CENTERED GLASS CAPSULE WITH GENEROUS LEFT PADDING
+          UP NAVBAR: COMPACT CENTERED GLASS CAPSULE
           ============================================================ */}
       <div
         style={{
           backgroundColor: isScrolledTop
-            ? "rgba(12, 12, 16, 0.32)"
-            : "rgba(12, 12, 16, 0.16)",
-          backdropFilter: "blur(10px) saturate(140%)",
-          WebkitBackdropFilter: "blur(10px) saturate(140%)",
+            ? "rgba(12, 12, 16, 0.36)"
+            : "rgba(12, 12, 16, 0.2)",
+          backdropFilter: "blur(12px) saturate(140%)",
+          WebkitBackdropFilter: "blur(12px) saturate(140%)",
           borderColor: isScrolledTop
             ? "rgba(255, 255, 255, 0.22)"
             : "rgba(255, 255, 255, 0.15)",
           transform: "translate3d(-50%, 0, 0)",
         }}
-        className="osl-top-capsule fixed top-3 left-1/2 z-[9980] w-max max-w-[94vw] rounded-full border shadow-[0_8px_24px_rgba(0,0,0,0.28)] transition-colors duration-300 flex items-center justify-center gap-2.5 pointer-events-auto"
+        className="osl-top-capsule fixed top-3 left-1/2 z-[9980] w-max max-w-[94vw] rounded-full border shadow-[0_8px_24px_rgba(0,0,0,0.28)] transition-colors duration-300 flex items-center justify-center gap-2 sm:gap-2.5 pointer-events-auto select-none"
       >
         <button
           type="button"
@@ -1844,33 +1844,25 @@ export default function MobileOilstainExperience() {
             setActiveNavTab("home");
             window.scrollTo({ top: 0, behavior: "smooth" });
           }}
-          style={{ paddingLeft: "4px" }}
-          className="flex items-center gap-2.5 cursor-pointer shrink-0"
+          className="flex items-center cursor-pointer shrink-0"
         >
           <div
-            style={{ width: "92px", height: "25px" }}
+            style={{ width: "90px", height: "24px" }}
             className="relative shrink-0"
           >
             <Image
               src="/images/shutterscape-brand-white.png"
               alt="ShutterScape Logo"
               fill
-              sizes="92px"
+              sizes="90px"
               priority
               unoptimized
-              className="object-contain object-center"
+              className="object-contain object-left"
             />
           </div>
-
-          <span className="h-3.5 w-[1px] bg-white/20 shrink-0" />
-
-          <span className="flex items-center gap-1 font-mono text-[8px] tracking-[0.18em] text-[#EF4444] font-bold uppercase shrink-0">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#EF4444] animate-pulse" />
-            REC
-          </span>
         </button>
 
-        <span className="h-3.5 w-[1px] bg-white/15 shrink-0" />
+        <span className="h-3.5 w-[1px] bg-white/20 shrink-0" />
 
         <div className="flex items-center gap-2 shrink-0">
           <button
@@ -1890,8 +1882,8 @@ export default function MobileOilstainExperience() {
             href="https://gcu.ac.in"
             target="_blank"
             rel="noopener noreferrer"
-            style={{ width: "78px", height: "24px" }}
-            className="relative opacity-95 hover:opacity-100 transition-opacity shrink-0"
+            style={{ width: "76px", height: "23px" }}
+            className="relative opacity-95 hover:opacity-100 transition-opacity shrink-0 flex items-center"
             title="Girijananda Chowdhury University"
           >
             <img
