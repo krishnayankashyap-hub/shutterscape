@@ -2572,264 +2572,262 @@ export default function MobileOilstainExperience() {
       </section>
 
       {/* ============================================================
-          3. EXECUTIVE + PLAYFUL "SPOTLIGHT" SECTION
-             - 2-Part Segmented Toggle: "UPCOMING" | "LIVE GOING"
-             - Viewfinder Brackets + Tactile Keycap Countdown + Perforated Pass
-             - Solid WHITE "ACTIVITIES +" Button on the Black Background!
+          3. PLAYFUL + PROFESSIONAL "SPOTLIGHT" COLLECTOR PASS SECTION
+             - Pill-Shaped 2-Part Switcher: "✦ UPCOMING" | "◉ LIVE GOING"
+             - Tilted Pastel Sticker + Colorful Flip-Clock Countdown Tiles
+             - Warm Ivory Editorial Pass Deck + Handwritten Note
+             - Solid WHITE "ACTIVITIES +" Button Below!
           ============================================================ */}
       <section
         id="mobile-dark-showcase"
-        className="relative z-20 w-full bg-[#0A0A0D] text-white border-t border-white/10 overflow-hidden"
+        className="relative z-20 w-full bg-[#0A0A0E] text-white border-t border-white/10 overflow-hidden"
       >
-        {/* Subtle Playful Ambient Studio Glow */}
+        {/* Soft Playful Studio Aura */}
         <div
-          className="pointer-events-none absolute -top-20 left-1/2 -translate-x-1/2 w-[340px] h-[220px] rounded-full opacity-20 blur-3xl"
+          className="pointer-events-none absolute top-8 left-1/2 -translate-x-1/2 w-[360px] h-[260px] rounded-full opacity-25 blur-3xl"
           style={{
             background:
               spotlightTab === "LIVE"
-                ? "radial-gradient(circle, #EF4444 0%, transparent 70%)"
-                : "radial-gradient(circle, #D4A843 0%, transparent 70%)",
+                ? "radial-gradient(circle, #FF6B6B 0%, transparent 70%)"
+                : "radial-gradient(circle, #FFE066 0%, transparent 70%)",
           }}
         />
 
         <div
-          style={{ padding: "32px 18px 22px" }}
-          className="relative z-10 space-y-5"
+          style={{ padding: "30px 18px 22px" }}
+          className="relative z-10 space-y-4"
         >
-          {/* TOP HEADER: "SPOTLIGHT" + 2-PART TOGGLE (UPCOMING / LIVE GOING) */}
-          <div className="flex flex-col gap-3.5 border-b border-white/10 pb-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <span className="font-mono text-[8.5px] tracking-[0.24em] uppercase text-[#D4A843] font-bold block">
-                  FEATURED CLUB DISPATCH // GCU
+          {/* TOP HEADER: Editorial + Playful Title & Status Pill */}
+          <div className="flex items-end justify-between">
+            <div>
+              <div className="flex items-center gap-2">
+                <span
+                  style={{ padding: "2px 8px" }}
+                  className="rounded-full bg-[#FFE066] text-[#111111] font-mono text-[8px] font-bold uppercase tracking-[0.18em]"
+                >
+                  ★ GCU DISPATCH
                 </span>
-                <div className="flex items-baseline gap-2 mt-0.5">
-                  <h2 className="font-heading font-black text-3xl tracking-[-0.03em] uppercase text-white leading-none">
-                    SPOTLIGHT
-                  </h2>
-                  <span className="font-serif italic text-sm text-white/50">
-                    &apos;26 Pass
-                  </span>
-                </div>
+                <span className="font-serif italic text-xs text-white/65">
+                  Collector&apos;s Pass
+                </span>
               </div>
-
-              <span
-                style={{ padding: "4px 10px" }}
-                className={`rounded-full font-mono text-[8px] font-bold uppercase tracking-[0.18em] flex items-center gap-1.5 border ${
-                  spotlightTab === "LIVE"
-                    ? "bg-[#EF4444]/15 border-[#EF4444]/50 text-[#FF6B6B]"
-                    : "bg-[#D4A843]/15 border-[#D4A843]/40 text-[#D4A843]"
-                }`}
+              <h2
+                style={{ marginTop: "6px" }}
+                className="font-heading font-black text-3xl tracking-[-0.03em] uppercase text-white leading-none"
               >
-                <span
-                  className={`w-1.5 h-1.5 rounded-full ${
-                    spotlightTab === "LIVE"
-                      ? "bg-[#EF4444] animate-ping"
-                      : "bg-[#D4A843] animate-pulse"
-                  }`}
-                />
-                {spotlightTab === "LIVE" ? "ON AIR NOW" : "NEXT SCHEDULED"}
-              </span>
+                SPOTLIGHT{" "}
+                <span className="font-serif italic font-normal text-[#FFE066]">
+                  &apos;26
+                </span>
+              </h2>
             </div>
 
-            {/* 2-Part Segmented Option Bar: UPCOMING vs LIVE GOING */}
-            <div
-              style={{ padding: "4px" }}
-              className="grid grid-cols-2 gap-1.5 rounded-xl bg-[#14141A] border border-white/12 shadow-inner"
+            <span
+              style={{ padding: "5px 11px" }}
+              className={`rounded-full font-mono text-[8px] font-bold uppercase tracking-[0.16em] flex items-center gap-1.5 border ${
+                spotlightTab === "LIVE"
+                  ? "bg-[#FF6B6B]/20 border-[#FF6B6B]/50 text-[#FFA8A8]"
+                  : "bg-white/10 border-white/20 text-[#FFE066]"
+              }`}
             >
-              <button
-                type="button"
-                onClick={() => setSpotlightTab("UPCOMING")}
-                style={{ padding: "10px 12px" }}
-                className={`rounded-lg font-mono text-[9.5px] font-bold uppercase tracking-[0.16em] flex items-center justify-center gap-2 cursor-pointer transition-all ${
-                  spotlightTab === "UPCOMING"
-                    ? "bg-[#D4A843] text-[#050505] shadow-md scale-[1.01]"
-                    : "bg-transparent text-white/60 hover:text-white"
-                }`}
-              >
-                <span
-                  className={`w-1.5 h-1.5 rounded-full ${
-                    spotlightTab === "UPCOMING"
-                      ? "bg-[#050505]"
-                      : "bg-[#D4A843]"
-                  }`}
-                />
-                <span>UPCOMING</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setSpotlightTab("LIVE")}
-                style={{ padding: "10px 12px" }}
-                className={`rounded-lg font-mono text-[9.5px] font-bold uppercase tracking-[0.16em] flex items-center justify-center gap-2 cursor-pointer transition-all ${
+              <span
+                className={`w-1.5 h-1.5 rounded-full ${
                   spotlightTab === "LIVE"
-                    ? "bg-[#D92B2B] text-white shadow-md scale-[1.01]"
-                    : "bg-transparent text-white/60 hover:text-white"
+                    ? "bg-[#FF6B6B] animate-ping"
+                    : "bg-[#8CE99A] animate-pulse"
                 }`}
-              >
-                <span
-                  className={`w-1.5 h-1.5 rounded-full ${
-                    spotlightTab === "LIVE"
-                      ? "bg-white animate-ping"
-                      : "bg-[#EF4444]"
-                  }`}
-                />
-                <span>LIVE GOING</span>
-              </button>
-            </div>
+              />
+              {spotlightTab === "LIVE" ? "LIVE ON CAMPUS" : "OPEN FOR RSVP"}
+            </span>
           </div>
 
-          {/* PLAYFUL + EXECUTIVE COLLECTOR PASS SPOTLIGHT CARD */}
-          <div className="relative rounded-2xl bg-[#131319] border border-white/15 overflow-hidden shadow-[0_24px_60px_rgba(0,0,0,0.85)]">
-            {/* 1. Upper 16:10 Photographic Stage with Viewfinder Corner Brackets */}
-            <div className="relative w-full aspect-[16/10] overflow-hidden bg-[#070709]">
-              <img
-                src={activeSpotlightEvent.img}
-                alt={activeSpotlightEvent.title}
-                className="w-full h-full object-cover transition-transform duration-700 scale-105 saturate-[1.1]"
-                loading="lazy"
-                decoding="async"
-              />
-              <div
-                className="absolute inset-0 pointer-events-none"
-                style={{
-                  background:
-                    "linear-gradient(180deg, rgba(10,10,13,0.5) 0%, rgba(10,10,13,0.05) 45%, rgba(19,19,25,0.95) 100%)",
-                }}
-              />
+          {/* PLAYFUL PILL-SHAPED 2-PART SWITCHER: UPCOMING vs LIVE GOING */}
+          <div
+            style={{ padding: "4px" }}
+            className="grid grid-cols-2 gap-1.5 rounded-full bg-white/[0.07] border border-white/15 backdrop-blur-md"
+          >
+            <button
+              type="button"
+              onClick={() => setSpotlightTab("UPCOMING")}
+              style={{ padding: "9px 12px" }}
+              className={`rounded-full font-sans text-xs font-bold tracking-wide flex items-center justify-center gap-1.5 cursor-pointer transition-all ${
+                spotlightTab === "UPCOMING"
+                  ? "bg-[#FFE066] text-[#111111] shadow-[0_4px_14px_rgba(255,224,102,0.35)]"
+                  : "bg-transparent text-white/65 hover:text-white"
+              }`}
+            >
+              <span>✦</span>
+              <span>Upcoming</span>
+            </button>
 
-              {/* Subtle Camera Viewfinder Corner Brackets */}
-              <div className="pointer-events-none absolute inset-3">
-                <span className="absolute top-0 left-0 w-3 h-3 border-t border-l border-white/35" />
-                <span className="absolute top-0 right-0 w-3 h-3 border-t border-r border-white/35" />
-                <span className="absolute bottom-7 left-0 w-3 h-3 border-b border-l border-white/35" />
-                <span className="absolute bottom-7 right-0 w-3 h-3 border-b border-r border-white/35" />
-              </div>
+            <button
+              type="button"
+              onClick={() => setSpotlightTab("LIVE")}
+              style={{ padding: "9px 12px" }}
+              className={`rounded-full font-sans text-xs font-bold tracking-wide flex items-center justify-center gap-1.5 cursor-pointer transition-all ${
+                spotlightTab === "LIVE"
+                  ? "bg-[#FF5A5F] text-white shadow-[0_4px_14px_rgba(255,90,95,0.4)]"
+                  : "bg-transparent text-white/65 hover:text-white"
+              }`}
+            >
+              <span
+                className={`w-2 h-2 rounded-full ${
+                  spotlightTab === "LIVE"
+                    ? "bg-white animate-ping"
+                    : "bg-[#FF5A5F]"
+                }`}
+              />
+              <span>Live Going</span>
+            </button>
+          </div>
 
-              {/* Top Floating Badges */}
-              <div
-                style={{ padding: "12px 14px" }}
-                className="absolute top-0 inset-x-0 flex items-center justify-between"
-              >
-                <span
-                  style={{ padding: "4px 10px" }}
-                  className="rounded-md bg-black/75 backdrop-blur-md border border-white/15 font-mono text-[8.5px] font-bold tracking-[0.18em] uppercase text-[#D4A843]"
+          {/* PLAYFUL + PROFESSIONAL TWO-TONE COLLECTOR PASS CARD */}
+          <div
+            style={{
+              boxShadow:
+                spotlightTab === "LIVE"
+                  ? "0 22px 50px rgba(0,0,0,0.75), 4px 4px 0px #FF5A5F"
+                  : "0 22px 50px rgba(0,0,0,0.75), 4px 4px 0px #D4A843",
+            }}
+            className="relative rounded-3xl bg-[#FAF8F5] text-[#111111] border-2 border-white overflow-hidden transition-all duration-300"
+          >
+            {/* 1. Top Framed Visual Stage (With Playful Tilted Sticker & Film Tag) */}
+            <div style={{ padding: "10px 10px 0 10px" }}>
+              <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden bg-[#111111]">
+                <img
+                  src={activeSpotlightEvent.img}
+                  alt={activeSpotlightEvent.title}
+                  className="w-full h-full object-cover saturate-[1.14] transition-transform duration-700 scale-105"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <div
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    background:
+                      "linear-gradient(180deg, rgba(0,0,0,0.35) 0%, transparent 45%, rgba(0,0,0,0.78) 100%)",
+                  }}
+                />
+
+                {/* Top-Left Playful Tilted Pastel Sticker Badge */}
+                <div
+                  style={{
+                    padding: "4px 11px",
+                    transform: "rotate(-2.5deg)",
+                    backgroundColor:
+                      spotlightTab === "LIVE" ? "#FFA8A8" : "#8CE99A",
+                  }}
+                  className="absolute top-3 left-3 rounded-lg text-[#111111] font-mono text-[8.5px] font-bold uppercase tracking-[0.15em] shadow-md border border-black/15"
                 >
                   ★ {activeSpotlightEvent.category}
-                </span>
+                </div>
 
-                <span
-                  style={{ padding: "4px 10px" }}
-                  className={`rounded-md font-mono text-[8.5px] font-bold tracking-[0.16em] uppercase ${
+                {/* Top-Right Date / Live Pill */}
+                <div
+                  style={{ padding: "4.5px 11px" }}
+                  className={`absolute top-3 right-3 rounded-full font-mono text-[8.5px] font-bold uppercase tracking-[0.14em] shadow-md ${
                     spotlightTab === "LIVE"
-                      ? "bg-[#D92B2B] text-white shadow-sm"
-                      : "bg-black/75 backdrop-blur-md border border-white/15 text-white/95"
+                      ? "bg-[#FF5A5F] text-white"
+                      : "bg-white/95 text-[#111111]"
                   }`}
                 >
                   {spotlightTab === "LIVE"
-                    ? "● LIVE SESSION"
+                    ? "● HAPPENING NOW"
                     : activeSpotlightEvent.date}
-                </span>
-              </div>
+                </div>
 
-              {/* Bottom Location & Film Stock Bar inside Photo Frame */}
-              <div
-                style={{ padding: "10px 14px" }}
-                className="absolute bottom-0 inset-x-0 flex items-center justify-between gap-2 font-mono text-[8.5px] uppercase tracking-[0.16em]"
-              >
-                <span className="text-white/95 font-semibold truncate">
-                  📍 {activeSpotlightEvent.location}
-                </span>
-                <span className="text-[#D4A843] font-bold shrink-0">
-                  {activeSpotlightEvent.filmStock || "35MM ARCHIVE"}
-                </span>
+                {/* Bottom Location & Film Stock Strip inside Photo */}
+                <div
+                  style={{ padding: "10px 12px" }}
+                  className="absolute bottom-0 inset-x-0 flex items-center justify-between gap-2 text-white"
+                >
+                  <span className="font-sans text-[11px] font-semibold truncate drop-shadow">
+                    📍 {activeSpotlightEvent.location}
+                  </span>
+                  <span
+                    style={{ padding: "2.5px 8px" }}
+                    className="rounded-full bg-black/65 backdrop-blur-md text-[#FFE066] font-mono text-[7.5px] font-bold uppercase tracking-wider shrink-0"
+                  >
+                    {activeSpotlightEvent.filmStock || "35MM ARCHIVE"}
+                  </span>
+                </div>
               </div>
             </div>
 
-            {/* 2. Tactile 4-Unit Countdown Bar (DAYS : HRS : MIN : SEC) */}
+            {/* 2. Playful Flip-Clock Countdown Strip (DAYS : HRS : MIN : SEC) */}
             <div
-              style={{ padding: "12px 14px" }}
-              className="bg-[#0D0D12] border-t border-white/10 flex items-center justify-between gap-2"
+              style={{ padding: "12px 14px 8px" }}
+              className="flex items-center justify-between gap-2"
             >
               <div className="flex flex-col">
-                <span className="font-mono text-[7.5px] tracking-[0.2em] uppercase text-white/45 font-bold">
+                <span className="handmade-fountain-pen text-[14px] text-[#D92B2B] leading-none">
                   {spotlightTab === "UPCOMING"
-                    ? "EVENT COUNTDOWN"
-                    : "LIVE SESSION TIMER"}
+                    ? "Don't miss the golden hour!"
+                    : " Doors are open right now!"}
                 </span>
                 <span
-                  className={`font-mono text-[9.5px] font-bold uppercase tracking-[0.14em] ${
-                    spotlightTab === "LIVE"
-                      ? "text-[#FF6B6B]"
-                      : "text-[#D4A843]"
-                  }`}
+                  style={{ marginTop: "3px" }}
+                  className="font-mono text-[8.5px] font-bold uppercase tracking-[0.16em] text-black/55"
                 >
-                  {spotlightTab === "UPCOMING" ? "STARTS IN :" : "ENDS IN :"}
+                  {spotlightTab === "UPCOMING"
+                    ? "COUNTDOWN TO LAUNCH"
+                    : "LIVE SESSION ENDS IN"}
                 </span>
               </div>
 
-              {/* 4 Tactile Digital Counter Cells */}
-              <div className="flex items-center gap-1.5">
+              {/* 4 Playful Tactile Countdown Tiles */}
+              <div className="flex items-center gap-1">
                 {[
-                  { val: countdown.days, label: "DAYS" },
-                  { val: countdown.hours, label: "HRS" },
-                  { val: countdown.minutes, label: "MIN" },
-                  { val: countdown.seconds, label: "SEC" },
-                ].map((unit, idx) => (
-                  <React.Fragment key={unit.label}>
-                    <div
-                      style={{
-                        padding: "5px 8px",
-                        minWidth: "44px",
-                        borderBottomWidth: "2px",
-                        borderBottomColor:
-                          spotlightTab === "LIVE" ? "#D92B2B" : "#D4A843",
-                      }}
-                      className="rounded-lg bg-[#181822] border border-white/15 flex flex-col items-center justify-center text-center shadow-md"
+                  { val: countdown.days, label: "DAYS", bg: "#FFE066" },
+                  { val: countdown.hours, label: "HRS", bg: "#8CE99A" },
+                  { val: countdown.minutes, label: "MIN", bg: "#74C0FC" },
+                  { val: countdown.seconds, label: "SEC", bg: "#FFA8A8" },
+                ].map((unit) => (
+                  <div
+                    key={unit.label}
+                    style={{
+                      padding: "4px 7px",
+                      minWidth: "41px",
+                      backgroundColor: unit.bg,
+                    }}
+                    className="rounded-xl border border-black/15 shadow-[2px_2px_0px_#111111] flex flex-col items-center justify-center text-center"
+                  >
+                    <span className="font-heading font-black text-xs text-[#111111] leading-none">
+                      {unit.val}
+                    </span>
+                    <span
+                      style={{ marginTop: "2px" }}
+                      className="font-mono text-[6px] font-bold tracking-[0.12em] text-black/65 uppercase leading-none"
                     >
-                      <span className="font-mono text-sm font-bold text-white leading-none tracking-wider">
-                        {unit.val}
-                      </span>
-                      <span
-                        style={{ marginTop: "3px" }}
-                        className="font-mono text-[6.5px] tracking-[0.16em] text-white/50 uppercase leading-none"
-                      >
-                        {unit.label}
-                      </span>
-                    </div>
-                    {idx < 3 && (
-                      <span className="font-mono text-xs font-bold text-[#D4A843]/70 animate-pulse">
-                        :
-                      </span>
-                    )}
-                  </React.Fragment>
+                      {unit.label}
+                    </span>
+                  </div>
                 ))}
               </div>
             </div>
 
-            {/* Playful Perforated Ticket-Stub Divider with Side Cutout Notches */}
-            <div className="relative w-full h-4 bg-[#131319] flex items-center justify-between overflow-hidden">
-              <span className="w-3.5 h-3.5 rounded-full bg-[#0A0A0D] border border-white/15 -ml-2 shrink-0" />
-              <div className="w-full border-t border-dashed border-white/15 mx-2" />
-              <span className="font-mono text-[7px] tracking-[0.22em] uppercase text-white/35 shrink-0 px-1">
-                ADMIT ONE // GCU
-              </span>
-              <div className="w-8 border-t border-dashed border-white/15 mr-2 shrink-0" />
-              <span className="w-3.5 h-3.5 rounded-full bg-[#0A0A0D] border border-white/15 -mr-2 shrink-0" />
+            {/* Perforated Ticket Cutout Divider */}
+            <div className="relative w-full h-4 flex items-center justify-between my-0.5">
+              <span className="w-4 h-4 rounded-full bg-[#0A0A0E] -ml-2.5 shrink-0" />
+              <div className="w-full border-t-2 border-dashed border-black/12 mx-2" />
+              <span className="w-4 h-4 rounded-full bg-[#0A0A0E] -mr-2.5 shrink-0" />
             </div>
 
-            {/* 3. High-Contrast Obsidian Content Deck (Title, Description & JOIN Button) */}
-            <div style={{ padding: "12px 16px 20px" }} className="space-y-4">
-              <div className="space-y-2">
-                <h3 className="font-heading font-extrabold text-xl sm:text-2xl text-white tracking-tight leading-[1.15]">
+            {/* 3. Warm Ivory Editorial Story & Action Deck */}
+            <div style={{ padding: "8px 16px 16px" }} className="space-y-3.5">
+              <div>
+                <h3 className="font-serif text-2xl sm:text-[26px] text-[#111111] font-normal leading-[1.1] tracking-tight">
                   {activeSpotlightEvent.title}
                 </h3>
-                <p className="font-sans text-xs text-white/75 leading-relaxed">
+                <p
+                  style={{ marginTop: "6px" }}
+                  className="font-sans text-xs text-black/70 leading-relaxed"
+                >
                   {activeSpotlightEvent.description}
                 </p>
               </div>
 
-              {/* Dedicated JOIN Button for UPCOMING or LIVE GOING */}
+              {/* Playful + Executive Pill JOIN Button */}
               <button
                 type="button"
                 onClick={() => {
@@ -2841,11 +2839,11 @@ export default function MobileOilstainExperience() {
                   setRegisterSubmitted(false);
                   setIsRegisterModalOpen(true);
                 }}
-                style={{ padding: "13px 18px" }}
-                className={`w-full rounded-xl font-mono text-[10px] font-bold uppercase tracking-[0.18em] flex items-center justify-between cursor-pointer transition-all shadow-lg active:scale-[0.99] ${
+                style={{ padding: "11px 14px 11px 20px" }}
+                className={`w-full rounded-full font-sans text-xs font-bold tracking-wide flex items-center justify-between cursor-pointer transition-all shadow-[0_8px_20px_rgba(0,0,0,0.15)] active:scale-[0.98] ${
                   spotlightTab === "LIVE"
                     ? "bg-[#D92B2B] hover:bg-[#B91C1C] text-white"
-                    : "bg-[#D4A843] hover:bg-[#E5B955] text-[#050505]"
+                    : "bg-[#111111] hover:bg-[#D92B2B] text-white"
                 }`}
               >
                 <span className="flex items-center gap-2">
@@ -2855,11 +2853,19 @@ export default function MobileOilstainExperience() {
                   <span>
                     {activeSpotlightEvent.ctaText ||
                       (spotlightTab === "LIVE"
-                        ? "JOIN LIVE SESSION NOW"
-                        : "JOIN UPCOMING EVENT")}
+                        ? "Join Live Session Now"
+                        : "Join Upcoming Event")}
                   </span>
                 </span>
-                <span className="text-sm leading-none">→</span>
+                <span
+                  style={{
+                    backgroundColor:
+                      spotlightTab === "LIVE" ? "#FFFFFF" : "#FFE066",
+                  }}
+                  className="w-7 h-7 rounded-full text-[#111111] flex items-center justify-center font-mono text-xs font-bold leading-none"
+                >
+                  ↗
+                </span>
               </button>
             </div>
           </div>
@@ -2874,7 +2880,7 @@ export default function MobileOilstainExperience() {
               setActiveActivitySlideIdx(0);
               setIsActivitiesPageOpen(true);
             }}
-            className="osl-bar-btn bg-white hover:bg-[#D4A843] text-[#0A0A0D] rounded-xl shadow-[0_12px_30px_rgba(255,255,255,0.14)] active:scale-[0.99]"
+            className="osl-bar-btn bg-white hover:bg-[#FFE066] text-[#0A0A0D] rounded-xl shadow-[0_12px_30px_rgba(255,255,255,0.14)] active:scale-[0.99]"
           >
             <span className="font-bold">
               ACTIVITIES ({activities.length} CHRONOLOGY WORKS)
@@ -3709,21 +3715,23 @@ export default function MobileOilstainExperience() {
       </footer>
 
       {/* ============================================================
-          PAGE OVERLAY 1: REDESIGNED CLEAN, PLAYFUL & PROFESSIONAL
-          ACTIVITIES PAGE (Unified Collector Pass Cards — Zero Clutter!)
+          PAGE OVERLAY 1: PLAYFUL, ARTISTIC & PROFESSIONAL ACTIVITIES PAGE
+          - Full-Bleed Vivid Images (No Blurry Letterbox Bars!)
+          - Tactile Offset Shadow Pass Cards + Tilted Pastel Stickers
+          - Interactive Filmstrip Quick-Jump Dock (Zero Dead Bottom Space!)
           ============================================================ */}
       {isActivitiesPageOpen && (
-        <div className="fixed inset-0 z-[9999] bg-[#F4F3EE] text-[#111111] flex flex-col justify-between overflow-y-auto animate-fade-in">
-          {/* Sticky Top Bar + Playful Pill Category Taskbar */}
-          <div className="sticky top-0 z-30 bg-[#F4F3EE]/95 backdrop-blur-md border-b border-black/10">
+        <div className="fixed inset-0 z-[9999] bg-[#F4F2EC] text-[#111111] flex flex-col overflow-y-auto animate-fade-in">
+          {/* 1. Sticky Top Bar + Playful Pill Category Taskbar */}
+          <div className="sticky top-0 z-30 bg-[#F4F2EC]/95 backdrop-blur-md border-b border-black/10 shrink-0">
             <div
-              style={{ padding: "14px 18px" }}
+              style={{ padding: "12px 18px" }}
               className="flex items-center justify-between"
             >
               <button
                 type="button"
                 onClick={() => setIsActivitiesPageOpen(false)}
-                style={{ padding: "7px 14px" }}
+                style={{ padding: "6.5px 14px" }}
                 className="rounded-full bg-[#111111] text-white font-sans text-xs font-semibold tracking-wide flex items-center gap-1.5 cursor-pointer shadow-xs active:scale-95 transition-transform"
               >
                 <span>←</span>
@@ -3734,26 +3742,26 @@ export default function MobileOilstainExperience() {
                 <span className="font-heading font-black text-sm uppercase tracking-tight text-[#111111] block leading-none">
                   CLUB ACTIVITIES
                 </span>
-                <span className="font-serif italic text-[11px] text-black/55 block mt-0.5">
+                <span className="handmade-fountain-pen text-[13px] text-[#D92B2B] block mt-0.5 leading-none">
                   Field Works &amp; Chronology
                 </span>
               </div>
 
               <span
-                style={{ padding: "5px 10px" }}
-                className="rounded-full bg-[#D4A843] text-[#050505] font-mono text-[8.5px] font-bold uppercase tracking-wider shadow-2xs"
+                style={{ padding: "4.5px 10px" }}
+                className="rounded-full bg-[#FFE066] border border-black/15 text-[#111111] font-mono text-[8.5px] font-bold uppercase tracking-wider shadow-[2px_2px_0px_#111111]"
               >
-                {filteredActivityItems.length} PASSES
+                {filteredActivityItems.length} WORKS
               </span>
             </div>
 
             {/* Playful Segmented Category Taskbar */}
             <div
-              style={{ padding: "10px 18px" }}
-              className="flex items-center gap-2 overflow-x-auto no-scrollbar border-t border-black/5 bg-[#EAE8E0]"
+              style={{ padding: "8px 18px" }}
+              className="flex items-center gap-2 overflow-x-auto no-scrollbar border-t border-black/5 bg-[#EAE7DF]"
             >
               {[
-                { key: "ALL", label: "All Works" },
+                { key: "ALL", label: "✦ All Works" },
                 { key: "PHOTOWALK", label: "Photowalks" },
                 { key: "WORKSHOP", label: "Workshops" },
                 { key: "EXHIBITION", label: "Exhibitions" },
@@ -3776,10 +3784,10 @@ export default function MobileOilstainExperience() {
                         });
                       }
                     }}
-                    style={{ padding: "6.5px 14px" }}
+                    style={{ padding: "6px 13px" }}
                     className={`rounded-full font-sans text-xs font-semibold shrink-0 cursor-pointer transition-all ${
                       isSelected
-                        ? "bg-[#111111] text-white shadow-sm scale-[1.02]"
+                        ? "bg-[#111111] text-white shadow-[2px_2px_0px_#D4A843]"
                         : "bg-white text-black/70 border border-black/10 hover:text-black"
                     }`}
                   >
@@ -3790,20 +3798,23 @@ export default function MobileOilstainExperience() {
             </div>
           </div>
 
-          {/* Main Collector Pass Deck */}
-          <div style={{ padding: "20px 0 24px" }} className="flex-1 space-y-5">
-            {/* Clean Editorial Title Row */}
+          {/* 2. Main Collector Pass Stage (Compact, Balanced, Zero Empty Gap!) */}
+          <div
+            style={{ padding: "16px 0 18px" }}
+            className="flex-1 flex flex-col justify-between gap-3.5"
+          >
+            {/* Editorial Title Row */}
             <div
               style={{ padding: "0 20px" }}
               className="flex items-end justify-between gap-2"
             >
               <div>
-                <span className="font-mono text-[8.5px] tracking-[0.22em] uppercase text-[#D92B2B] font-bold block">
+                <span className="font-mono text-[8px] tracking-[0.22em] uppercase text-[#D92B2B] font-bold block">
                   ARCHIVE DIRECTORY // 2025–2026
                 </span>
                 <h2
-                  style={{ marginTop: "3px" }}
-                  className="font-heading font-black text-2xl sm:text-3xl text-[#111111] tracking-[-0.03em] leading-[1.05]"
+                  style={{ marginTop: "2px" }}
+                  className="font-heading font-black text-2xl text-[#111111] tracking-[-0.03em] leading-none"
                 >
                   EXPLORE{" "}
                   <span className="font-serif italic font-normal text-[#D92B2B]">
@@ -3812,13 +3823,16 @@ export default function MobileOilstainExperience() {
                 </h2>
               </div>
 
-              <span className="font-mono text-[10px] font-bold text-black/45 shrink-0">
+              <span
+                style={{ padding: "3px 9px" }}
+                className="rounded-full bg-black/[0.06] font-mono text-[9.5px] font-bold text-[#111111] shrink-0"
+              >
                 {String(activeActivitySlideIdx + 1).padStart(2, "0")} /{" "}
                 {String(filteredActivityItems.length).padStart(2, "0")}
               </span>
             </div>
 
-            {/* Horizontal Unified Collector Pass Carousel (Zero Clutter, Zero Cropped Poster Text!) */}
+            {/* Horizontal Tactile Collector Cards (Full-Bleed Vivid Photo + Neo-Brutalist Offset Shadow!) */}
             <div
               ref={activitiesPeekScrollRef}
               onScroll={(e) => {
@@ -3833,7 +3847,11 @@ export default function MobileOilstainExperience() {
                   setActiveActivitySlideIdx(idx);
                 }
               }}
-              style={{ paddingLeft: "18px", paddingRight: "18px" }}
+              style={{
+                paddingLeft: "18px",
+                paddingRight: "18px",
+                paddingBottom: "6px",
+              }}
               className="flex items-stretch gap-4 overflow-x-auto snap-x snap-mandatory no-scrollbar"
             >
               {filteredActivityItems.map((ev, idx) => {
@@ -3845,102 +3863,108 @@ export default function MobileOilstainExperience() {
                   <div
                     key={ev._id || ev.id || idx}
                     onClick={() => scrollActivitiesPeekTo(idx)}
-                    style={{ padding: "12px" }}
-                    className={`shrink-0 w-[85vw] max-w-[345px] snap-center bg-white rounded-3xl border border-black/12 shadow-[0_16px_40px_rgba(0,0,0,0.08)] flex flex-col justify-between transition-all duration-300 cursor-pointer ${
+                    style={{
+                      padding: "11px",
+                      boxShadow: isSelectedCard
+                        ? "5px 5px 0px #111111"
+                        : "2px 2px 0px rgba(17,17,17,0.2)",
+                    }}
+                    className={`shrink-0 w-[85vw] max-w-[345px] snap-center bg-white rounded-3xl border-2 border-[#111111] flex flex-col justify-between transition-all duration-300 cursor-pointer ${
                       isSelectedCard
                         ? "opacity-100 scale-100"
                         : "opacity-80 scale-[0.97]"
                     }`}
                   >
                     <div>
-                      {/* 1. Top Collector Pass Header (Above Image so Poster Text is Never Covered!) */}
-                      <div
-                        style={{ padding: "2px 4px 10px" }}
-                        className="flex items-center justify-between gap-2"
-                      >
-                        <div className="flex items-center gap-1.5">
-                          <span
-                            style={{ padding: "3.5px 8px" }}
-                            className="rounded-full bg-[#111111] text-white font-mono text-[8.5px] font-bold uppercase"
-                          >
-                            #{String(idx + 1).padStart(2, "0")}
-                          </span>
-                          <span
-                            style={{
-                              padding: "3.5px 10px",
-                              backgroundColor: pillAccent,
-                            }}
-                            className="rounded-full text-[#111111] font-mono text-[8.5px] font-bold uppercase tracking-[0.14em]"
-                          >
-                            {ev.category}
-                          </span>
+                      {/* Full-Bleed 16:10 Vivid Photo Stage (No Blurry Bars!) */}
+                      <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden bg-[#111115] border border-black/15">
+                        <img
+                          src={ev.img}
+                          alt={ev.title}
+                          className="w-full h-full object-cover object-center saturate-[1.12]"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                        <div
+                          className="absolute inset-0 pointer-events-none"
+                          style={{
+                            background:
+                              "linear-gradient(180deg, rgba(0,0,0,0.3) 0%, transparent 45%, rgba(0,0,0,0.72) 100%)",
+                          }}
+                        />
+
+                        {/* Top-Left Playful Tilted Pastel Sticker */}
+                        <div
+                          style={{
+                            padding: "3.5px 10px",
+                            backgroundColor: pillAccent,
+                            transform: "rotate(-2deg)",
+                          }}
+                          className="absolute top-2.5 left-2.5 rounded-lg border border-black/20 text-[#111111] font-mono text-[8px] font-bold uppercase tracking-[0.14em] shadow-sm"
+                        >
+                          #{String(idx + 1).padStart(2, "0")} · {ev.category}
                         </div>
 
+                        {/* Top-Right Date / Live Badge */}
                         <span
                           style={{ padding: "3.5px 9px" }}
-                          className={`rounded-full font-mono text-[8px] font-bold uppercase tracking-[0.12em] ${
+                          className={`absolute top-2.5 right-2.5 rounded-full font-mono text-[8px] font-bold uppercase tracking-[0.12em] shadow-sm ${
                             ev.isUpcoming
-                              ? "bg-[#10B981]/20 text-[#0F5132]"
-                              : "bg-black/[0.06] text-black/65"
+                              ? "bg-[#10B981] text-[#050505]"
+                              : "bg-white/95 text-[#111111]"
                           }`}
                         >
                           {ev.isUpcoming ? "● LIVE RSVP" : ev.date}
                         </span>
-                      </div>
 
-                      {/* 2. Clean Un-Obscured Artwork Stage (Shows Full Poster or Photo Cleanly!) */}
-                      <div className="relative w-full aspect-[4/3.4] rounded-2xl overflow-hidden bg-[#111115] border border-black/10">
-                        {/* Blurred Ambient Backdrop so Portrait Flyers & Landscape Photos Both Look Studio-Grade */}
-                        <img
-                          src={ev.img}
-                          alt=""
-                          aria-hidden="true"
-                          className="absolute inset-0 w-full h-full object-cover blur-xl opacity-55 scale-110"
-                        />
-                        <img
-                          src={ev.img}
-                          alt={ev.title}
-                          className="relative z-10 w-full h-full object-contain"
-                          loading="lazy"
-                          decoding="async"
-                        />
-
-                        {/* Subtle Bottom-Right Film Stock Tag */}
-                        <span
-                          style={{ padding: "3px 8px" }}
-                          className="absolute bottom-2.5 right-2.5 z-20 rounded-md bg-black/75 backdrop-blur-md text-[#D4A843] font-mono text-[7.5px] font-bold uppercase tracking-[0.15em]"
+                        {/* Bottom Location & Film Stock Strip inside Photo */}
+                        <div
+                          style={{ padding: "8px 10px" }}
+                          className="absolute bottom-0 inset-x-0 flex items-center justify-between gap-2 text-white"
                         >
-                          {ev.filmStock || ev.exif || "35MM ARCHIVE"}
-                        </span>
-                      </div>
-
-                      {/* 3. Playful Perforated Ticket Cutout Divider */}
-                      <div className="relative w-full h-5 flex items-center justify-between my-1">
-                        <span className="w-4 h-4 rounded-full bg-[#F4F3EE] border border-black/10 -ml-5 shrink-0" />
-                        <div className="w-full border-t-2 border-dashed border-black/10 mx-1" />
-                        <span className="w-4 h-4 rounded-full bg-[#F4F3EE] border border-black/10 -mr-5 shrink-0" />
-                      </div>
-
-                      {/* 4. Unified Title, Location & Story Deck Inside the Card */}
-                      <div style={{ padding: "2px 6px 10px" }} className="space-y-2">
-                        <div className="flex items-center justify-between gap-2 font-mono text-[8.5px] uppercase tracking-[0.14em] text-black/50">
-                          <span className="truncate font-semibold text-[#D92B2B]">
+                          <span className="font-sans text-[10.5px] font-semibold truncate drop-shadow">
                             📍 {ev.location}
                           </span>
-                          <span className="shrink-0">{ev.date}</span>
+                          <span
+                            style={{ padding: "2px 7px" }}
+                            className="rounded bg-black/70 backdrop-blur-xs text-[#FFE066] font-mono text-[7px] font-bold uppercase tracking-wider shrink-0"
+                          >
+                            {ev.filmStock || ev.exif || "35MM"}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Perforated Ticket Cutout Divider */}
+                      <div className="relative w-full h-4 flex items-center justify-between my-1">
+                        <span className="w-3.5 h-3.5 rounded-full bg-[#F4F2EC] border border-[#111111] -ml-4 shrink-0" />
+                        <div className="w-full border-t-2 border-dashed border-black/12 mx-1.5" />
+                        <span className="w-3.5 h-3.5 rounded-full bg-[#F4F2EC] border border-[#111111] -mr-4 shrink-0" />
+                      </div>
+
+                      {/* Editorial Story Deck */}
+                      <div style={{ padding: "2px 6px 10px" }} className="space-y-1.5">
+                        <div className="flex items-center justify-between">
+                          <span className="handmade-fountain-pen text-[14px] text-[#D92B2B] leading-none">
+                            {ev.isUpcoming
+                              ? "Open for GCU registrations"
+                              : "Official Club Archive"}
+                          </span>
+                          <span className="font-mono text-[8px] font-bold text-black/45 uppercase">
+                            {ev.year || "2026"}
+                          </span>
                         </div>
 
-                        <h3 className="font-heading font-extrabold text-lg text-[#111111] tracking-tight leading-snug">
+                        <h3 className="font-serif text-xl text-[#111111] font-normal leading-tight tracking-tight">
                           {ev.title}
                         </h3>
 
-                        <p className="font-sans text-xs text-black/70 leading-relaxed line-clamp-3">
+                        <p className="font-sans text-xs text-black/70 leading-relaxed line-clamp-2">
                           {ev.description}
                         </p>
                       </div>
                     </div>
 
-                    {/* 5. Playful + Executive Full-Width Action Bar */}
+                    {/* Playful Pill Action Button */}
                     <button
                       type="button"
                       onClick={(e) => {
@@ -3949,19 +3973,22 @@ export default function MobileOilstainExperience() {
                         setRegisterSubmitted(false);
                         setIsRegisterModalOpen(true);
                       }}
-                      style={{ padding: "11px 16px" }}
-                      className={`w-full rounded-xl font-mono text-[9.5px] font-bold uppercase tracking-[0.18em] flex items-center justify-between cursor-pointer transition-all shadow-sm active:scale-[0.98] ${
+                      style={{ padding: "10px 12px 10px 16px" }}
+                      className={`w-full rounded-full font-sans text-xs font-bold tracking-wide flex items-center justify-between cursor-pointer transition-all active:scale-[0.98] ${
                         ev.isUpcoming
                           ? "bg-[#D92B2B] hover:bg-[#B91C1C] text-white"
-                          : "bg-[#111111] hover:bg-[#D4A843] text-white hover:text-[#050505]"
+                          : "bg-[#111111] hover:bg-[#D92B2B] text-white"
                       }`}
                     >
                       <span>
                         {ev.isUpcoming
-                          ? "JOIN / RSVP THIS SESSION"
-                          : "REGISTER INTEREST // ARCHIVE"}
+                          ? "Join / RSVP This Session"
+                          : "Register Interest // Archive"}
                       </span>
-                      <span className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-xs leading-none">
+                      <span
+                        style={{ backgroundColor: pillAccent }}
+                        className="w-6 h-6 rounded-full text-[#111111] flex items-center justify-center font-mono text-xs font-bold leading-none"
+                      >
                         →
                       </span>
                     </button>
@@ -3970,80 +3997,119 @@ export default function MobileOilstainExperience() {
               })}
             </div>
 
-            {/* ← PREV | Playful Pill Dots | NEXT → Controller */}
-            <div
-              style={{ padding: "4px 20px" }}
-              className="flex items-center justify-between gap-4"
-            >
-              <button
-                type="button"
-                onClick={() =>
-                  scrollActivitiesPeekTo(activeActivitySlideIdx - 1)
-                }
-                style={{ padding: "8px 14px" }}
-                className="rounded-full bg-white border border-black/12 font-mono text-[9.5px] font-bold uppercase tracking-[0.16em] text-[#111111] flex items-center gap-1.5 cursor-pointer shadow-2xs active:scale-95"
-              >
-                <span>←</span>
-                <span>PREV</span>
-              </button>
+            {/* 3. Bottom Interactive Controller + Filmstrip Quick-Jump Dock (Fills Space Cleanly!) */}
+            <div style={{ padding: "0 18px" }} className="space-y-3">
+              {/* ← PREV | Pill Dots | NEXT → */}
+              <div className="flex items-center justify-between gap-3">
+                <button
+                  type="button"
+                  onClick={() =>
+                    scrollActivitiesPeekTo(activeActivitySlideIdx - 1)
+                  }
+                  style={{ padding: "7px 14px" }}
+                  className="rounded-full bg-white border-2 border-[#111111] font-mono text-[9.5px] font-bold uppercase tracking-[0.14em] text-[#111111] flex items-center gap-1.5 cursor-pointer shadow-[2px_2px_0px_#111111] active:scale-95"
+                >
+                  <span>←</span>
+                  <span>PREV</span>
+                </button>
 
-              {/* Playful Expanding Pill Indicators */}
-              <div className="flex items-center gap-1.5 overflow-hidden max-w-[140px]">
-                {filteredActivityItems.slice(0, 8).map((_, dotIdx) => {
-                  const isCurrentDot =
-                    dotIdx ===
-                    activeActivitySlideIdx %
-                      Math.min(8, filteredActivityItems.length);
-                  return (
-                    <button
-                      key={dotIdx}
-                      type="button"
-                      onClick={() => scrollActivitiesPeekTo(dotIdx)}
-                      style={{
-                        width: isCurrentDot ? "22px" : "6px",
-                        height: "6px",
-                      }}
-                      className={`rounded-full transition-all duration-300 cursor-pointer ${
-                        isCurrentDot ? "bg-[#D92B2B]" : "bg-black/20"
-                      }`}
-                      aria-label={`Go to slide ${dotIdx + 1}`}
-                    />
-                  );
-                })}
+                <div className="flex items-center gap-1.5 overflow-hidden max-w-[140px]">
+                  {filteredActivityItems.slice(0, 8).map((_, dotIdx) => {
+                    const isCurrentDot =
+                      dotIdx ===
+                      activeActivitySlideIdx %
+                        Math.min(8, filteredActivityItems.length);
+                    return (
+                      <button
+                        key={dotIdx}
+                        type="button"
+                        onClick={() => scrollActivitiesPeekTo(dotIdx)}
+                        style={{
+                          width: isCurrentDot ? "22px" : "6px",
+                          height: "6px",
+                        }}
+                        className={`rounded-full transition-all duration-300 cursor-pointer ${
+                          isCurrentDot ? "bg-[#D92B2B]" : "bg-black/25"
+                        }`}
+                        aria-label={`Go to slide ${dotIdx + 1}`}
+                      />
+                    );
+                  })}
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    scrollActivitiesPeekTo(activeActivitySlideIdx + 1)
+                  }
+                  style={{ padding: "7px 14px" }}
+                  className="rounded-full bg-[#111111] border-2 border-[#111111] text-white font-mono text-[9.5px] font-bold uppercase tracking-[0.14em] flex items-center gap-1.5 cursor-pointer shadow-[2px_2px_0px_#D4A843] active:scale-95"
+                >
+                  <span>NEXT</span>
+                  <span>→</span>
+                </button>
               </div>
 
-              <button
-                type="button"
-                onClick={() =>
-                  scrollActivitiesPeekTo(activeActivitySlideIdx + 1)
-                }
-                style={{ padding: "8px 14px" }}
-                className="rounded-full bg-[#111111] text-white font-mono text-[9.5px] font-bold uppercase tracking-[0.16em] flex items-center gap-1.5 cursor-pointer shadow-2xs active:scale-95"
+              {/* Interactive Filmstrip Quick-Jump Dock (Eliminates Empty Bottom Space!) */}
+              <div
+                style={{ padding: "10px 12px" }}
+                className="rounded-2xl bg-white/85 border border-black/10 flex items-center justify-between gap-2.5 shadow-2xs"
               >
-                <span>NEXT</span>
-                <span>→</span>
-              </button>
+                <div className="shrink-0">
+                  <span className="font-mono text-[7.5px] tracking-[0.18em] uppercase text-black/45 font-bold block">
+                    CONTACT STRIP
+                  </span>
+                  <span className="font-serif italic text-xs text-[#111111]">
+                    Quick Jump
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
+                  {filteredActivityItems.map((thumbEv, tIdx) => {
+                    const isActiveThumb = tIdx === activeActivitySlideIdx;
+                    return (
+                      <button
+                        key={thumbEv._id || thumbEv.id || tIdx}
+                        type="button"
+                        onClick={() => scrollActivitiesPeekTo(tIdx)}
+                        style={{ width: "44px", height: "34px" }}
+                        className={`relative rounded-lg overflow-hidden shrink-0 cursor-pointer transition-all ${
+                          isActiveThumb
+                            ? "ring-2 ring-[#D92B2B] scale-105 opacity-100"
+                            : "opacity-55 hover:opacity-90"
+                        }`}
+                      >
+                        <img
+                          src={thumbEv.img}
+                          alt={thumbEv.shortTitle || thumbEv.title}
+                          className="w-full h-full object-cover"
+                        />
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Compact Dark Editorial Footer Strip */}
+          {/* 4. Compact Dark Editorial Footer Strip */}
           <div
-            style={{ padding: "18px 20px" }}
-            className="bg-[#111113] text-white flex items-center justify-between gap-3"
+            style={{ padding: "14px 20px" }}
+            className="bg-[#111113] text-white flex items-center justify-between gap-3 shrink-0"
           >
             <div>
-              <span className="font-serif italic text-base text-[#D4A843] block leading-none">
+              <span className="font-serif italic text-sm text-[#FFE066] block leading-none">
                 ShutterScape GCU
               </span>
-              <p className="font-sans text-[11px] text-white/65 mt-1">
+              <p className="font-sans text-[10.5px] text-white/65 mt-0.5">
                 Capturing stories that outlive the moment.
               </p>
             </div>
             <button
               type="button"
               onClick={() => setIsActivitiesPageOpen(false)}
-              style={{ padding: "7px 12px" }}
-              className="rounded-full bg-white/10 hover:bg-white/20 text-white font-mono text-[8.5px] font-bold uppercase tracking-widest shrink-0 cursor-pointer"
+              style={{ padding: "6px 12px" }}
+              className="rounded-full bg-white/10 hover:bg-white/20 text-white font-mono text-[8px] font-bold uppercase tracking-widest shrink-0 cursor-pointer"
             >
               CLOSE ✕
             </button>
