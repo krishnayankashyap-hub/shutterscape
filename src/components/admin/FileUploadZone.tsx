@@ -28,7 +28,7 @@ export default function FileUploadZone({
   const [fileName, setFileName] = useState<string | null>(null);
   const [fileSize, setFileSize] = useState<string | null>(null);
   const [localPreview, setLocalPreview] = useState<string | null>(null);
-  const [isR2Ready, setIsR2Ready] = useState(false);
+  const [storageProvider, setStorageProvider] = useState<"cloudinary" | "cloudflare-r2" | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -36,8 +36,10 @@ export default function FileUploadZone({
     fetch("/api/upload")
       .then((res) => res.json())
       .then((data) => {
-        if (data.storage === "cloudflare-r2" || data.cloudflareR2?.configured) {
-          setIsR2Ready(true);
+        if (data.storage === "cloudinary" || data.cloudinary?.configured) {
+          setStorageProvider("cloudinary");
+        } else if (data.storage === "cloudflare-r2" || data.cloudflareR2?.configured) {
+          setStorageProvider("cloudflare-r2");
         }
       })
       .catch(() => {});
@@ -124,7 +126,47 @@ export default function FileUploadZone({
     setLocalPreview(localPreviewUrl);
 
     try {
-      // 1. Direct Cloudflare R2 Presigned Upload (Bypasses Vercel 4.5MB limit, supports videos up to 100MB)
+      // 1. Direct Cloudinary Signed Upload (100% Free, No Credit Card, Bypasses Vercel 4.5MB limit, supports videos up to 100MB)
+      try {
+        const signRes = await fetch("/api/upload/cloudinary-sign", {
+          method: "POST",
+        });
+
+        if (signRes.ok) {
+          const signData = await signRes.json();
+          if (signData.enabled && signData.cloudName && signData.signature) {
+            const cldFormData = new FormData();
+            cldFormData.append("file", file);
+            cldFormData.append("api_key", signData.apiKey);
+            cldFormData.append("timestamp", String(signData.timestamp));
+            cldFormData.append("signature", signData.signature);
+            cldFormData.append("folder", signData.folder);
+
+            const cldRes = await fetch(
+              `https://api.cloudinary.com/v1_1/${signData.cloudName}/auto/upload`,
+              {
+                method: "POST",
+                body: cldFormData,
+              }
+            );
+
+            if (cldRes.ok) {
+              const cldResult = await cldRes.json();
+              if (cldResult.secure_url) {
+                onChange(cldResult.secure_url);
+                setLocalPreview(null);
+                setUploadError(null);
+                setIsUploading(false);
+                return;
+              }
+            }
+          }
+        }
+      } catch (cldErr) {
+        console.warn("Direct Cloudinary upload skipped:", cldErr);
+      }
+
+      // 2. Direct Cloudflare R2 Presigned Upload (Bypasses Vercel 4.5MB limit)
       try {
         const presignRes = await fetch("/api/upload/presign", {
           method: "POST",
@@ -160,10 +202,10 @@ export default function FileUploadZone({
         console.warn("Direct Cloudflare R2 upload skipped:", presignErr);
       }
 
-      // 2. Standard Serverless Fallback (/api/upload)
+      // 3. Standard Serverless Fallback (/api/upload)
       if (file.type.startsWith("video/") && file.size > 4.5 * 1024 * 1024) {
         setUploadError(
-          `Video size (${formatBytes(file.size)}) exceeds Vercel's 4.5MB serverless limit. Configure Cloudflare R2 in your Vercel settings for direct unlimited uploads, or click 'Paste URL instead' above.`
+          `Video size (${formatBytes(file.size)}) exceeds Vercel's 4.5MB serverless limit. Configure Cloudinary in your Vercel settings for direct unlimited uploads, or click 'Paste URL instead' above.`
         );
         setLocalPreview(null);
         setIsUploading(false);
@@ -268,11 +310,20 @@ export default function FileUploadZone({
           <label className="text-xs font-bold uppercase tracking-wider text-[#2A3547]">
             {label}
           </label>
-          {isR2Ready && (
+          {storageProvider === "cloudinary" && (
             <span
               style={{ padding: "1px 7px" }}
               className="rounded-full bg-[#EBF5FF] text-[#0066CC] border border-[#0066CC]/25 font-mono text-[9px] font-bold"
-              title="Cloudflare R2 Direct Storage Active (10GB Free, 0 Egress)"
+              title="Cloudinary Media Storage Active (25GB Free, Global CDN)"
+            >
+              ☁️ Cloudinary
+            </span>
+          )}
+          {storageProvider === "cloudflare-r2" && (
+            <span
+              style={{ padding: "1px 7px" }}
+              className="rounded-full bg-[#FFF4E6] text-[#D97706] border border-[#D97706]/25 font-mono text-[9px] font-bold"
+              title="Cloudflare R2 Direct Storage Active"
             >
               ☁️ Cloudflare R2
             </span>

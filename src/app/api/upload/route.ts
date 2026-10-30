@@ -2,14 +2,25 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import { UploadMedia } from "@/models/UploadMedia";
+import { isCloudinaryConfigured, uploadToCloudinary } from "@/lib/cloudinary";
 import { isR2Configured, uploadToR2 } from "@/lib/r2";
 import sharp from "sharp";
 
 export async function GET() {
+  const cldActive = isCloudinaryConfigured();
   const r2Active = isR2Configured();
+
+  let storage = "mongodb-fallback";
+  if (cldActive) storage = "cloudinary";
+  else if (r2Active) storage = "cloudflare-r2";
+
   return NextResponse.json({
     success: true,
-    storage: r2Active ? "cloudflare-r2" : "mongodb-fallback",
+    storage,
+    cloudinary: {
+      configured: cldActive,
+      cloudName: process.env.CLOUDINARY_CLOUD_NAME || null,
+    },
     cloudflareR2: {
       configured: r2Active,
       bucket: process.env.R2_BUCKET_NAME || null,
@@ -61,7 +72,24 @@ export async function POST(request: Request) {
       }
     }
 
-    // PRIMARY DESTINATION: Cloudflare R2 (10GB Free, 0 Egress Fees, CDN URLs)
+    // 1. PRIMARY: Cloudinary (100% Free, No Credit Card, 25GB Storage/Bandwidth)
+    if (isCloudinaryConfigured()) {
+      try {
+        const cldRes = await uploadToCloudinary(buffer, originalName);
+        return NextResponse.json({
+          success: true,
+          url: cldRes.secure_url,
+          provider: "cloudinary",
+          filename: originalName,
+          size: buffer.length,
+          mimeType,
+        });
+      } catch (cldErr) {
+        console.error("Cloudinary upload failed, checking next fallback:", cldErr);
+      }
+    }
+
+    // 2. SECONDARY: Cloudflare R2
     if (isR2Configured()) {
       try {
         const { url } = await uploadToR2(buffer, originalName, mimeType);
@@ -74,14 +102,11 @@ export async function POST(request: Request) {
           mimeType,
         });
       } catch (r2Error) {
-        console.error(
-          "Cloudflare R2 upload failed, falling back to MongoDB:",
-          r2Error
-        );
+        console.error("Cloudflare R2 upload failed, falling back to MongoDB:", r2Error);
       }
     }
 
-    // SECONDARY FALLBACK: MongoDB Atlas Base64 Cloud Asset
+    // 3. TERTIARY: MongoDB Atlas Base64 Cloud Asset
     const base64Data = buffer.toString("base64");
     const conn = await connectDB();
     if (conn) {
@@ -104,7 +129,7 @@ export async function POST(request: Request) {
       });
     }
 
-    // TERTIARY FALLBACK: Data URI
+    // 4. QUATERNARY: Data URI
     const dataUri = `data:${mimeType};base64,${base64Data}`;
     return NextResponse.json({
       success: true,
@@ -119,8 +144,7 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         success: false,
-        message:
-          error instanceof Error ? error.message : "Failed to upload file",
+        message: error instanceof Error ? error.message : "Failed to upload file",
       },
       { status: 500 }
     );
