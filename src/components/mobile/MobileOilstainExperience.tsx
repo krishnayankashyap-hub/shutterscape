@@ -562,20 +562,13 @@ const StopMotionFlipbook = React.memo(function StopMotionFlipbook({
         , and creative excess.
       </p>
 
-      {/* Restored Original Giant Static "SHUTTER*SCAPE*" Background Block + FULL-COLOR Stop-Motion Photo */}
+      {/* Clean Plain White Background Block + FULL-COLOR Stop-Motion Photo */}
       <div
         ref={containerRef}
         onClick={() => setPhotoIdx((prev) => (prev + 1) % matrixStack.length)}
-        style={{ paddingTop: "24px", paddingBottom: "24px" }}
-        className="relative w-full overflow-hidden flex items-center justify-center border-y border-black/15 bg-[#FAF9F5] cursor-pointer"
+        style={{ paddingTop: "24px", paddingBottom: "24px", minHeight: "280px" }}
+        className="relative w-full overflow-hidden flex items-center justify-center border-y border-black/15 bg-white cursor-pointer"
       >
-        <div
-          aria-hidden="true"
-          className="font-heading font-black text-[13vw] leading-[0.86] tracking-[-0.04em] uppercase text-[#111111] text-center select-none break-all"
-        >
-          SHUTTER*SCAPE*GCU*35MM*RAW*OPTICS*DARKROOM*ASSAM*
-        </div>
-
         {matrixStack.map((frame, i) => {
           const isCurrent = i === photoIdx % matrixStack.length;
           const isPortrait = frame.orientation === "portrait";
