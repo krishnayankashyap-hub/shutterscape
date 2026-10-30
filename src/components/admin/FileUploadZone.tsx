@@ -1,7 +1,7 @@
 // src/components/admin/FileUploadZone.tsx
 "use client";
 
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 import Image from "next/image";
 
 interface FileUploadZoneProps {
@@ -28,8 +28,20 @@ export default function FileUploadZone({
   const [fileName, setFileName] = useState<string | null>(null);
   const [fileSize, setFileSize] = useState<string | null>(null);
   const [localPreview, setLocalPreview] = useState<string | null>(null);
+  const [isR2Ready, setIsR2Ready] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    fetch("/api/upload")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.storage === "cloudflare-r2" || data.cloudflareR2?.configured) {
+          setIsR2Ready(true);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   // Accepted file types
   const acceptTypes =
@@ -111,17 +123,53 @@ export default function FileUploadZone({
     const localPreviewUrl = URL.createObjectURL(file);
     setLocalPreview(localPreviewUrl);
 
-    // Validate video file size against Vercel's 4.5MB serverless payload limit
-    if (file.type.startsWith("video/") && file.size > 4 * 1024 * 1024) {
-      setUploadError(
-        `Video size (${formatBytes(file.size)}) exceeds Vercel's 4MB serverless upload limit. Please trim the clip, or click 'Paste URL instead' above to link any external video URL (Google Drive, Cloudinary, YouTube, Imgur, etc.).`
-      );
-      setLocalPreview(null);
-      setIsUploading(false);
-      return;
-    }
-
     try {
+      // 1. Direct Cloudflare R2 Presigned Upload (Bypasses Vercel 4.5MB limit, supports videos up to 100MB)
+      try {
+        const presignRes = await fetch("/api/upload/presign", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            filename: file.name,
+            contentType: file.type || "application/octet-stream",
+            size: file.size,
+          }),
+        });
+
+        if (presignRes.ok) {
+          const presignData = await presignRes.json();
+          if (presignData.enabled && presignData.uploadUrl && presignData.publicUrl) {
+            const putRes = await fetch(presignData.uploadUrl, {
+              method: "PUT",
+              headers: {
+                "Content-Type": file.type || "application/octet-stream",
+              },
+              body: file,
+            });
+
+            if (putRes.ok) {
+              onChange(presignData.publicUrl);
+              setLocalPreview(null);
+              setUploadError(null);
+              setIsUploading(false);
+              return;
+            }
+          }
+        }
+      } catch (presignErr) {
+        console.warn("Direct Cloudflare R2 upload skipped:", presignErr);
+      }
+
+      // 2. Standard Serverless Fallback (/api/upload)
+      if (file.type.startsWith("video/") && file.size > 4.5 * 1024 * 1024) {
+        setUploadError(
+          `Video size (${formatBytes(file.size)}) exceeds Vercel's 4.5MB serverless limit. Configure Cloudflare R2 in your Vercel settings for direct unlimited uploads, or click 'Paste URL instead' above.`
+        );
+        setLocalPreview(null);
+        setIsUploading(false);
+        return;
+      }
+
       const optimizedFile = await compressImageIfNeeded(file);
       setFileSize(formatBytes(optimizedFile.size));
 
@@ -135,7 +183,7 @@ export default function FileUploadZone({
 
       if (res.status === 413) {
         throw new Error(
-          "File exceeds Vercel's 4.5MB serverless upload limit. Please use a compressed file or click 'Paste URL instead' above."
+          "File exceeds Vercel's 4.5MB serverless upload limit. Configure Cloudflare R2 for direct uploads or click 'Paste URL instead' above."
         );
       }
 
@@ -216,9 +264,20 @@ export default function FileUploadZone({
     <div className={`space-y-2.5 ${className}`}>
       {/* Label and Mode Toggle Row */}
       <div className="flex items-center justify-between">
-        <label className="text-xs font-bold uppercase tracking-wider text-[#2A3547]">
-          {label}
-        </label>
+        <div className="flex items-center gap-2">
+          <label className="text-xs font-bold uppercase tracking-wider text-[#2A3547]">
+            {label}
+          </label>
+          {isR2Ready && (
+            <span
+              style={{ padding: "1px 7px" }}
+              className="rounded-full bg-[#EBF5FF] text-[#0066CC] border border-[#0066CC]/25 font-mono text-[9px] font-bold"
+              title="Cloudflare R2 Direct Storage Active (10GB Free, 0 Egress)"
+            >
+              ☁️ Cloudflare R2
+            </span>
+          )}
+        </div>
         <button
           type="button"
           onClick={() => setShowUrlInput(!showUrlInput)}

@@ -2,7 +2,21 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import { UploadMedia } from "@/models/UploadMedia";
+import { isR2Configured, uploadToR2 } from "@/lib/r2";
 import sharp from "sharp";
+
+export async function GET() {
+  const r2Active = isR2Configured();
+  return NextResponse.json({
+    success: true,
+    storage: r2Active ? "cloudflare-r2" : "mongodb-fallback",
+    cloudflareR2: {
+      configured: r2Active,
+      bucket: process.env.R2_BUCKET_NAME || null,
+      publicUrl: process.env.R2_PUBLIC_URL || null,
+    },
+  });
+}
 
 export async function POST(request: Request) {
   try {
@@ -21,7 +35,7 @@ export async function POST(request: Request) {
     let mimeType = file.type || "image/jpeg";
     const originalName = file.name || "upload.jpg";
 
-    // Auto-compress images to ultra-fast lightweight WebP before storing in MongoDB
+    // Auto-compress raster images to lightweight WebP if appropriate
     if (
       mimeType.startsWith("image/") &&
       !mimeType.includes("svg") &&
@@ -30,25 +44,47 @@ export async function POST(request: Request) {
       try {
         const webpBuf = await sharp(buffer)
           .resize({
-            width: 1600,
-            height: 1600,
+            width: 2000,
+            height: 2000,
             fit: "inside",
             withoutEnlargement: true,
           })
-          .webp({ quality: 82 })
+          .webp({ quality: 85 })
           .toBuffer();
         buffer = webpBuf;
         mimeType = "image/webp";
       } catch (compressionErr) {
-        console.warn("Upload image compression failed, using original:", compressionErr);
+        console.warn(
+          "Upload image compression failed, using original buffer:",
+          compressionErr
+        );
       }
     }
 
-    const base64Data = buffer.toString("base64");
+    // PRIMARY DESTINATION: Cloudflare R2 (10GB Free, 0 Egress Fees, CDN URLs)
+    if (isR2Configured()) {
+      try {
+        const { url } = await uploadToR2(buffer, originalName, mimeType);
+        return NextResponse.json({
+          success: true,
+          url,
+          provider: "cloudflare-r2",
+          filename: originalName,
+          size: buffer.length,
+          mimeType,
+        });
+      } catch (r2Error) {
+        console.error(
+          "Cloudflare R2 upload failed, falling back to MongoDB:",
+          r2Error
+        );
+      }
+    }
 
+    // SECONDARY FALLBACK: MongoDB Atlas Base64 Cloud Asset
+    const base64Data = buffer.toString("base64");
     const conn = await connectDB();
     if (conn) {
-      // Store in MongoDB Atlas as a persistent cloud media asset
       const media = await UploadMedia.create({
         filename: originalName,
         mimeType,
@@ -61,17 +97,19 @@ export async function POST(request: Request) {
       return NextResponse.json({
         success: true,
         url: publicUrl,
+        provider: "mongodb",
         filename: originalName,
         size: buffer.length,
         mimeType,
       });
     }
 
-    // High-availability fallback: Data URI
+    // TERTIARY FALLBACK: Data URI
     const dataUri = `data:${mimeType};base64,${base64Data}`;
     return NextResponse.json({
       success: true,
       url: dataUri,
+      provider: "data-uri",
       filename: originalName,
       size: buffer.length,
       mimeType,
@@ -81,7 +119,8 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         success: false,
-        message: error instanceof Error ? error.message : "Failed to upload file",
+        message:
+          error instanceof Error ? error.message : "Failed to upload file",
       },
       { status: 500 }
     );
