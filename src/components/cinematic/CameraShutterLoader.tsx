@@ -7,6 +7,11 @@ import { usePathname } from "next/navigation";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+// Register GSAP plugins immediately to prevent execution failures
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
 const CRITICAL_IMAGE_ASSETS = [
   "/images/gcu-campus-anime.jpg",
   "/images/gcu-campus-sketch.jpg",
@@ -109,11 +114,7 @@ export default function CameraShutterLoader() {
       } catch {}
     };
 
-    // 3. VIDEO 10 PRELOADER TIMELINE:
-    //    - 000 -> 100 PERCENT counter on right, [ THE ART OF SHUTTERSCAPE ] on left
-    //    - Center [ + ] viewfinder brackets lock in
-    //    - Vertical 3-frame filmstrip glides in with Live Website Hero Preview in center
-    //    - Center Website Preview expands smoothly to 100vw x 100vh and reveals the live site!
+    // 3. TIMELINE SETUP
     const counterObj = { val: 0 };
 
     const tl = gsap.timeline({
@@ -129,7 +130,9 @@ export default function CameraShutterLoader() {
       },
     });
 
-    gsap.set(reelColumnRef.current, { y: "38vh", opacity: 0 });
+    if (reelColumnRef.current) {
+      gsap.set(reelColumnRef.current, { y: "38vh", opacity: 0 });
+    }
 
     // Count from 000 to 100 PERCENT over 1.75s
     tl.to(
@@ -145,52 +148,58 @@ export default function CameraShutterLoader() {
       0
     );
 
-    // At 0.35s: Fade out center "+" crosshair as the 3-frame vertical reel glides into the brackets
-    tl.to(
-      crosshairRef.current,
-      {
-        opacity: 0,
-        scale: 0.5,
-        duration: 0.25,
-        ease: "power2.out",
-      },
-      0.35
-    );
+    if (crosshairRef.current) {
+      tl.to(
+        crosshairRef.current,
+        {
+          opacity: 0,
+          scale: 0.5,
+          duration: 0.25,
+          ease: "power2.out",
+        },
+        0.35
+      );
+    }
 
-    tl.to(
-      reelColumnRef.current,
-      {
-        y: "0vh",
-        opacity: 1,
-        duration: 1.15,
-        ease: "expo.out",
-        onStart: () => playShutterLockSound(),
-      },
-      0.35
-    );
+    if (reelColumnRef.current) {
+      tl.to(
+        reelColumnRef.current,
+        {
+          y: "0vh",
+          opacity: 1,
+          duration: 1.15,
+          ease: "expo.out",
+          onStart: () => playShutterLockSound(),
+        },
+        0.35
+      );
+    }
 
-    // At 1.65s: Top and bottom neighbor reel frames slide away & fade out
-    tl.to(
-      topReelFrameRef.current,
-      {
-        y: -60,
-        opacity: 0,
-        duration: 0.45,
-        ease: "power3.in",
-      },
-      1.65
-    );
+    if (topReelFrameRef.current) {
+      tl.to(
+        topReelFrameRef.current,
+        {
+          y: -60,
+          opacity: 0,
+          duration: 0.45,
+          ease: "power3.in",
+        },
+        1.65
+      );
+    }
 
-    tl.to(
-      bottomReelFrameRef.current,
-      {
-        y: 60,
-        opacity: 0,
-        duration: 0.45,
-        ease: "power3.in",
-      },
-      1.65
-    );
+    if (bottomReelFrameRef.current) {
+      tl.to(
+        bottomReelFrameRef.current,
+        {
+          y: 60,
+          opacity: 0,
+          duration: 0.45,
+          ease: "power3.in",
+        },
+        1.65
+      );
+    }
 
     tl.to(
       [
@@ -206,30 +215,32 @@ export default function CameraShutterLoader() {
       1.7
     );
 
-    // At 1.8s: Expand the Center Website Preview Frame to Fullscreen (100vw x 100vh)
-    tl.to(
-      centerWebsitePreviewRef.current,
-      {
-        width: "100vw",
-        height: "100vh",
-        borderRadius: "0px",
-        duration: 0.75,
-        ease: "expo.inOut",
-      },
-      1.75
-    );
+    if (centerWebsitePreviewRef.current) {
+      tl.to(
+        centerWebsitePreviewRef.current,
+        {
+          width: "100vw",
+          height: "100vh",
+          borderRadius: "0px",
+          duration: 0.75,
+          ease: "expo.inOut",
+        },
+        1.75
+      );
+    }
 
-    // Dissolve the preloader wrapper seamlessly into the live interactive website
-    tl.to(
-      loaderRef.current,
-      {
-        opacity: 0,
-        pointerEvents: "none",
-        duration: 0.4,
-        ease: "power2.out",
-      },
-      2.35
-    );
+    if (loaderRef.current) {
+      tl.to(
+        loaderRef.current,
+        {
+          opacity: 0,
+          pointerEvents: "none",
+          duration: 0.4,
+          ease: "power2.out",
+        },
+        2.35
+      );
+    }
 
     return () => {
       tl.kill();
@@ -246,7 +257,7 @@ export default function CameraShutterLoader() {
       className="fixed inset-0 z-[99999] bg-[#040405] text-white flex items-center justify-center overflow-hidden select-none cursor-default"
       style={{ willChange: "opacity" }}
     >
-      {/* Left Telemetry Label: [ THE ART OF SHUTTERSCAPE ] (Matches Video 10!) */}
+      {/* Left Telemetry Label */}
       <div
         ref={leftLabelRef}
         className="fixed left-3 sm:left-8 top-1/2 -translate-y-1/2 z-30 font-mono text-[8.5px] sm:text-[10px] tracking-[0.22em] text-white/80 uppercase pointer-events-none"
@@ -254,7 +265,7 @@ export default function CameraShutterLoader() {
         [ THE ART OF SHUTTERSCAPE ]
       </div>
 
-      {/* Right Percentage Counter: [ 000 PERCENT ] -> [ 100 PERCENT ] (Matches Video 10!) */}
+      {/* Right Percentage Counter */}
       <div
         ref={rightCounterRef}
         className="fixed right-3 sm:right-8 top-1/2 -translate-y-1/2 z-30 font-mono text-[8.5px] sm:text-[10px] tracking-[0.22em] text-white/80 uppercase pointer-events-none"
@@ -262,7 +273,7 @@ export default function CameraShutterLoader() {
         [ {formattedPercent} PERCENT ]
       </div>
 
-      {/* Center Viewfinder Reticle [ + ] Corner Brackets (Matches Video 10 00:00!) */}
+      {/* Center Viewfinder Reticle */}
       <div
         ref={bracketsWrapRef}
         style={{
@@ -273,13 +284,11 @@ export default function CameraShutterLoader() {
         }}
         className="relative z-20 flex items-center justify-center pointer-events-none"
       >
-        {/* 4 Crisp Corner Brackets */}
         <span className="absolute -top-2 -left-2 w-3.5 h-3.5 border-t border-l border-white/75" />
         <span className="absolute -top-2 -right-2 w-3.5 h-3.5 border-t border-r border-white/75" />
         <span className="absolute -bottom-2 -left-2 w-3.5 h-3.5 border-b border-l border-white/75" />
         <span className="absolute -bottom-2 -right-2 w-3.5 h-3.5 border-b border-r border-white/75" />
 
-        {/* Center Crosshair "+" */}
         <span
           ref={crosshairRef}
           className="font-mono text-sm text-white/75 font-light leading-none"
@@ -288,13 +297,12 @@ export default function CameraShutterLoader() {
         </span>
       </div>
 
-      {/* Vertical 3-Frame Filmstrip Column (Glides into the center brackets and expands to the live website!) */}
+      {/* Vertical Filmstrip Column */}
       <div
         ref={reelColumnRef}
         className="fixed inset-0 z-10 flex flex-col items-center justify-center gap-4 pointer-events-none"
         style={{ opacity: 0 }}
       >
-        {/* Top Neighbor Frame in Reel */}
         <div
           ref={topReelFrameRef}
           style={{
@@ -316,8 +324,6 @@ export default function CameraShutterLoader() {
           />
         </div>
 
-        {/* CENTER FRAME: LIVE PREVIEW OF THE SHUTTERSCAPE WEBSITE HERO!
-            Sits inside the [ ] brackets, then expands to 100vw x 100vh! */}
         <div
           ref={centerWebsitePreviewRef}
           style={{
@@ -341,7 +347,6 @@ export default function CameraShutterLoader() {
             }}
           />
 
-          {/* Miniaturized Live Preview of the Website Hero Title */}
           <div className="relative z-10 flex flex-col items-center text-center px-3">
             <span className="font-mono text-[6px] sm:text-[8px] tracking-[0.24em] uppercase text-[#D4A843] font-bold mb-1">
               EST. 2023 · GCU PHOTOGRAPHY CLUB
@@ -352,7 +357,6 @@ export default function CameraShutterLoader() {
           </div>
         </div>
 
-        {/* Bottom Neighbor Frame in Reel */}
         <div
           ref={bottomReelFrameRef}
           style={{
