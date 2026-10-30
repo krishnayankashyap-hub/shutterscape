@@ -3306,102 +3306,123 @@ export default function MobileOilstainExperience() {
       </section>
 
       {/* ============================================================
-          7. COMPACT CORPORATE-GRADE MINIMALIST FOOTER + FULL WATERMARK
+          7. COMPACT CORPORATE-GRADE MINIMALIST FOOTER (ZERO OVERFLOW)
           ============================================================ */}
       <footer
         id="mobile-global-footer"
         style={{
-          padding: "20px 18px 68px 18px",
+          padding: "18px 14px 82px 14px",
           backgroundColor: "#FAF9F5",
           color: "#0A0A0C",
         }}
         className="relative z-20 w-full border-t border-black/10 select-none overflow-hidden"
       >
-        {/* Full-Width Edge-to-Edge SHUTTERSCAPE Backdrop Watermark (All 12 Letters Visible!) */}
+        {/* Responsive SVG Watermark: Guarantees all 12 letters of SHUTTERSCAPE fit 100% inside the screen */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 bottom-10 flex items-center justify-center overflow-hidden select-none"
+          className="pointer-events-none absolute inset-x-3 bottom-12 flex items-center justify-center overflow-hidden select-none"
         >
-          <span className="font-heading font-black text-[11.2vw] tracking-[-0.04em] uppercase text-black/[0.045] leading-none whitespace-nowrap">
-            SHUTTERSCAPE
-          </span>
+          <svg
+            viewBox="0 0 620 64"
+            className="w-full h-auto overflow-visible"
+            preserveAspectRatio="xMidYMid meet"
+          >
+            <text
+              x="50%"
+              y="52"
+              textAnchor="middle"
+              fill="rgba(10, 10, 12, 0.045)"
+              style={{
+                fontFamily: "var(--font-sora), system-ui, sans-serif",
+                fontWeight: 900,
+                fontSize: "62px",
+                letterSpacing: "0.02em",
+              }}
+            >
+              SHUTTERSCAPE
+            </text>
+          </svg>
         </div>
 
-        <div className="relative z-10 max-w-md mx-auto flex flex-col gap-3">
-          {/* ROW 1: Dual Brand Crest (Left) + Direct Social Pills (Right) */}
+        <div className="relative z-10 w-full max-w-md mx-auto flex flex-col gap-2.5">
+          {/* ROW 1: Dual Brand Crest (Left) + Compact Social Pills (Right — Zero Right Overflow!) */}
           <div
-            style={{ paddingBottom: "11px" }}
-            className="flex items-center justify-between gap-2 border-b border-black/[0.08]"
+            style={{ paddingBottom: "10px" }}
+            className="w-full flex items-center justify-between gap-1.5 border-b border-black/[0.08]"
           >
-            <div className="flex items-center gap-2.5 shrink-0">
-              <div className="relative h-5 w-[76px]">
+            <div className="flex items-center gap-2 min-w-0 shrink">
+              <div
+                style={{ width: "64px", height: "18px" }}
+                className="relative shrink-0"
+              >
                 <Image
                   src="/images/shutterscape-logo-cropped.png"
                   alt="ShutterScape"
                   fill
-                  sizes="76px"
+                  sizes="64px"
                   unoptimized
                   className="object-contain object-left"
                 />
               </div>
 
-              <span className="h-3.5 w-[1px] bg-black/15" />
+              <span className="h-3 w-[1px] bg-black/15 shrink-0" />
 
               <a
                 href="https://gcu.ac.in"
                 target="_blank"
                 rel="noopener noreferrer"
                 title="Girijananda Chowdhury University"
-                className="relative h-5 w-[82px] opacity-90 hover:opacity-100 transition-opacity"
+                style={{ width: "70px", height: "18px" }}
+                className="relative opacity-90 hover:opacity-100 transition-opacity shrink-0"
               >
                 <Image
                   src="/images/gcu-logo-black-text.png"
                   alt="GCU"
                   fill
-                  sizes="82px"
+                  sizes="70px"
                   unoptimized
                   className="object-contain object-left"
                 />
               </a>
             </div>
 
-            {/* Minimalist Corporate Social Pills */}
-            <div className="flex items-center gap-1.5 shrink-0">
+            {/* Compact Corporate Social Pills */}
+            <div className="flex items-center gap-1 shrink-0">
               <a
                 href="https://www.instagram.com/shutterscape_gcu"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ padding: "5px 10px" }}
-                className="rounded-full bg-black/[0.04] hover:bg-[#111111] text-[#111111] hover:text-white font-sans text-[10px] font-semibold tracking-tight flex items-center gap-1 transition-colors"
+                style={{ padding: "4px 8px" }}
+                className="rounded-full bg-black/[0.05] hover:bg-[#111111] text-[#111111] hover:text-white font-sans text-[9.5px] font-semibold tracking-tight flex items-center gap-0.5 transition-colors whitespace-nowrap"
               >
                 <span>Instagram</span>
-                <span className="text-[9px] opacity-60">↗</span>
+                <span className="text-[8.5px] opacity-60">↗</span>
               </a>
               <a
                 href="https://chat.whatsapp.com/Hs71BicR1Xj3PmOyPJ5wdc?s=sw&p=a&mlu=4&ilr=4"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ padding: "5px 10px" }}
-                className="rounded-full bg-[#111111] text-white font-sans text-[10px] font-semibold tracking-tight flex items-center gap-1 transition-opacity hover:opacity-85"
+                style={{ padding: "4px 8px" }}
+                className="rounded-full bg-[#111111] text-white font-sans text-[9.5px] font-semibold tracking-tight flex items-center gap-0.5 transition-opacity hover:opacity-85 whitespace-nowrap"
               >
                 <span>WhatsApp</span>
-                <span className="text-[9px] text-[#D4A843]">↗</span>
+                <span className="text-[8.5px] text-[#D4A843]">↗</span>
               </a>
             </div>
           </div>
 
-          {/* ROW 2: Sleek Single-Line Contact & Campus Map Strip (Zero Emojis) */}
+          {/* ROW 2: Sleek Single-Line Contact & Campus Map Strip */}
           <div
-            style={{ paddingBottom: "11px" }}
-            className="flex items-center justify-between gap-3 border-b border-black/[0.08] font-sans text-[11px] text-black/75"
+            style={{ paddingBottom: "10px" }}
+            className="w-full flex items-center justify-between gap-2 border-b border-black/[0.08] font-sans text-[10px] text-black/75"
           >
             <a
               href="mailto:shutterscape@gcuniversity.ac.in"
-              className="flex items-center gap-1.5 hover:text-black transition-colors truncate"
+              className="flex items-center gap-1.5 hover:text-black transition-colors min-w-0 truncate"
             >
               <svg
-                width="12"
-                height="12"
+                width="11"
+                height="11"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -3422,11 +3443,11 @@ export default function MobileOilstainExperience() {
               href="https://maps.app.goo.gl/NhdHs1u76Bjxo2J87"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1 text-black/65 hover:text-black font-medium shrink-0 transition-colors"
+              className="flex items-center gap-1 text-black/65 hover:text-black font-medium shrink-0 whitespace-nowrap transition-colors"
             >
               <svg
-                width="11"
-                height="11"
+                width="10"
+                height="10"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -3439,17 +3460,17 @@ export default function MobileOilstainExperience() {
                 <circle cx="12" cy="10" r="3" />
               </svg>
               <span>Azara, Guwahati</span>
-              <span className="text-[9px] opacity-50">↗</span>
+              <span className="text-[8.5px] opacity-50">↗</span>
             </a>
           </div>
 
-          {/* ROW 3: Compact Legal & Attribution Bar */}
-          <div className="flex items-center justify-between gap-2 pt-0.5 font-sans text-[10px] text-black/50">
-            <span className="font-mono text-[8.5px] tracking-[0.12em] uppercase">
+          {/* ROW 3: Compact Legal & Attribution Bar (Clears the Floating Navbar Bubble!) */}
+          <div className="w-full flex items-center justify-between gap-2 pt-0.5 font-sans text-[9.5px] text-black/50">
+            <span className="font-mono text-[8px] tracking-[0.1em] uppercase whitespace-nowrap">
               © 2026 SHUTTERSCAPE GCU
             </span>
 
-            <div className="flex items-center gap-1.5 text-[10.5px] text-black/65">
+            <div className="flex items-center gap-1 text-[9.5px] text-black/65 whitespace-nowrap">
               <span>
                 Crafted by{" "}
                 <strong className="font-semibold text-[#111111]">
@@ -3461,7 +3482,7 @@ export default function MobileOilstainExperience() {
                 href="https://codingclub.gcuniversity.ac.in"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-medium text-[#111111] hover:underline"
+                className="font-semibold text-[#111111] hover:underline"
               >
                 Codénix
               </a>
