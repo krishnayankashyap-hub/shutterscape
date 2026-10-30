@@ -2601,7 +2601,7 @@ export default function MobileOilstainExperience() {
         />
 
         <div
-          style={{ padding: "30px 18px 22px" }}
+          style={{ padding: "36px 18px 24px" }}
           className="relative z-10 space-y-4"
         >
           {/* TOP HEADER: Editorial + Playful Title & Status Pill */}
@@ -2650,7 +2650,7 @@ export default function MobileOilstainExperience() {
 
           {/* PLAYFUL PILL-SHAPED 2-PART SWITCHER: UPCOMING vs LIVE GOING */}
           <div
-            style={{ padding: "4px" }}
+            style={{ padding: "4px", marginTop: "16px" }}
             className="grid grid-cols-2 gap-1.5 rounded-full bg-white/[0.07] border border-white/15 backdrop-blur-md"
           >
             <button
@@ -2691,6 +2691,7 @@ export default function MobileOilstainExperience() {
           {/* PLAYFUL + PROFESSIONAL TWO-TONE COLLECTOR PASS CARD */}
           <div
             style={{
+              marginTop: "24px",
               boxShadow:
                 spotlightTab === "LIVE"
                   ? "0 22px 50px rgba(0,0,0,0.75), 4px 4px 0px #FF5A5F"
