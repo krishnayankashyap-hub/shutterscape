@@ -1010,7 +1010,7 @@ export default function MobileOilstainExperience() {
     }
   };
 
-  const lockProgrammaticScroll = (durationMs = 900) => {
+  const lockProgrammaticScroll = (durationMs = 1200) => {
     isProgrammaticScrollRef.current = true;
     if (programmaticScrollTimerRef.current) {
       clearTimeout(programmaticScrollTimerRef.current);
@@ -1121,6 +1121,7 @@ export default function MobileOilstainExperience() {
     };
 
     const onScroll = () => {
+      if (typeof window !== "undefined" && window.innerWidth >= 1024) return;
       if (scrollRafId) return;
       scrollRafId = requestAnimationFrame(() => {
         scrollRafId = 0;
@@ -2060,9 +2061,18 @@ export default function MobileOilstainExperience() {
         }}
         className="fixed bottom-3 left-1/2 z-[9985] max-w-[90vw] select-none pointer-events-auto"
       >
-        <svg width="0" height="0" className="absolute pointer-events-none">
+        <svg
+          style={{
+            position: "absolute",
+            width: "1px",
+            height: "1px",
+            opacity: 0,
+            pointerEvents: "none",
+          }}
+          aria-hidden="true"
+        >
           <defs>
-            <clipPath id="compact-glass-notch-clip">
+            <clipPath id="mobile-compact-glass-notch-clip">
               <path
                 ref={clipPathElementRef}
                 d={buildCompactNotchPath(51)}
@@ -2073,8 +2083,8 @@ export default function MobileOilstainExperience() {
 
         <div
           style={{
-            clipPath: "url(#compact-glass-notch-clip)",
-            WebkitClipPath: "url(#compact-glass-notch-clip)",
+            clipPath: "url(#mobile-compact-glass-notch-clip)",
+            WebkitClipPath: "url(#mobile-compact-glass-notch-clip)",
             backgroundColor: "rgba(18, 18, 24, 0.36)",
             backdropFilter: "blur(10px) saturate(140%)",
             WebkitBackdropFilter: "blur(10px) saturate(140%)",

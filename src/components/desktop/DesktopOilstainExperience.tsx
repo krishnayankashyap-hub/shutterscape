@@ -1148,6 +1148,7 @@ export default function DesktopOilstainExperience() {
     };
 
     const onScroll = () => {
+      if (typeof window !== "undefined" && window.innerWidth < 1024) return;
       if (scrollRafId) return;
       scrollRafId = requestAnimationFrame(() => {
         scrollRafId = 0;
@@ -2089,9 +2090,18 @@ export default function DesktopOilstainExperience() {
         }}
         className="fixed bottom-4 left-1/2 z-[9985] select-none pointer-events-auto"
       >
-        <svg width="0" height="0" className="absolute pointer-events-none">
+        <svg
+          style={{
+            position: "absolute",
+            width: "1px",
+            height: "1px",
+            opacity: 0,
+            pointerEvents: "none",
+          }}
+          aria-hidden="true"
+        >
           <defs>
-            <clipPath id="compact-glass-notch-clip">
+            <clipPath id="desktop-compact-glass-notch-clip">
               <path
                 ref={clipPathElementRef}
                 d={buildCompactNotchPath(54)}
@@ -2102,8 +2112,8 @@ export default function DesktopOilstainExperience() {
 
         <div
           style={{
-            clipPath: "url(#compact-glass-notch-clip)",
-            WebkitClipPath: "url(#compact-glass-notch-clip)",
+            clipPath: "url(#desktop-compact-glass-notch-clip)",
+            WebkitClipPath: "url(#desktop-compact-glass-notch-clip)",
             backgroundColor: "rgba(18, 18, 24, 0.42)",
             backdropFilter: "blur(12px) saturate(140%)",
             WebkitBackdropFilter: "blur(12px) saturate(140%)",
