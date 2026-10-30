@@ -496,14 +496,18 @@ function renderFloatingNavIcon(id: NavTabId, isActive: boolean) {
 
 function buildCompactNotchPath(cx: number): string {
   const width = 340;
-  const safeCx = Math.max(34, Math.min(width - 34, cx));
+  const safeCx = Math.max(53, Math.min(width - 53, cx));
   const nStart = (safeCx - 21).toFixed(2);
   const c1 = (safeCx - 12.5).toFixed(2);
   const center = safeCx.toFixed(2);
   const c2 = (safeCx + 12.5).toFixed(2);
   const nEnd = (safeCx + 21).toFixed(2);
 
-  return `M 22 0 L ${nStart} 0 C ${c1} 0, ${c1} 19.5, ${center} 19.5 C ${c2} 19.5, ${c2} 0, ${nEnd} 0 L ${width - 22} 0 A 22 22 0 0 1 ${width} 22 L ${width} 32 A 22 22 0 0 1 ${width - 22} 54 L 22 54 A 22 22 0 0 1 0 32 L 0 22 A 22 22 0 0 1 22 0 Z`;
+  return `M 22 0 L ${nStart} 0 C ${c1} 0, ${c1} 19.5, ${center} 19.5 C ${c2} 19.5, ${c2} 0, ${nEnd} 0 L ${
+    width - 22
+  } 0 A 22 22 0 0 1 ${width} 22 L ${width} 32 A 22 22 0 0 1 ${
+    width - 22
+  } 54 L 22 54 A 22 22 0 0 1 0 32 L 0 22 A 22 22 0 0 1 22 0 Z`;
 }
 
 // Helper to compute live DAYS / HRS / MIN / SEC from an ISO targetDate
@@ -531,8 +535,8 @@ const SLICES_PER_CARD = 6;
 const SLICE_INDICES = Array.from({ length: SLICES_PER_CARD }, (_, i) => i);
 
 // =========================================================================
-// 1. RESTORED FULL-BLEED "SHUTTER*SCAPE*" MATRIX + COLORED STOP-MOTION
-//    PHOTO + FRAMELESS/BORDERLESS EDITORIAL PARAGRAPHS WITH BREATHING SPACE
+// 1. DESKTOP-PROPORTIONED "SHUTTER*SCAPE*" MATRIX + COLORED STOP-MOTION
+//    PHOTO + FRAMELESS/BORDERLESS EDITORIAL PARAGRAPHS
 // =========================================================================
 const StopMotionFlipbook = React.memo(function StopMotionFlipbook({
   matrixStack,
@@ -578,13 +582,13 @@ const StopMotionFlipbook = React.memo(function StopMotionFlipbook({
     <div style={{ paddingTop: "8px", paddingBottom: "8px" }}>
       {/* Top Frameless, Borderless Paragraph with Breathing Space & Colorful Highlights */}
       <p
-        style={{ marginBottom: "28px" }}
-        className="font-serif text-[18px] leading-[1.6] text-[#111111] font-normal"
+        style={{ marginBottom: "28px", maxWidth: "820px" }}
+        className="font-serif text-[21px] leading-[1.6] text-[#111111] font-normal"
       >
         Born at{" "}
         <span
-          style={{ padding: "1px 6px" }}
-          className={`inline-block rounded font-heading font-bold text-[13.5px] uppercase tracking-tight transition-all duration-700 ${
+          style={{ padding: "2px 8px" }}
+          className={`inline-block rounded font-heading font-bold text-[15px] uppercase tracking-tight transition-all duration-700 ${
             isHighlighted
               ? "bg-[#D4A843] text-[#111111]"
               : "bg-transparent text-[#111111]"
@@ -598,8 +602,8 @@ const StopMotionFlipbook = React.memo(function StopMotionFlipbook({
         </span>{" "}
         is our unmedicated{" "}
         <span
-          style={{ padding: "1px 6px" }}
-          className={`inline-block rounded font-mono text-[11.5px] font-bold uppercase tracking-wider transition-all duration-700 delay-150 ${
+          style={{ padding: "2px 8px" }}
+          className={`inline-block rounded font-mono text-[13px] font-bold uppercase tracking-wider transition-all duration-700 delay-150 ${
             isHighlighted
               ? "bg-[#D92B2B] text-white"
               : "bg-transparent text-[#111111]"
@@ -618,17 +622,24 @@ const StopMotionFlipbook = React.memo(function StopMotionFlipbook({
         , and creative excess.
       </p>
 
-      {/* Clean Plain White Background Block + FULL-COLOR Stop-Motion Photo */}
+      {/* Desktop-Proportioned Giant Static "SHUTTER*SCAPE*" Wall + Properly Sized Full-Color Stop-Motion Photo */}
       <div
         ref={containerRef}
         onClick={() => setPhotoIdx((prev) => (prev + 1) % matrixStack.length)}
         style={{
-          paddingTop: "24px",
-          paddingBottom: "24px",
-          minHeight: "280px",
+          padding: "36px 24px",
+          height: "420px",
         }}
-        className="relative w-full overflow-hidden flex items-center justify-center border-y border-black/15 bg-white cursor-pointer"
+        className="relative w-full overflow-hidden flex items-center justify-center border-y border-black/15 bg-white rounded-2xl cursor-pointer"
       >
+        <div
+          aria-hidden="true"
+          style={{ fontSize: "clamp(3.2rem, 6.2vw, 5.8rem)" }}
+          className="font-heading font-black leading-[0.88] tracking-[-0.04em] uppercase text-[#111111]/[0.08] text-center select-none break-all pointer-events-none"
+        >
+          SHUTTER*SCAPE*GCU*35MM*RAW*OPTICS*DARKROOM*ASSAM*SHUTTER*SCAPE*2026*
+        </div>
+
         {matrixStack.map((frame, i) => {
           const isCurrent = i === photoIdx % matrixStack.length;
           const isPortrait = frame.orientation === "portrait";
@@ -637,16 +648,19 @@ const StopMotionFlipbook = React.memo(function StopMotionFlipbook({
               key={i}
               style={{
                 opacity: isCurrent ? 1 : 0,
-                width: isPortrait ? "48%" : "64%",
-                aspectRatio: isPortrait ? "3 / 4" : "4 / 3",
-                padding: "6px",
+                width: isPortrait ? "265px" : "390px",
+                height: isPortrait ? "345px" : "290px",
+                padding: "7px",
+                transform: isCurrent
+                  ? "scale(1) rotate(-1.5deg)"
+                  : "scale(0.95) rotate(1.5deg)",
               }}
-              className="absolute bg-white shadow-[0_22px_55px_rgba(0,0,0,0.45)] border border-black/15 pointer-events-none transition-opacity duration-200"
+              className="absolute bg-white rounded-xl shadow-[0_24px_60px_rgba(0,0,0,0.32)] border border-black/15 pointer-events-none transition-all duration-200"
             >
               <img
                 src={frame.src}
                 alt={frame.title}
-                className="w-full h-full object-cover saturate-[1.15] contrast-[1.04]"
+                className="w-full h-full object-cover rounded-lg saturate-[1.15] contrast-[1.04]"
                 loading="lazy"
                 decoding="async"
               />
@@ -656,36 +670,36 @@ const StopMotionFlipbook = React.memo(function StopMotionFlipbook({
       </div>
 
       {/* Bottom Frameless, Borderless Paragraph with Breathing Space & Colorful Accents */}
-      <div style={{ marginTop: "28px" }}>
+      <div style={{ marginTop: "28px", maxWidth: "820px" }}>
         <span
           style={{ marginBottom: "10px" }}
-          className="font-mono text-[10px] tracking-[0.22em] uppercase text-[#D92B2B] font-bold block"
+          className="font-mono text-[11px] tracking-[0.22em] uppercase text-[#D92B2B] font-bold block"
         >
           DOUBLE VISION // {currentFrame?.title || "GCU ARCHIVE"}
         </span>
-        <p className="font-serif text-[17px] text-[#111111]/85 leading-[1.6]">
+        <p className="font-serif text-[19px] text-[#111111]/85 leading-[1.6]">
           ShutterScape was created for students who love to{" "}
           <span className="font-semibold text-[#111111] underline decoration-[#D4A843] decoration-2 underline-offset-4">
             observe, capture, and tell stories
           </span>{" "}
           through photographs. Whether you shoot on a{" "}
           <span
-            style={{ padding: "1px 6px" }}
-            className="rounded bg-[#FFF3BF] text-[#8C6D1F] font-mono text-[10.5px] font-bold"
+            style={{ padding: "2px 7px" }}
+            className="rounded bg-[#FFF3BF] text-[#8C6D1F] font-mono text-[11.5px] font-bold"
           >
             35mm SLR
           </span>
           , a{" "}
           <span
-            style={{ padding: "1px 6px" }}
-            className="rounded bg-[#E7F5FF] text-[#1864AB] font-mono text-[10.5px] font-bold"
+            style={{ padding: "2px 7px" }}
+            className="rounded bg-[#E7F5FF] text-[#1864AB] font-mono text-[11.5px] font-bold"
           >
             mirrorless rig
           </span>
           , or your{" "}
           <span
-            style={{ padding: "1px 6px" }}
-            className="rounded bg-[#EBFBEE] text-[#2B8A3E] font-mono text-[10.5px] font-bold"
+            style={{ padding: "2px 7px" }}
+            className="rounded bg-[#EBFBEE] text-[#2B8A3E] font-mono text-[11.5px] font-bold"
           >
             phone
           </span>{" "}
@@ -701,7 +715,7 @@ const StopMotionFlipbook = React.memo(function StopMotionFlipbook({
 
 // =========================================================================
 // 2. SEAMLESS AUTOMATIC ROTATING HALF-WHEEL COLORED FAN (Section 4)
-//    Blends 100% seamlessly into the #ECEBE6 page background with ZERO box!
+//    Scaled cleanly for Desktop & blends 100% into #ECEBE6!
 // =========================================================================
 const HalfWheelGalleryFan = React.memo(function HalfWheelGalleryFan({
   items,
@@ -743,10 +757,10 @@ const HalfWheelGalleryFan = React.memo(function HalfWheelGalleryFan({
         const deg = rawDeg - 110;
         const rad = (deg * Math.PI) / 180;
 
-        const radius = 190;
+        const radius = 230;
         const x = Math.sin(rad) * radius;
-        const y = -Math.cos(rad) * radius + 95;
-        const scale = Math.max(0.75, 1 - Math.abs(deg) / 240);
+        const y = -Math.cos(rad) * radius + 115;
+        const scale = Math.max(0.76, 1 - Math.abs(deg) / 240);
         const opacity =
           Math.abs(deg) > 95
             ? 0
@@ -794,13 +808,19 @@ const HalfWheelGalleryFan = React.memo(function HalfWheelGalleryFan({
   return (
     <div
       ref={stageRef}
+      onMouseEnter={() => {
+        isPausedRef.current = true;
+      }}
+      onMouseLeave={() => {
+        isPausedRef.current = false;
+      }}
       onTouchStart={() => {
         isPausedRef.current = true;
       }}
       onTouchEnd={() => {
         isPausedRef.current = false;
       }}
-      className="relative w-full h-[330px] bg-transparent overflow-hidden flex items-center justify-center select-none"
+      className="relative w-full h-[360px] bg-transparent overflow-hidden flex items-center justify-center select-none"
     >
       <div className="relative w-full h-full flex items-center justify-center">
         {wheelCards.map((item, idx) => (
@@ -811,12 +831,12 @@ const HalfWheelGalleryFan = React.memo(function HalfWheelGalleryFan({
             }}
             onClick={() => onSelectCard(idx)}
             style={{
-              width: "155px",
-              height: "210px",
-              padding: "5px",
+              width: "172px",
+              height: "230px",
+              padding: "6px",
               willChange: "transform, opacity",
             }}
-            className="absolute bg-white rounded-2xl shadow-[0_16px_36px_rgba(0,0,0,0.18)] border border-black/10 cursor-pointer"
+            className="absolute bg-white rounded-2xl shadow-[0_18px_40px_rgba(0,0,0,0.18)] border border-black/10 cursor-pointer hover:border-[#D4A843] transition-colors"
           >
             <div className="relative w-full h-full rounded-xl overflow-hidden bg-[#111111]">
               <img
@@ -826,11 +846,11 @@ const HalfWheelGalleryFan = React.memo(function HalfWheelGalleryFan({
                 loading="lazy"
                 decoding="async"
               />
-              <div className="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black/85 via-black/35 to-transparent">
-                <span className="block font-mono text-[6.5px] tracking-[0.16em] uppercase text-[#D4A843] font-bold truncate">
+              <div className="absolute inset-x-0 bottom-0 p-2.5 bg-gradient-to-t from-black/85 via-black/35 to-transparent">
+                <span className="block font-mono text-[7px] tracking-[0.16em] uppercase text-[#D4A843] font-bold truncate">
                   {item.category}
                 </span>
-                <span className="block font-serif text-[11px] text-white leading-tight truncate">
+                <span className="block font-serif text-xs text-white leading-tight truncate">
                   {item.title}
                 </span>
               </div>
@@ -875,9 +895,7 @@ export default function DesktopOilstainExperience() {
   const [activityFilterCat, setActivityFilterCat] = useState<string>("ALL");
   const [activeActivitySlideIdx, setActiveActivitySlideIdx] = useState(0);
 
-  // =========================================================================
-  // SECTION 3: SPOTLIGHT STATE (2-PART TOGGLE: "UPCOMING" vs "LIVE" + TIMER)
-  // =========================================================================
+  // Section 3: Spotlight State ("UPCOMING" vs "LIVE" + Timer)
   const [spotlightTab, setSpotlightTab] = useState<"UPCOMING" | "LIVE">(
     "UPCOMING"
   );
@@ -923,12 +941,12 @@ export default function DesktopOilstainExperience() {
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const heroVideoRef = useRef<HTMLVideoElement>(null);
 
-  // Refs for glitch-free 60fps Notch & Bubble Spring Interpolation
+  // Refs for glitch-free 60fps Notch & Bubble Spring Interpolation (Width = 340px, padding = 25px, 5 cols of 58px -> centers at 54, 112, 170, 228, 286)
   const clipPathElementRef = useRef<SVGPathElement>(null);
   const borderPathElementRef = useRef<SVGPathElement>(null);
   const activeBubbleRef = useRef<HTMLDivElement>(null);
-  const currentNotchXRef = useRef<number>(34);
-  const targetNotchXRef = useRef<number>(34);
+  const currentNotchXRef = useRef<number>(54);
+  const targetNotchXRef = useRef<number>(54);
   const isProgrammaticScrollRef = useRef<boolean>(false);
   const programmaticScrollTimerRef = useRef<ReturnType<
     typeof setTimeout
@@ -1060,8 +1078,9 @@ export default function DesktopOilstainExperience() {
           borderPathElementRef.current.setAttribute("d", dStr);
         }
         if (activeBubbleRef.current) {
-          const pct = (cx / 310) * 100;
-          activeBubbleRef.current.style.left = `${((cx / 340) * 100).toFixed(2)}%`;
+          activeBubbleRef.current.style.left = `${((cx / 340) * 100).toFixed(
+            2
+          )}%`;
         }
 
         requestAnimationFrame(animateNotch);
@@ -1077,8 +1096,9 @@ export default function DesktopOilstainExperience() {
           borderPathElementRef.current.setAttribute("d", dStr);
         }
         if (activeBubbleRef.current) {
-          const pct = (cx / 310) * 100;
-          activeBubbleRef.current.style.left = `${((cx / 340) * 100).toFixed(2)}%`;
+          activeBubbleRef.current.style.left = `${((cx / 340) * 100).toFixed(
+            2
+          )}%`;
         }
 
         isNotchAnimatingRef.current = false;
@@ -1093,7 +1113,8 @@ export default function DesktopOilstainExperience() {
       0,
       FLOATING_NAV_ITEMS.findIndex((it) => it.id === activeNavTab)
     );
-    targetNotchXRef.current = 34 + idx * 68;
+    // For 340px width with 25px left/right padding: 290px inner width / 5 cols = 58px per col -> centers at 54 + idx * 58
+    targetNotchXRef.current = 54 + idx * 58;
     startNotchAnimation();
   }, [activeNavTab, startNotchAnimation]);
 
@@ -1340,18 +1361,17 @@ export default function DesktopOilstainExperience() {
     };
   }, []);
 
-  // Ultra-Lightweight 3D Concave Cylindrical Curved Ribbon Engine (Section 2)
+  // Widescreen 3D Concave Cylindrical Curved Ribbon Engine (Section 2)
   useEffect(() => {
     const total = gallery.length;
     if (total === 0) return;
 
-    let vw = window.innerWidth;
-    let cardW = 380;
-    let cardH = 236;
-    let gap = 24;
+    let cardW = 370;
+    let cardH = 232;
+    let gap = 22;
     let stride = cardW + gap;
     let sliceW = cardW / SLICES_PER_CARD;
-    let cylRadius = 680;
+    let cylRadius = 820;
 
     const renderCylindricalSlices = (currentFloatIdx: number) => {
       for (let i = 0; i < total; i++) {
@@ -1362,7 +1382,8 @@ export default function DesktopOilstainExperience() {
         if (deltaCards > total / 2) deltaCards -= total;
         if (deltaCards < -total / 2) deltaCards += total;
 
-        if (Math.abs(deltaCards) > 1.38) {
+        // Show up to 5 cards across widescreen desktop
+        if (Math.abs(deltaCards) > 2.25) {
           if (cardEl.style.display !== "none") {
             cardEl.style.display = "none";
           }
@@ -1399,13 +1420,12 @@ export default function DesktopOilstainExperience() {
     };
 
     const setupStaticCardMetrics = () => {
-      vw = window.innerWidth;
-      cardW = 380;
-      cardH = 236;
-      gap = 24;
+      cardW = 370;
+      cardH = 232;
+      gap = 22;
       stride = cardW + gap;
       sliceW = cardW / SLICES_PER_CARD;
-      cylRadius = 680;
+      cylRadius = Math.max(760, window.innerWidth * 0.55);
 
       for (let i = 0; i < total; i++) {
         const cardEl = curvedCardOuterRefs.current[i];
@@ -1537,7 +1557,7 @@ export default function DesktopOilstainExperience() {
       const cardEl = container.children[clamped] as HTMLElement | undefined;
       if (cardEl) {
         container.scrollTo({
-          left: cardEl.offsetLeft - 18,
+          left: cardEl.offsetLeft - 24,
           behavior: "smooth",
         });
       }
@@ -1608,7 +1628,6 @@ export default function DesktopOilstainExperience() {
     return () => observer.disconnect();
   }, [reels]);
 
-  // Silky smooth mobile performance: only play the active center reel video; pause all others
   useEffect(() => {
     videoRefs.current.forEach((vid, idx) => {
       if (!vid) return;
@@ -1620,6 +1639,7 @@ export default function DesktopOilstainExperience() {
     });
   }, [activeReelIdx]);
 
+  // Desktop 5-Card Widescreen 3D Reel Carousel Math
   const getReelCardStyle = (index: number) => {
     const total = reels.length;
     let relativeIndex = index - activeReelIdx;
@@ -1642,33 +1662,33 @@ export default function DesktopOilstainExperience() {
       rotateY = 0;
       filter = "none";
     } else if (relativeIndex === 1) {
-      translateX = 160;
+      translateX = 210;
       scale = 0.88;
       zIndex = 35;
-      opacity = 0.85;
-      rotateY = -6;
-      filter = "brightness(0.85)";
+      opacity = 0.88;
+      rotateY = -8;
+      filter = "brightness(0.82)";
     } else if (relativeIndex === -1) {
-      translateX = -160;
+      translateX = -210;
       scale = 0.88;
       zIndex = 35;
-      opacity = 0.85;
-      rotateY = 6;
-      filter = "brightness(0.85)";
+      opacity = 0.88;
+      rotateY = 8;
+      filter = "brightness(0.82)";
     } else if (relativeIndex === 2) {
-      translateX = 300;
-      scale = 0.75;
+      translateX = 390;
+      scale = 0.76;
       zIndex = 20;
-      opacity = 0;
-      rotateY = -12;
-      filter = "brightness(0.5)";
+      opacity = 0.55;
+      rotateY = -14;
+      filter = "brightness(0.6)";
     } else if (relativeIndex === -2) {
-      translateX = -300;
-      scale = 0.75;
+      translateX = -390;
+      scale = 0.76;
       zIndex = 20;
-      opacity = 0;
-      rotateY = 12;
-      filter = "brightness(0.5)";
+      opacity = 0.55;
+      rotateY = 14;
+      filter = "brightness(0.6)";
     } else {
       translateX = 0;
       scale = 0.6;
@@ -1716,24 +1736,28 @@ export default function DesktopOilstainExperience() {
     }
   };
 
-  // Colored Studio Member Card (Screenshots 7 & 8)
+  // Studio-Proportioned Desktop Member Card (Never stretches to 900px!)
   const renderStudioMemberCard = (person: any, idx: number) => {
     const bgColor = MEMBER_CARD_BACKDROPS[idx % MEMBER_CARD_BACKDROPS.length];
     return (
       <div
         key={`${person.name}-${idx}`}
         onClick={() => setSelectedMemberModal({ person, bgColor })}
-        style={{ padding: "10px" }}
-        className="group bg-white rounded-2xl border border-black/10 shadow-[0_8px_24px_rgba(0,0,0,0.06)] hover:shadow-[0_14px_34px_rgba(0,0,0,0.12)] transition-all duration-300 flex flex-col justify-between cursor-pointer"
+        style={{
+          padding: "12px",
+          width: "265px",
+          maxWidth: "100%",
+        }}
+        className="group bg-white rounded-2xl border border-black/10 shadow-[0_10px_28px_rgba(0,0,0,0.06)] hover:shadow-[0_18px_40px_rgba(0,0,0,0.13)] transition-all duration-300 flex flex-col justify-between cursor-pointer"
       >
         <div>
           <div
             style={{
               backgroundColor: bgColor,
               clipPath:
-                "polygon(0 0, 100% 0, 100% 100%, 18px 100%, 0 calc(100% - 18px))",
+                "polygon(0 0, 100% 0, 100% 100%, 20px 100%, 0 calc(100% - 20px))",
             }}
-            className="relative w-full aspect-[4/4.4] rounded-xl overflow-hidden"
+            className="relative w-full aspect-[4/4.3] rounded-xl overflow-hidden"
           >
             <div
               className="absolute inset-0 pointer-events-none"
@@ -1752,20 +1776,20 @@ export default function DesktopOilstainExperience() {
             />
           </div>
 
-          <div style={{ padding: "10px 4px 4px" }}>
-            <h4 className="font-heading font-bold text-[13.5px] text-[#111111] tracking-tight leading-snug">
+          <div style={{ padding: "12px 4px 4px" }}>
+            <h4 className="font-heading font-bold text-[15px] text-[#111111] tracking-tight leading-snug">
               {person.name}
             </h4>
             <p
-              style={{ marginTop: "2px" }}
-              className="font-sans text-[11px] font-medium text-black/65 leading-snug"
+              style={{ marginTop: "3px" }}
+              className="font-sans text-xs font-medium text-black/65 leading-snug"
             >
               {person.role}
             </p>
             {person.dept && (
               <p
-                style={{ marginTop: "2px" }}
-                className="font-sans text-[10px] text-black/45 line-clamp-1"
+                style={{ marginTop: "3px" }}
+                className="font-sans text-[11px] text-black/45 line-clamp-1"
               >
                 {person.dept}
               </p>
@@ -1774,10 +1798,10 @@ export default function DesktopOilstainExperience() {
         </div>
 
         <div
-          style={{ paddingTop: "6px", paddingRight: "4px" }}
+          style={{ paddingTop: "8px", paddingRight: "4px" }}
           className="flex items-center justify-end"
         >
-          <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-black/[0.04] group-hover:bg-[#111111] text-[#111111] group-hover:text-white text-xs transition-colors">
+          <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-black/[0.04] group-hover:bg-[#111111] text-[#111111] group-hover:text-white text-xs transition-colors">
             →
           </span>
         </div>
@@ -1833,32 +1857,26 @@ export default function DesktopOilstainExperience() {
           animation: oslHeartBurst 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        @media (max-width: 1023px) {
-          header[aria-label="Global Viewfinder Navigation"] {
-            display: none !important;
-          }
-        }
-
         #shutterscape-desktop-oilstain {
           background-color: #ECEBE6;
           color: #111111;
           -webkit-overflow-scrolling: touch;
         }
         #shutterscape-desktop-oilstain .osl-top-capsule {
-          padding: 6px 14px !important;
+          padding: 7px 18px !important;
         }
-        #shutterscape-desktop-oilstain .osl-pad-sm { padding: 12px 16px !important; }
-        #shutterscape-desktop-oilstain .osl-pad-md { padding: 20px 18px !important; }
-        #shutterscape-desktop-oilstain .osl-pad-lg { padding: 30px 20px !important; }
-        #shutterscape-desktop-oilstain .osl-btn-pill { padding: 7px 12px !important; }
+        #shutterscape-desktop-oilstain .osl-pad-sm { padding: 12px 24px !important; }
+        #shutterscape-desktop-oilstain .osl-pad-md { padding: 20px 24px !important; }
+        #shutterscape-desktop-oilstain .osl-pad-lg { padding: 36px 28px !important; }
+        #shutterscape-desktop-oilstain .osl-btn-pill { padding: 7px 14px !important; }
         #shutterscape-desktop-oilstain .osl-bar-btn {
-          padding: 16px 20px !important;
+          padding: 16px 24px !important;
           display: flex;
           align-items: center;
           justify-content: space-between;
           width: 100%;
           font-family: var(--font-space-mono), monospace;
-          font-size: 10.5px;
+          font-size: 11px;
           font-weight: 700;
           letter-spacing: 0.16em;
           text-transform: uppercase;
@@ -1866,7 +1884,7 @@ export default function DesktopOilstainExperience() {
           transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
         }
         #shutterscape-desktop-oilstain .osl-bento-cell {
-          padding: 20px 8px !important;
+          padding: 22px 12px !important;
           border-top: 1px solid rgba(17, 17, 17, 0.15);
           border-bottom: 1px solid rgba(17, 17, 17, 0.15);
           border-right: 1px solid rgba(17, 17, 17, 0.15);
@@ -1874,20 +1892,20 @@ export default function DesktopOilstainExperience() {
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          gap: 5px;
+          gap: 6px;
           background: #ECEBE6;
           cursor: pointer;
           transition: background 0.2s ease, color 0.2s ease;
         }
         #shutterscape-desktop-oilstain .osl-bento-cell.active-lab,
-        #shutterscape-desktop-oilstain .osl-bento-cell:active {
+        #shutterscape-desktop-oilstain .osl-bento-cell:hover {
           background: #111111;
           color: #ECEBE6;
         }
         #shutterscape-desktop-oilstain .osl-chapter-pill {
-          padding: 13px 14px !important;
+          padding: 14px 20px !important;
           font-family: var(--font-space-mono), monospace;
-          font-size: 9.5px;
+          font-size: 10px;
           font-weight: 700;
           letter-spacing: 0.14em;
           text-transform: uppercase;
@@ -1898,12 +1916,12 @@ export default function DesktopOilstainExperience() {
         }
         #shutterscape-desktop-oilstain .osl-input-line {
           width: 100%;
-          padding: 12px 0 !important;
+          padding: 13px 0 !important;
           border: none;
           border-bottom: 1px solid rgba(17, 17, 17, 0.25);
           background: transparent;
           font-family: var(--font-space-mono), monospace;
-          font-size: 11px;
+          font-size: 11.5px;
           letter-spacing: 0.12em;
           color: #111111;
           outline: none;
@@ -1985,8 +2003,8 @@ export default function DesktopOilstainExperience() {
       <div
         style={{
           backgroundColor: isScrolledTop
-            ? "rgba(12, 12, 16, 0.36)"
-            : "rgba(12, 12, 16, 0.2)",
+            ? "rgba(12, 12, 16, 0.42)"
+            : "rgba(12, 12, 16, 0.24)",
           backdropFilter: "blur(12px) saturate(140%)",
           WebkitBackdropFilter: "blur(12px) saturate(140%)",
           borderColor: isScrolledTop
@@ -1994,7 +2012,7 @@ export default function DesktopOilstainExperience() {
             : "rgba(255, 255, 255, 0.15)",
           transform: "translate3d(-50%, 0, 0)",
         }}
-        className="osl-top-capsule fixed top-3 left-1/2 z-[9980] w-max max-w-[94vw] rounded-full border shadow-[0_8px_24px_rgba(0,0,0,0.28)] transition-colors duration-300 flex items-center justify-center gap-2 sm:gap-2.5 pointer-events-auto select-none"
+        className="osl-top-capsule fixed top-4 left-1/2 z-[9980] w-max rounded-full border shadow-[0_8px_24px_rgba(0,0,0,0.28)] transition-colors duration-300 flex items-center justify-center gap-3 pointer-events-auto select-none"
       >
         <button
           type="button"
@@ -2006,14 +2024,14 @@ export default function DesktopOilstainExperience() {
           className="flex items-center cursor-pointer shrink-0"
         >
           <div
-            style={{ width: "90px", height: "24px" }}
+            style={{ width: "96px", height: "25px" }}
             className="relative shrink-0"
           >
             <Image
               src="/images/shutterscape-brand-white.png"
               alt="ShutterScape Logo"
               fill
-              sizes="90px"
+              sizes="96px"
               priority
               unoptimized
               className="object-contain object-left"
@@ -2023,7 +2041,7 @@ export default function DesktopOilstainExperience() {
 
         <span className="h-3.5 w-[1px] bg-white/20 shrink-0" />
 
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-2.5 shrink-0">
           <button
             type="button"
             onClick={() => {
@@ -2031,8 +2049,8 @@ export default function DesktopOilstainExperience() {
               setRegisterSubmitted(false);
               setIsRegisterModalOpen(true);
             }}
-            style={{ padding: "4.5px 10px" }}
-            className="rounded-full bg-[#D4A843] hover:bg-[#E5B955] text-[#050505] font-mono text-[8px] font-bold tracking-[0.14em] uppercase cursor-pointer shrink-0 shadow-2xs"
+            style={{ padding: "5px 12px" }}
+            className="rounded-full bg-[#D4A843] hover:bg-[#E5B955] text-[#050505] font-mono text-[8.5px] font-bold tracking-[0.14em] uppercase cursor-pointer shrink-0 shadow-2xs"
           >
             JOIN &apos;26
           </button>
@@ -2041,7 +2059,7 @@ export default function DesktopOilstainExperience() {
             href="https://gcu.ac.in"
             target="_blank"
             rel="noopener noreferrer"
-            style={{ width: "76px", height: "23px" }}
+            style={{ width: "80px", height: "24px" }}
             className="relative opacity-95 hover:opacity-100 transition-opacity shrink-0 flex items-center"
             title="Girijananda Chowdhury University"
           >
@@ -2064,14 +2082,14 @@ export default function DesktopOilstainExperience() {
           height: "54px",
           transform: "translate3d(-50%, 0, 0)",
         }}
-        className="fixed bottom-3 left-1/2 z-[9985] max-w-[90vw] select-none pointer-events-auto"
+        className="fixed bottom-4 left-1/2 z-[9985] select-none pointer-events-auto"
       >
         <svg width="0" height="0" className="absolute pointer-events-none">
           <defs>
             <clipPath id="compact-glass-notch-clip">
               <path
                 ref={clipPathElementRef}
-                d={buildCompactNotchPath(34)}
+                d={buildCompactNotchPath(54)}
               />
             </clipPath>
           </defs>
@@ -2081,12 +2099,12 @@ export default function DesktopOilstainExperience() {
           style={{
             clipPath: "url(#compact-glass-notch-clip)",
             WebkitClipPath: "url(#compact-glass-notch-clip)",
-            backgroundColor: "rgba(18, 18, 24, 0.36)",
-            backdropFilter: "blur(10px) saturate(140%)",
-            WebkitBackdropFilter: "blur(10px) saturate(140%)",
+            backgroundColor: "rgba(18, 18, 24, 0.42)",
+            backdropFilter: "blur(12px) saturate(140%)",
+            WebkitBackdropFilter: "blur(12px) saturate(140%)",
             transform: "translate3d(0, 0, 0)",
           }}
-          className="absolute inset-0 w-full h-full shadow-[0_8px_24px_rgba(0,0,0,0.25)]"
+          className="absolute inset-0 w-full h-full shadow-[0_8px_24px_rgba(0,0,0,0.28)]"
         />
 
         <svg
@@ -2096,7 +2114,7 @@ export default function DesktopOilstainExperience() {
         >
           <path
             ref={borderPathElementRef}
-            d={buildCompactNotchPath(34)}
+            d={buildCompactNotchPath(54)}
             fill="rgba(255, 255, 255, 0.04)"
             stroke="rgba(255, 255, 255, 0.24)"
             strokeWidth="1"
@@ -2106,14 +2124,14 @@ export default function DesktopOilstainExperience() {
         <div
           ref={activeBubbleRef}
           style={{
-            left: `${(34 / 340) * 100}%`,
+            left: `${(54 / 340) * 100}%`,
             top: "-13px",
             width: "34px",
             height: "34px",
-            backgroundColor: "rgba(22, 22, 30, 0.48)",
-            backdropFilter: "blur(10px) saturate(140%)",
-            WebkitBackdropFilter: "blur(10px) saturate(140%)",
-            border: "1px solid rgba(255, 255, 255, 0.28)",
+            backgroundColor: "rgba(22, 22, 30, 0.56)",
+            backdropFilter: "blur(12px) saturate(140%)",
+            WebkitBackdropFilter: "blur(12px) saturate(140%)",
+            border: "1px solid rgba(255, 255, 255, 0.32)",
             transform: "translate3d(-50%, 0, 0)",
           }}
           className="absolute rounded-full shadow-[0_6px_14px_rgba(0,0,0,0.3)] flex items-center justify-center pointer-events-none z-20"
@@ -2152,7 +2170,7 @@ export default function DesktopOilstainExperience() {
                     marginTop: isActive ? "13px" : "3px",
                     transition: "margin-top 0.24s ease",
                   }}
-                  className={`font-sans text-[9.5px] tracking-[0.02em] leading-none ${
+                  className={`font-sans text-[10px] tracking-[0.02em] leading-none ${
                     isActive
                       ? "text-white font-semibold"
                       : "text-white/75 font-normal"
@@ -2172,7 +2190,7 @@ export default function DesktopOilstainExperience() {
       <section
         id="desktop-hero-top"
         ref={heroSectionRef}
-        className="sticky top-0 z-10 w-full h-[100svh] min-h-[580px] bg-[#070709] text-white flex flex-col justify-between overflow-hidden"
+        className="sticky top-0 z-10 w-full h-[100svh] min-h-[640px] bg-[#070709] text-white flex flex-col justify-between overflow-hidden"
       >
         <div className="absolute inset-0 z-0 overflow-hidden">
           <img
@@ -2208,29 +2226,30 @@ export default function DesktopOilstainExperience() {
           key={heroAnimKey}
           onClick={() => setHeroAnimKey((prev) => prev + 1)}
           title="Tap to replay intro sequence"
-          className="relative z-10 px-4 py-6 flex flex-col items-center text-center my-auto w-full cursor-pointer select-none"
+          style={{ margin: "auto" }}
+          className="relative z-10 px-6 py-8 flex flex-col items-center text-center w-full max-w-4xl cursor-pointer select-none"
         >
-          <div className="flex items-center justify-center gap-2 mb-3 w-full">
+          <div className="flex items-center justify-center gap-3 mb-4 w-full">
             <span
-              className={`w-4 h-[1px] bg-[#D4A843] shrink-0 ${
+              className={`w-6 h-[1px] bg-[#D4A843] shrink-0 ${
                 isHeroAnimReady ? "osl-hero-rule" : "opacity-0"
               }`}
             />
             <span
-              className={`font-mono text-[8.5px] tracking-[0.22em] uppercase text-[#D4A843] font-bold ${
+              className={`font-mono text-[10px] tracking-[0.26em] uppercase text-[#D4A843] font-bold ${
                 isHeroAnimReady ? "osl-hero-badge" : "opacity-0"
               }`}
             >
               EST. 2023 · MORE THAN JUST A CAMERA CLUB
             </span>
             <span
-              className={`w-4 h-[1px] bg-[#D4A843] shrink-0 ${
+              className={`w-6 h-[1px] bg-[#D4A843] shrink-0 ${
                 isHeroAnimReady ? "osl-hero-rule" : "opacity-0"
               }`}
             />
           </div>
 
-          <h1 className="font-serif text-[clamp(1.85rem,9.2vw,3.4rem)] leading-[0.92] tracking-[0.04em] uppercase text-white font-normal w-full text-center">
+          <h1 className="font-serif text-[clamp(3rem,6.5vw,5.6rem)] leading-[0.92] tracking-[0.05em] uppercase text-white font-normal w-full text-center">
             {"SHUTTERSCAPE".split("").map((char, i) => (
               <span
                 key={i}
@@ -2251,8 +2270,8 @@ export default function DesktopOilstainExperience() {
           </h1>
 
           <p
-            style={{ marginTop: "12px" }}
-            className={`font-mono text-[10px] tracking-[0.3em] uppercase text-white/90 font-semibold ${
+            style={{ marginTop: "14px" }}
+            className={`font-mono text-xs tracking-[0.34em] uppercase text-white/90 font-semibold ${
               isHeroAnimReady ? "osl-hero-subtitle" : "opacity-0"
             }`}
           >
@@ -2260,8 +2279,8 @@ export default function DesktopOilstainExperience() {
           </p>
 
           <p
-            style={{ marginTop: "10px" }}
-            className={`font-serif italic text-sm text-white/75 max-w-[280px] ${
+            style={{ marginTop: "12px" }}
+            className={`font-serif italic text-base text-white/75 max-w-md ${
               isHeroAnimReady ? "osl-hero-tagline" : "opacity-0"
             }`}
           >
@@ -2270,11 +2289,13 @@ export default function DesktopOilstainExperience() {
         </div>
 
         <div
-          style={{ paddingBottom: "68px" }}
+          style={{ paddingBottom: "74px" }}
           className="relative z-10 w-full flex flex-col bg-black/65"
         >
-          <div className="osl-pad-sm flex items-center justify-between font-mono text-[8.5px] tracking-[0.2em] text-white/55 uppercase border-t border-white/10">
-            <span className="pl-12">f/1.4 · 1/1000s · ISO 400</span>
+          <div className="osl-pad-sm flex items-center justify-between font-mono text-[9.5px] tracking-[0.22em] text-white/55 uppercase border-t border-white/10">
+            <span style={{ paddingLeft: "48px" }}>
+              f/1.4 · 1/1000s · ISO 400
+            </span>
             <span>GCU · ASSAM</span>
           </div>
 
@@ -2282,7 +2303,7 @@ export default function DesktopOilstainExperience() {
             <button
               type="button"
               onClick={toggleHeroAudio}
-              className="absolute bottom-2 left-3 z-20 flex h-9 w-9 items-center justify-center rounded-full border border-[#D4A843]/60 bg-[#161513] text-[#D4A843] shadow-md cursor-pointer active:scale-95 transition-transform"
+              className="absolute bottom-2.5 left-5 z-20 flex h-9 w-9 items-center justify-center rounded-full border border-[#D4A843]/60 bg-[#161513] text-[#D4A843] shadow-md cursor-pointer active:scale-95 transition-transform"
               title={isHeroMuted ? "Unmute video sound" : "Mute video sound"}
               aria-label={
                 isHeroMuted ? "Unmute video sound" : "Mute video sound"
@@ -2317,8 +2338,8 @@ export default function DesktopOilstainExperience() {
             <button
               type="button"
               onClick={handleEnterArchiveTransition}
-              style={{ padding: "13px 18px 13px 56px" }}
-              className="w-full flex items-center justify-between bg-[#D4A843] text-[#050505] font-mono text-[9.5px] font-bold tracking-[0.18em] uppercase cursor-pointer"
+              style={{ padding: "14px 28px 14px 68px" }}
+              className="w-full flex items-center justify-between bg-[#D4A843] hover:bg-[#E5B955] text-[#050505] font-mono text-[10.5px] font-bold tracking-[0.2em] uppercase cursor-pointer transition-colors"
             >
               <span>ENTER THE DARKROOM ARCHIVE</span>
               <span className="text-sm leading-none">↓</span>
@@ -2328,34 +2349,39 @@ export default function DesktopOilstainExperience() {
       </section>
 
       {/* ============================================================
-          2. PAGE 2: COMPACT SINGLE-SCREEN ARCHIVE STAGE
+          2. PAGE 2: COMPACT SINGLE-SCREEN ARCHIVE STAGE (DESKTOP ALIGNED)
           ============================================================ */}
       <section
         id="desktop-light-spec-section"
         ref={archiveSectionRef}
-        style={{ minHeight: "100svh", paddingBottom: "74px" }}
+        style={{ minHeight: "100svh", paddingBottom: "80px" }}
         className="relative z-20 w-full bg-[#ECEBE6] text-[#111111] shadow-[0_-20px_50px_rgba(0,0,0,0.45)] flex flex-col justify-between overflow-hidden"
       >
         <div
-          style={{ padding: "54px 20px 12px" }}
-          className="relative z-10 flex items-center justify-between border-b border-black/10 shrink-0"
+          style={{
+            padding: "56px 40px 14px",
+            maxWidth: "1280px",
+            margin: "0 auto",
+          }}
+          className="relative z-10 w-full flex items-center justify-between border-b border-black/10 shrink-0"
         >
-          <div className="relative h-10 w-[125px] sm:h-12 sm:w-[150px] shrink-0">
+          <div className="relative h-12 w-[155px] shrink-0">
             <Image
               src="/images/shutterscape-logo.png"
               alt="ShutterScape Logo"
               fill
-              sizes="150px"
+              sizes="155px"
               priority
               unoptimized
               className="object-contain object-left"
             />
           </div>
-          <span className="font-heading font-light text-4xl sm:text-5xl tracking-[-0.05em] leading-none text-[#111111] select-none">
+          <span className="font-heading font-light text-5xl tracking-[-0.05em] leading-none text-[#111111] select-none">
             26
           </span>
         </div>
 
+        {/* Widescreen 3D Cylindrical Curved Ribbon */}
         <div
           ref={ribbonDropWrapRef}
           onTouchStart={() => {
@@ -2371,10 +2397,10 @@ export default function DesktopOilstainExperience() {
             isRibbonPausedRef.current = false;
           }}
           style={{
-            marginTop: "12px",
-            marginBottom: "6px",
-            height: "260px",
-            perspective: "850px",
+            marginTop: "16px",
+            marginBottom: "8px",
+            height: "255px",
+            perspective: "980px",
             perspectiveOrigin: "50% 50%",
             transformStyle: "preserve-3d",
             willChange: "transform",
@@ -2403,7 +2429,7 @@ export default function DesktopOilstainExperience() {
                 className="absolute top-1/2 left-1/2 cursor-pointer"
                 style={{
                   transformStyle: "preserve-3d",
-                  display: cardIdx < 3 ? "block" : "none",
+                  display: cardIdx < 5 ? "block" : "none",
                 }}
               >
                 {SLICE_INDICES.map((s) => (
@@ -2422,7 +2448,7 @@ export default function DesktopOilstainExperience() {
                       ref={(el) => {
                         curvedSliceInnerRefs.current[cardIdx][s] = el;
                       }}
-                      className="relative overflow-hidden rounded-[6px] bg-[#0B0B0E] border border-black/20"
+                      className="relative overflow-hidden rounded-[8px] bg-[#0B0B0E] border border-black/20"
                       style={{
                         backgroundImage: `linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.22) 50%, rgba(0,0,0,0.3) 100%), url(${item.src})`,
                         backgroundSize: "cover",
@@ -2430,39 +2456,39 @@ export default function DesktopOilstainExperience() {
                       }}
                     >
                       <div
-                        style={{ padding: "10px 12px" }}
+                        style={{ padding: "12px 14px" }}
                         className="absolute top-0 inset-x-0 flex items-center justify-between pointer-events-none"
                       >
                         <span
-                          style={{ padding: "2.5px 7px" }}
-                          className="rounded bg-black/80 border border-white/20 font-mono text-[7.5px] uppercase tracking-[0.18em] text-[#D4A843] font-semibold"
+                          style={{ padding: "3px 8px" }}
+                          className="rounded bg-black/80 border border-white/20 font-mono text-[8px] uppercase tracking-[0.18em] text-[#D4A843] font-semibold"
                         >
                           {item.category || "ARCHIVE"}
                         </span>
-                        <span className="font-mono text-[7.5px] tracking-[0.18em] text-white/85 uppercase font-medium">
+                        <span className="font-mono text-[8px] tracking-[0.18em] text-white/85 uppercase font-medium">
                           {item.filmStock || "KODAK TRI-X 400"}
                         </span>
                       </div>
 
                       <div
-                        style={{ padding: "11px 12px" }}
+                        style={{ padding: "12px 14px" }}
                         className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-2 pointer-events-none"
                       >
                         <div className="max-w-[73%]">
-                          <h3 className="font-serif text-lg sm:text-xl text-white font-light leading-[0.98] tracking-tight truncate">
+                          <h3 className="font-serif text-xl text-white font-light leading-[0.98] tracking-tight truncate">
                             {item.title}
                           </h3>
                           <p
                             style={{ marginTop: "3px" }}
-                            className="font-body text-[9.5px] text-white/85 line-clamp-1"
+                            className="font-body text-[10px] text-white/85 line-clamp-1"
                           >
                             {item.description}
                           </p>
                         </div>
 
                         <span
-                          style={{ padding: "3.5px 9px" }}
-                          className="shrink-0 rounded-full bg-[#D4A843] text-[#050505] font-mono text-[7px] font-bold uppercase tracking-[0.16em]"
+                          style={{ padding: "4px 10px" }}
+                          className="shrink-0 rounded-full bg-[#D4A843] text-[#050505] font-mono text-[7.5px] font-bold uppercase tracking-[0.16em]"
                         >
                           INSPECT ↗
                         </span>
@@ -2475,28 +2501,30 @@ export default function DesktopOilstainExperience() {
           })}
         </div>
 
+        {/* Centered Lower Heading & Handwritten Fountain-Pen Note */}
         <div
           ref={lowerContentRiseRef}
-          style={{ willChange: "transform, opacity" }}
+          style={{
+            willChange: "transform, opacity",
+            maxWidth: "1140px",
+            margin: "0 auto",
+          }}
           className="relative z-10 flex-1 flex flex-col justify-evenly items-center w-full"
         >
           <div
             style={{
-              paddingTop: "4px",
-              paddingBottom: "10px",
-              paddingLeft: "20px",
-              paddingRight: "20px",
+              padding: "6px 24px 12px",
             }}
             className="w-full text-center border-b border-black/10 shrink-0"
           >
-            <h2 className="font-heading font-black text-xl sm:text-2xl tracking-[-0.03em] uppercase leading-[0.96] text-[#111111]">
+            <h2 className="font-heading font-black text-2xl lg:text-3xl tracking-[-0.03em] uppercase leading-[0.96] text-[#111111]">
               LIGHT IS MEMORY.
               <br />
               MEMORY IS LIGHT.
             </h2>
             <p
-              style={{ marginTop: "5px" }}
-              className="font-mono text-[8.5px] tracking-[0.22em] uppercase text-black/45"
+              style={{ marginTop: "6px" }}
+              className="font-mono text-[9.5px] tracking-[0.22em] uppercase text-black/45"
             >
               [ GIRIJANANDA CHOWDHURY UNIVERSITY ]
             </p>
@@ -2504,34 +2532,32 @@ export default function DesktopOilstainExperience() {
 
           <div
             style={{
-              paddingTop: "10px",
-              paddingBottom: "6px",
-              paddingLeft: "22px",
-              paddingRight: "22px",
+              padding: "16px 24px 8px",
             }}
             className="relative w-full flex flex-col items-center justify-center shrink-0"
           >
             <div
               style={{
-                transform: "rotate(-5deg)",
-                maxWidth: "355px",
+                transform: "rotate(-4deg)",
+                maxWidth: "440px",
+                margin: "0 auto",
               }}
               className="w-full flex flex-col select-none"
             >
-              <div className="handmade-fountain-pen text-[18px] sm:text-[20px] leading-[1.42] tracking-[0.01em] text-left">
+              <div className="handmade-fountain-pen text-[21px] leading-[1.45] tracking-[0.01em] text-left">
                 <p style={{ marginLeft: "4px" }}>
                   Every photograph holds a little piece of time,
                 </p>
-                <p style={{ marginLeft: "16px", marginTop: "2px" }}>
+                <p style={{ marginLeft: "20px", marginTop: "2px" }}>
                   every frame keeps a story alive.
                 </p>
               </div>
 
               <div
-                style={{ marginTop: "12px" }}
-                className="handmade-fountain-pen text-[18px] sm:text-[20px] leading-[1.42] tracking-[0.01em] text-left"
+                style={{ marginTop: "14px" }}
+                className="handmade-fountain-pen text-[21px] leading-[1.45] tracking-[0.01em] text-left"
               >
-                <p style={{ marginLeft: "22px" }}>
+                <p style={{ marginLeft: "26px" }}>
                   Through light, laughter, and the moments
                 </p>
                 <p style={{ marginLeft: "6px", marginTop: "2px" }}>
@@ -2540,10 +2566,10 @@ export default function DesktopOilstainExperience() {
               </div>
 
               <div
-                style={{ marginTop: "14px", paddingRight: "6px" }}
+                style={{ marginTop: "16px", paddingRight: "6px" }}
                 className="w-full flex flex-col items-end text-right"
               >
-                <span className="handmade-fountain-pen text-[16px] sm:text-[17.5px] text-[#1D1C1A]/85 leading-none">
+                <span className="handmade-fountain-pen text-[18px] text-[#1D1C1A]/85 leading-none">
                   With love, light, and endless stories,
                 </span>
 
@@ -2551,11 +2577,11 @@ export default function DesktopOilstainExperience() {
                   style={{ marginTop: "6px" }}
                   className="flex flex-col items-end"
                 >
-                  <span className="handmade-signature-pen text-[32px] sm:text-[36px] leading-[0.88] tracking-[0.02em] text-[#111111]">
+                  <span className="handmade-signature-pen text-[38px] leading-[0.88] tracking-[0.02em] text-[#111111]">
                     The Shutterscape Family
                   </span>
                   <svg
-                    width="160"
+                    width="180"
                     height="12"
                     viewBox="0 0 220 20"
                     fill="none"
@@ -2578,19 +2604,18 @@ export default function DesktopOilstainExperience() {
       </section>
 
       {/* ============================================================
-          3. PLAYFUL + PROFESSIONAL "SPOTLIGHT" COLLECTOR PASS SECTION
-             - Pill-Shaped 2-Part Switcher: "✦ UPCOMING" | "◉ LIVE GOING"
-             - Tilted Pastel Sticker + Colorful Flip-Clock Countdown Tiles
-             - Warm Ivory Editorial Pass Deck + Handwritten Note
+          3. DESKTOP WIDESCREEN "SPOTLIGHT '26" COLLECTOR PASS SECTION
+             - Centered 1140px Container + 2-Column Split Collector Pass Card
+             - Left 56%: Framed 16:10 Photo + Tilted Pastel Sticker
+             - Right 44%: 4 Flip-Clock Countdown Tiles + Ivory Story Deck
              - Solid WHITE "ACTIVITIES +" Button Below!
           ============================================================ */}
       <section
         id="desktop-dark-showcase"
         className="relative z-20 w-full bg-[#0A0A0E] text-white border-t border-white/10 overflow-hidden"
       >
-        {/* Soft Playful Studio Aura */}
         <div
-          className="pointer-events-none absolute top-8 left-1/2 -translate-x-1/2 w-[360px] h-[260px] rounded-full opacity-25 blur-3xl"
+          className="pointer-events-none absolute top-12 left-1/2 -translate-x-1/2 w-[560px] h-[320px] rounded-full opacity-20 blur-3xl"
           style={{
             background:
               spotlightTab === "LIVE"
@@ -2600,26 +2625,47 @@ export default function DesktopOilstainExperience() {
         />
 
         <div
-          style={{ padding: "30px 18px 22px" }}
-          className="relative z-10 space-y-4"
+          style={{
+            padding: "56px 32px 48px",
+            maxWidth: "1140px",
+            margin: "0 auto",
+          }}
+          className="relative z-10 w-full space-y-6"
         >
-          {/* TOP HEADER: Editorial + Playful Title & Status Pill */}
-          <div className="flex items-end justify-between">
+          {/* TOP HEADER + PILL SWITCHER ON ONE CLEAN DESKTOP ROW */}
+          <div className="flex flex-wrap items-end justify-between gap-4 border-b border-white/10 pb-5">
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2.5">
                 <span
-                  style={{ padding: "2px 8px" }}
-                  className="rounded-full bg-[#FFE066] text-[#111111] font-mono text-[8px] font-bold uppercase tracking-[0.18em]"
+                  style={{ padding: "3px 10px" }}
+                  className="rounded-full bg-[#FFE066] text-[#111111] font-mono text-[9px] font-bold uppercase tracking-[0.18em]"
                 >
                   ★ GCU DISPATCH
                 </span>
-                <span className="font-serif italic text-xs text-white/65">
+                <span className="font-serif italic text-sm text-white/65">
                   Collector&apos;s Pass
+                </span>
+                <span
+                  style={{ padding: "3px 10px" }}
+                  className={`rounded-full font-mono text-[8.5px] font-bold uppercase tracking-[0.16em] flex items-center gap-1.5 border ${
+                    spotlightTab === "LIVE"
+                      ? "bg-[#FF6B6B]/20 border-[#FF6B6B]/50 text-[#FFA8A8]"
+                      : "bg-white/10 border-white/20 text-[#FFE066]"
+                  }`}
+                >
+                  <span
+                    className={`w-1.5 h-1.5 rounded-full ${
+                      spotlightTab === "LIVE"
+                        ? "bg-[#FF6B6B] animate-ping"
+                        : "bg-[#8CE99A] animate-pulse"
+                    }`}
+                  />
+                  {spotlightTab === "LIVE" ? "LIVE ON CAMPUS" : "OPEN FOR RSVP"}
                 </span>
               </div>
               <h2
-                style={{ marginTop: "6px" }}
-                className="font-heading font-black text-3xl tracking-[-0.03em] uppercase text-white leading-none"
+                style={{ marginTop: "8px" }}
+                className="font-heading font-black text-4xl tracking-[-0.03em] uppercase text-white leading-none"
               >
                 SPOTLIGHT{" "}
                 <span className="font-serif italic font-normal text-[#FFE066]">
@@ -2628,82 +2674,67 @@ export default function DesktopOilstainExperience() {
               </h2>
             </div>
 
-            <span
-              style={{ padding: "5px 11px" }}
-              className={`rounded-full font-mono text-[8px] font-bold uppercase tracking-[0.16em] flex items-center gap-1.5 border ${
-                spotlightTab === "LIVE"
-                  ? "bg-[#FF6B6B]/20 border-[#FF6B6B]/50 text-[#FFA8A8]"
-                  : "bg-white/10 border-white/20 text-[#FFE066]"
-              }`}
+            {/* 2-Part Pill Switcher (Right-Aligned on Desktop Header) */}
+            <div
+              style={{ padding: "4px", width: "320px" }}
+              className="grid grid-cols-2 gap-1.5 rounded-full bg-white/[0.07] border border-white/15 backdrop-blur-md shrink-0"
             >
-              <span
-                className={`w-1.5 h-1.5 rounded-full ${
-                  spotlightTab === "LIVE"
-                    ? "bg-[#FF6B6B] animate-ping"
-                    : "bg-[#8CE99A] animate-pulse"
+              <button
+                type="button"
+                onClick={() => setSpotlightTab("UPCOMING")}
+                style={{ padding: "9px 14px" }}
+                className={`rounded-full font-sans text-xs font-bold tracking-wide flex items-center justify-center gap-1.5 cursor-pointer transition-all ${
+                  spotlightTab === "UPCOMING"
+                    ? "bg-[#FFE066] text-[#111111] shadow-[0_4px_14px_rgba(255,224,102,0.35)]"
+                    : "bg-transparent text-white/65 hover:text-white"
                 }`}
-              />
-              {spotlightTab === "LIVE" ? "LIVE ON CAMPUS" : "OPEN FOR RSVP"}
-            </span>
+              >
+                <span>✦</span>
+                <span>Upcoming</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setSpotlightTab("LIVE")}
+                style={{ padding: "9px 14px" }}
+                className={`rounded-full font-sans text-xs font-bold tracking-wide flex items-center justify-center gap-1.5 cursor-pointer transition-all ${
+                  spotlightTab === "LIVE"
+                    ? "bg-[#FF5A5F] text-white shadow-[0_4px_14px_rgba(255,90,95,0.4)]"
+                    : "bg-transparent text-white/65 hover:text-white"
+                }`}
+              >
+                <span
+                  className={`w-2 h-2 rounded-full ${
+                    spotlightTab === "LIVE"
+                      ? "bg-white animate-ping"
+                      : "bg-[#FF5A5F]"
+                  }`}
+                />
+                <span>Live Going</span>
+              </button>
+            </div>
           </div>
 
-          {/* PLAYFUL PILL-SHAPED 2-PART SWITCHER: UPCOMING vs LIVE GOING */}
-          <div
-            style={{ padding: "4px" }}
-            className="grid grid-cols-2 gap-1.5 rounded-full bg-white/[0.07] border border-white/15 backdrop-blur-md"
-          >
-            <button
-              type="button"
-              onClick={() => setSpotlightTab("UPCOMING")}
-              style={{ padding: "9px 12px" }}
-              className={`rounded-full font-sans text-xs font-bold tracking-wide flex items-center justify-center gap-1.5 cursor-pointer transition-all ${
-                spotlightTab === "UPCOMING"
-                  ? "bg-[#FFE066] text-[#111111] shadow-[0_4px_14px_rgba(255,224,102,0.35)]"
-                  : "bg-transparent text-white/65 hover:text-white"
-              }`}
-            >
-              <span>✦</span>
-              <span>Upcoming</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setSpotlightTab("LIVE")}
-              style={{ padding: "9px 12px" }}
-              className={`rounded-full font-sans text-xs font-bold tracking-wide flex items-center justify-center gap-1.5 cursor-pointer transition-all ${
-                spotlightTab === "LIVE"
-                  ? "bg-[#FF5A5F] text-white shadow-[0_4px_14px_rgba(255,90,95,0.4)]"
-                  : "bg-transparent text-white/65 hover:text-white"
-              }`}
-            >
-              <span
-                className={`w-2 h-2 rounded-full ${
-                  spotlightTab === "LIVE"
-                    ? "bg-white animate-ping"
-                    : "bg-[#FF5A5F]"
-                }`}
-              />
-              <span>Live Going</span>
-            </button>
-          </div>
-
-          {/* PLAYFUL + PROFESSIONAL TWO-TONE COLLECTOR PASS CARD */}
+          {/* DESKTOP 2-COLUMN SPLIT COLLECTOR PASS CARD */}
           <div
             style={{
               boxShadow:
                 spotlightTab === "LIVE"
-                  ? "0 22px 50px rgba(0,0,0,0.75), 4px 4px 0px #FF5A5F"
-                  : "0 22px 50px rgba(0,0,0,0.75), 4px 4px 0px #D4A843",
+                  ? "0 24px 60px rgba(0,0,0,0.75), 6px 6px 0px #FF5A5F"
+                  : "0 24px 60px rgba(0,0,0,0.75), 6px 6px 0px #D4A843",
             }}
-            className="relative rounded-3xl bg-[#FAF8F5] text-[#111111] border-2 border-white overflow-hidden transition-all duration-300"
+            className="relative rounded-3xl bg-[#FAF8F5] text-[#111111] border-2 border-white overflow-hidden grid grid-cols-12 items-stretch"
           >
-            {/* 1. Top Framed Visual Stage (With Playful Tilted Sticker & Film Tag) */}
-            <div style={{ padding: "10px 10px 0 10px" }}>
-              <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden bg-[#111111]">
+            {/* Left Column (7 cols): Framed 16:10 Visual Stage */}
+            <div
+              style={{ padding: "14px" }}
+              className="col-span-7 flex flex-col justify-center"
+            >
+              <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden bg-[#111111] shadow-md">
                 <img
                   src={activeSpotlightEvent.img}
                   alt={activeSpotlightEvent.title}
-                  className="w-full h-full object-cover saturate-[1.14] transition-transform duration-700 scale-105"
+                  className="w-full h-full object-cover saturate-[1.14] transition-transform duration-700 hover:scale-105"
                   loading="lazy"
                   decoding="async"
                 />
@@ -2718,20 +2749,20 @@ export default function DesktopOilstainExperience() {
                 {/* Top-Left Playful Tilted Pastel Sticker Badge */}
                 <div
                   style={{
-                    padding: "4px 11px",
+                    padding: "5px 12px",
                     transform: "rotate(-2.5deg)",
                     backgroundColor:
                       spotlightTab === "LIVE" ? "#FFA8A8" : "#8CE99A",
                   }}
-                  className="absolute top-3 left-3 rounded-lg text-[#111111] font-mono text-[8.5px] font-bold uppercase tracking-[0.15em] shadow-md border border-black/15"
+                  className="absolute top-3.5 left-3.5 rounded-lg text-[#111111] font-mono text-[9px] font-bold uppercase tracking-[0.15em] shadow-md border border-black/15"
                 >
                   ★ {activeSpotlightEvent.category}
                 </div>
 
                 {/* Top-Right Date / Live Pill */}
                 <div
-                  style={{ padding: "4.5px 11px" }}
-                  className={`absolute top-3 right-3 rounded-full font-mono text-[8.5px] font-bold uppercase tracking-[0.14em] shadow-md ${
+                  style={{ padding: "5px 12px" }}
+                  className={`absolute top-3.5 right-3.5 rounded-full font-mono text-[9px] font-bold uppercase tracking-[0.14em] shadow-md ${
                     spotlightTab === "LIVE"
                       ? "bg-[#FF5A5F] text-white"
                       : "bg-white/95 text-[#111111]"
@@ -2744,15 +2775,15 @@ export default function DesktopOilstainExperience() {
 
                 {/* Bottom Location & Film Stock Strip inside Photo */}
                 <div
-                  style={{ padding: "10px 12px" }}
+                  style={{ padding: "12px 14px" }}
                   className="absolute bottom-0 inset-x-0 flex items-center justify-between gap-2 text-white"
                 >
-                  <span className="font-sans text-[11px] font-semibold truncate drop-shadow">
+                  <span className="font-sans text-xs font-semibold truncate drop-shadow">
                     📍 {activeSpotlightEvent.location}
                   </span>
                   <span
-                    style={{ padding: "2.5px 8px" }}
-                    className="rounded-full bg-black/65 backdrop-blur-md text-[#FFE066] font-mono text-[7.5px] font-bold uppercase tracking-wider shrink-0"
+                    style={{ padding: "3px 9px" }}
+                    className="rounded-full bg-black/65 backdrop-blur-md text-[#FFE066] font-mono text-[8px] font-bold uppercase tracking-wider shrink-0"
                   >
                     {activeSpotlightEvent.filmStock || "35MM ARCHIVE"}
                   </span>
@@ -2760,80 +2791,67 @@ export default function DesktopOilstainExperience() {
               </div>
             </div>
 
-            {/* 2. Playful Flip-Clock Countdown Strip (DAYS : HRS : MIN : SEC) */}
+            {/* Right Column (5 cols): Flip-Clock Countdown + Story + Join Button */}
             <div
-              style={{ padding: "12px 14px 8px" }}
-              className="flex items-center justify-between gap-2"
+              style={{ padding: "24px 26px 24px 12px" }}
+              className="col-span-5 flex flex-col justify-between border-l-2 border-dashed border-black/10"
             >
-              <div className="flex flex-col">
-                <span className="handmade-fountain-pen text-[14px] text-[#D92B2B] leading-none">
-                  {spotlightTab === "UPCOMING"
-                    ? "Don't miss the golden hour!"
-                    : " Doors are open right now!"}
-                </span>
-                <span
-                  style={{ marginTop: "3px" }}
-                  className="font-mono text-[8.5px] font-bold uppercase tracking-[0.16em] text-black/55"
-                >
-                  {spotlightTab === "UPCOMING"
-                    ? "COUNTDOWN TO LAUNCH"
-                    : "LIVE SESSION ENDS IN"}
-                </span>
-              </div>
+              {/* Top Countdown Strip */}
+              <div className="space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <span className="handmade-fountain-pen text-[16px] text-[#D92B2B] leading-none">
+                    {spotlightTab === "UPCOMING"
+                      ? "Don't miss the golden hour!"
+                      : "Doors are open right now!"}
+                  </span>
+                  <span className="font-mono text-[8.5px] font-bold uppercase tracking-[0.16em] text-black/45">
+                    {spotlightTab === "UPCOMING" ? "STARTS IN" : "ENDS IN"}
+                  </span>
+                </div>
 
-              {/* 4 Playful Tactile Countdown Tiles */}
-              <div className="flex items-center gap-1">
-                {[
-                  { val: countdown.days, label: "DAYS", bg: "#FFE066" },
-                  { val: countdown.hours, label: "HRS", bg: "#8CE99A" },
-                  { val: countdown.minutes, label: "MIN", bg: "#74C0FC" },
-                  { val: countdown.seconds, label: "SEC", bg: "#FFA8A8" },
-                ].map((unit) => (
-                  <div
-                    key={unit.label}
-                    style={{
-                      padding: "4px 7px",
-                      minWidth: "41px",
-                      backgroundColor: unit.bg,
-                    }}
-                    className="rounded-xl border border-black/15 shadow-[2px_2px_0px_#111111] flex flex-col items-center justify-center text-center"
-                  >
-                    <span className="font-heading font-black text-xs text-[#111111] leading-none">
-                      {unit.val}
-                    </span>
-                    <span
-                      style={{ marginTop: "2px" }}
-                      className="font-mono text-[6px] font-bold tracking-[0.12em] text-black/65 uppercase leading-none"
+                <div className="grid grid-cols-4 gap-2">
+                  {[
+                    { val: countdown.days, label: "DAYS", bg: "#FFE066" },
+                    { val: countdown.hours, label: "HRS", bg: "#8CE99A" },
+                    { val: countdown.minutes, label: "MIN", bg: "#74C0FC" },
+                    { val: countdown.seconds, label: "SEC", bg: "#FFA8A8" },
+                  ].map((unit) => (
+                    <div
+                      key={unit.label}
+                      style={{
+                        padding: "7px 8px",
+                        backgroundColor: unit.bg,
+                      }}
+                      className="rounded-xl border border-black/15 shadow-[2px_2px_0px_#111111] flex flex-col items-center justify-center text-center"
                     >
-                      {unit.label}
-                    </span>
-                  </div>
-                ))}
+                      <span className="font-heading font-black text-sm text-[#111111] leading-none">
+                        {unit.val}
+                      </span>
+                      <span
+                        style={{ marginTop: "3px" }}
+                        className="font-mono text-[7px] font-bold tracking-[0.12em] text-black/65 uppercase leading-none"
+                      >
+                        {unit.label}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
 
-            {/* Perforated Ticket Cutout Divider */}
-            <div className="relative w-full h-4 flex items-center justify-between my-0.5">
-              <span className="w-4 h-4 rounded-full bg-[#0A0A0E] -ml-2.5 shrink-0" />
-              <div className="w-full border-t-2 border-dashed border-black/12 mx-2" />
-              <span className="w-4 h-4 rounded-full bg-[#0A0A0E] -mr-2.5 shrink-0" />
-            </div>
-
-            {/* 3. Warm Ivory Editorial Story & Action Deck */}
-            <div style={{ padding: "8px 16px 16px" }} className="space-y-3.5">
-              <div>
-                <h3 className="font-serif text-2xl sm:text-[26px] text-[#111111] font-normal leading-[1.1] tracking-tight">
+              {/* Middle Title & Story */}
+              <div
+                style={{ padding: "14px 0" }}
+                className="border-y border-black/10 my-3 space-y-2"
+              >
+                <h3 className="font-serif text-2xl lg:text-3xl text-[#111111] font-normal leading-[1.1] tracking-tight">
                   {activeSpotlightEvent.title}
                 </h3>
-                <p
-                  style={{ marginTop: "6px" }}
-                  className="font-sans text-xs text-black/70 leading-relaxed"
-                >
+                <p className="font-sans text-xs text-black/70 leading-relaxed">
                   {activeSpotlightEvent.description}
                 </p>
               </div>
 
-              {/* Playful + Executive Pill JOIN Button */}
+              {/* Bottom Pill JOIN Button */}
               <button
                 type="button"
                 onClick={() => {
@@ -2845,7 +2863,7 @@ export default function DesktopOilstainExperience() {
                   setRegisterSubmitted(false);
                   setIsRegisterModalOpen(true);
                 }}
-                style={{ padding: "11px 14px 11px 20px" }}
+                style={{ padding: "12px 14px 12px 22px" }}
                 className={`w-full rounded-full font-sans text-xs font-bold tracking-wide flex items-center justify-between cursor-pointer transition-all shadow-[0_8px_20px_rgba(0,0,0,0.15)] active:scale-[0.98] ${
                   spotlightTab === "LIVE"
                     ? "bg-[#D92B2B] hover:bg-[#B91C1C] text-white"
@@ -2875,10 +2893,8 @@ export default function DesktopOilstainExperience() {
               </button>
             </div>
           </div>
-        </div>
 
-        {/* Bottom Button: SOLID WHITE "ACTIVITIES +" Button on the Black Background! */}
-        <div style={{ padding: "0 18px 28px" }} className="relative z-10">
+          {/* SOLID WHITE "ACTIVITIES +" BAR BUTTON */}
           <button
             type="button"
             onClick={() => {
@@ -2906,20 +2922,26 @@ export default function DesktopOilstainExperience() {
         id="desktop-light-bento-section"
         className="relative z-20 w-full bg-[#ECEBE6] text-[#111111]"
       >
-        <div style={{ paddingTop: "32px" }}>
+        <div
+          style={{
+            paddingTop: "48px",
+            maxWidth: "1140px",
+            margin: "0 auto",
+          }}
+        >
           <div
-            style={{ paddingLeft: "20px", paddingRight: "20px" }}
+            style={{ paddingLeft: "24px", paddingRight: "24px" }}
             className="flex items-end justify-between"
           >
             <div>
-              <span className="font-serif italic text-sm text-black/60 block">
+              <span className="font-serif italic text-base text-black/60 block">
                 Curated Contact Sheet
               </span>
-              <h2 className="font-heading font-black text-2xl uppercase tracking-[-0.03em] text-[#111111]">
+              <h2 className="font-heading font-black text-3xl uppercase tracking-[-0.03em] text-[#111111]">
                 VISUAL ARCHIVE
               </h2>
             </div>
-            <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-black/45">
+            <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-black/45">
               [ {gallery.length} COLOR PLATES ]
             </span>
           </div>
@@ -2935,236 +2957,251 @@ export default function DesktopOilstainExperience() {
               setIsGalleryPageOpen(true);
             }}
           />
-        </div>
 
-        <div className="grid grid-cols-3 w-full border-l border-black/15">
-          <button
-            type="button"
-            onClick={() =>
-              setActiveOpticalLab((prev) =>
-                prev === "LOUPE" ? null : "LOUPE"
-              )
-            }
-            className={`osl-bento-cell ${
-              activeOpticalLab === "LOUPE" ? "active-lab" : ""
-            }`}
-          >
-            <span className="font-mono text-[8px] opacity-55">01 // LAB</span>
-            <span className="font-mono text-[9.5px] font-bold tracking-[0.14em] uppercase">
-              35MM LOUPE
-            </span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() =>
-              setActiveOpticalLab((prev) =>
-                prev === "EMULSION" ? null : "EMULSION"
-              )
-            }
-            className={`osl-bento-cell ${
-              activeOpticalLab === "EMULSION" ? "active-lab" : ""
-            }`}
-          >
-            <span className="font-mono text-[8px] opacity-55">02 // FILM</span>
-            <span className="font-mono text-[9.5px] font-bold tracking-[0.14em] uppercase">
-              EMULSION
-            </span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() =>
-              setActiveOpticalLab((prev) =>
-                prev === "STROBE" ? null : "STROBE"
-              )
-            }
-            className={`osl-bento-cell ${
-              activeOpticalLab === "STROBE" ? "active-lab" : ""
-            }`}
-          >
-            <span className="font-mono text-[8px] opacity-55">03 // SPEC</span>
-            <span className="font-mono text-[9.5px] font-bold tracking-[0.14em] uppercase">
-              OPTICS RIG
-            </span>
-          </button>
-        </div>
-
-        {activeOpticalLab && (
           <div
-            style={{ padding: "18px 20px" }}
-            className="w-full bg-[#141417] text-white border-b border-black/15 space-y-4 animate-fade-in"
+            style={{ margin: "0 24px" }}
+            className="grid grid-cols-3 border-l border-black/15 rounded-xl overflow-hidden"
           >
-            <div className="flex items-center justify-between">
-              <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-[#D4A843] font-bold">
-                ● INTERACTIVE OPTICAL LAB // {activeOpticalLab}
+            <button
+              type="button"
+              onClick={() =>
+                setActiveOpticalLab((prev) =>
+                  prev === "LOUPE" ? null : "LOUPE"
+                )
+              }
+              className={`osl-bento-cell ${
+                activeOpticalLab === "LOUPE" ? "active-lab" : ""
+              }`}
+            >
+              <span className="font-mono text-[8.5px] opacity-55">
+                01 // LAB
               </span>
-              <button
-                type="button"
-                onClick={() => setActiveOpticalLab(null)}
-                className="font-mono text-[9px] uppercase tracking-widest text-white/60"
-              >
-                CLOSE ✕
-              </button>
-            </div>
+              <span className="font-mono text-[10.5px] font-bold tracking-[0.14em] uppercase">
+                35MM LOUPE
+              </span>
+            </button>
 
-            {activeOpticalLab === "LOUPE" && (
-              <div className="space-y-3">
-                <p className="font-body text-xs text-white/80">
-                  Tap a focal length below to preview how GCU photographers
-                  frame subjects across prime lenses:
-                </p>
-                <div className="grid grid-cols-4 gap-2">
-                  {[24, 35, 50, 85].map((mm) => (
-                    <button
-                      key={mm}
-                      type="button"
-                      onClick={() => setSelectedFocalMm(mm)}
-                      style={{ padding: "8px" }}
-                      className={`rounded-lg font-mono text-[10px] font-bold uppercase cursor-pointer ${
-                        selectedFocalMm === mm
-                          ? "bg-[#D4A843] text-black"
-                          : "bg-white/10 text-white"
-                      }`}
-                    >
-                      {mm}MM
-                    </button>
-                  ))}
-                </div>
-                <div className="relative w-full aspect-[16/9] rounded-xl overflow-hidden border border-white/15">
-                  <img
-                    src={gallery[0]?.src || FALLBACK_GALLERY[0].src}
-                    alt="Focal Preview"
-                    style={{
-                      transform: `scale(${
-                        selectedFocalMm === 24
-                          ? 1
-                          : selectedFocalMm === 35
-                          ? 1.15
-                          : selectedFocalMm === 50
-                          ? 1.32
-                          : 1.55
-                      })`,
-                    }}
-                    className="w-full h-full object-cover transition-transform duration-500"
-                  />
-                  <div className="absolute bottom-2 left-2 px-2.5 py-1 rounded bg-black/75 font-mono text-[9px] text-[#D4A843]">
-                    {selectedFocalMm}MM PRIME ·{" "}
-                    {selectedFocalMm === 85
-                      ? "PORTRAIT COMPRESSION"
-                      : selectedFocalMm === 50
-                      ? "HUMAN EYE PERSPECTIVE"
-                      : selectedFocalMm === 35
-                      ? "STREET REPORTAGE"
-                      : "ARCHITECTURAL WIDE"}
-                  </div>
-                </div>
-              </div>
-            )}
+            <button
+              type="button"
+              onClick={() =>
+                setActiveOpticalLab((prev) =>
+                  prev === "EMULSION" ? null : "EMULSION"
+                )
+              }
+              className={`osl-bento-cell ${
+                activeOpticalLab === "EMULSION" ? "active-lab" : ""
+              }`}
+            >
+              <span className="font-mono text-[8.5px] opacity-55">
+                02 // FILM
+              </span>
+              <span className="font-mono text-[10.5px] font-bold tracking-[0.14em] uppercase">
+                EMULSION
+              </span>
+            </button>
 
-            {activeOpticalLab === "EMULSION" && (
-              <div className="space-y-3">
-                <p className="font-body text-xs text-white/80">
-                  Switch between our club&apos;s 3 signature analog film
-                  emulsions:
-                </p>
-                <div className="grid grid-cols-3 gap-2">
-                  {(["PORTRA", "CINESTILL", "VELVIA"] as const).map((stock) => (
-                    <button
-                      key={stock}
-                      type="button"
-                      onClick={() => setSelectedEmulsion(stock)}
-                      style={{ padding: "8px" }}
-                      className={`rounded-lg font-mono text-[9.5px] font-bold uppercase cursor-pointer ${
-                        selectedEmulsion === stock
-                          ? "bg-[#D92B2B] text-white"
-                          : "bg-white/10 text-white"
-                      }`}
-                    >
-                      {stock}
-                    </button>
-                  ))}
-                </div>
-                <div className="relative w-full aspect-[16/9] rounded-xl overflow-hidden border border-white/15">
-                  <img
-                    src={gallery[2]?.src || FALLBACK_GALLERY[2].src}
-                    alt="Emulsion Grade"
-                    style={{
-                      filter:
-                        selectedEmulsion === "PORTRA"
-                          ? "sepia(0.18) saturate(1.25) contrast(1.05)"
-                          : selectedEmulsion === "CINESTILL"
-                          ? "hue-rotate(-14deg) saturate(1.4) contrast(1.15)"
-                          : "saturate(1.65) contrast(1.12)",
-                    }}
-                    className="w-full h-full object-cover transition-all duration-500"
-                  />
-                  <div className="absolute bottom-2 left-2 px-2.5 py-1 rounded bg-black/75 font-mono text-[9px] text-white">
-                    {selectedEmulsion === "PORTRA"
-                      ? "KODAK PORTRA 400 // WARM SKIN TONES"
-                      : selectedEmulsion === "CINESTILL"
-                      ? "CINESTILL 800T // TUNGSTEN HALATION"
-                      : "FUJIFILM VELVIA 50 // VIVID CHROME"}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {activeOpticalLab === "STROBE" && (
-              <div className="space-y-2.5 font-mono text-[10px] text-white/80">
-                <div className="flex justify-between py-1.5 border-b border-white/10">
-                  <span className="text-white/45">OPTICAL FORMAT</span>
-                  <span className="text-[#D4A843] font-bold">
-                    35MM FULL-FRAME &amp; 120 MEDIUM
-                  </span>
-                </div>
-                <div className="flex justify-between py-1.5 border-b border-white/10">
-                  <span className="text-white/45">STUDIO LIGHTING</span>
-                  <span className="text-white font-bold">
-                    GODEX AD600 PRO XENON STROBES
-                  </span>
-                </div>
-                <div className="flex justify-between py-1.5">
-                  <span className="text-white/45">DARKROOM LOCATION</span>
-                  <span className="text-[#8CE99A] font-bold">
-                    GCU MEDIA LAB · AZARA
-                  </span>
-                </div>
-              </div>
-            )}
+            <button
+              type="button"
+              onClick={() =>
+                setActiveOpticalLab((prev) =>
+                  prev === "STROBE" ? null : "STROBE"
+                )
+              }
+              className={`osl-bento-cell ${
+                activeOpticalLab === "STROBE" ? "active-lab" : ""
+              }`}
+            >
+              <span className="font-mono text-[8.5px] opacity-55">
+                03 // SPEC
+              </span>
+              <span className="font-mono text-[10.5px] font-bold tracking-[0.14em] uppercase">
+                OPTICS RIG
+              </span>
+            </button>
           </div>
-        )}
 
-        {/* Bottom Button: SOLID JET BLACK "GALLERY +" Button on the Light Background! */}
-        <div className="osl-pad-md">
-          <button
-            type="button"
-            onClick={() => {
-              setGalleryFilterCat("ALL");
-              setExpandedGalleryId(null);
-              setIsGalleryPageOpen(true);
-            }}
-            className="osl-bar-btn bg-[#111111] hover:bg-[#D92B2B] text-white rounded-xl shadow-[0_12px_30px_rgba(0,0,0,0.16)] active:scale-[0.99]"
-          >
-            <span className="font-bold">
-              GALLERY // EXPLORE ALL {gallery.length} FRAMES
-            </span>
-            <span className="w-6 h-6 rounded-full bg-[#D4A843] text-[#050505] flex items-center justify-center text-sm font-bold leading-none">
-              +
-            </span>
-          </button>
+          {activeOpticalLab && (
+            <div
+              style={{ margin: "12px 24px 0", padding: "22px 24px" }}
+              className="rounded-2xl bg-[#141417] text-white border border-black/15 space-y-4 animate-fade-in"
+            >
+              <div className="flex items-center justify-between">
+                <span className="font-mono text-[9.5px] tracking-[0.2em] uppercase text-[#D4A843] font-bold">
+                  ● INTERACTIVE OPTICAL LAB // {activeOpticalLab}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setActiveOpticalLab(null)}
+                  className="font-mono text-[9.5px] uppercase tracking-widest text-white/60 cursor-pointer"
+                >
+                  CLOSE ✕
+                </button>
+              </div>
+
+              {activeOpticalLab === "LOUPE" && (
+                <div className="space-y-3">
+                  <p className="font-body text-xs text-white/80">
+                    Select a prime focal length below to preview how GCU
+                    photographers frame subjects:
+                  </p>
+                  <div className="grid grid-cols-4 gap-2.5 max-w-md">
+                    {[24, 35, 50, 85].map((mm) => (
+                      <button
+                        key={mm}
+                        type="button"
+                        onClick={() => setSelectedFocalMm(mm)}
+                        style={{ padding: "8px" }}
+                        className={`rounded-lg font-mono text-[10px] font-bold uppercase cursor-pointer ${
+                          selectedFocalMm === mm
+                            ? "bg-[#D4A843] text-black"
+                            : "bg-white/10 text-white"
+                        }`}
+                      >
+                        {mm}MM
+                      </button>
+                    ))}
+                  </div>
+                  <div className="relative w-full max-h-[320px] aspect-[21/9] rounded-xl overflow-hidden border border-white/15">
+                    <img
+                      src={gallery[0]?.src || FALLBACK_GALLERY[0].src}
+                      alt="Focal Preview"
+                      style={{
+                        transform: `scale(${
+                          selectedFocalMm === 24
+                            ? 1
+                            : selectedFocalMm === 35
+                            ? 1.15
+                            : selectedFocalMm === 50
+                            ? 1.32
+                            : 1.55
+                        })`,
+                      }}
+                      className="w-full h-full object-cover transition-transform duration-500"
+                    />
+                    <div className="absolute bottom-3 left-3 px-3 py-1 rounded bg-black/75 font-mono text-[9.5px] text-[#D4A843]">
+                      {selectedFocalMm}MM PRIME ·{" "}
+                      {selectedFocalMm === 85
+                        ? "PORTRAIT COMPRESSION"
+                        : selectedFocalMm === 50
+                        ? "HUMAN EYE PERSPECTIVE"
+                        : selectedFocalMm === 35
+                        ? "STREET REPORTAGE"
+                        : "ARCHITECTURAL WIDE"}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeOpticalLab === "EMULSION" && (
+                <div className="space-y-3">
+                  <p className="font-body text-xs text-white/80">
+                    Switch between our club&apos;s 3 signature analog film
+                    emulsions:
+                  </p>
+                  <div className="grid grid-cols-3 gap-2.5 max-w-md">
+                    {(["PORTRA", "CINESTILL", "VELVIA"] as const).map(
+                      (stock) => (
+                        <button
+                          key={stock}
+                          type="button"
+                          onClick={() => setSelectedEmulsion(stock)}
+                          style={{ padding: "8px" }}
+                          className={`rounded-lg font-mono text-[9.5px] font-bold uppercase cursor-pointer ${
+                            selectedEmulsion === stock
+                              ? "bg-[#D92B2B] text-white"
+                              : "bg-white/10 text-white"
+                          }`}
+                        >
+                          {stock}
+                        </button>
+                      )
+                    )}
+                  </div>
+                  <div className="relative w-full max-h-[320px] aspect-[21/9] rounded-xl overflow-hidden border border-white/15">
+                    <img
+                      src={gallery[2]?.src || FALLBACK_GALLERY[2].src}
+                      alt="Emulsion Grade"
+                      style={{
+                        filter:
+                          selectedEmulsion === "PORTRA"
+                            ? "sepia(0.18) saturate(1.25) contrast(1.05)"
+                            : selectedEmulsion === "CINESTILL"
+                            ? "hue-rotate(-14deg) saturate(1.4) contrast(1.15)"
+                            : "saturate(1.65) contrast(1.12)",
+                      }}
+                      className="w-full h-full object-cover transition-all duration-500"
+                    />
+                    <div className="absolute bottom-3 left-3 px-3 py-1 rounded bg-black/75 font-mono text-[9.5px] text-white">
+                      {selectedEmulsion === "PORTRA"
+                        ? "KODAK PORTRA 400 // WARM SKIN TONES"
+                        : selectedEmulsion === "CINESTILL"
+                        ? "CINESTILL 800T // TUNGSTEN HALATION"
+                        : "FUJIFILM VELVIA 50 // VIVID CHROME"}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeOpticalLab === "STROBE" && (
+                <div className="space-y-2.5 font-mono text-[10.5px] text-white/80">
+                  <div className="flex justify-between py-1.5 border-b border-white/10">
+                    <span className="text-white/45">OPTICAL FORMAT</span>
+                    <span className="text-[#D4A843] font-bold">
+                      35MM FULL-FRAME &amp; 120 MEDIUM
+                    </span>
+                  </div>
+                  <div className="flex justify-between py-1.5 border-b border-white/10">
+                    <span className="text-white/45">STUDIO LIGHTING</span>
+                    <span className="text-white font-bold">
+                      GODEX AD600 PRO XENON STROBES
+                    </span>
+                  </div>
+                  <div className="flex justify-between py-1.5">
+                    <span className="text-white/45">DARKROOM LOCATION</span>
+                    <span className="text-[#8CE99A] font-bold">
+                      GCU MEDIA LAB · AZARA
+                    </span>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* SOLID JET BLACK "GALLERY +" BUTTON */}
+          <div style={{ padding: "20px 24px 44px" }}>
+            <button
+              type="button"
+              onClick={() => {
+                setGalleryFilterCat("ALL");
+                setExpandedGalleryId(null);
+                setIsGalleryPageOpen(true);
+              }}
+              className="osl-bar-btn bg-[#111111] hover:bg-[#D92B2B] text-white rounded-xl shadow-[0_12px_30px_rgba(0,0,0,0.16)] active:scale-[0.99]"
+            >
+              <span className="font-bold">
+                GALLERY // EXPLORE ALL {gallery.length} FRAMES
+              </span>
+              <span className="w-6 h-6 rounded-full bg-[#D4A843] text-[#050505] flex items-center justify-center text-sm font-bold leading-none">
+                +
+              </span>
+            </button>
+          </div>
         </div>
       </section>
 
       {/* ============================================================
-          5. "ABOUT" BANNER + 6-CHAPTER BAR + RESTORED FULL-BLEED MATRIX
-             + COLORED STUDIO MEMBER CARDS
+          5. "ABOUT" BANNER + 6-CHAPTER BAR + CENTERED DESKTOP CONTENT
+             + STUDIO-PROPORTIONED COLORED MEMBER CARDS
           ============================================================ */}
       <section
         id="desktop-light-about-section"
         className="relative z-20 w-full bg-[#FAF9F5] text-[#111111] border-t border-black/15"
       >
-        <div className="relative w-full aspect-[16/9] bg-[#111111] flex items-center justify-center overflow-hidden">
+        {/* Fixed 320px Desktop Cinematic Banner (Never stretches to 1000px tall!) */}
+        <div
+          style={{ height: "320px" }}
+          className="relative w-full bg-[#111111] flex items-center justify-center overflow-hidden"
+        >
           <img
             src="/images/gcu-campus-sketch.jpg"
             onError={(e) => {
@@ -3178,175 +3215,202 @@ export default function DesktopOilstainExperience() {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/35 to-black/40" />
           <div className="relative z-10 text-center px-4">
-            <span className="font-mono text-[8.5px] tracking-[0.28em] uppercase text-[#D4A843] font-bold block mb-1">
+            <span className="font-mono text-[9.5px] tracking-[0.28em] uppercase text-[#D4A843] font-bold block mb-1.5">
               GIRIJANANDA CHOWDHURY UNIVERSITY
             </span>
-            <h2 className="font-heading font-black text-3xl tracking-[0.06em] uppercase text-white">
+            <h2 className="font-heading font-black text-4xl lg:text-5xl tracking-[0.06em] uppercase text-white">
               ABOUT US
             </h2>
           </div>
         </div>
 
-        <div className="w-full overflow-x-auto no-scrollbar bg-[#ECEBE6] border-y border-black/15 flex items-center">
-          {ABOUT_CHAPTER_TABS.map((tab) => {
-            const isActive = activeAboutTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                type="button"
-                onClick={() => setActiveAboutTab(tab.id)}
-                className={`osl-chapter-pill shrink-0 flex items-center gap-1.5 ${
-                  isActive
-                    ? "bg-[#111111] text-white"
-                    : "bg-[#ECEBE6] text-[#111111]/70"
-                }`}
-              >
-                <span
-                  className={
-                    isActive ? "text-[#D4A843] font-bold" : "opacity-45"
-                  }
+        {/* Centered 6-Chapter Horizontal Taskbar */}
+        <div className="w-full overflow-x-auto no-scrollbar bg-[#ECEBE6] border-y border-black/15 flex items-center justify-center">
+          <div className="flex items-center">
+            {ABOUT_CHAPTER_TABS.map((tab) => {
+              const isActive = activeAboutTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setActiveAboutTab(tab.id)}
+                  className={`osl-chapter-pill shrink-0 flex items-center gap-2 ${
+                    isActive
+                      ? "bg-[#111111] text-white"
+                      : "bg-[#ECEBE6] text-[#111111]/70 hover:text-[#111111]"
+                  }`}
                 >
-                  {tab.code}
-                </span>
-                <span>{tab.shortLabel}</span>
-              </button>
-            );
-          })}
+                  <span
+                    className={
+                      isActive ? "text-[#D4A843] font-bold" : "opacity-45"
+                    }
+                  >
+                    {tab.code}
+                  </span>
+                  <span>{tab.shortLabel}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
 
-        {activeAboutTab === "ORIGINS" && (
-          <div className="osl-pad-lg space-y-4">
-            <div>
-              <h3 className="font-heading font-black text-3xl uppercase tracking-[-0.03em] text-[#111111]">
-                STORYTELLERS
-              </h3>
-              <span className="font-mono text-[9.5px] tracking-[0.2em] uppercase text-black/45 block mt-1">
-                CHAPTER 01 // ORIGINS
-              </span>
-            </div>
+        {/* Centered 1140px Chapter Stage */}
+        <div
+          style={{
+            maxWidth: "1140px",
+            margin: "0 auto",
+            padding: "44px 32px 56px",
+          }}
+        >
+          {activeAboutTab === "ORIGINS" && (
+            <div className="space-y-5">
+              <div>
+                <h3 className="font-heading font-black text-4xl uppercase tracking-[-0.03em] text-[#111111]">
+                  STORYTELLERS
+                </h3>
+                <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-black/45 block mt-1">
+                  CHAPTER 01 // ORIGINS
+                </span>
+              </div>
 
-            <StopMotionFlipbook matrixStack={matrixStack} />
-          </div>
-        )}
-
-        {activeAboutTab === "THE TEACHERS" && (
-          <div className="osl-pad-lg space-y-5">
-            <div>
-              <span className="font-mono text-[9.5px] tracking-[0.22em] uppercase text-[#0F766E] font-bold block">
-                CHAPTER 02 // THE TEACHERS
-              </span>
-              <h3 className="font-heading font-black text-2xl uppercase tracking-[-0.03em] text-[#111111] mt-1">
-                THE TEACHERS WHO GUIDE US
-              </h3>
-              <p className="font-body text-xs text-black/65 mt-1 leading-relaxed">
-                Our faculty coordinators who mentor our visual archive,
-                symposia, and campus-wide exhibitions at GCU.
-              </p>
+              <StopMotionFlipbook matrixStack={matrixStack} />
             </div>
+          )}
 
-            <div className="grid grid-cols-2 gap-3.5">
-              {mentorsList.map((person, idx) =>
-                renderStudioMemberCard(person, idx)
-              )}
-            </div>
-          </div>
-        )}
+          {activeAboutTab === "THE TEACHERS" && (
+            <div className="space-y-8">
+              <div className="text-center">
+                <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-[#0F766E] font-bold block">
+                  CHAPTER 02 // THE TEACHERS
+                </span>
+                <h3 className="font-heading font-black text-3xl uppercase tracking-[-0.03em] text-[#111111] mt-1">
+                  THE TEACHERS WHO GUIDE US
+                </h3>
+                <p
+                  style={{ maxWidth: "560px", margin: "6px auto 0" }}
+                  className="font-body text-xs text-black/65 leading-relaxed"
+                >
+                  Our faculty coordinators who mentor our visual archive,
+                  symposia, and campus-wide exhibitions at GCU.
+                </p>
+              </div>
 
-        {activeAboutTab === "BEHIND THE LENS" && (
-          <div className="osl-pad-lg space-y-5">
-            <div>
-              <span className="font-mono text-[9.5px] tracking-[0.22em] uppercase text-[#D92B2B] font-bold block">
-                CHAPTER 03 // LEADERSHIP
-              </span>
-              <h3 className="font-heading font-black text-2xl uppercase tracking-[-0.03em] text-[#111111] mt-1">
-                BEHIND THE LENS
-              </h3>
-              <p className="font-body text-xs text-black/65 mt-1 leading-relaxed">
-                Student executive directors leading expeditions, darkroom
-                critiques, and curation across Assam.
-              </p>
+              <div className="flex flex-wrap items-stretch justify-center gap-6">
+                {mentorsList.map((person, idx) =>
+                  renderStudioMemberCard(person, idx)
+                )}
+              </div>
             </div>
+          )}
 
-            <div className="grid grid-cols-2 gap-3.5">
-              {leadsList.map((person, idx) =>
-                renderStudioMemberCard(person, idx + 2)
-              )}
-            </div>
-          </div>
-        )}
+          {activeAboutTab === "BEHIND THE LENS" && (
+            <div className="space-y-8">
+              <div className="text-center">
+                <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-[#D92B2B] font-bold block">
+                  CHAPTER 03 // LEADERSHIP
+                </span>
+                <h3 className="font-heading font-black text-3xl uppercase tracking-[-0.03em] text-[#111111] mt-1">
+                  BEHIND THE LENS
+                </h3>
+                <p
+                  style={{ maxWidth: "560px", margin: "6px auto 0" }}
+                  className="font-body text-xs text-black/65 leading-relaxed"
+                >
+                  Student executive directors leading expeditions, darkroom
+                  critiques, and curation across Assam.
+                </p>
+              </div>
 
-        {activeAboutTab === "CORE MEMBERS" && (
-          <div className="osl-pad-lg space-y-5">
-            <div>
-              <span className="font-mono text-[9.5px] tracking-[0.22em] uppercase text-[#1864AB] font-bold block">
-                CHAPTER 04 // THE FOUNDATION
-              </span>
-              <h3 className="font-heading font-black text-2xl uppercase tracking-[-0.03em] text-[#111111] mt-1">
-                CORE MEMBERS
-              </h3>
-              <p className="font-body text-xs text-black/65 mt-1 leading-relaxed">
-                The creative backbone driving street reportage, strobe
-                portraiture, landscape expeditions, and motion reels.
-              </p>
+              <div className="flex flex-wrap items-stretch justify-center gap-6">
+                {leadsList.map((person, idx) =>
+                  renderStudioMemberCard(person, idx + 2)
+                )}
+              </div>
             </div>
+          )}
 
-            <div className="grid grid-cols-2 gap-3.5">
-              {coreList.map((person, idx) =>
-                renderStudioMemberCard(person, idx + 1)
-              )}
-            </div>
-          </div>
-        )}
+          {activeAboutTab === "CORE MEMBERS" && (
+            <div className="space-y-8">
+              <div className="text-center">
+                <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-[#1864AB] font-bold block">
+                  CHAPTER 04 // THE FOUNDATION
+                </span>
+                <h3 className="font-heading font-black text-3xl uppercase tracking-[-0.03em] text-[#111111] mt-1">
+                  CORE MEMBERS
+                </h3>
+                <p
+                  style={{ maxWidth: "560px", margin: "6px auto 0" }}
+                  className="font-body text-xs text-black/65 leading-relaxed"
+                >
+                  The creative backbone driving street reportage, strobe
+                  portraiture, landscape expeditions, and motion reels.
+                </p>
+              </div>
 
-        {activeAboutTab === "WHERE IT ALL STARTED" && (
-          <div className="osl-pad-lg space-y-5">
-            <div>
-              <span className="font-mono text-[9.5px] tracking-[0.22em] uppercase text-[#B45309] font-bold block">
-                CHAPTER 05 // GENESIS
-              </span>
-              <h3 className="font-heading font-black text-2xl uppercase tracking-[-0.03em] text-[#111111] mt-1">
-                WHERE IT ALL STARTED
-              </h3>
-              <p className="font-body text-xs text-black/65 mt-1 leading-relaxed">
-                Founded in 2023 to unite Girijananda Chowdhury University&apos;s
-                visual storytellers under one banner.
-              </p>
+              <div className="flex flex-wrap items-stretch justify-center gap-6">
+                {coreList.map((person, idx) =>
+                  renderStudioMemberCard(person, idx + 1)
+                )}
+              </div>
             </div>
+          )}
 
-            <div className="grid grid-cols-2 gap-3.5">
-              {foundersList.map((person, idx) =>
-                renderStudioMemberCard(person, idx + 4)
-              )}
-            </div>
-          </div>
-        )}
+          {activeAboutTab === "WHERE IT ALL STARTED" && (
+            <div className="space-y-8">
+              <div className="text-center">
+                <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-[#B45309] font-bold block">
+                  CHAPTER 05 // GENESIS
+                </span>
+                <h3 className="font-heading font-black text-3xl uppercase tracking-[-0.03em] text-[#111111] mt-1">
+                  WHERE IT ALL STARTED
+                </h3>
+                <p
+                  style={{ maxWidth: "560px", margin: "6px auto 0" }}
+                  className="font-body text-xs text-black/65 leading-relaxed"
+                >
+                  Founded in 2023 to unite Girijananda Chowdhury
+                  University&apos;s visual storytellers under one banner.
+                </p>
+              </div>
 
-        {activeAboutTab === "CARRYING IT FORWARD" && (
-          <div className="osl-pad-lg space-y-5">
-            <div>
-              <span className="font-mono text-[9.5px] tracking-[0.22em] uppercase text-[#6B21A8] font-bold block">
-                CHAPTER 06 // LEGACY
-              </span>
-              <h3 className="font-heading font-black text-2xl uppercase tracking-[-0.03em] text-[#111111] mt-1">
-                CARRYING IT FORWARD
-              </h3>
-              <p className="font-body text-xs text-black/65 mt-1 leading-relaxed">
-                Alumni torchbearers whose early exhibitions and mentorship built
-                the creative culture of ShutterScape.
-              </p>
+              <div className="flex flex-wrap items-stretch justify-center gap-6">
+                {foundersList.map((person, idx) =>
+                  renderStudioMemberCard(person, idx + 4)
+                )}
+              </div>
             </div>
+          )}
 
-            <div className="grid grid-cols-2 gap-3.5">
-              {legacyList.map((person, idx) =>
-                renderStudioMemberCard(person, idx + 3)
-              )}
+          {activeAboutTab === "CARRYING IT FORWARD" && (
+            <div className="space-y-8">
+              <div className="text-center">
+                <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-[#6B21A8] font-bold block">
+                  CHAPTER 06 // LEGACY
+                </span>
+                <h3 className="font-heading font-black text-3xl uppercase tracking-[-0.03em] text-[#111111] mt-1">
+                  CARRYING IT FORWARD
+                </h3>
+                <p
+                  style={{ maxWidth: "560px", margin: "6px auto 0" }}
+                  className="font-body text-xs text-black/65 leading-relaxed"
+                >
+                  Alumni torchbearers whose early exhibitions and mentorship
+                  built the creative culture of ShutterScape.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-stretch justify-center gap-6">
+                {legacyList.map((person, idx) =>
+                  renderStudioMemberCard(person, idx + 3)
+                )}
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </section>
 
       {/* ============================================================
-          6. FRAMES IN MOTION — 3D CENTERED VIDEO REEL CAROUSEL
+          6. FRAMES IN MOTION — 3D CENTERED VIDEO REEL CAROUSEL (DESKTOP ALIGNED)
           ============================================================ */}
       <section
         id="desktop-chronology-matrix"
@@ -3360,17 +3424,22 @@ export default function DesktopOilstainExperience() {
           }}
         />
 
+        {/* Explicitly Centered Header (Never hugs the left wall!) */}
         <div
-          style={{ padding: "36px 20px 14px" }}
-          className="relative z-10 flex flex-col items-center justify-center text-center gap-2 w-full max-w-md mx-auto"
+          style={{
+            padding: "48px 24px 16px",
+            maxWidth: "680px",
+            margin: "0 auto",
+          }}
+          className="relative z-10 flex flex-col items-center justify-center text-center gap-2 w-full"
         >
-          <h2 className="font-script text-5xl sm:text-6xl font-bold tracking-normal leading-[0.9]">
+          <h2 className="font-script text-6xl font-bold tracking-normal leading-[0.9]">
             <span className="text-white drop-shadow-sm">Frames in </span>
             <span className="text-[#EF4444] drop-shadow-[0_0_35px_rgba(239,68,68,0.45)]">
               Motion
             </span>
           </h2>
-          <p className="font-sans text-xs sm:text-[13px] text-gray-400 font-medium tracking-wide">
+          <p className="font-sans text-sm text-gray-400 font-medium tracking-wide">
             Moments in motion — from the club and its members.
           </p>
           <div className="pt-1">
@@ -3381,7 +3450,7 @@ export default function DesktopOilstainExperience() {
                 setExpandedGalleryId(null);
                 setIsGalleryPageOpen(true);
               }}
-              className="group inline-flex items-center justify-center gap-2 font-mono text-[9.5px] font-bold uppercase tracking-[0.22em] text-white/70 hover:text-white cursor-pointer transition-colors"
+              className="group inline-flex items-center justify-center gap-2 font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-white/70 hover:text-white cursor-pointer transition-colors"
             >
               <span>SEE MORE</span>
               <span className="text-[#EF4444] group-hover:translate-x-1 transition-transform">
@@ -3391,25 +3460,26 @@ export default function DesktopOilstainExperience() {
           </div>
         </div>
 
+        {/* 5-Card Widescreen 3D Reel Carousel */}
         <div
-          className="relative w-full h-[54vh] min-h-[400px] max-h-[520px] flex items-center justify-center overflow-hidden my-2"
+          className="relative w-full h-[58vh] min-h-[440px] max-h-[560px] flex items-center justify-center overflow-hidden my-2"
           onTouchStart={handleReelTouchStart}
           onTouchEnd={handleReelTouchEnd}
         >
           {reels.map((reel, index) => {
             const isActive = index === activeReelIdx;
             const isActiveAudio = activeAudioReelIdx === index;
-            const isAdjacent =
-              Math.abs(index - activeReelIdx) === 1 ||
-              (index === 0 && activeReelIdx === reels.length - 1) ||
-              (index === reels.length - 1 && activeReelIdx === 0);
-            const isVisibleCard = isActive || isAdjacent;
+            const total = reels.length;
+            let relIdx = index - activeReelIdx;
+            if (relIdx > total / 2) relIdx -= total;
+            if (relIdx < -total / 2) relIdx += total;
+            const isVisibleCard = Math.abs(relIdx) <= 2;
 
             return (
               <div
                 key={reel._id || reel.id || index}
                 onClick={() => handleReelCardClick(index)}
-                className="absolute top-1/2 left-1/2 w-[280px] max-w-[320px] aspect-[9/16] max-h-[52vh] rounded-[24px] overflow-hidden group bg-[#0A0A0D] border border-white/10 shadow-[0_24px_60px_rgba(0,0,0,0.8)] cursor-pointer select-none"
+                className="absolute top-1/2 left-1/2 w-[275px] aspect-[9/16] max-h-[54vh] rounded-[24px] overflow-hidden group bg-[#0A0A0D] border border-white/10 shadow-[0_24px_60px_rgba(0,0,0,0.8)] cursor-pointer select-none"
                 style={getReelCardStyle(index)}
               >
                 {isVisibleCard ? (
@@ -3517,9 +3587,9 @@ export default function DesktopOilstainExperience() {
           })}
         </div>
 
-        <div className="text-center pb-5 pt-1">
-          <p className="font-sans text-[10.5px] text-white/45 font-medium tracking-wide">
-            Tap a reel to watch it with sound · Swipe to navigate
+        <div style={{ paddingBottom: "24px", paddingTop: "8px" }} className="text-center">
+          <p className="font-sans text-xs text-white/45 font-medium tracking-wide">
+            Click active reel to toggle sound · Click side reels to navigate
           </p>
         </div>
 
@@ -3531,7 +3601,12 @@ export default function DesktopOilstainExperience() {
               setRegisterSubmitted(false);
               setIsRegisterModalOpen(true);
             }}
-            className="osl-bar-btn bg-[#D92B2B] text-white border-y border-white/15"
+            style={{
+              maxWidth: "1140px",
+              margin: "0 auto 36px",
+              borderRadius: "12px",
+            }}
+            className="osl-bar-btn bg-[#D92B2B] hover:bg-[#B91C1C] text-white border border-white/15 shadow-lg"
           >
             <span>REGISTER YOUR INTEREST // JOIN SHUTTERSCAPE</span>
             <span className="text-lg leading-none">+</span>
@@ -3540,12 +3615,12 @@ export default function DesktopOilstainExperience() {
       </section>
 
       {/* ============================================================
-          7. COMPACT CORPORATE-GRADE MINIMALIST FOOTER (ZERO OVERFLOW)
+          7. COMPACT CORPORATE-GRADE MINIMALIST FOOTER (CENTERED ON DESKTOP)
           ============================================================ */}
       <footer
         id="desktop-global-footer"
         style={{
-          padding: "18px 14px 82px 14px",
+          padding: "28px 32px 92px 32px",
           backgroundColor: "#FAF9F5",
           color: "#0A0A0C",
         }}
@@ -3553,7 +3628,8 @@ export default function DesktopOilstainExperience() {
       >
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-x-3 bottom-12 flex items-center justify-center overflow-hidden select-none"
+          style={{ maxWidth: "1140px", margin: "0 auto" }}
+          className="pointer-events-none absolute inset-x-6 bottom-12 flex items-center justify-center overflow-hidden select-none"
         >
           <svg
             viewBox="0 0 620 64"
@@ -3564,7 +3640,7 @@ export default function DesktopOilstainExperience() {
               x="50%"
               y="52"
               textAnchor="middle"
-              fill="rgba(10, 10, 12, 0.045)"
+              fill="rgba(10, 10, 12, 0.04)"
               style={{
                 fontFamily: "var(--font-sora), system-ui, sans-serif",
                 fontWeight: 900,
@@ -3577,82 +3653,85 @@ export default function DesktopOilstainExperience() {
           </svg>
         </div>
 
-        <div className="relative z-10 w-full max-w-md mx-auto flex flex-col gap-2.5">
+        <div
+          style={{ maxWidth: "1140px", margin: "0 auto" }}
+          className="relative z-10 w-full flex flex-col gap-3.5"
+        >
           <div
-            style={{ paddingBottom: "10px" }}
-            className="w-full flex items-center justify-between gap-1.5 border-b border-black/[0.08]"
+            style={{ paddingBottom: "12px" }}
+            className="w-full flex items-center justify-between gap-4 border-b border-black/[0.08]"
           >
-            <div className="flex items-center gap-2 min-w-0 shrink">
+            <div className="flex items-center gap-3 min-w-0 shrink">
               <div
-                style={{ width: "64px", height: "18px" }}
+                style={{ width: "82px", height: "22px" }}
                 className="relative shrink-0"
               >
                 <Image
                   src="/images/shutterscape-logo-cropped.png"
                   alt="ShutterScape"
                   fill
-                  sizes="64px"
+                  sizes="82px"
                   unoptimized
                   className="object-contain object-left"
                 />
               </div>
 
-              <span className="h-3 w-[1px] bg-black/15 shrink-0" />
+              <span className="h-4 w-[1px] bg-black/15 shrink-0" />
 
               <a
                 href="https://gcu.ac.in"
                 target="_blank"
                 rel="noopener noreferrer"
                 title="Girijananda Chowdhury University"
-                style={{ width: "70px", height: "18px" }}
+                style={{ width: "88px", height: "22px" }}
                 className="relative opacity-90 hover:opacity-100 transition-opacity shrink-0"
               >
                 <Image
                   src="/images/gcu-logo-black-text.png"
                   alt="GCU"
                   fill
-                  sizes="70px"
+                  sizes="88px"
                   unoptimized
                   className="object-contain object-left"
                 />
               </a>
             </div>
 
-            <div className="flex items-center gap-1 shrink-0">
+            <div className="flex items-center gap-2 shrink-0">
               <a
                 href="https://www.instagram.com/shutterscape_gcu"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ padding: "4px 8px" }}
-                className="rounded-full bg-black/[0.05] hover:bg-[#111111] text-[#111111] hover:text-white font-sans text-[9.5px] font-semibold tracking-tight flex items-center gap-0.5 transition-colors whitespace-nowrap"
+                style={{ padding: "6px 12px" }}
+                className="rounded-full bg-black/[0.05] hover:bg-[#111111] text-[#111111] hover:text-white font-sans text-xs font-semibold tracking-tight flex items-center gap-1 transition-colors whitespace-nowrap"
               >
                 <span>Instagram</span>
-                <span className="text-[8.5px] opacity-60">↗</span>
+                <span className="text-[10px] opacity-60">↗</span>
               </a>
               <a
                 href="https://chat.whatsapp.com/Hs71BicR1Xj3PmOyPJ5wdc?s=sw&p=a&mlu=4&ilr=4"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ padding: "4px 8px" }}
-                className="rounded-full bg-[#111111] text-white font-sans text-[9.5px] font-semibold tracking-tight flex items-center gap-0.5 transition-opacity hover:opacity-85 whitespace-nowrap"
+                style={{ padding: "6px 12px" }}
+                className="rounded-full bg-[#111111] text-white font-sans text-xs font-semibold tracking-tight flex items-center gap-1 transition-opacity hover:opacity-85 whitespace-nowrap"
               >
                 <span>WhatsApp</span>
-                <span className="text-[8.5px] text-[#D4A843]">↗</span>
+                <span className="text-[10px] text-[#D4A843]">↗</span>
               </a>
             </div>
           </div>
 
           <div
-            style={{ paddingBottom: "10px" }}
-            className="w-full flex items-center justify-between gap-2 border-b border-black/[0.08] font-sans text-[10px] text-black/75"
+            style={{ paddingBottom: "12px" }}
+            className="w-full flex items-center justify-between gap-4 border-b border-black/[0.08] font-sans text-xs text-black/75"
           >
             <a
               href="mailto:shutterscape@gcuniversity.ac.in"
-              className="flex items-center gap-1.5 hover:text-black transition-colors min-w-0 truncate"
+              className="flex items-center gap-2 hover:text-black transition-colors min-w-0 truncate"
             >
               <svg
-                width="11"
-                height="11"
+                width="13"
+                height="13"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -3673,11 +3752,11 @@ export default function DesktopOilstainExperience() {
               href="https://maps.app.goo.gl/NhdHs1u76Bjxo2J87"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1 text-black/65 hover:text-black font-medium shrink-0 whitespace-nowrap transition-colors"
+              className="flex items-center gap-1.5 text-black/65 hover:text-black font-medium shrink-0 whitespace-nowrap transition-colors"
             >
               <svg
-                width="10"
-                height="10"
+                width="12"
+                height="12"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -3689,17 +3768,17 @@ export default function DesktopOilstainExperience() {
                 <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
                 <circle cx="12" cy="10" r="3" />
               </svg>
-              <span>Azara, Guwahati</span>
-              <span className="text-[8.5px] opacity-50">↗</span>
+              <span>Azara, Guwahati, Assam</span>
+              <span className="text-[10px] opacity-50">↗</span>
             </a>
           </div>
 
-          <div className="w-full flex items-center justify-between gap-2 pt-0.5 font-sans text-[9.5px] text-black/50">
-            <span className="font-mono text-[8px] tracking-[0.1em] uppercase whitespace-nowrap">
-              © 2026 SHUTTERSCAPE GCU
+          <div className="w-full flex items-center justify-between gap-4 pt-0.5 font-sans text-xs text-black/50">
+            <span className="font-mono text-[9.5px] tracking-[0.12em] uppercase whitespace-nowrap">
+              © 2026 SHUTTERSCAPE · GIRIJANANDA CHOWDHURY UNIVERSITY
             </span>
 
-            <div className="flex items-center gap-1 text-[9.5px] text-black/65 whitespace-nowrap">
+            <div className="flex items-center gap-1.5 text-xs text-black/65 whitespace-nowrap">
               <span>
                 Crafted by{" "}
                 <strong className="font-semibold text-[#111111]">
@@ -3713,7 +3792,7 @@ export default function DesktopOilstainExperience() {
                 rel="noopener noreferrer"
                 className="font-semibold text-[#111111] hover:underline"
               >
-                Codénix
+                Codénix (GCU)
               </a>
             </div>
           </div>
@@ -3721,23 +3800,25 @@ export default function DesktopOilstainExperience() {
       </footer>
 
       {/* ============================================================
-          PAGE OVERLAY 1: PLAYFUL, ARTISTIC & PROFESSIONAL ACTIVITIES PAGE
-          - Full-Bleed Vivid Images (No Blurry Letterbox Bars!)
-          - Tactile Offset Shadow Pass Cards + Tilted Pastel Stickers
-          - Interactive Filmstrip Quick-Jump Dock (Zero Dead Bottom Space!)
+          PAGE OVERLAY 1: DESKTOP-CENTERED ACTIVITIES PAGE
+          - Uncropped Poster Stage (Blurred Backdrop + Object-Contain)
+          - Centered 1240px Header, Carousel, Prev/Next & Quick-Jump Strip
           ============================================================ */}
       {isActivitiesPageOpen && (
         <div className="fixed inset-0 z-[9999] bg-[#F4F2EC] text-[#111111] flex flex-col overflow-y-auto animate-fade-in">
-          {/* 1. Sticky Top Bar + Playful Pill Category Taskbar */}
           <div className="sticky top-0 z-30 bg-[#F4F2EC]/95 backdrop-blur-md border-b border-black/10 shrink-0">
             <div
-              style={{ padding: "12px 18px" }}
+              style={{
+                padding: "14px 32px",
+                maxWidth: "1280px",
+                margin: "0 auto",
+              }}
               className="flex items-center justify-between"
             >
               <button
                 type="button"
                 onClick={() => setIsActivitiesPageOpen(false)}
-                style={{ padding: "6.5px 14px" }}
+                style={{ padding: "7px 16px" }}
                 className="rounded-full bg-[#111111] text-white font-sans text-xs font-semibold tracking-wide flex items-center gap-1.5 cursor-pointer shadow-xs active:scale-95 transition-transform"
               >
                 <span>←</span>
@@ -3745,82 +3826,86 @@ export default function DesktopOilstainExperience() {
               </button>
 
               <div className="text-center">
-                <span className="font-heading font-black text-sm uppercase tracking-tight text-[#111111] block leading-none">
+                <span className="font-heading font-black text-base uppercase tracking-tight text-[#111111] block leading-none">
                   CLUB ACTIVITIES
                 </span>
-                <span className="handmade-fountain-pen text-[13px] text-[#D92B2B] block mt-0.5 leading-none">
+                <span className="handmade-fountain-pen text-[14px] text-[#D92B2B] block mt-0.5 leading-none">
                   Field Works &amp; Chronology
                 </span>
               </div>
 
               <span
-                style={{ padding: "4.5px 10px" }}
-                className="rounded-full bg-[#FFE066] border border-black/15 text-[#111111] font-mono text-[8.5px] font-bold uppercase tracking-wider shadow-[2px_2px_0px_#111111]"
+                style={{ padding: "5px 12px" }}
+                className="rounded-full bg-[#FFE066] border border-black/15 text-[#111111] font-mono text-[9px] font-bold uppercase tracking-wider shadow-[2px_2px_0px_#111111]"
               >
                 {filteredActivityItems.length} WORKS
               </span>
             </div>
 
-            {/* Playful Segmented Category Taskbar */}
-            <div
-              style={{ padding: "8px 18px" }}
-              className="flex items-center gap-2 overflow-x-auto no-scrollbar border-t border-black/5 bg-[#EAE7DF]"
-            >
-              {[
-                { key: "ALL", label: "✦ All Works" },
-                { key: "PHOTOWALK", label: "Photowalks" },
-                { key: "WORKSHOP", label: "Workshops" },
-                { key: "EXHIBITION", label: "Exhibitions" },
-                { key: "COMPETITION", label: "Competitions" },
-                { key: "2026", label: "Works '26" },
-                { key: "2025", label: "Works '25" },
-              ].map((cat) => {
-                const isSelected = activityFilterCat === cat.key;
-                return (
-                  <button
-                    key={cat.key}
-                    type="button"
-                    onClick={() => {
-                      setActivityFilterCat(cat.key);
-                      setActiveActivitySlideIdx(0);
-                      if (activitiesPeekScrollRef.current) {
-                        activitiesPeekScrollRef.current.scrollTo({
-                          left: 0,
-                          behavior: "smooth",
-                        });
-                      }
-                    }}
-                    style={{ padding: "6px 13px" }}
-                    className={`rounded-full font-sans text-xs font-semibold shrink-0 cursor-pointer transition-all ${
-                      isSelected
-                        ? "bg-[#111111] text-white shadow-[2px_2px_0px_#D4A843]"
-                        : "bg-white text-black/70 border border-black/10 hover:text-black"
-                    }`}
-                  >
-                    {cat.label}
-                  </button>
-                );
-              })}
+            <div className="w-full border-t border-black/5 bg-[#EAE7DF]">
+              <div
+                style={{
+                  padding: "10px 32px",
+                  maxWidth: "1280px",
+                  margin: "0 auto",
+                }}
+                className="flex items-center gap-2.5 overflow-x-auto no-scrollbar"
+              >
+                {[
+                  { key: "ALL", label: "✦ All Works" },
+                  { key: "PHOTOWALK", label: "Photowalks" },
+                  { key: "WORKSHOP", label: "Workshops" },
+                  { key: "EXHIBITION", label: "Exhibitions" },
+                  { key: "COMPETITION", label: "Competitions" },
+                  { key: "2026", label: "Works '26" },
+                  { key: "2025", label: "Works '25" },
+                ].map((cat) => {
+                  const isSelected = activityFilterCat === cat.key;
+                  return (
+                    <button
+                      key={cat.key}
+                      type="button"
+                      onClick={() => {
+                        setActivityFilterCat(cat.key);
+                        setActiveActivitySlideIdx(0);
+                        if (activitiesPeekScrollRef.current) {
+                          activitiesPeekScrollRef.current.scrollTo({
+                            left: 0,
+                            behavior: "smooth",
+                          });
+                        }
+                      }}
+                      style={{ padding: "6.5px 15px" }}
+                      className={`rounded-full font-sans text-xs font-semibold shrink-0 cursor-pointer transition-all ${
+                        isSelected
+                          ? "bg-[#111111] text-white shadow-[2px_2px_0px_#D4A843]"
+                          : "bg-white text-black/70 border border-black/10 hover:text-black"
+                      }`}
+                    >
+                      {cat.label}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
 
-          {/* 2. Main Collector Pass Stage (Compact, Balanced, Zero Empty Gap!) */}
           <div
-            style={{ padding: "16px 0 18px" }}
-            className="flex-1 flex flex-col justify-between gap-3.5"
+            style={{
+              padding: "24px 32px",
+              maxWidth: "1280px",
+              margin: "0 auto",
+            }}
+            className="flex-1 w-full flex flex-col justify-between gap-5"
           >
-            {/* Editorial Title Row */}
-            <div
-              style={{ padding: "0 20px" }}
-              className="flex items-end justify-between gap-2"
-            >
+            <div className="flex items-end justify-between gap-2">
               <div>
-                <span className="font-mono text-[8px] tracking-[0.22em] uppercase text-[#D92B2B] font-bold block">
+                <span className="font-mono text-[9px] tracking-[0.22em] uppercase text-[#D92B2B] font-bold block">
                   ARCHIVE DIRECTORY // 2025–2026
                 </span>
                 <h2
-                  style={{ marginTop: "2px" }}
-                  className="font-heading font-black text-2xl text-[#111111] tracking-[-0.03em] leading-none"
+                  style={{ marginTop: "3px" }}
+                  className="font-heading font-black text-3xl text-[#111111] tracking-[-0.03em] leading-none"
                 >
                   EXPLORE{" "}
                   <span className="font-serif italic font-normal text-[#D92B2B]">
@@ -3830,21 +3915,20 @@ export default function DesktopOilstainExperience() {
               </div>
 
               <span
-                style={{ padding: "3px 9px" }}
-                className="rounded-full bg-black/[0.06] font-mono text-[9.5px] font-bold text-[#111111] shrink-0"
+                style={{ padding: "4px 12px" }}
+                className="rounded-full bg-black/[0.06] font-mono text-[10px] font-bold text-[#111111] shrink-0"
               >
                 {String(activeActivitySlideIdx + 1).padStart(2, "0")} /{" "}
                 {String(filteredActivityItems.length).padStart(2, "0")}
               </span>
             </div>
 
-            {/* Horizontal Tactile Collector Cards (Full-Bleed Vivid Photo + Neo-Brutalist Offset Shadow!) */}
+            {/* Horizontal Collector Pass Cards */}
             <div
               ref={activitiesPeekScrollRef}
               onScroll={(e) => {
                 const container = e.currentTarget;
-                const cardWidth = container.clientWidth * 0.85;
-                const idx = Math.round(container.scrollLeft / cardWidth);
+                const idx = Math.round(container.scrollLeft / 370);
                 if (
                   idx !== activeActivitySlideIdx &&
                   idx >= 0 &&
@@ -3853,12 +3937,8 @@ export default function DesktopOilstainExperience() {
                   setActiveActivitySlideIdx(idx);
                 }
               }}
-              style={{
-                paddingLeft: "18px",
-                paddingRight: "18px",
-                paddingBottom: "6px",
-              }}
-              className="flex items-stretch gap-4 overflow-x-auto snap-x snap-mandatory no-scrollbar"
+              style={{ paddingBottom: "8px" }}
+              className="flex items-stretch gap-5 overflow-x-auto snap-x snap-mandatory no-scrollbar"
             >
               {filteredActivityItems.map((ev, idx) => {
                 const isSelectedCard = idx === activeActivitySlideIdx;
@@ -3870,70 +3950,73 @@ export default function DesktopOilstainExperience() {
                     key={ev._id || ev.id || idx}
                     onClick={() => scrollActivitiesPeekTo(idx)}
                     style={{
-                      padding: "11px",
+                      padding: "13px",
+                      width: "355px",
                       boxShadow: isSelectedCard
                         ? "5px 5px 0px #111111"
                         : "2px 2px 0px rgba(17,17,17,0.2)",
                     }}
-                    className={`shrink-0 w-[85vw] max-w-[345px] snap-center bg-white rounded-3xl border-2 border-[#111111] flex flex-col justify-between transition-all duration-300 cursor-pointer ${
+                    className={`shrink-0 snap-start bg-white rounded-3xl border-2 border-[#111111] flex flex-col justify-between transition-all duration-300 cursor-pointer ${
                       isSelectedCard
                         ? "opacity-100 scale-100"
-                        : "opacity-80 scale-[0.97]"
+                        : "opacity-85 hover:opacity-100"
                     }`}
                   >
                     <div>
-                      {/* Full-Bleed 16:10 Vivid Photo Stage (No Blurry Bars!) */}
-                      <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden bg-[#111115] border border-black/15">
-                        <img
-                          src={ev.img}
-                          alt={ev.title}
-                          className="w-full h-full object-cover object-center saturate-[1.12]"
-                          loading="lazy"
-                          decoding="async"
-                        />
-                        <div
-                          className="absolute inset-0 pointer-events-none"
-                          style={{
-                            background:
-                              "linear-gradient(180deg, rgba(0,0,0,0.3) 0%, transparent 45%, rgba(0,0,0,0.72) 100%)",
-                          }}
-                        />
-
-                        {/* Top-Left Playful Tilted Pastel Sticker */}
+                      {/* Top Header Above Image so Flyers/Posters are NEVER Covered */}
+                      <div
+                        style={{ padding: "0 2px 8px" }}
+                        className="flex items-center justify-between gap-2"
+                      >
                         <div
                           style={{
                             padding: "3.5px 10px",
                             backgroundColor: pillAccent,
-                            transform: "rotate(-2deg)",
+                            transform: "rotate(-1.5deg)",
                           }}
-                          className="absolute top-2.5 left-2.5 rounded-lg border border-black/20 text-[#111111] font-mono text-[8px] font-bold uppercase tracking-[0.14em] shadow-sm"
+                          className="rounded-lg border border-black/20 text-[#111111] font-mono text-[8px] font-bold uppercase tracking-[0.14em]"
                         >
                           #{String(idx + 1).padStart(2, "0")} · {ev.category}
                         </div>
 
-                        {/* Top-Right Date / Live Badge */}
                         <span
                           style={{ padding: "3.5px 9px" }}
-                          className={`absolute top-2.5 right-2.5 rounded-full font-mono text-[8px] font-bold uppercase tracking-[0.12em] shadow-sm ${
+                          className={`rounded-full font-mono text-[8px] font-bold uppercase tracking-[0.12em] ${
                             ev.isUpcoming
                               ? "bg-[#10B981] text-[#050505]"
-                              : "bg-white/95 text-[#111111]"
+                              : "bg-black/[0.06] text-[#111111]"
                           }`}
                         >
                           {ev.isUpcoming ? "● LIVE RSVP" : ev.date}
                         </span>
+                      </div>
 
-                        {/* Bottom Location & Film Stock Strip inside Photo */}
+                      {/* Uncropped Artwork Stage (Blurred Backdrop + Object-Contain so Poster Text is 100% Readable!) */}
+                      <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden bg-[#111115] border border-black/15">
+                        <img
+                          src={ev.img}
+                          alt=""
+                          aria-hidden="true"
+                          className="absolute inset-0 w-full h-full object-cover blur-xl opacity-55 scale-110"
+                        />
+                        <img
+                          src={ev.img}
+                          alt={ev.title}
+                          className="relative z-10 w-full h-full object-contain"
+                          loading="lazy"
+                          decoding="async"
+                        />
+
                         <div
-                          style={{ padding: "8px 10px" }}
-                          className="absolute bottom-0 inset-x-0 flex items-center justify-between gap-2 text-white"
+                          style={{ padding: "6px 10px" }}
+                          className="absolute bottom-0 inset-x-0 z-20 bg-gradient-to-t from-black/85 to-transparent flex items-center justify-between gap-2 text-white"
                         >
                           <span className="font-sans text-[10.5px] font-semibold truncate drop-shadow">
                             📍 {ev.location}
                           </span>
                           <span
                             style={{ padding: "2px 7px" }}
-                            className="rounded bg-black/70 backdrop-blur-xs text-[#FFE066] font-mono text-[7px] font-bold uppercase tracking-wider shrink-0"
+                            className="rounded bg-black/70 text-[#FFE066] font-mono text-[7px] font-bold uppercase tracking-wider shrink-0"
                           >
                             {ev.filmStock || ev.exif || "35MM"}
                           </span>
@@ -3948,7 +4031,10 @@ export default function DesktopOilstainExperience() {
                       </div>
 
                       {/* Editorial Story Deck */}
-                      <div style={{ padding: "2px 6px 10px" }} className="space-y-1.5">
+                      <div
+                        style={{ padding: "2px 6px 10px" }}
+                        className="space-y-1.5"
+                      >
                         <div className="flex items-center justify-between">
                           <span className="handmade-fountain-pen text-[14px] text-[#D92B2B] leading-none">
                             {ev.isUpcoming
@@ -3960,7 +4046,7 @@ export default function DesktopOilstainExperience() {
                           </span>
                         </div>
 
-                        <h3 className="font-serif text-xl text-[#111111] font-normal leading-tight tracking-tight">
+                        <h3 className="font-serif text-xl text-[#111111] font-normal leading-tight tracking-tight line-clamp-2">
                           {ev.title}
                         </h3>
 
@@ -3970,7 +4056,6 @@ export default function DesktopOilstainExperience() {
                       </div>
                     </div>
 
-                    {/* Playful Pill Action Button */}
                     <button
                       type="button"
                       onClick={(e) => {
@@ -4003,36 +4088,35 @@ export default function DesktopOilstainExperience() {
               })}
             </div>
 
-            {/* 3. Bottom Interactive Controller + Filmstrip Quick-Jump Dock (Fills Space Cleanly!) */}
-            <div style={{ padding: "0 18px" }} className="space-y-3">
-              {/* ← PREV | Pill Dots | NEXT → */}
-              <div className="flex items-center justify-between gap-3">
+            {/* Bottom Controls + Filmstrip Quick-Jump Dock */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between gap-4">
                 <button
                   type="button"
                   onClick={() =>
                     scrollActivitiesPeekTo(activeActivitySlideIdx - 1)
                   }
-                  style={{ padding: "7px 14px" }}
-                  className="rounded-full bg-white border-2 border-[#111111] font-mono text-[9.5px] font-bold uppercase tracking-[0.14em] text-[#111111] flex items-center gap-1.5 cursor-pointer shadow-[2px_2px_0px_#111111] active:scale-95"
+                  style={{ padding: "8px 18px" }}
+                  className="rounded-full bg-white border-2 border-[#111111] font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[#111111] flex items-center gap-1.5 cursor-pointer shadow-[2px_2px_0px_#111111] active:scale-95"
                 >
                   <span>←</span>
                   <span>PREV</span>
                 </button>
 
-                <div className="flex items-center gap-1.5 overflow-hidden max-w-[140px]">
-                  {filteredActivityItems.slice(0, 8).map((_, dotIdx) => {
+                <div className="flex items-center gap-1.5">
+                  {filteredActivityItems.slice(0, 10).map((_, dotIdx) => {
                     const isCurrentDot =
                       dotIdx ===
                       activeActivitySlideIdx %
-                        Math.min(8, filteredActivityItems.length);
+                        Math.min(10, filteredActivityItems.length);
                     return (
                       <button
                         key={dotIdx}
                         type="button"
                         onClick={() => scrollActivitiesPeekTo(dotIdx)}
                         style={{
-                          width: isCurrentDot ? "22px" : "6px",
-                          height: "6px",
+                          width: isCurrentDot ? "24px" : "7px",
+                          height: "7px",
                         }}
                         className={`rounded-full transition-all duration-300 cursor-pointer ${
                           isCurrentDot ? "bg-[#D92B2B]" : "bg-black/25"
@@ -4048,24 +4132,23 @@ export default function DesktopOilstainExperience() {
                   onClick={() =>
                     scrollActivitiesPeekTo(activeActivitySlideIdx + 1)
                   }
-                  style={{ padding: "7px 14px" }}
-                  className="rounded-full bg-[#111111] border-2 border-[#111111] text-white font-mono text-[9.5px] font-bold uppercase tracking-[0.14em] flex items-center gap-1.5 cursor-pointer shadow-[2px_2px_0px_#D4A843] active:scale-95"
+                  style={{ padding: "8px 18px" }}
+                  className="rounded-full bg-[#111111] border-2 border-[#111111] text-white font-mono text-[10px] font-bold uppercase tracking-[0.14em] flex items-center gap-1.5 cursor-pointer shadow-[2px_2px_0px_#D4A843] active:scale-95"
                 >
                   <span>NEXT</span>
                   <span>→</span>
                 </button>
               </div>
 
-              {/* Interactive Filmstrip Quick-Jump Dock (Eliminates Empty Bottom Space!) */}
               <div
-                style={{ padding: "10px 12px" }}
-                className="rounded-2xl bg-white/85 border border-black/10 flex items-center justify-between gap-2.5 shadow-2xs"
+                style={{ padding: "10px 16px" }}
+                className="rounded-2xl bg-white/85 border border-black/10 flex items-center justify-between gap-4 shadow-2xs"
               >
                 <div className="shrink-0">
-                  <span className="font-mono text-[7.5px] tracking-[0.18em] uppercase text-black/45 font-bold block">
+                  <span className="font-mono text-[8px] tracking-[0.18em] uppercase text-black/45 font-bold block">
                     CONTACT STRIP
                   </span>
-                  <span className="font-serif italic text-xs text-[#111111]">
+                  <span className="font-serif italic text-sm text-[#111111]">
                     Quick Jump
                   </span>
                 </div>
@@ -4078,7 +4161,7 @@ export default function DesktopOilstainExperience() {
                         key={thumbEv._id || thumbEv.id || tIdx}
                         type="button"
                         onClick={() => scrollActivitiesPeekTo(tIdx)}
-                        style={{ width: "44px", height: "34px" }}
+                        style={{ width: "48px", height: "36px" }}
                         className={`relative rounded-lg overflow-hidden shrink-0 cursor-pointer transition-all ${
                           isActiveThumb
                             ? "ring-2 ring-[#D92B2B] scale-105 opacity-100"
@@ -4098,100 +4181,120 @@ export default function DesktopOilstainExperience() {
             </div>
           </div>
 
-          {/* 4. Compact Dark Editorial Footer Strip */}
-          <div
-            style={{ padding: "14px 20px" }}
-            className="bg-[#111113] text-white flex items-center justify-between gap-3 shrink-0"
-          >
-            <div>
-              <span className="font-serif italic text-sm text-[#FFE066] block leading-none">
-                ShutterScape GCU
-              </span>
-              <p className="font-sans text-[10.5px] text-white/65 mt-0.5">
-                Capturing stories that outlive the moment.
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={() => setIsActivitiesPageOpen(false)}
-              style={{ padding: "6px 12px" }}
-              className="rounded-full bg-white/10 hover:bg-white/20 text-white font-mono text-[8px] font-bold uppercase tracking-widest shrink-0 cursor-pointer"
+          <div className="bg-[#111113] text-white shrink-0">
+            <div
+              style={{
+                padding: "14px 32px",
+                maxWidth: "1280px",
+                margin: "0 auto",
+              }}
+              className="flex items-center justify-between gap-3"
             >
-              CLOSE ✕
-            </button>
+              <div>
+                <span className="font-serif italic text-sm text-[#FFE066] block leading-none">
+                  ShutterScape GCU
+                </span>
+                <p className="font-sans text-[11px] text-white/65 mt-0.5">
+                  Capturing stories that outlive the moment.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsActivitiesPageOpen(false)}
+                style={{ padding: "6px 14px" }}
+                className="rounded-full bg-white/10 hover:bg-white/20 text-white font-mono text-[8.5px] font-bold uppercase tracking-widest shrink-0 cursor-pointer"
+              >
+                CLOSE ✕
+              </button>
+            </div>
           </div>
         </div>
       )}
 
       {/* ============================================================
-          PAGE OVERLAY 2: DEDICATED FULL-SCREEN GALLERY PAGE (Video 5)
-          + INTERACTIVE LOVE / LIKE COUNTER FEATURE
+          PAGE OVERLAY 2: DESKTOP 2-COLUMN CENTERED GALLERY PAGE
+          (Eliminates the Left-Stuck Column & Right Black Void!)
           ============================================================ */}
       {isGalleryPageOpen && (
         <div className="fixed inset-0 z-[9999] bg-[#0B0B0E] text-white overflow-y-auto animate-fade-in">
           <div className="sticky top-0 z-40 bg-[#0B0B0E]/95 backdrop-blur-md border-b border-white/10">
             <div
-              style={{ padding: "14px 18px" }}
+              style={{
+                padding: "14px 32px",
+                maxWidth: "1240px",
+                margin: "0 auto",
+              }}
               className="flex items-center justify-between"
             >
               <button
                 type="button"
                 onClick={() => setIsGalleryPageOpen(false)}
-                style={{ padding: "7px 14px" }}
+                style={{ padding: "7px 16px" }}
                 className="rounded-full bg-white text-[#0B0B0E] font-mono text-[10px] font-bold uppercase tracking-[0.18em] flex items-center gap-2 cursor-pointer shadow-md"
               >
                 <span>←</span>
                 <span>BACK</span>
               </button>
 
-              <span className="font-serif italic text-lg tracking-wide text-white">
+              <span className="font-serif italic text-xl tracking-wide text-white">
                 ShutterScape{" "}
-                <span className="font-mono not-italic text-[10px] text-[#D4A843] uppercase tracking-widest">
+                <span className="font-mono not-italic text-[10.5px] text-[#D4A843] uppercase tracking-widest">
                   Archive
                 </span>
               </span>
 
-              <span className="font-mono text-[9.5px] tracking-[0.18em] text-white/60 uppercase">
+              <span className="font-mono text-[10px] tracking-[0.18em] text-white/60 uppercase">
                 {filteredGalleryItems.length} PLATES
               </span>
             </div>
 
-            <div
-              style={{ padding: "8px 18px" }}
-              className="flex items-center gap-2 overflow-x-auto no-scrollbar border-t border-white/10 bg-black/50"
-            >
-              {[
-                "ALL",
-                "DOCUMENTARY",
-                "PORTRAITURE",
-                "LANDSCAPE",
-                "ARCHITECTURE",
-                "STREET",
-                "EXPERIMENTAL",
-              ].map((cat) => {
-                const isSelected = galleryFilterCat === cat;
-                return (
-                  <button
-                    key={cat}
-                    type="button"
-                    onClick={() => setGalleryFilterCat(cat)}
-                    style={{ padding: "6px 12px" }}
-                    className={`rounded-full font-mono text-[9px] font-bold uppercase tracking-[0.16em] shrink-0 cursor-pointer transition-all ${
-                      isSelected
-                        ? "bg-[#D4A843] text-[#050505]"
-                        : "bg-white/10 text-white/70"
-                    }`}
-                  >
-                    {cat === "ALL" ? "ALL PLATES" : cat}
-                  </button>
-                );
-              })}
+            <div className="w-full border-t border-white/10 bg-black/50">
+              <div
+                style={{
+                  padding: "10px 32px",
+                  maxWidth: "1240px",
+                  margin: "0 auto",
+                }}
+                className="flex items-center gap-2.5 overflow-x-auto no-scrollbar"
+              >
+                {[
+                  "ALL",
+                  "DOCUMENTARY",
+                  "PORTRAITURE",
+                  "LANDSCAPE",
+                  "ARCHITECTURE",
+                  "STREET",
+                  "EXPERIMENTAL",
+                ].map((cat) => {
+                  const isSelected = galleryFilterCat === cat;
+                  return (
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => setGalleryFilterCat(cat)}
+                      style={{ padding: "6.5px 14px" }}
+                      className={`rounded-full font-mono text-[9.5px] font-bold uppercase tracking-[0.16em] shrink-0 cursor-pointer transition-all ${
+                        isSelected
+                          ? "bg-[#D4A843] text-[#050505]"
+                          : "bg-white/10 text-white/70 hover:text-white"
+                      }`}
+                    >
+                      {cat === "ALL" ? "ALL PLATES" : cat}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
 
+          {/* Centered 2-Column Desktop Editorial Grid */}
           <div
-            style={{ padding: "16px 14px 48px" }}
-            className="space-y-4 max-w-xl mx-auto"
+            style={{
+              padding: "28px 32px 64px",
+              maxWidth: "1240px",
+              margin: "0 auto",
+            }}
+            className="grid grid-cols-2 gap-6"
           >
             {filteredGalleryItems.map((item, idx) => {
               const cardKey = item._id || item.id || String(idx);
@@ -4204,7 +4307,7 @@ export default function DesktopOilstainExperience() {
               return (
                 <div
                   key={cardKey}
-                  className="relative w-full rounded-2xl overflow-hidden bg-[#141418] border border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.75)]"
+                  className="relative w-full rounded-2xl overflow-hidden bg-[#141418] border border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.75)] flex flex-col"
                 >
                   <div
                     onDoubleClick={(e) => handleToggleLike(cardKey, e)}
@@ -4213,11 +4316,11 @@ export default function DesktopOilstainExperience() {
                     <img
                       src={item.src}
                       alt={item.title}
-                      className="w-full h-full object-cover saturate-[1.12]"
+                      className="w-full h-full object-cover saturate-[1.12] transition-transform duration-700 hover:scale-105"
                       loading="lazy"
                       decoding="async"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/35" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/35 pointer-events-none" />
 
                     {isBursting && (
                       <div className="pointer-events-none absolute inset-0 z-30 flex items-center justify-center">
@@ -4237,16 +4340,19 @@ export default function DesktopOilstainExperience() {
 
                     <div
                       style={{ padding: "12px 14px" }}
-                      className="absolute top-0 inset-x-0 flex items-center justify-between font-mono text-[8.5px] tracking-[0.2em] uppercase"
+                      className="absolute top-0 inset-x-0 flex items-center justify-between font-mono text-[8.5px] tracking-[0.2em] uppercase pointer-events-none"
                     >
-                      <span className="px-2.5 py-1 rounded bg-black/70 text-[#D4A843] font-bold">
+                      <span
+                        style={{ padding: "3px 8px" }}
+                        className="rounded bg-black/70 text-[#D4A843] font-bold"
+                      >
                         {item.category}
                       </span>
                       <span className="text-white/75">{item.filmStock}</span>
                     </div>
 
                     <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
-                      <h3 className="font-serif text-2xl sm:text-3xl text-white font-light tracking-wide drop-shadow-[0_4px_16px_rgba(0,0,0,0.9)]">
+                      <h3 className="font-serif text-2xl lg:text-3xl text-white font-light tracking-wide drop-shadow-[0_4px_16px_rgba(0,0,0,0.9)]">
                         {item.title}
                       </h3>
                       <p
@@ -4257,13 +4363,13 @@ export default function DesktopOilstainExperience() {
                       </p>
                     </div>
 
-                    <div className="absolute bottom-3.5 inset-x-0 flex items-center justify-center gap-2.5 px-4">
+                    <div className="absolute bottom-4 inset-x-0 flex items-center justify-center gap-2.5 px-4">
                       <button
                         type="button"
                         onClick={() =>
                           setExpandedGalleryId(isExpanded ? null : cardKey)
                         }
-                        style={{ padding: "7px 16px" }}
+                        style={{ padding: "7.5px 16px" }}
                         className="rounded-md bg-white/95 hover:bg-[#D4A843] text-[#050505] font-mono text-[9px] font-bold uppercase tracking-[0.18em] shadow-lg cursor-pointer transition-colors"
                       >
                         {isExpanded ? "− HIDE DETAILS" : "+ VIEW IN LOUPE"}
@@ -4273,11 +4379,11 @@ export default function DesktopOilstainExperience() {
                         type="button"
                         onClick={(e) => handleToggleLike(cardKey, e)}
                         aria-label={isLiked ? "Unlike photo" : "Love photo"}
-                        style={{ padding: "6.5px 12px" }}
+                        style={{ padding: "7px 13px" }}
                         className={`rounded-md border-0 font-mono text-[9.5px] font-bold tracking-[0.12em] flex items-center gap-1.5 shadow-lg cursor-pointer transition-all active:scale-90 ${
                           isLiked
                             ? "bg-[#EF4444] text-white"
-                            : "bg-black/70 backdrop-blur-md text-white"
+                            : "bg-black/70 backdrop-blur-md text-white hover:bg-black/90"
                         }`}
                       >
                         <svg
@@ -4322,24 +4428,24 @@ export default function DesktopOilstainExperience() {
       )}
 
       {/* ============================================================
-          MODAL 3: STUDIO MEMBER BIO SHEET (With ← BACK Button)
+          MODAL 3: STUDIO MEMBER BIO SHEET
           ============================================================ */}
       {selectedMemberModal && (
         <div
           onClick={() => setSelectedMemberModal(null)}
-          style={{ padding: "20px" }}
+          style={{ padding: "24px" }}
           className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-md flex items-center justify-center animate-fade-in"
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            style={{ padding: "22px" }}
-            className="w-full max-w-sm bg-white text-[#111111] rounded-3xl shadow-2xl space-y-4"
+            style={{ padding: "24px", maxWidth: "420px", margin: "0 auto" }}
+            className="w-full bg-white text-[#111111] rounded-3xl shadow-2xl space-y-4"
           >
             <div className="flex items-center justify-between">
               <button
                 type="button"
                 onClick={() => setSelectedMemberModal(null)}
-                style={{ padding: "6px 12px" }}
+                style={{ padding: "6px 14px" }}
                 className="rounded-full bg-[#111111] text-white font-mono text-[9.5px] font-bold uppercase tracking-widest flex items-center gap-1.5 cursor-pointer"
               >
                 <span>←</span>
@@ -4387,29 +4493,45 @@ export default function DesktopOilstainExperience() {
       )}
 
       {/* ============================================================
-          MODAL 4: "REGISTER YOUR INTEREST" SWISS FORM MODAL (With ← BACK Button)
+          MODAL 4: "REGISTER YOUR INTEREST" SWISS FORM MODAL (CENTERED)
           ============================================================ */}
       {isRegisterModalOpen && (
         <div className="fixed inset-0 z-[9999] bg-[#FAF9F5] text-[#111111] overflow-y-auto animate-fade-in flex flex-col justify-between">
           <div>
-            <div className="osl-pad-md flex items-center justify-between border-b border-black/15 sticky top-0 bg-[#FAF9F5]/95 z-20">
-              <button
-                type="button"
-                onClick={() => setIsRegisterModalOpen(false)}
-                style={{ padding: "6px 12px" }}
-                className="rounded-full bg-[#111111] text-white font-mono text-[9.5px] tracking-[0.18em] uppercase font-bold cursor-pointer flex items-center gap-1.5"
+            <div className="border-b border-black/15 sticky top-0 bg-[#FAF9F5]/95 z-20">
+              <div
+                style={{
+                  padding: "18px 32px",
+                  maxWidth: "760px",
+                  margin: "0 auto",
+                }}
+                className="flex items-center justify-between"
               >
-                <span>←</span>
-                <span>BACK</span>
-              </button>
-              <span className="font-mono text-[10px] tracking-[0.18em] uppercase text-[#111111] font-bold">
-                JOIN SHUTTERSCAPE &apos;26
-              </span>
+                <button
+                  type="button"
+                  onClick={() => setIsRegisterModalOpen(false)}
+                  style={{ padding: "7px 14px" }}
+                  className="rounded-full bg-[#111111] text-white font-mono text-[9.5px] tracking-[0.18em] uppercase font-bold cursor-pointer flex items-center gap-1.5"
+                >
+                  <span>←</span>
+                  <span>BACK</span>
+                </button>
+                <span className="font-mono text-[10.5px] tracking-[0.18em] uppercase text-[#111111] font-bold">
+                  JOIN SHUTTERSCAPE &apos;26
+                </span>
+              </div>
             </div>
 
-            <div className="osl-pad-lg space-y-6">
+            <div
+              style={{
+                padding: "40px 32px",
+                maxWidth: "760px",
+                margin: "0 auto",
+              }}
+              className="space-y-6"
+            >
               <div>
-                <h2 className="font-heading font-black text-3xl uppercase tracking-[-0.03em] leading-[0.95] text-[#111111]">
+                <h2 className="font-heading font-black text-4xl uppercase tracking-[-0.03em] leading-[0.95] text-[#111111]">
                   REGISTER
                   <br />
                   YOUR INTEREST
@@ -4418,8 +4540,8 @@ export default function DesktopOilstainExperience() {
                 </h2>
                 {registerEventName && (
                   <span
-                    style={{ marginTop: "8px", padding: "4px 10px" }}
-                    className="inline-block rounded bg-[#D4A843] text-[#050505] font-mono text-[9.5px] font-bold uppercase tracking-wider"
+                    style={{ marginTop: "10px", padding: "5px 12px" }}
+                    className="inline-block rounded bg-[#D4A843] text-[#050505] font-mono text-[10px] font-bold uppercase tracking-wider"
                   >
                     EVENT RSVP // {registerEventName}
                   </span>
@@ -4427,11 +4549,14 @@ export default function DesktopOilstainExperience() {
               </div>
 
               {registerSubmitted ? (
-                <div className="p-6 border border-black/20 bg-[#ECEBE6] space-y-3">
+                <div
+                  style={{ padding: "24px" }}
+                  className="border border-black/20 bg-[#ECEBE6] rounded-2xl space-y-3"
+                >
                   <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#D92B2B] font-bold block">
                     ● TRANSMISSION RECEIVED
                   </span>
-                  <h3 className="font-heading font-bold text-lg uppercase text-[#111111]">
+                  <h3 className="font-heading font-bold text-xl uppercase text-[#111111]">
                     WELCOME TO THE DARKROOM.
                   </h3>
                   <p className="font-body text-xs text-black/75 leading-relaxed">
@@ -4443,7 +4568,7 @@ export default function DesktopOilstainExperience() {
                     href="https://chat.whatsapp.com/Hs71BicR1Xj3PmOyPJ5wdc?s=sw&p=a&mlu=4&ilr=4"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="osl-bar-btn bg-[#111111] text-white mt-3"
+                    className="osl-bar-btn bg-[#111111] text-white rounded-xl mt-3"
                   >
                     <span>JOIN WHATSAPP COMMUNITY</span>
                     <span>↗</span>
@@ -4511,8 +4636,8 @@ export default function DesktopOilstainExperience() {
                   <div className="pt-4 flex justify-end">
                     <button
                       type="submit"
-                      style={{ padding: "13px 34px" }}
-                      className="bg-[#D92B2B] text-white font-mono text-[10.5px] font-bold uppercase tracking-[0.2em] cursor-pointer shadow-md"
+                      style={{ padding: "14px 38px" }}
+                      className="rounded-xl bg-[#D92B2B] hover:bg-[#B91C1C] text-white font-mono text-[11px] font-bold uppercase tracking-[0.2em] cursor-pointer shadow-md transition-colors"
                     >
                       SUBMIT
                     </button>
