@@ -826,7 +826,6 @@ export default function MobileOilstainExperience() {
     bgColor: string;
   } | null>(null);
 
-  const [isEngineeringDataOpen, setIsEngineeringDataOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [registerEventName, setRegisterEventName] = useState<string>("");
   const [registerSubmitted, setRegisterSubmitted] = useState(false);
@@ -1090,7 +1089,6 @@ export default function MobileOilstainExperience() {
   }, [
     gallery.length,
     activities.length,
-    isEngineeringDataOpen,
     activeAboutTab,
     activeOpticalLab,
   ]);
@@ -3217,7 +3215,7 @@ export default function MobileOilstainExperience() {
           </p>
         </div>
 
-        {/* REGISTER & ARCHIVE CHRONOLOGY LEDGER BUTTONS */}
+        {/* REGISTER BUTTON */}
         <div className="w-full">
           <button
             type="button"
@@ -3231,78 +3229,7 @@ export default function MobileOilstainExperience() {
             <span>REGISTER YOUR INTEREST // JOIN SHUTTERSCAPE</span>
             <span className="text-lg leading-none">+</span>
           </button>
-
-          <button
-            type="button"
-            onClick={() => setIsEngineeringDataOpen((prev) => !prev)}
-            className="osl-bar-btn bg-[#141418] text-white border-b border-white/10"
-          >
-            <span>
-              {isEngineeringDataOpen
-                ? "HIDE CHRONOLOGY & ARCHIVE DATA"
-                : "VIEW FULL CHRONOLOGY & ARCHIVE DATA"}
-            </span>
-            <span className="text-lg leading-none">
-              {isEngineeringDataOpen ? "−" : "+"}
-            </span>
-          </button>
         </div>
-
-        {/* Full Chronology Ledger Table */}
-        {isEngineeringDataOpen && (
-          <div className="osl-pad-lg border-b border-white/10 space-y-6 bg-[#111113] animate-fade-in">
-            <div className="flex items-start justify-between border-b border-white/15 pb-4">
-              <div>
-                <h3 className="font-heading font-black text-lg uppercase tracking-[0.02em] text-white">
-                  SHUTTERSCAPE GCU:
-                  <br />
-                  FULL CHRONOLOGY &amp; ARCHIVE DATA
-                </h3>
-                <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-[#D4A843] block mt-1">
-                  WORKS &apos;26 &amp; WORKS &apos;25 OFFICIAL LEDGER
-                </span>
-              </div>
-              <button
-                type="button"
-                onClick={() => setIsEngineeringDataOpen(false)}
-                className="px-2.5 py-1 bg-white/10 text-white font-mono text-[9px] uppercase tracking-[0.18em]"
-              >
-                CLOSE ✕
-              </button>
-            </div>
-
-            <div className="divide-y divide-white/10">
-              {activities.map((ev, idx) => (
-                <div
-                  key={ev._id || ev.id || idx}
-                  className="py-3.5 grid grid-cols-12 gap-2 items-baseline font-mono text-[10px]"
-                >
-                  <div className="col-span-4 text-white/45 uppercase tracking-[0.14em]">
-                    {ev.category}
-                    <span className="block text-[8.5px] text-[#D4A843]">
-                      {ev.date}
-                    </span>
-                  </div>
-                  <div className="col-span-5 text-white font-sans font-semibold text-xs">
-                    {ev.title}
-                    <span className="block font-mono text-[9px] text-white/50 font-normal mt-0.5">
-                      📍 {ev.location}
-                    </span>
-                  </div>
-                  <div className="col-span-3 text-right text-[9px] text-white/65">
-                    {ev.isUpcoming ? (
-                      <span className="inline-block px-1.5 py-0.5 bg-[#D92B2B] text-white font-bold uppercase">
-                        UPCOMING
-                      </span>
-                    ) : (
-                      <span>{ev.filmStock}</span>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
       </section>
 
       {/* ============================================================
