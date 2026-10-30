@@ -146,7 +146,6 @@ const FALLBACK_SPOTLIGHT = {
     title: "Brahmaputra Heritage Photowalk 4.0",
     category: "PHOTOWALK",
     date: "NOV 14, 2026",
-    // Default targetDate: 14 days, 6 hours, 45 mins in the future if not set by admin
     targetDate: new Date(
       Date.now() + (14 * 86400 + 6 * 3600 + 45 * 60) * 1000
     ).toISOString(),
@@ -162,7 +161,6 @@ const FALLBACK_SPOTLIGHT = {
     title: "Campus Nocturnes & Strobe Light Lab",
     category: "LIVE WORKSHOP",
     date: "HAPPENING NOW",
-    // Default targetDate: 4 hours, 38 mins remaining in the live session
     targetDate: new Date(
       Date.now() + (4 * 3600 + 38 * 60 + 25) * 1000
     ).toISOString(),
@@ -297,7 +295,7 @@ const FALLBACK_COMMITTEE = [
     tier: "CORE",
     dept: "Optics & Strobe Lead",
     bio: "Focuses on studio strobe choreography, Chiaroscuro portraiture, and manual lens experimentation.",
-    img: "https://images.unsplash.com/photo-1488161628813-04466f872be2?w=600&auto=format&fit=crop",
+    img: "https://images.unsplash.com/photo-1488161628813-04466f872be2?q=75&w=600&auto=format&fit=crop",
   },
   {
     name: "Manash Pratim Sarma",
@@ -511,7 +509,6 @@ function buildCompactNotchPath(cx: number): string {
 function computeCountdownParts(targetIso?: string, fallbackHours = 72) {
   let targetMs = targetIso ? Date.parse(targetIso) : NaN;
   if (isNaN(targetMs) || targetMs <= Date.now()) {
-    // Keep a rolling positive timer if targetDate is missing or in the past
     const cycleMs = fallbackHours * 3600 * 1000;
     const remainder = cycleMs - (Date.now() % cycleMs);
     targetMs = Date.now() + remainder;
@@ -1242,7 +1239,6 @@ export default function MobileOilstainExperience() {
         const actList = actRes.value.data;
         setActivities(actList);
 
-        // If /api/spotlight wasn't configured yet, hydrate from activities if tagged
         const foundUpcoming = actList.find(
           (a: any) => a.spotlightType === "upcoming" || a.isUpcoming
         );
@@ -1530,11 +1526,6 @@ export default function MobileOilstainExperience() {
     );
   }, [activities, activityFilterCat]);
 
-  const activeActivityDetail =
-    filteredActivityItems[
-      activeActivitySlideIdx % Math.max(1, filteredActivityItems.length)
-    ] || FALLBACK_ACTIVITIES[0];
-
   const scrollActivitiesPeekTo = (idx: number) => {
     const total = filteredActivityItems.length;
     if (total === 0) return;
@@ -1545,7 +1536,7 @@ export default function MobileOilstainExperience() {
       const cardEl = container.children[clamped] as HTMLElement | undefined;
       if (cardEl) {
         container.scrollTo({
-          left: cardEl.offsetLeft - 20,
+          left: cardEl.offsetLeft - 18,
           behavior: "smooth",
         });
       }
@@ -1866,7 +1857,7 @@ export default function MobileOilstainExperience() {
           letter-spacing: 0.16em;
           text-transform: uppercase;
           cursor: pointer;
-          transition: background-color 0.2s ease, color 0.2s ease;
+          transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
         }
         #shutterscape-mobile-oilstain .osl-bento-cell {
           padding: 20px 8px !important;
@@ -2581,17 +2572,30 @@ export default function MobileOilstainExperience() {
       </section>
 
       {/* ============================================================
-          3. EXECUTIVE "SPOTLIGHT" SECTION
+          3. EXECUTIVE + PLAYFUL "SPOTLIGHT" SECTION
              - 2-Part Segmented Toggle: "UPCOMING" | "LIVE GOING"
-             - Real-Time Digital Countdown (DAYS : HRS : MIN : SEC)
-             - Separated Visual & Carbon Decks (100% Crisp Legibility!)
-             - Respective "JOIN" Action Button + "ACTIVITIES +" Bar
+             - Viewfinder Brackets + Tactile Keycap Countdown + Perforated Pass
+             - Solid WHITE "ACTIVITIES +" Button on the Black Background!
           ============================================================ */}
       <section
         id="mobile-dark-showcase"
-        className="relative z-20 w-full bg-[#0A0A0D] text-white border-t border-white/10"
+        className="relative z-20 w-full bg-[#0A0A0D] text-white border-t border-white/10 overflow-hidden"
       >
-        <div style={{ padding: "32px 18px 22px" }} className="space-y-5">
+        {/* Subtle Playful Ambient Studio Glow */}
+        <div
+          className="pointer-events-none absolute -top-20 left-1/2 -translate-x-1/2 w-[340px] h-[220px] rounded-full opacity-20 blur-3xl"
+          style={{
+            background:
+              spotlightTab === "LIVE"
+                ? "radial-gradient(circle, #EF4444 0%, transparent 70%)"
+                : "radial-gradient(circle, #D4A843 0%, transparent 70%)",
+          }}
+        />
+
+        <div
+          style={{ padding: "32px 18px 22px" }}
+          className="relative z-10 space-y-5"
+        >
           {/* TOP HEADER: "SPOTLIGHT" + 2-PART TOGGLE (UPCOMING / LIVE GOING) */}
           <div className="flex flex-col gap-3.5 border-b border-white/10 pb-4">
             <div className="flex items-center justify-between">
@@ -2599,12 +2603,14 @@ export default function MobileOilstainExperience() {
                 <span className="font-mono text-[8.5px] tracking-[0.24em] uppercase text-[#D4A843] font-bold block">
                   FEATURED CLUB DISPATCH // GCU
                 </span>
-                <h2
-                  style={{ marginTop: "3px" }}
-                  className="font-heading font-black text-3xl tracking-[-0.03em] uppercase text-white leading-none"
-                >
-                  SPOTLIGHT
-                </h2>
+                <div className="flex items-baseline gap-2 mt-0.5">
+                  <h2 className="font-heading font-black text-3xl tracking-[-0.03em] uppercase text-white leading-none">
+                    SPOTLIGHT
+                  </h2>
+                  <span className="font-serif italic text-sm text-white/50">
+                    &apos;26 Pass
+                  </span>
+                </div>
               </div>
 
               <span
@@ -2629,7 +2635,7 @@ export default function MobileOilstainExperience() {
             {/* 2-Part Segmented Option Bar: UPCOMING vs LIVE GOING */}
             <div
               style={{ padding: "4px" }}
-              className="grid grid-cols-2 gap-1.5 rounded-xl bg-[#14141A] border border-white/10"
+              className="grid grid-cols-2 gap-1.5 rounded-xl bg-[#14141A] border border-white/12 shadow-inner"
             >
               <button
                 type="button"
@@ -2637,7 +2643,7 @@ export default function MobileOilstainExperience() {
                 style={{ padding: "10px 12px" }}
                 className={`rounded-lg font-mono text-[9.5px] font-bold uppercase tracking-[0.16em] flex items-center justify-center gap-2 cursor-pointer transition-all ${
                   spotlightTab === "UPCOMING"
-                    ? "bg-[#D4A843] text-[#050505] shadow-md"
+                    ? "bg-[#D4A843] text-[#050505] shadow-md scale-[1.01]"
                     : "bg-transparent text-white/60 hover:text-white"
                 }`}
               >
@@ -2657,7 +2663,7 @@ export default function MobileOilstainExperience() {
                 style={{ padding: "10px 12px" }}
                 className={`rounded-lg font-mono text-[9.5px] font-bold uppercase tracking-[0.16em] flex items-center justify-center gap-2 cursor-pointer transition-all ${
                   spotlightTab === "LIVE"
-                    ? "bg-[#D92B2B] text-white shadow-md"
+                    ? "bg-[#D92B2B] text-white shadow-md scale-[1.01]"
                     : "bg-transparent text-white/60 hover:text-white"
                 }`}
               >
@@ -2673,14 +2679,14 @@ export default function MobileOilstainExperience() {
             </div>
           </div>
 
-          {/* ARCHITECTURAL SPOTLIGHT CARD (Split Visual Stage + Countdown + Carbon Deck) */}
-          <div className="rounded-2xl bg-[#131319] border border-white/15 overflow-hidden shadow-[0_24px_60px_rgba(0,0,0,0.85)]">
-            {/* 1. Upper 16:10 Photographic Stage */}
+          {/* PLAYFUL + EXECUTIVE COLLECTOR PASS SPOTLIGHT CARD */}
+          <div className="relative rounded-2xl bg-[#131319] border border-white/15 overflow-hidden shadow-[0_24px_60px_rgba(0,0,0,0.85)]">
+            {/* 1. Upper 16:10 Photographic Stage with Viewfinder Corner Brackets */}
             <div className="relative w-full aspect-[16/10] overflow-hidden bg-[#070709]">
               <img
                 src={activeSpotlightEvent.img}
                 alt={activeSpotlightEvent.title}
-                className="w-full h-full object-cover transition-transform duration-700 scale-105 saturate-[1.08]"
+                className="w-full h-full object-cover transition-transform duration-700 scale-105 saturate-[1.1]"
                 loading="lazy"
                 decoding="async"
               />
@@ -2688,9 +2694,17 @@ export default function MobileOilstainExperience() {
                 className="absolute inset-0 pointer-events-none"
                 style={{
                   background:
-                    "linear-gradient(180deg, rgba(10,10,13,0.55) 0%, rgba(10,10,13,0.05) 45%, rgba(19,19,25,0.95) 100%)",
+                    "linear-gradient(180deg, rgba(10,10,13,0.5) 0%, rgba(10,10,13,0.05) 45%, rgba(19,19,25,0.95) 100%)",
                 }}
               />
+
+              {/* Subtle Camera Viewfinder Corner Brackets */}
+              <div className="pointer-events-none absolute inset-3">
+                <span className="absolute top-0 left-0 w-3 h-3 border-t border-l border-white/35" />
+                <span className="absolute top-0 right-0 w-3 h-3 border-t border-r border-white/35" />
+                <span className="absolute bottom-7 left-0 w-3 h-3 border-b border-l border-white/35" />
+                <span className="absolute bottom-7 right-0 w-3 h-3 border-b border-r border-white/35" />
+              </div>
 
               {/* Top Floating Badges */}
               <div
@@ -2701,7 +2715,7 @@ export default function MobileOilstainExperience() {
                   style={{ padding: "4px 10px" }}
                   className="rounded-md bg-black/75 backdrop-blur-md border border-white/15 font-mono text-[8.5px] font-bold tracking-[0.18em] uppercase text-[#D4A843]"
                 >
-                  {activeSpotlightEvent.category}
+                  ★ {activeSpotlightEvent.category}
                 </span>
 
                 <span
@@ -2709,7 +2723,7 @@ export default function MobileOilstainExperience() {
                   className={`rounded-md font-mono text-[8.5px] font-bold tracking-[0.16em] uppercase ${
                     spotlightTab === "LIVE"
                       ? "bg-[#D92B2B] text-white shadow-sm"
-                      : "bg-black/75 backdrop-blur-md border border-white/15 text-white/90"
+                      : "bg-black/75 backdrop-blur-md border border-white/15 text-white/95"
                   }`}
                 >
                   {spotlightTab === "LIVE"
@@ -2723,7 +2737,7 @@ export default function MobileOilstainExperience() {
                 style={{ padding: "10px 14px" }}
                 className="absolute bottom-0 inset-x-0 flex items-center justify-between gap-2 font-mono text-[8.5px] uppercase tracking-[0.16em]"
               >
-                <span className="text-white/90 font-semibold truncate">
+                <span className="text-white/95 font-semibold truncate">
                   📍 {activeSpotlightEvent.location}
                 </span>
                 <span className="text-[#D4A843] font-bold shrink-0">
@@ -2732,10 +2746,10 @@ export default function MobileOilstainExperience() {
               </div>
             </div>
 
-            {/* 2. Real-Time 4-Unit Countdown Bar (DAYS : HRS : MIN : SEC) */}
+            {/* 2. Tactile 4-Unit Countdown Bar (DAYS : HRS : MIN : SEC) */}
             <div
               style={{ padding: "12px 14px" }}
-              className="bg-[#0D0D12] border-y border-white/10 flex items-center justify-between gap-2"
+              className="bg-[#0D0D12] border-t border-white/10 flex items-center justify-between gap-2"
             >
               <div className="flex flex-col">
                 <span className="font-mono text-[7.5px] tracking-[0.2em] uppercase text-white/45 font-bold">
@@ -2754,7 +2768,7 @@ export default function MobileOilstainExperience() {
                 </span>
               </div>
 
-              {/* 4 Digital Counter Cells */}
+              {/* 4 Tactile Digital Counter Cells */}
               <div className="flex items-center gap-1.5">
                 {[
                   { val: countdown.days, label: "DAYS" },
@@ -2764,21 +2778,27 @@ export default function MobileOilstainExperience() {
                 ].map((unit, idx) => (
                   <React.Fragment key={unit.label}>
                     <div
-                      style={{ padding: "5px 8px", minWidth: "44px" }}
-                      className="rounded-lg bg-[#181820] border border-white/12 flex flex-col items-center justify-center text-center shadow-inner"
+                      style={{
+                        padding: "5px 8px",
+                        minWidth: "44px",
+                        borderBottomWidth: "2px",
+                        borderBottomColor:
+                          spotlightTab === "LIVE" ? "#D92B2B" : "#D4A843",
+                      }}
+                      className="rounded-lg bg-[#181822] border border-white/15 flex flex-col items-center justify-center text-center shadow-md"
                     >
                       <span className="font-mono text-sm font-bold text-white leading-none tracking-wider">
                         {unit.val}
                       </span>
                       <span
                         style={{ marginTop: "3px" }}
-                        className="font-mono text-[6.5px] tracking-[0.16em] text-white/45 uppercase leading-none"
+                        className="font-mono text-[6.5px] tracking-[0.16em] text-white/50 uppercase leading-none"
                       >
                         {unit.label}
                       </span>
                     </div>
                     {idx < 3 && (
-                      <span className="font-mono text-xs font-bold text-white/30">
+                      <span className="font-mono text-xs font-bold text-[#D4A843]/70 animate-pulse">
                         :
                       </span>
                     )}
@@ -2787,13 +2807,24 @@ export default function MobileOilstainExperience() {
               </div>
             </div>
 
+            {/* Playful Perforated Ticket-Stub Divider with Side Cutout Notches */}
+            <div className="relative w-full h-4 bg-[#131319] flex items-center justify-between overflow-hidden">
+              <span className="w-3.5 h-3.5 rounded-full bg-[#0A0A0D] border border-white/15 -ml-2 shrink-0" />
+              <div className="w-full border-t border-dashed border-white/15 mx-2" />
+              <span className="font-mono text-[7px] tracking-[0.22em] uppercase text-white/35 shrink-0 px-1">
+                ADMIT ONE // GCU
+              </span>
+              <div className="w-8 border-t border-dashed border-white/15 mr-2 shrink-0" />
+              <span className="w-3.5 h-3.5 rounded-full bg-[#0A0A0D] border border-white/15 -mr-2 shrink-0" />
+            </div>
+
             {/* 3. High-Contrast Obsidian Content Deck (Title, Description & JOIN Button) */}
-            <div style={{ padding: "18px 16px 20px" }} className="space-y-4">
+            <div style={{ padding: "12px 16px 20px" }} className="space-y-4">
               <div className="space-y-2">
                 <h3 className="font-heading font-extrabold text-xl sm:text-2xl text-white tracking-tight leading-[1.15]">
                   {activeSpotlightEvent.title}
                 </h3>
-                <p className="font-sans text-xs text-white/70 leading-relaxed">
+                <p className="font-sans text-xs text-white/75 leading-relaxed">
                   {activeSpotlightEvent.description}
                 </p>
               </div>
@@ -2834,8 +2865,8 @@ export default function MobileOilstainExperience() {
           </div>
         </div>
 
-        {/* Bottom Hairline Bar: "ACTIVITIES +" */}
-        <div style={{ padding: "0 18px 28px" }}>
+        {/* Bottom Button: SOLID WHITE "ACTIVITIES +" Button on the Black Background! */}
+        <div style={{ padding: "0 18px 28px" }} className="relative z-10">
           <button
             type="button"
             onClick={() => {
@@ -2843,17 +2874,21 @@ export default function MobileOilstainExperience() {
               setActiveActivitySlideIdx(0);
               setIsActivitiesPageOpen(true);
             }}
-            className="osl-bar-btn border border-white/25 bg-white/[0.04] hover:bg-white hover:text-black text-white rounded-xl"
+            className="osl-bar-btn bg-white hover:bg-[#D4A843] text-[#0A0A0D] rounded-xl shadow-[0_12px_30px_rgba(255,255,255,0.14)] active:scale-[0.99]"
           >
-            <span>ACTIVITIES ({activities.length} CHRONOLOGY WORKS)</span>
-            <span className="text-lg leading-none font-light">+</span>
+            <span className="font-bold">
+              ACTIVITIES ({activities.length} CHRONOLOGY WORKS)
+            </span>
+            <span className="w-6 h-6 rounded-full bg-[#0A0A0D] text-white flex items-center justify-center text-sm leading-none">
+              +
+            </span>
           </button>
         </div>
       </section>
 
       {/* ============================================================
           4. SEAMLESS ROTATING HALF-WHEEL COLORED FAN + CREATIVE OPTICAL LAB
-             + "GALLERY +" BUTTON (Blends 100% with the #ECEBE6 Page!)
+             + SOLID BLACK "GALLERY +" BUTTON ON LIGHT BACKGROUND!
           ============================================================ */}
       <section
         id="mobile-light-bento-section"
@@ -3088,6 +3123,7 @@ export default function MobileOilstainExperience() {
           </div>
         )}
 
+        {/* Bottom Button: SOLID JET BLACK "GALLERY +" Button on the Light Background! */}
         <div className="osl-pad-md">
           <button
             type="button"
@@ -3096,10 +3132,14 @@ export default function MobileOilstainExperience() {
               setExpandedGalleryId(null);
               setIsGalleryPageOpen(true);
             }}
-            className="osl-bar-btn border border-black/25 bg-transparent hover:bg-[#111111] text-[#111111] hover:text-white"
+            className="osl-bar-btn bg-[#111111] hover:bg-[#D92B2B] text-white rounded-xl shadow-[0_12px_30px_rgba(0,0,0,0.16)] active:scale-[0.99]"
           >
-            <span>GALLERY // EXPLORE ALL {gallery.length} FRAMES</span>
-            <span className="text-base leading-none">+</span>
+            <span className="font-bold">
+              GALLERY // EXPLORE ALL {gallery.length} FRAMES
+            </span>
+            <span className="w-6 h-6 rounded-full bg-[#D4A843] text-[#050505] flex items-center justify-center text-sm font-bold leading-none">
+              +
+            </span>
           </button>
         </div>
       </section>
@@ -3669,42 +3709,48 @@ export default function MobileOilstainExperience() {
       </footer>
 
       {/* ============================================================
-          PAGE OVERLAY 1: EXECUTIVE EDITORIAL ACTIVITIES PAGE
+          PAGE OVERLAY 1: REDESIGNED CLEAN, PLAYFUL & PROFESSIONAL
+          ACTIVITIES PAGE (Unified Collector Pass Cards — Zero Clutter!)
           ============================================================ */}
       {isActivitiesPageOpen && (
-        <div className="fixed inset-0 z-[9999] bg-[#F7F6F1] text-[#111111] flex flex-col justify-between overflow-y-auto animate-fade-in">
-          <div className="sticky top-0 z-30 bg-[#F7F6F1]/95 backdrop-blur-md border-b border-black/10">
+        <div className="fixed inset-0 z-[9999] bg-[#F4F3EE] text-[#111111] flex flex-col justify-between overflow-y-auto animate-fade-in">
+          {/* Sticky Top Bar + Playful Pill Category Taskbar */}
+          <div className="sticky top-0 z-30 bg-[#F4F3EE]/95 backdrop-blur-md border-b border-black/10">
             <div
-              style={{ padding: "14px 20px" }}
+              style={{ padding: "14px 18px" }}
               className="flex items-center justify-between"
             >
               <button
                 type="button"
                 onClick={() => setIsActivitiesPageOpen(false)}
                 style={{ padding: "7px 14px" }}
-                className="rounded-full bg-[#111111] text-white font-sans text-xs font-semibold tracking-wide flex items-center gap-1.5 cursor-pointer shadow-xs"
+                className="rounded-full bg-[#111111] text-white font-sans text-xs font-semibold tracking-wide flex items-center gap-1.5 cursor-pointer shadow-xs active:scale-95 transition-transform"
               >
                 <span>←</span>
                 <span>Back</span>
               </button>
 
               <div className="text-center">
-                <span className="font-serif italic text-base text-[#111111] block leading-none">
+                <span className="font-heading font-black text-sm uppercase tracking-tight text-[#111111] block leading-none">
+                  CLUB ACTIVITIES
+                </span>
+                <span className="font-serif italic text-[11px] text-black/55 block mt-0.5">
                   Field Works &amp; Chronology
                 </span>
               </div>
 
               <span
-                style={{ padding: "4px 10px" }}
-                className="rounded-full bg-black/[0.06] text-[#111111] font-mono text-[9px] font-bold uppercase tracking-wider"
+                style={{ padding: "5px 10px" }}
+                className="rounded-full bg-[#D4A843] text-[#050505] font-mono text-[8.5px] font-bold uppercase tracking-wider shadow-2xs"
               >
-                {filteredActivityItems.length} Works
+                {filteredActivityItems.length} PASSES
               </span>
             </div>
 
+            {/* Playful Segmented Category Taskbar */}
             <div
-              style={{ padding: "10px 20px" }}
-              className="flex items-center gap-2 overflow-x-auto no-scrollbar border-t border-black/8 bg-[#ECEBE6]/80"
+              style={{ padding: "10px 18px" }}
+              className="flex items-center gap-2 overflow-x-auto no-scrollbar border-t border-black/5 bg-[#EAE8E0]"
             >
               {[
                 { key: "ALL", label: "All Works" },
@@ -3723,12 +3769,18 @@ export default function MobileOilstainExperience() {
                     onClick={() => {
                       setActivityFilterCat(cat.key);
                       setActiveActivitySlideIdx(0);
+                      if (activitiesPeekScrollRef.current) {
+                        activitiesPeekScrollRef.current.scrollTo({
+                          left: 0,
+                          behavior: "smooth",
+                        });
+                      }
                     }}
-                    style={{ padding: "6px 14px" }}
+                    style={{ padding: "6.5px 14px" }}
                     className={`rounded-full font-sans text-xs font-semibold shrink-0 cursor-pointer transition-all ${
                       isSelected
-                        ? "bg-[#111111] text-white shadow-xs"
-                        : "bg-white text-black/65 border border-black/10"
+                        ? "bg-[#111111] text-white shadow-sm scale-[1.02]"
+                        : "bg-white text-black/70 border border-black/10 hover:text-black"
                     }`}
                   >
                     {cat.label}
@@ -3738,25 +3790,40 @@ export default function MobileOilstainExperience() {
             </div>
           </div>
 
-          <div style={{ padding: "24px 0 20px" }} className="flex-1 space-y-5">
-            <div style={{ padding: "0 20px" }}>
-              <span className="font-mono text-[9px] tracking-[0.22em] uppercase text-[#D92B2B] font-bold block">
-                ARCHIVE DIRECTORY // 2025–2026
+          {/* Main Collector Pass Deck */}
+          <div style={{ padding: "20px 0 24px" }} className="flex-1 space-y-5">
+            {/* Clean Editorial Title Row */}
+            <div
+              style={{ padding: "0 20px" }}
+              className="flex items-end justify-between gap-2"
+            >
+              <div>
+                <span className="font-mono text-[8.5px] tracking-[0.22em] uppercase text-[#D92B2B] font-bold block">
+                  ARCHIVE DIRECTORY // 2025–2026
+                </span>
+                <h2
+                  style={{ marginTop: "3px" }}
+                  className="font-heading font-black text-2xl sm:text-3xl text-[#111111] tracking-[-0.03em] leading-[1.05]"
+                >
+                  EXPLORE{" "}
+                  <span className="font-serif italic font-normal text-[#D92B2B]">
+                    ShutterScape.
+                  </span>
+                </h2>
+              </div>
+
+              <span className="font-mono text-[10px] font-bold text-black/45 shrink-0">
+                {String(activeActivitySlideIdx + 1).padStart(2, "0")} /{" "}
+                {String(filteredActivityItems.length).padStart(2, "0")}
               </span>
-              <h2
-                style={{ marginTop: "4px" }}
-                className="font-serif text-3xl text-[#111111] font-light leading-[1.08] tracking-tight"
-              >
-                Continue Exploring{" "}
-                <span className="italic font-normal">ShutterScape.</span>
-              </h2>
             </div>
 
+            {/* Horizontal Unified Collector Pass Carousel (Zero Clutter, Zero Cropped Poster Text!) */}
             <div
               ref={activitiesPeekScrollRef}
               onScroll={(e) => {
                 const container = e.currentTarget;
-                const cardWidth = container.clientWidth * 0.8;
+                const cardWidth = container.clientWidth * 0.85;
                 const idx = Math.round(container.scrollLeft / cardWidth);
                 if (
                   idx !== activeActivitySlideIdx &&
@@ -3766,84 +3833,146 @@ export default function MobileOilstainExperience() {
                   setActiveActivitySlideIdx(idx);
                 }
               }}
-              style={{ paddingLeft: "20px", paddingRight: "20px" }}
+              style={{ paddingLeft: "18px", paddingRight: "18px" }}
               className="flex items-stretch gap-4 overflow-x-auto snap-x snap-mandatory no-scrollbar"
             >
               {filteredActivityItems.map((ev, idx) => {
                 const isSelectedCard = idx === activeActivitySlideIdx;
+                const pillAccent =
+                  MEMBER_CARD_BACKDROPS[idx % MEMBER_CARD_BACKDROPS.length];
+
                 return (
                   <div
                     key={ev._id || ev.id || idx}
                     onClick={() => scrollActivitiesPeekTo(idx)}
-                    className={`shrink-0 w-[78vw] max-w-[325px] snap-start flex flex-col transition-opacity duration-300 cursor-pointer ${
-                      isSelectedCard ? "opacity-100" : "opacity-75"
+                    style={{ padding: "12px" }}
+                    className={`shrink-0 w-[85vw] max-w-[345px] snap-center bg-white rounded-3xl border border-black/12 shadow-[0_16px_40px_rgba(0,0,0,0.08)] flex flex-col justify-between transition-all duration-300 cursor-pointer ${
+                      isSelectedCard
+                        ? "opacity-100 scale-100"
+                        : "opacity-80 scale-[0.97]"
                     }`}
                   >
-                    <div className="relative w-full aspect-[4/4.2] rounded-2xl overflow-hidden bg-[#111111] shadow-[0_14px_34px_rgba(0,0,0,0.14)] border border-black/10">
-                      <img
-                        src={ev.img}
-                        alt={ev.title}
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-black/25" />
-
+                    <div>
+                      {/* 1. Top Collector Pass Header (Above Image so Poster Text is Never Covered!) */}
                       <div
-                        style={{ padding: "12px" }}
-                        className="absolute top-0 inset-x-0 flex items-center justify-between"
+                        style={{ padding: "2px 4px 10px" }}
+                        className="flex items-center justify-between gap-2"
                       >
-                        <span
-                          style={{ padding: "4px 10px" }}
-                          className="rounded-full bg-black/65 backdrop-blur-md text-[#D4A843] font-mono text-[8.5px] font-bold uppercase tracking-[0.16em]"
-                        >
-                          {ev.category} · &apos;{String(ev.year).slice(-2)}
-                        </span>
-                        {ev.isUpcoming && (
+                        <div className="flex items-center gap-1.5">
                           <span
-                            style={{ padding: "4px 10px" }}
-                            className="rounded-full bg-[#10B981] text-[#050505] font-mono text-[8.5px] font-bold uppercase tracking-[0.14em]"
+                            style={{ padding: "3.5px 8px" }}
+                            className="rounded-full bg-[#111111] text-white font-mono text-[8.5px] font-bold uppercase"
                           >
-                            ● Live RSVP
+                            #{String(idx + 1).padStart(2, "0")}
                           </span>
-                        )}
-                      </div>
+                          <span
+                            style={{
+                              padding: "3.5px 10px",
+                              backgroundColor: pillAccent,
+                            }}
+                            className="rounded-full text-[#111111] font-mono text-[8.5px] font-bold uppercase tracking-[0.14em]"
+                          >
+                            {ev.category}
+                          </span>
+                        </div>
 
-                      <div className="absolute bottom-5 inset-x-0 flex justify-center">
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setRegisterEventName(ev.title);
-                            setRegisterSubmitted(false);
-                            setIsRegisterModalOpen(true);
-                          }}
-                          style={{ padding: "9px 20px" }}
-                          className="rounded-full bg-[#D92B2B] hover:bg-[#B91C1C] text-white font-mono text-[9.5px] font-bold uppercase tracking-[0.18em] shadow-lg cursor-pointer"
+                        <span
+                          style={{ padding: "3.5px 9px" }}
+                          className={`rounded-full font-mono text-[8px] font-bold uppercase tracking-[0.12em] ${
+                            ev.isUpcoming
+                              ? "bg-[#10B981]/20 text-[#0F5132]"
+                              : "bg-black/[0.06] text-black/65"
+                          }`}
                         >
-                          [ {ev.isUpcoming ? "JOIN / RSVP" : "EXPLORE"} ]
-                        </button>
+                          {ev.isUpcoming ? "● LIVE RSVP" : ev.date}
+                        </span>
+                      </div>
+
+                      {/* 2. Clean Un-Obscured Artwork Stage (Shows Full Poster or Photo Cleanly!) */}
+                      <div className="relative w-full aspect-[4/3.4] rounded-2xl overflow-hidden bg-[#111115] border border-black/10">
+                        {/* Blurred Ambient Backdrop so Portrait Flyers & Landscape Photos Both Look Studio-Grade */}
+                        <img
+                          src={ev.img}
+                          alt=""
+                          aria-hidden="true"
+                          className="absolute inset-0 w-full h-full object-cover blur-xl opacity-55 scale-110"
+                        />
+                        <img
+                          src={ev.img}
+                          alt={ev.title}
+                          className="relative z-10 w-full h-full object-contain"
+                          loading="lazy"
+                          decoding="async"
+                        />
+
+                        {/* Subtle Bottom-Right Film Stock Tag */}
+                        <span
+                          style={{ padding: "3px 8px" }}
+                          className="absolute bottom-2.5 right-2.5 z-20 rounded-md bg-black/75 backdrop-blur-md text-[#D4A843] font-mono text-[7.5px] font-bold uppercase tracking-[0.15em]"
+                        >
+                          {ev.filmStock || ev.exif || "35MM ARCHIVE"}
+                        </span>
+                      </div>
+
+                      {/* 3. Playful Perforated Ticket Cutout Divider */}
+                      <div className="relative w-full h-5 flex items-center justify-between my-1">
+                        <span className="w-4 h-4 rounded-full bg-[#F4F3EE] border border-black/10 -ml-5 shrink-0" />
+                        <div className="w-full border-t-2 border-dashed border-black/10 mx-1" />
+                        <span className="w-4 h-4 rounded-full bg-[#F4F3EE] border border-black/10 -mr-5 shrink-0" />
+                      </div>
+
+                      {/* 4. Unified Title, Location & Story Deck Inside the Card */}
+                      <div style={{ padding: "2px 6px 10px" }} className="space-y-2">
+                        <div className="flex items-center justify-between gap-2 font-mono text-[8.5px] uppercase tracking-[0.14em] text-black/50">
+                          <span className="truncate font-semibold text-[#D92B2B]">
+                            📍 {ev.location}
+                          </span>
+                          <span className="shrink-0">{ev.date}</span>
+                        </div>
+
+                        <h3 className="font-heading font-extrabold text-lg text-[#111111] tracking-tight leading-snug">
+                          {ev.title}
+                        </h3>
+
+                        <p className="font-sans text-xs text-black/70 leading-relaxed line-clamp-3">
+                          {ev.description}
+                        </p>
                       </div>
                     </div>
 
-                    <div
-                      style={{ paddingTop: "10px", paddingRight: "8px" }}
-                      className="flex items-center justify-between gap-2"
+                    {/* 5. Playful + Executive Full-Width Action Bar */}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setRegisterEventName(ev.title);
+                        setRegisterSubmitted(false);
+                        setIsRegisterModalOpen(true);
+                      }}
+                      style={{ padding: "11px 16px" }}
+                      className={`w-full rounded-xl font-mono text-[9.5px] font-bold uppercase tracking-[0.18em] flex items-center justify-between cursor-pointer transition-all shadow-sm active:scale-[0.98] ${
+                        ev.isUpcoming
+                          ? "bg-[#D92B2B] hover:bg-[#B91C1C] text-white"
+                          : "bg-[#111111] hover:bg-[#D4A843] text-white hover:text-[#050505]"
+                      }`}
                     >
-                      <span className="font-heading font-bold text-xs uppercase tracking-tight text-[#111111] truncate">
-                        {ev.shortTitle || ev.title}
+                      <span>
+                        {ev.isUpcoming
+                          ? "JOIN / RSVP THIS SESSION"
+                          : "REGISTER INTEREST // ARCHIVE"}
                       </span>
-                      <span className="font-mono text-[9px] text-black/50 uppercase shrink-0">
-                        {ev.date}
+                      <span className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-xs leading-none">
+                        →
                       </span>
-                    </div>
+                    </button>
                   </div>
                 );
               })}
             </div>
 
+            {/* ← PREV | Playful Pill Dots | NEXT → Controller */}
             <div
-              style={{ padding: "6px 20px" }}
+              style={{ padding: "4px 20px" }}
               className="flex items-center justify-between gap-4"
             >
               <button
@@ -3851,23 +3980,36 @@ export default function MobileOilstainExperience() {
                 onClick={() =>
                   scrollActivitiesPeekTo(activeActivitySlideIdx - 1)
                 }
-                className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-[#111111] flex items-center gap-1.5 cursor-pointer"
+                style={{ padding: "8px 14px" }}
+                className="rounded-full bg-white border border-black/12 font-mono text-[9.5px] font-bold uppercase tracking-[0.16em] text-[#111111] flex items-center gap-1.5 cursor-pointer shadow-2xs active:scale-95"
               >
                 <span>←</span>
                 <span>PREV</span>
               </button>
 
-              <div className="flex-1 h-[2px] bg-black/12 relative overflow-hidden rounded-full">
-                <div
-                  style={{
-                    width: `${
-                      ((activeActivitySlideIdx + 1) /
-                        Math.max(1, filteredActivityItems.length)) *
-                      100
-                    }%`,
-                  }}
-                  className="h-full bg-[#111111] transition-all duration-300"
-                />
+              {/* Playful Expanding Pill Indicators */}
+              <div className="flex items-center gap-1.5 overflow-hidden max-w-[140px]">
+                {filteredActivityItems.slice(0, 8).map((_, dotIdx) => {
+                  const isCurrentDot =
+                    dotIdx ===
+                    activeActivitySlideIdx %
+                      Math.min(8, filteredActivityItems.length);
+                  return (
+                    <button
+                      key={dotIdx}
+                      type="button"
+                      onClick={() => scrollActivitiesPeekTo(dotIdx)}
+                      style={{
+                        width: isCurrentDot ? "22px" : "6px",
+                        height: "6px",
+                      }}
+                      className={`rounded-full transition-all duration-300 cursor-pointer ${
+                        isCurrentDot ? "bg-[#D92B2B]" : "bg-black/20"
+                      }`}
+                      aria-label={`Go to slide ${dotIdx + 1}`}
+                    />
+                  );
+                })}
               </div>
 
               <button
@@ -3875,57 +4017,36 @@ export default function MobileOilstainExperience() {
                 onClick={() =>
                   scrollActivitiesPeekTo(activeActivitySlideIdx + 1)
                 }
-                className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-[#111111] flex items-center gap-1.5 cursor-pointer"
+                style={{ padding: "8px 14px" }}
+                className="rounded-full bg-[#111111] text-white font-mono text-[9.5px] font-bold uppercase tracking-[0.16em] flex items-center gap-1.5 cursor-pointer shadow-2xs active:scale-95"
               >
                 <span>NEXT</span>
                 <span>→</span>
               </button>
             </div>
-
-            {activeActivityDetail && (
-              <div
-                style={{ margin: "0 20px", padding: "20px" }}
-                className="rounded-2xl bg-white border border-black/10 shadow-[0_8px_28px_rgba(0,0,0,0.05)] space-y-3"
-              >
-                <div className="flex items-center justify-between gap-2 flex-wrap">
-                  <span className="font-mono text-[9px] tracking-[0.18em] uppercase text-[#D92B2B] font-bold">
-                    0{activeActivitySlideIdx + 1} //{" "}
-                    {activeActivityDetail.category} ·{" "}
-                    {activeActivityDetail.date}
-                  </span>
-                  <span className="font-mono text-[9px] tracking-[0.14em] uppercase text-black/45">
-                    {activeActivityDetail.filmStock ||
-                      activeActivityDetail.exif}
-                  </span>
-                </div>
-
-                <h3 className="font-serif text-2xl text-[#111111] font-normal leading-snug">
-                  {activeActivityDetail.title}
-                </h3>
-
-                <p className="font-mono text-[9.5px] tracking-[0.14em] uppercase text-black/55">
-                  📍 {activeActivityDetail.location}
-                </p>
-
-                <p className="font-body text-xs text-black/75 leading-relaxed pt-1">
-                  {activeActivityDetail.description}
-                </p>
-              </div>
-            )}
           </div>
 
+          {/* Compact Dark Editorial Footer Strip */}
           <div
-            style={{ padding: "24px 20px" }}
-            className="bg-[#111113] text-white space-y-2.5"
+            style={{ padding: "18px 20px" }}
+            className="bg-[#111113] text-white flex items-center justify-between gap-3"
           >
-            <span className="font-serif italic text-lg text-[#D4A843] block">
-              ShutterScape GCU
-            </span>
-            <p className="font-body text-xs text-white/70 leading-relaxed">
-              With every photowalk, Xenon strobe clinic, and annual print
-              exhibition at Girijananda Chowdhury University, we document
-              stories that outlive the moment.
-            </p>
+            <div>
+              <span className="font-serif italic text-base text-[#D4A843] block leading-none">
+                ShutterScape GCU
+              </span>
+              <p className="font-sans text-[11px] text-white/65 mt-1">
+                Capturing stories that outlive the moment.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setIsActivitiesPageOpen(false)}
+              style={{ padding: "7px 12px" }}
+              className="rounded-full bg-white/10 hover:bg-white/20 text-white font-mono text-[8.5px] font-bold uppercase tracking-widest shrink-0 cursor-pointer"
+            >
+              CLOSE ✕
+            </button>
           </div>
         </div>
       )}
