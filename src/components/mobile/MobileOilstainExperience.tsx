@@ -368,7 +368,7 @@ const FLOATING_NAV_ITEMS: {
   sectionId: string;
 }[] = [
   { id: "home", label: "Home", sectionId: "mobile-hero-top" },
-  { id: "gallery", label: "Gallery", sectionId: "mobile-light-spec-section" },
+  { id: "gallery", label: "Gallery", sectionId: "mobile-light-bento-section" },
   { id: "about", label: "About", sectionId: "mobile-light-about-section" },
   { id: "activity", label: "Activity", sectionId: "mobile-dark-showcase" },
   { id: "moments", label: "Moments", sectionId: "mobile-chronology-matrix" },
@@ -877,16 +877,18 @@ export default function MobileOilstainExperience() {
   // Cached Section Offsets
   const sectionOffsetsRef = useRef<{
     vh: number;
-    galleryTop: number;
+    archiveTop: number;
     activityTop: number;
+    galleryTop: number;
     aboutTop: number;
     momentsTop: number;
   }>({
     vh: 800,
-    galleryTop: 800,
+    archiveTop: 800,
     activityTop: 1800,
-    aboutTop: 2800,
-    momentsTop: 3600,
+    galleryTop: 2600,
+    aboutTop: 3400,
+    momentsTop: 4200,
   });
 
   // Load persisted gallery likes from localStorage
@@ -1042,8 +1044,9 @@ export default function MobileOilstainExperience() {
 
       sectionOffsetsRef.current = {
         vh,
-        galleryTop: getTop("mobile-light-spec-section", vh),
+        archiveTop: getTop("mobile-light-spec-section", vh),
         activityTop: getTop("mobile-dark-showcase", vh * 2),
+        galleryTop: getTop("mobile-light-bento-section", vh * 2.8),
         aboutTop: getTop("mobile-light-about-section", vh * 3.5),
         momentsTop: getTop("mobile-chronology-matrix", vh * 4.5),
       };
@@ -1054,7 +1057,7 @@ export default function MobileOilstainExperience() {
       scrollRafId = requestAnimationFrame(() => {
         scrollRafId = 0;
         const scrollY = window.scrollY || window.pageYOffset || 0;
-        const { vh, galleryTop, activityTop, aboutTop, momentsTop } =
+        const { vh, archiveTop, galleryTop, activityTop, aboutTop, momentsTop } =
           sectionOffsetsRef.current;
 
         const shouldBeScrolled = scrollY > 24;
@@ -1062,7 +1065,7 @@ export default function MobileOilstainExperience() {
           prev !== shouldBeScrolled ? shouldBeScrolled : prev
         );
 
-        const heroCovered = scrollY >= galleryTop + 16;
+        const heroCovered = scrollY >= archiveTop + 16;
         if (heroCovered !== isHeroCurrentlyHidden) {
           isHeroCurrentlyHidden = heroCovered;
           if (heroSectionRef.current) {
@@ -1079,7 +1082,7 @@ export default function MobileOilstainExperience() {
           }
         }
 
-        const secTopInViewport = galleryTop - scrollY;
+        const secTopInViewport = archiveTop - scrollY;
         const raw = (vh * 0.58 - secTopInViewport) / (vh * 0.58);
         const p = Math.max(0, Math.min(1, raw));
 
@@ -1113,9 +1116,11 @@ export default function MobileOilstainExperience() {
             nextTab = "moments";
           } else if (triggerLine >= aboutTop) {
             nextTab = "about";
+          } else if (triggerLine >= galleryTop) {
+            nextTab = "gallery";
           } else if (triggerLine >= activityTop) {
             nextTab = "activity";
-          } else if (triggerLine >= galleryTop) {
+          } else if (triggerLine >= archiveTop) {
             nextTab = "gallery";
           }
           setActiveNavTab((prev) => (prev !== nextTab ? nextTab : prev));
@@ -3907,10 +3912,10 @@ export default function MobileOilstainExperience() {
                         onClick={(e) => handleToggleLike(cardKey, e)}
                         aria-label={isLiked ? "Unlike photo" : "Love photo"}
                         style={{ padding: "6.5px 12px" }}
-                        className={`rounded-md font-mono text-[9.5px] font-bold tracking-[0.12em] flex items-center gap-1.5 shadow-lg cursor-pointer transition-all active:scale-90 ${
+                        className={`rounded-md border-0 font-mono text-[9.5px] font-bold tracking-[0.12em] flex items-center gap-1.5 shadow-lg cursor-pointer transition-all active:scale-90 ${
                           isLiked
-                            ? "bg-[#EF4444] text-white border border-[#EF4444]"
-                            : "bg-black/70 backdrop-blur-md text-white border border-white/25 hover:border-white/60"
+                            ? "bg-[#EF4444] text-white"
+                            : "bg-black/70 backdrop-blur-md text-white"
                         }`}
                       >
                         <svg
