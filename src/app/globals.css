@@ -162,3 +162,10 @@ main > section {
     animation-duration: 90s;
   }
 }
+
+/* ====== HIDE LEGACY VIEWFINDER HEADER & UNIVERSAL FOOTER ACROSS ALL BREAKPOINTS ====== */
+header[aria-label="Global Viewfinder Navigation"],
+#shutterscape-universal-footer {
+  display: none !important;
+}
+
