@@ -130,6 +130,15 @@ function getReelInitials(name: string) {
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 }
 
+function getBaseLikes(idStr: string, idx: number, apiLikes?: number): number {
+  if (typeof apiLikes === "number" && apiLikes >= 0) return apiLikes;
+  let hash = 0;
+  for (let i = 0; i < idStr.length; i++) {
+    hash = (hash * 31 + idStr.charCodeAt(i)) % 1000;
+  }
+  return 28 + ((hash + idx * 17) % 64);
+}
+
 const FALLBACK_ACTIVITIES = [
   {
     id: "ACT-26-01",
@@ -803,6 +812,10 @@ export default function MobileOilstainExperience() {
     null
   );
 
+  // Gallery Photo Love / Like Counter States
+  const [likedMap, setLikedMap] = useState<Record<string, boolean>>({});
+  const [heartBurstId, setHeartBurstId] = useState<string | null>(null);
+
   const [isActivitiesPageOpen, setIsActivitiesPageOpen] = useState(false);
   const [activityFilterCat, setActivityFilterCat] = useState<string>("ALL");
   const [activeActivitySlideIdx, setActiveActivitySlideIdx] = useState(0);
@@ -875,6 +888,43 @@ export default function MobileOilstainExperience() {
     aboutTop: 2800,
     momentsTop: 3600,
   });
+
+  // Load persisted gallery likes from localStorage
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("shutterscape_gallery_likes_v1");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && typeof parsed === "object") {
+          setLikedMap(parsed);
+        }
+      }
+    } catch {}
+  }, []);
+
+  const handleToggleLike = useCallback(
+    (cardKey: string, e?: React.MouseEvent) => {
+      if (e) e.stopPropagation();
+      setLikedMap((prev) => {
+        const nextLiked = !prev[cardKey];
+        const updated = { ...prev, [cardKey]: nextLiked };
+        try {
+          localStorage.setItem(
+            "shutterscape_gallery_likes_v1",
+            JSON.stringify(updated)
+          );
+        } catch {}
+        if (nextLiked) {
+          setHeartBurstId(cardKey);
+          setTimeout(() => {
+            setHeartBurstId((curr) => (curr === cardKey ? null : curr));
+          }, 650);
+        }
+        return updated;
+      });
+    },
+    []
+  );
 
   const toggleHeroAudio = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -1671,6 +1721,16 @@ export default function MobileOilstainExperience() {
         #shutterscape-mobile-oilstain .sound-wave span:nth-child(2) { animation-delay: 0.25s; height: 100%; }
         #shutterscape-mobile-oilstain .sound-wave span:nth-child(3) { animation-delay: 0.4s; height: 60%; }
         @keyframes wave { 50% { height: 20%; } }
+
+        @keyframes oslHeartBurst {
+          0% { transform: scale(0.3); opacity: 0; }
+          35% { transform: scale(1.25); opacity: 1; }
+          70% { transform: scale(0.95); opacity: 1; }
+          100% { transform: scale(1.4); opacity: 0; }
+        }
+        #shutterscape-mobile-oilstain .osl-heart-burst {
+          animation: oslHeartBurst 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
 
         @media (max-width: 1023px) {
           header[aria-label="Global Viewfinder Navigation"] {
@@ -3767,13 +3827,20 @@ export default function MobileOilstainExperience() {
             {filteredGalleryItems.map((item, idx) => {
               const cardKey = item._id || item.id || String(idx);
               const isExpanded = expandedGalleryId === cardKey;
+              const isLiked = !!likedMap[cardKey];
+              const likeCount =
+                getBaseLikes(cardKey, idx, item.likes) + (isLiked ? 1 : 0);
+              const isBursting = heartBurstId === cardKey;
 
               return (
                 <div
                   key={cardKey}
                   className="relative w-full rounded-2xl overflow-hidden bg-[#141418] border border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.75)]"
                 >
-                  <div className="relative w-full aspect-[4/3] overflow-hidden">
+                  <div
+                    onDoubleClick={(e) => handleToggleLike(cardKey, e)}
+                    className="relative w-full aspect-[4/3] overflow-hidden"
+                  >
                     <img
                       src={item.src}
                       alt={item.title}
@@ -3782,6 +3849,23 @@ export default function MobileOilstainExperience() {
                       decoding="async"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/35" />
+
+                    {/* Center Heart Burst Animation on Like */}
+                    {isBursting && (
+                      <div className="pointer-events-none absolute inset-0 z-30 flex items-center justify-center">
+                        <svg
+                          width="68"
+                          height="68"
+                          viewBox="0 0 24 24"
+                          fill="#EF4444"
+                          stroke="#FFFFFF"
+                          strokeWidth="1"
+                          className="osl-heart-burst drop-shadow-[0_8px_24px_rgba(239,68,68,0.75)]"
+                        >
+                          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                        </svg>
+                      </div>
+                    )}
 
                     <div
                       style={{ padding: "12px 14px" }}
@@ -3805,7 +3889,7 @@ export default function MobileOilstainExperience() {
                       </p>
                     </div>
 
-                    <div className="absolute bottom-3.5 inset-x-0 flex justify-center">
+                    <div className="absolute bottom-3.5 inset-x-0 flex items-center justify-center gap-2.5 px-4">
                       <button
                         type="button"
                         onClick={() =>
@@ -3815,6 +3899,36 @@ export default function MobileOilstainExperience() {
                         className="rounded-md bg-white/95 hover:bg-[#D4A843] text-[#050505] font-mono text-[9px] font-bold uppercase tracking-[0.18em] shadow-lg cursor-pointer transition-colors"
                       >
                         {isExpanded ? "− HIDE DETAILS" : "+ VIEW IN LOUPE"}
+                      </button>
+
+                      {/* LOVE / LIKE BUTTON WITH LIVE COUNTER */}
+                      <button
+                        type="button"
+                        onClick={(e) => handleToggleLike(cardKey, e)}
+                        aria-label={isLiked ? "Unlike photo" : "Love photo"}
+                        style={{ padding: "6.5px 12px" }}
+                        className={`rounded-md font-mono text-[9.5px] font-bold tracking-[0.12em] flex items-center gap-1.5 shadow-lg cursor-pointer transition-all active:scale-90 ${
+                          isLiked
+                            ? "bg-[#EF4444] text-white border border-[#EF4444]"
+                            : "bg-black/70 backdrop-blur-md text-white border border-white/25 hover:border-white/60"
+                        }`}
+                      >
+                        <svg
+                          width="13"
+                          height="13"
+                          viewBox="0 0 24 24"
+                          fill={isLiked ? "currentColor" : "none"}
+                          stroke="currentColor"
+                          strokeWidth="2.2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className={`transition-transform duration-200 ${
+                            isLiked ? "scale-110" : "scale-100"
+                          }`}
+                        >
+                          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                        </svg>
+                        <span>{likeCount}</span>
                       </button>
                     </div>
                   </div>
